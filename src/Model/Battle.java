@@ -1,4 +1,4 @@
-import com.sun.org.apache.bcel.internal.generic.ACONST_NULL;
+package Model;
 
 public class Battle {
     private int turn;
@@ -14,7 +14,7 @@ public class Battle {
     private GraveYard player1GraveYard;
     private GraveYard player2GraveYard;
     private int battleID;
-    private View view;
+    //private View view;
 
     public static void handleBattleEvent(){}
     public static void gameInfo(){}

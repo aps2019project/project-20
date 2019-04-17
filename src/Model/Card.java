@@ -1,4 +1,7 @@
-public class Card {
+package Model;
+
+
+public class Card extends CardAndItem {
     private String name;
     private int price ;
     private Account owner;

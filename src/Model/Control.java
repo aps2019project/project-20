@@ -1,3 +1,7 @@
+package Model;
+
+import Model.Account;
+
 import java.util.ArrayList;
 
 public class Control {
