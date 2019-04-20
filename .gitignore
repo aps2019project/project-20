@@ -77,10 +77,6 @@ fabric.properties
 # Editor-based Rest Client
 .idea/httpRequests
 
-/.idea/.name
-/.idea/misc.xml
-/.idea/modules.xml
-/.idea/encodings.xml
-/.idea/uiDesigner.xml
-/.idea
+/.idea/*
 /project-20.iml
+

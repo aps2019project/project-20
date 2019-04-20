@@ -12,7 +12,7 @@ public class Hero extends Card{
     private int coolDown;
     private AttackType attackType;
 
-    public void hybrid(){}
-    public void melee(){}
-    public void range(){}
+    public static void hybrid(){}
+    public static void melee(){}
+    public static void range(){}
 }

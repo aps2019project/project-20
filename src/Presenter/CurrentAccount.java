@@ -1,5 +1,4 @@
 package Presenter;
-
-public class CurrentAccount {
+ class CurrentAccount {
    // private Model.Account currentAccount
 }

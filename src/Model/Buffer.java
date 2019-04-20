@@ -9,6 +9,6 @@ public class Buffer {
     private int ID;
     private Type type;
 
-    public void defineBuffes(Account Opponent) {
+    public static void defineBuffes(Account Opponent) {
     }
 }

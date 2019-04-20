@@ -10,9 +10,9 @@ public class Minion extends Card{
     private int AP;
     private AttackType attackType;
 
-    public void hybrid(){}
-    public void melee(){}
-    public void range(){}
+    public static void hybrid(){}
+    public static void melee(){}
+    public static void range(){}
 
 
 }
