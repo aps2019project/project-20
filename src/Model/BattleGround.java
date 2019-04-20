@@ -8,9 +8,9 @@ public class BattleGround {
         FIRE,
         HOLY;
     }
-    private ArrayList<ArrayList<Integer>> ground;
-    private ArrayList <Effect> effect;
-    private ArrayList<ArrayList<Integer>> effectposition;
-    private ArrayList<Item> groundItem;
+    private ArrayList<ArrayList<Asset>> ground;
+    private ArrayList<Effect> effects;
+    private ArrayList<ArrayList<Integer>> effectsPosition;
+// what is this?    private ArrayList<Item> groundItem;
 }
 

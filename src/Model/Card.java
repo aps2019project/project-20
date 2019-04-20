@@ -1,12 +1,5 @@
 package Model;
 
-
-public class Card extends CardAndItem {
-    private String name;
-    private int price ;
-    private Account owner;
+public class Card extends Asset {
     private int MP;
-    private int ID;
-    private int xInGround;
-    private int yInGround;
 }
