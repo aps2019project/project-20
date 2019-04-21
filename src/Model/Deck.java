@@ -8,6 +8,10 @@ public class Deck {
     private Card hero;
     private Item item;
 
+    public Deck(String name) {
+        this.name = name;
+    }
+
     public String getName(){
         return name;
     }
@@ -56,9 +60,22 @@ public class Deck {
                     cards.remove(card);
                     return;
                 }
-            throw new IllegalRemoveFromDeckException("The asset doesn't exist in the deck.");
+            throw new AssetNotFoundException("Asset not found in the deck.");
         }
     }
+
+//    public Asset searchAsset(int assetID) {
+//        if (assetID == hero.getID())
+//            return hero;
+//        else if (assetID == item.getID())
+//            return item;
+//        else {
+//            for (Card card: cards)
+//                if (assetID == card.getID())
+//                    return card;
+//        }
+//        throw new AssetNotFoundException("Asset not found in the deck");
+//    }
 
 //    public static Deck findDeck(String deckName){
 //        for (Deck deck: decks)
