@@ -1,5 +1,5 @@
 package Presenter;
 
-public class GameMenuPresenter extends CurrentAccount {
+public class GameMenuPresenter {
     public void handleEventPresenter(){}
 }

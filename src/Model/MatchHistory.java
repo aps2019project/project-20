@@ -1,10 +1,11 @@
 package Model;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
 public class MatchHistory {
-    enum Result
-    {
-        WIN, LOSE, DRAW
-    }
+    enum Result {WIN, LOSE, DRAW}
 
     private long time;
     private Result result;

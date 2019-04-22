@@ -1,6 +1,6 @@
 package Presenter;
 
-public class BattleEnvironment extends CurrentAccount {
+public class BattleEnvironment{
 //    private Model.Account player;
 //   private Model.Account opponentOrAI;
 

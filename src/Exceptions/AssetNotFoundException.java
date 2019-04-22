@@ -1,4 +1,4 @@
-package Model;
+package Exceptions;
 
 public class AssetNotFoundException extends RuntimeException {
     public AssetNotFoundException(String message){

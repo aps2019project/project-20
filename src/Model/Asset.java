@@ -1,5 +1,9 @@
 package Model;
 
+import Exceptions.AssetNotFoundException;
+
+import java.util.ArrayList;
+
 public class Asset {
     private String name;
     private String desc;
@@ -8,6 +12,64 @@ public class Asset {
     private int xInGround;
     private int yInGround;
     private Account owner;
+
+    public static ArrayList<Hero> getHeroesOfAssetCollection(ArrayList<Asset> cardAndItems){
+        ArrayList<Hero> heroes = new ArrayList<>();
+        for (Asset asset : cardAndItems) {
+            if (asset instanceof Hero) {
+                heroes.add((Hero) asset);
+            }
+        }
+        return heroes;
+    }
+
+    public static ArrayList<Item> getItemsOfAssetCollection(ArrayList<Asset> cardAndItems){
+        ArrayList<Item> items = new ArrayList<>();
+        for (Asset asset : cardAndItems) {
+            if (asset instanceof Item) {
+                items.add((Item) asset);
+            }
+        }
+        return items;
+    }
+
+    public static ArrayList<Spell> getSpellsOfAssetCollection(ArrayList<Asset> cardAndItems){
+        ArrayList<Spell> spells = new ArrayList<>();
+        for (Asset asset : cardAndItems) {
+            if (asset instanceof Spell) {
+                spells.add((Spell) asset);
+            }
+        }
+        return spells;
+    }
+
+    public static ArrayList<Minion> getMinionsOfAssetCollection(ArrayList<Asset> cardAndItems){
+        ArrayList<Minion> minions = new ArrayList<>();
+        for (Asset asset : cardAndItems) {
+            if (asset instanceof Minion) {
+                minions.add((Minion) asset);
+            }
+        }
+        return minions;
+    }
+
+    public static Asset searchAsset(ArrayList<Asset> cardAndItems, String name){
+        for (Asset asset : cardAndItems) {
+            if(asset.getName().compareTo(name)==0){
+                return asset;
+            }
+        }
+        throw new AssetNotFoundException("");
+    }
+
+    public static Asset searchAsset(ArrayList<Asset> assets, int ID){
+        for (Asset asset : assets) {
+            if(asset.getID() == ID){
+                return asset;
+            }
+        }
+        throw new AssetNotFoundException("");
+    }
 
     public String getName() {
         return name;

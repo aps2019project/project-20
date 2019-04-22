@@ -1,7 +1,12 @@
 package View;
 
+import java.util.Scanner;
+
 public class CustomGameMenu {
-    public void handleEvents(){}
+    private final static int BACK = 12;
+    public int handleEvents(Scanner scanner){
+        return BACK;
+    }
 
 //    public void startGame(String deckName,Mode mode){}
 //    public void startGame(String deckName,Mode mode, numberOfFlags){}

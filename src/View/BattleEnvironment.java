@@ -1,12 +1,16 @@
 package View;
 
 
+import java.util.Scanner;
 
 public class BattleEnvironment {
+    private final static int BACK = 12;
 //    private Model.Account player;
 //    private Model.Account opponent OR AI;
 
-    public void handleEvents(){}
+    public int handleEvents(Scanner scanner){
+        return BACK;
+    }
 
     public void setPlayer(){}
     public void setOpponent(){}

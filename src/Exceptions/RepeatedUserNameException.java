@@ -1,4 +1,4 @@
-package Model;
+package Exceptions;
 
 public class RepeatedUserNameException extends RuntimeException {
     public RepeatedUserNameException(String message){

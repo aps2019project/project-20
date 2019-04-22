@@ -77,6 +77,8 @@ fabric.properties
 # Editor-based Rest Client
 .idea/httpRequests
 
-/.idea/*
-/project-20.iml
 
+/.idea/
+/project-20.iml
+/out/
+/lib/json-20180813.jar

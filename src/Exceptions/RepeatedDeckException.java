@@ -1,4 +1,4 @@
-package Model;
+package Exceptions;
 
 public class RepeatedDeckException extends RuntimeException {
     public RepeatedDeckException(String message){
