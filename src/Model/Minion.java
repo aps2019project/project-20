@@ -1,12 +1,31 @@
 package Model;
 
+import java.util.ArrayList;
+
 public class Minion extends Card{
     private int range;
-    private Buffer specialPower;
     private int HP;
     private int AP;
     private AttackType attackType;
+    private ArrayList<Card> attackedCards = new ArrayList<>();
+    private ArrayList<Integer>  multiplicityOfEachAttackedCard = new ArrayList<>();
 
+
+    public Minion(String name,String desc, int price, int ID,int range, int AP, int HP,int MP, AttackType attackType,String action) {
+        this.setName(name);
+        this.setDesc(desc);
+        this.setPrice(price);
+        this.setID(ID);
+        this.setxInGround(0);
+        this.setyInGround(0);
+        this.setOwner(null);
+        this.setAction(action);
+        this.range = range;
+        this.AP = AP;
+        this.HP = HP;
+        this.setMP(MP);
+        this.attackType = attackType;
+    }
 
     public int getRange() {
         return range;
@@ -16,13 +35,6 @@ public class Minion extends Card{
         this.range = range;
     }
 
-    public Buffer getSpecialPower() {
-        return specialPower;
-    }
-
-    public void setSpecialPower(Buffer specialPower) {
-        this.specialPower = specialPower;
-    }
 
     public int getHP() {
         return HP;

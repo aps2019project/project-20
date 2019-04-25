@@ -4,13 +4,15 @@ import java.util.ArrayList;
 
 public class BattleGround {
     enum Effect{
+        NOTHING,
         POISON,
         FIRE,
-        HOLY;
+        HOLY,
     }
     private ArrayList<ArrayList<Asset>> ground;
-    private ArrayList<Effect> effects;
-    private ArrayList<ArrayList<Integer>> effectsPosition;
-// what is this?    private ArrayList<Item> groundItem;
+    private ArrayList<ArrayList<Effect>> effectsPosition;
+
+
+
 }
 

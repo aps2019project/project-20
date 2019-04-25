@@ -2,13 +2,11 @@ package Model;
 
 public class Buffer {
 
-    enum Type {
+    //AtFirst each Asset needs one function which needs his necessary parameters
 
+    public void totalDisarmAction(Card cardOfEnemy){
+       cardOfEnemy.setDisarm(true);
     }
 
-    private int ID;
-    private Type type;
 
-    public static void defineBuffes(Account Opponent) {
-    }
 }

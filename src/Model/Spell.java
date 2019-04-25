@@ -2,15 +2,26 @@ package Model;
 
 import java.util.ArrayList;
 
-public class Spell extends Card{
-    private String desc;
+public class Spell extends Card {
+    private int squareSideLength;
 
-    public String getDesc() {
-        return desc;
+    public enum TargetType {
+        ENEMY, PLAYER, CELLS
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    private TargetType targetType;
+
+    public Spell(String name,String desc, int price, int ID,int MP, TargetType targetType,String action) {
+        this.setName(name);
+        this.setDesc(desc);
+        this.setPrice(price);
+        this.setID(ID);
+        this.setxInGround(0);
+        this.setyInGround(0);
+        this.setOwner(null);
+        this.setAction(action);
+        this.setMP(MP);
+        this.targetType = targetType;
     }
 
 }

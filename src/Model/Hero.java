@@ -2,13 +2,29 @@ package Model;
 
 public class Hero extends Card{
     private int range;
-    private Buffer specialPower;
+    // extending 10 heroes
+   // private Spell specialPower;
     private int AP;
     private int HP;
-    private Spell spell;
     private int coolDown;
     private AttackType attackType;
 
+    public Hero(String name,String desc, int price, int ID,int range, int AP, int HP,int MP, int coolDown, AttackType attackType,String action) {
+        this.setName(name);
+        this.setDesc(desc);
+        this.setPrice(price);
+        this.setID(ID);
+        this.setxInGround(0);
+        this.setyInGround(0);
+        this.setOwner(null);
+        this.setAction(action);
+        this.range = range;
+        this.AP = AP;
+        this.HP = HP;
+        this.setMP(MP);
+        this.coolDown = coolDown;
+        this.attackType = attackType;
+    }
 
     public int getRange() {
         return range;
@@ -17,14 +33,14 @@ public class Hero extends Card{
     public void setRange(int range) {
         this.range = range;
     }
-
-    public Buffer getSpecialPower() {
-        return specialPower;
-    }
-
-    public void setSpecialPower(Buffer specialPower) {
-        this.specialPower = specialPower;
-    }
+//
+//    public Spell getSpecialPower() {
+//        return specialPower;
+//    }
+//
+//    public void setSpecialPower(Spell specialPower) {
+//        this.specialPower = specialPower;
+//    }
 
     public int getAP() {
         return AP;
@@ -40,14 +56,6 @@ public class Hero extends Card{
 
     public void setHP(int HP) {
         this.HP = HP;
-    }
-
-    public Spell getSpell() {
-        return spell;
-    }
-
-    public void setSpell(Spell spell) {
-        this.spell = spell;
     }
 
     public int getCoolDown() {

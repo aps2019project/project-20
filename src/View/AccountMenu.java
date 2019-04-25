@@ -1,6 +1,6 @@
 package View;
 
-import AccountDatas.AccountDatas;
+import Datas.AccountDatas;
 import Model.Account;
 import Model.MatchHistory;
 import Presenter.AccountMenuPresenter;
@@ -8,7 +8,6 @@ import Presenter.AccountMenuPresenter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import Presenter.AccountPresenter;
 import Presenter.CurrentAccount;
 
 public class AccountMenu {

@@ -12,6 +12,32 @@ public class Asset {
     private int xInGround;
     private int yInGround;
     private Account owner;
+    private String action;
+    private Buffer buffer;
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
+    public String getAction() {
+        return action;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
+    }
+
+    public Buffer getBuffer() {
+        return buffer;
+    }
+
+    public void setBuffer(Buffer buffer) {
+        this.buffer = buffer;
+    }
 
     public static ArrayList<Hero> getHeroesOfAssetCollection(ArrayList<Asset> cardAndItems){
         ArrayList<Hero> heroes = new ArrayList<>();

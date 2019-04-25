@@ -1,6 +1,6 @@
 package View;
 
-import AccountDatas.AccountDatas;
+import Datas.AccountDatas;
 
 import java.util.Scanner;
 
