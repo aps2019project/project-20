@@ -1,74 +1,18 @@
 package Model;
 
+import java.util.ArrayList;
+
 public class Card extends Asset {
     private int MP;
-    private int xInGround;
-    private int yInGround;
+    private ArrayList<BufferOfSpells> bufferEffected = new ArrayList<>();
 
-    private boolean isPoisonBuff = false;
-    private boolean isStunBuff = false;
-    private boolean isWeaknessBuff = false;
-    private boolean isDisarmBuff = false;
-    private boolean isHolyBuff = false;
-    private boolean isPowerBuff = false;
-
-    public boolean isWeaknessBuff() {
-        return isWeaknessBuff;
+    public ArrayList<BufferOfSpells> getBufferEffected() {
+        return bufferEffected;
     }
 
-    public void setWeaknessBuff(boolean weaknessBuff) {
-        isWeaknessBuff = weaknessBuff;
+    public void setBufferEffected(ArrayList<BufferOfSpells> bufferEffected) {
+        this.bufferEffected = bufferEffected;
     }
-
-    public boolean isHolyBuff() {
-        return isHolyBuff;
-    }
-
-    public void setHolyBuff(boolean holyBuff) {
-        isHolyBuff = holyBuff;
-    }
-
-    public boolean isPowerBuff() {
-        return isPowerBuff;
-    }
-
-    public void setPowerBuff(boolean powerBuff) {
-        isPowerBuff = powerBuff;
-    }
-
-    public boolean isDisarm() {
-        return isDisarm;
-    }
-
-    public void setDisarm(boolean disarm) {
-        isDisarm = disarm;
-    }
-
-    public boolean isPoisonBuff() {
-        return isPoisonBuff;
-    }
-
-    public void setPoisonBuff(boolean poisonBuff) {
-        isPoisonBuff = poisonBuff;
-    }
-
-    public boolean isStunBuff() {
-        return isStunBuff;
-    }
-
-    public void setStunBuff(boolean stunBuff) {
-        isStunBuff = stunBuff;
-    }
-
-    public boolean isDisarmBuff() {
-        return isDisarmBuff;
-    }
-
-    public void setDisarmBuff(boolean disarmBuff) {
-        isDisarmBuff = disarmBuff;
-    }
-
-    private boolean isDisarm =false;
 
     public int getMP() {
         return MP;
@@ -78,19 +22,4 @@ public class Card extends Asset {
         this.MP = MP;
     }
 
-    public int getxInGround() {
-        return xInGround;
-    }
-
-    public void setxInGround(int xInGround) {
-        this.xInGround = xInGround;
-    }
-
-    public int getyInGround() {
-        return yInGround;
-    }
-
-    public void setyInGround(int yInGround) {
-        this.yInGround = yInGround;
-    }
 }

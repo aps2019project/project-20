@@ -8,6 +8,7 @@ public class AssetDatas {
     //Items ID:starts from 1000
     //Minions ID:starts from 3000
 
+    //spells
     private static Spell totalDisarm = new Spell("TotalDisarm","Disarming a Card of Enemy forever",1000,4000,0, Spell.TargetType.ENEMY,"totalDisarmAction");
     private static Spell areaDispel = new Spell("AreaDispel","Destroy Positive Buffs of Enemy Cards And Negative Buffs Of your Cards",1500,4001,2, Spell.TargetType.CELLS,2,"areaDispelAction");
     private static Spell empower = new Spell("empower","Improve َAp Of One Of Your Cards",250,4002,1, Spell.TargetType.PLAYER,"empowerAction");
@@ -29,10 +30,16 @@ public class AssetDatas {
     private static Spell kingsGuard = new Spell("kingsGuard","Kill A Card Of Enemy",1750,4018,3, Spell.TargetType.ENEMY,"kingsGuardAction");
     private static Spell shock = new Spell("shock","Stunning Card Of Enemy For Two Turns",1200,4019,1, Spell.TargetType.ENEMY,"shockAction");
 
-    private static Minion farsArcher = new Minion("farsArcher","farsArcher",300,3000,7,4,6,2,AttackType.Ranged,"NoAction");
-    private static Minion farsSwordsman = new Minion("farsSwordsman","farsSwordsman",400,3001,0,4,6,2,AttackType.Melee,"farsSwordsmanAction");
-    private static Minion farsSpear = new Minion("farsSpear","farsSpear",500,3002,3,3,5,1,AttackType.Hybrid,"NoAction");
-    private static Minion farsHorseman = new Minion("farsHorseman","farsSpear",200,3003,3,6,10,4,AttackType.Melee,"NoAction");
-    private static Minion farsChampion = new Minion("farsChampion","farsChampion",200,3003,3,6,10,4,AttackType.Melee,"");
+    //minions
+    private static Minion farsArcher = new Minion("farsArcher","farsArcher",300,3000,7,4,6,2,AttackType.Ranged, Minion.ActivateTimeOfSpecialPower.NOTHING,"NoAction");
+    private static Minion farsSwordsman = new Minion("farsSwordsman","farsSwordsman",400,3001,0,4,6,2,AttackType.Melee,Minion.ActivateTimeOfSpecialPower.PASSIVE,"farsSwordsmanAction");
+    private static Minion farsSpear = new Minion("farsSpear","farsSpear",500,3002,3,3,5,1,AttackType.Hybrid,Minion.ActivateTimeOfSpecialPower.NOTHING,"NoAction");
+    private static Minion farsHorseman = new Minion("farsHorseman","farsSpear",200,3003,0,6,10,4,AttackType.Melee,Minion.ActivateTimeOfSpecialPower.NOTHING,"NoAction");
+    private static Minion farsChampion = new Minion("farsChampion","farsChampion",600,3004,0,6,24,9,AttackType.Melee,Minion.ActivateTimeOfSpecialPower.ON_ATTACK,"farsChampionAction");
+    private static Minion farsChief = new Minion("farsChief","farsChief",800,3005,0,4,12,7,AttackType.Melee,Minion.ActivateTimeOfSpecialPower.COMBO,"farsChiefAction");
+    private static Minion TooraniArcher = new Minion("TooraniArcher","TooraniArcher",500,3006,5,4,3,1,AttackType.Ranged,Minion.ActivateTimeOfSpecialPower.NOTHING,"NoAction");
+    private static Minion TooraniCatapult = new Minion("TooraniCatapult","TooraniCatapult",500,3007,7,2,4,1,AttackType.Ranged,Minion.ActivateTimeOfSpecialPower.NOTHING,"NoAction");
+    private static Minion TooraniSpear = new Minion("TooraniSpear","TooraniSpear",600,3008,3,4,4,1,AttackType.Hybrid,Minion.ActivateTimeOfSpecialPower.NOTHING,"NoAction");
+    private static Minion TooraniSpy = new Minion("TooraniSpy","TooraniSpy",700,3009,0,6,6,4,AttackType.Melee,Minion.ActivateTimeOfSpecialPower.ON_ATTACK,"TooraniSpyAction");
 
 }

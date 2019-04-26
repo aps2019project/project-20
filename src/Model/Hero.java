@@ -5,6 +5,8 @@ public class Hero extends Card{
     // extending 10 heroes
    // private Spell specialPower;
     private int AP;
+    private int LifeTimeChangedAP = 0;
+    private int amountOfChangedAP = 0;
     private int HP;
     private int coolDown;
     private AttackType attackType;
@@ -24,6 +26,20 @@ public class Hero extends Card{
         this.setMP(MP);
         this.coolDown = coolDown;
         this.attackType = attackType;
+    }
+    public int getAmountOfChangedAP() {
+        return amountOfChangedAP;
+    }
+
+    public void setAmountOfChangedAP(int amountOfChangedAP) {
+        this.amountOfChangedAP = amountOfChangedAP;
+    }
+    public int getLifeTimeChangedAP() {
+        return LifeTimeChangedAP;
+    }
+
+    public void setLifeTimeChangedAP(int lifeTimeChangedAP) {
+        LifeTimeChangedAP = lifeTimeChangedAP;
     }
 
     public int getRange() {
