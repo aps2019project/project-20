@@ -1,28 +1,39 @@
 package Model;
 
-import java.util.ArrayList;
-
 public class Card extends Asset {
     private int MP;
     private int xInGround;
     private int yInGround;
-    private boolean isPoison = false;
-    private boolean isStun = false;
 
-    public boolean isPoison() {
-        return isPoison;
+    private boolean isPoisonBuff = false;
+    private boolean isStunBuff = false;
+    private boolean isWeaknessBuff = false;
+    private boolean isDisarmBuff = false;
+    private boolean isHolyBuff = false;
+    private boolean isPowerBuff = false;
+
+    public boolean isWeaknessBuff() {
+        return isWeaknessBuff;
     }
 
-    public void setPoison(boolean poison) {
-        isPoison = poison;
+    public void setWeaknessBuff(boolean weaknessBuff) {
+        isWeaknessBuff = weaknessBuff;
     }
 
-    public boolean isStun() {
-        return isStun;
+    public boolean isHolyBuff() {
+        return isHolyBuff;
     }
 
-    public void setStun(boolean stun) {
-        isStun = stun;
+    public void setHolyBuff(boolean holyBuff) {
+        isHolyBuff = holyBuff;
+    }
+
+    public boolean isPowerBuff() {
+        return isPowerBuff;
+    }
+
+    public void setPowerBuff(boolean powerBuff) {
+        isPowerBuff = powerBuff;
     }
 
     public boolean isDisarm() {
@@ -31,6 +42,30 @@ public class Card extends Asset {
 
     public void setDisarm(boolean disarm) {
         isDisarm = disarm;
+    }
+
+    public boolean isPoisonBuff() {
+        return isPoisonBuff;
+    }
+
+    public void setPoisonBuff(boolean poisonBuff) {
+        isPoisonBuff = poisonBuff;
+    }
+
+    public boolean isStunBuff() {
+        return isStunBuff;
+    }
+
+    public void setStunBuff(boolean stunBuff) {
+        isStunBuff = stunBuff;
+    }
+
+    public boolean isDisarmBuff() {
+        return isDisarmBuff;
+    }
+
+    public void setDisarmBuff(boolean disarmBuff) {
+        isDisarmBuff = disarmBuff;
     }
 
     private boolean isDisarm =false;
