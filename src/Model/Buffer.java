@@ -289,8 +289,8 @@ public class Buffer {
     public void kingsGuardAction(Account opponent,Account player, BattleGround battleGround, int x, int y) {
         x--;
         y--;
-        int X = player.getMainDeck().getHero().getxInGround();
-        int Y = player.getMainDeck().getHero().getyInGround();
+        int X = player.getMainDeck().getHero().getXInGround();
+        int Y = player.getMainDeck().getHero().getYInGround();
         if (battleGround.getGround().get(x).get(y).getOwner() == opponent && battleGround.getGround().get(x).get(y) instanceof Minion && (x-X<=1 && x-X>=-1 && y-Y<=1 && y-Y>=-1)) {
             ((Minion) battleGround.getGround().get(x).get(y)).setHP(0);
             return;
