@@ -14,8 +14,8 @@ public class Hero extends Card{
         this.setDesc(desc);
         this.setPrice(price);
         this.setID(ID);
-        this.setxInGround(0);
-        this.setyInGround(0);
+        this.setXInGround(0);
+        this.setYInGround(0);
         this.setOwner(null);
         this.setAction(action);
         this.range = range;

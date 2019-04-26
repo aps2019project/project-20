@@ -78,19 +78,19 @@ public class Card extends Asset {
         this.MP = MP;
     }
 
-    public int getxInGround() {
+    public int getXInGround() {
         return xInGround;
     }
 
-    public void setxInGround(int xInGround) {
+    public void setXInGround(int xInGround) {
         this.xInGround = xInGround;
     }
 
-    public int getyInGround() {
+    public int getYInGround() {
         return yInGround;
     }
 
-    public void setyInGround(int yInGround) {
+    public void setYInGround(int yInGround) {
         this.yInGround = yInGround;
     }
 }
