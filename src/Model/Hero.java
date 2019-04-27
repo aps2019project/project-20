@@ -3,43 +3,28 @@ package Model;
 public class Hero extends Card{
     private int range;
     // extending 10 heroes
-   // private Spell specialPower;
+    // private Spell specialPower;
     private int AP;
-    private int LifeTimeChangedAP = 0;
-    private int amountOfChangedAP = 0;
     private int HP;
     private int coolDown;
     private AttackType attackType;
 
-    public Hero(String name,String desc, int price, int ID,int range, int AP, int HP,int MP, int coolDown, AttackType attackType,String action) {
-        this.setName(name);
-        this.setDesc(desc);
-        this.setPrice(price);
-        this.setID(ID);
-        this.setXInGround(0);
-        this.setYInGround(0);
-        this.setOwner(null);
-        this.setAction(action);
-        this.range = range;
-        this.AP = AP;
-        this.HP = HP;
+    public Hero(String name, int price, int ID, int range, int AP, int HP, boolean doesHaveAction, AttackType attackType) {
+        super(name, name, price, ID, doesHaveAction);
+        this.setRange(range);
+        this.setAP(AP);
+        this.changeHP(HP);
+        this.setAttackType(attackType);
+    }
+
+    public Hero(String name, int price, int ID, int range, int AP, int HP, int MP, int coolDown, AttackType attackType) {
+        this(name, price, ID, range, AP, HP, true, attackType);
         this.setMP(MP);
-        this.coolDown = coolDown;
-        this.attackType = attackType;
-    }
-    public int getAmountOfChangedAP() {
-        return amountOfChangedAP;
+        this.setCoolDown(coolDown);
     }
 
-    public void setAmountOfChangedAP(int amountOfChangedAP) {
-        this.amountOfChangedAP = amountOfChangedAP;
-    }
-    public int getLifeTimeChangedAP() {
-        return LifeTimeChangedAP;
-    }
-
-    public void setLifeTimeChangedAP(int lifeTimeChangedAP) {
-        LifeTimeChangedAP = lifeTimeChangedAP;
+    public Hero(String name, int price, int ID, int range, int AP, int HP, AttackType attackType) {
+        this(name, price, ID, range, AP, HP, false, attackType);
     }
 
     public int getRange() {
@@ -70,8 +55,8 @@ public class Hero extends Card{
         return HP;
     }
 
-    public void setHP(int HP) {
-        this.HP = HP;
+    public void changeHP(int valueOfChange) {
+        this.HP += valueOfChange;
     }
 
     public int getCoolDown() {

@@ -2,14 +2,12 @@ package Model;
 
 public class Item extends Asset {
     //price=0 ----> item is collectable
-    public Item(String name,String desc, int price, int ID,String action) {
-        this.setName(name);
-        this.setDesc(desc);
-        this.setPrice(price);
-        this.setID(ID);
-        this.setXInGround(0);
-        this.setYInGround(0);
-        this.setOwner(null);
-        this.setAction(action);
+
+    public Item(String name, String desc, int price, int ID) {
+        super(name, desc, price, ID, true);
+    }
+
+    public Item(String name, String desc, int ID) {
+        super(name, desc, 0, ID, true);
     }
 }
