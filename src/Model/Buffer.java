@@ -412,8 +412,8 @@ public class Buffer {
 
     public void whiteWolfAction(Minion minion, Card enemyCard) {
         if (enemyCard instanceof Minion) {
-            BufferOfSpells bufferOfSpells = new BufferOfSpells(1, false, POWER_BUFF_HEALTH, 6, 1);
-            BufferOfSpells bufferOfSpells1 = new BufferOfSpells(1, false, POWER_BUFF_HEALTH, 4, 2);
+            BufferOfSpells bufferOfSpells = new BufferOfSpells(1, false, POISON_BUFF, 6, 1);
+            BufferOfSpells bufferOfSpells1 = new BufferOfSpells(1, false, POISON_BUFF, 4, 2);
         }
     }
 
@@ -425,7 +425,7 @@ public class Buffer {
 
     public void WolfAction(Minion playerMinion, Card enemyCard) {
         if (enemyCard instanceof Minion) {
-            BufferOfSpells bufferOfSpells = new BufferOfSpells(1, false, POWER_BUFF_HEALTH, 6, 1);
+            BufferOfSpells bufferOfSpells = new BufferOfSpells(1, false, POISON_BUFF, 6, 1);
         }
 
     }
