@@ -42,4 +42,35 @@ public class AssetDatas {
     private static Minion TooraniSpear = new Minion("TooraniSpear","TooraniSpear",600,3008,3,4,4,1,AttackType.Hybrid,Minion.ActivateTimeOfSpecialPower.NOTHING,"NoAction");
     private static Minion TooraniSpy = new Minion("TooraniSpy","TooraniSpy",700,3009,0,6,6,4,AttackType.Melee,Minion.ActivateTimeOfSpecialPower.ON_ATTACK,"TooraniSpyAction");
 
+
+    private static Minion tooraniSwampy = new Minion("tooraniSwampy", "tooraniSwampy", 450, 3010, 0, 10, 3, 2, AttackType.Melee, Minion.ActivateTimeOfSpecialPower.NOTHING, "");
+    private static Minion tooraniPrince = new Minion("tooraniPrince", "sor any not torani plus 4 attackpower", 800, 3011, 0, 10, 6, 6, AttackType.Melee,Minion.ActivateTimeOfSpecialPower.COMBO, "combo");
+    private static Minion blackGoblin = new Minion("blackGoblin", "", 300, 3012, 7, 10, 14, 9, AttackType.Hybrid,Minion.ActivateTimeOfSpecialPower.NOTHING, "");
+    private static Minion throwStoneGiant = new Minion("throwStoneGiant", "", 300, 3013, 7, 12, 12, 9, AttackType.Ranged, Minion.ActivateTimeOfSpecialPower.NOTHING,"");
+    private static Minion eagle = new Minion("eagle", "plus 10 power buff with increase HP", 300, 3014, 3, 2, 0, 2, AttackType.Ranged,Minion.ActivateTimeOfSpecialPower.PASSIVE, "passive");
+    private static Minion hogRiderGoblin = new Minion("hogRiderGoblin", "", 300, 3015, 0, 8, 16, 6, AttackType.Melee,Minion.ActivateTimeOfSpecialPower.NOTHING, "");
+    private static Minion oneEyeGiant = new Minion("oneEyeGiant", "on death time attack to all minion around 8 cells with 2 AP", 500, 3016, 3, 11, 12, 7, AttackType.Hybrid,Minion.ActivateTimeOfSpecialPower.ON_DEATH, "on death");
+    private static Minion poisonSnake = new Minion("poisonSnake", "for 3 turn poisoned enemy", 300, 3017, 4, 6, 5, 4, AttackType.Ranged, Minion.ActivateTimeOfSpecialPower.ON_ATTACK, "on attack");
+    private static Minion throwFireDragon = new Minion("throwFireDragon", "", 250, 3018, 4, 5, 9, 5, AttackType.Ranged, Minion.ActivateTimeOfSpecialPower.NOTHING,"");
+    private static Minion drainLion = new Minion("drainLion", "no effect from holly buff", 600, 3019, 0, 8, 1, 2, AttackType.Melee, Minion.ActivateTimeOfSpecialPower.ON_ATTACK,"on attack");
+    private static Minion giantSnake = new Minion("giantSnake", "not holly buff", 500, 3020, 5, 7, 14, 8, AttackType.Ranged, Minion.ActivateTimeOfSpecialPower.ON_RESPAWN,"on respawn");
+    private static Minion whiteWolf = new Minion("whiteWolf", "4 and 6 decrease minion HP for two after turn", 400, 3021, 0, 2, 8, 5, AttackType.Melee, Minion.ActivateTimeOfSpecialPower.ON_ATTACK,"on attack");
+    private static Minion tiger = new Minion("tiger", "decrease 8 HP in after turn from minion that attacked", 400, 3022, 0, 2, 6, 4, AttackType.Melee,Minion.ActivateTimeOfSpecialPower.ON_ATTACK, "on attack");
+    private static Minion wolf = new Minion("wolf", "decrease 6 HP in after turn from minion that attacked", 400, 3023, 0, 1, 6, 3, AttackType.Melee,Minion.ActivateTimeOfSpecialPower.ON_ATTACK, "on attack");
+    private static Minion wizard = new Minion("wizard", "plus 2 AP and one weakness (decrease 1 HP)  for around minion", 550, 3024, 3, 4, 5, 4, AttackType.Ranged,Minion.ActivateTimeOfSpecialPower.PASSIVE, "passive");
+    private static Minion greatWizard = new Minion("greatWizard", "plus 2 AP and holly buff  for around minion", 550, 3025, 5, 6, 6, 6, AttackType.Ranged,Minion.ActivateTimeOfSpecialPower.PASSIVE, "passive");
+    private static Minion elf = new Minion("elf", "for all own minions passive 1 AP power buff", 500, 3026, 4, 4, 10, 5, AttackType.Ranged,Minion.ActivateTimeOfSpecialPower.PASSIVE, "passive");
+    private static Minion wildBoar = new Minion("wildBoar", "no effect by disarm", 500, 3027, 0, 14, 10, 6, AttackType.Melee,Minion.ActivateTimeOfSpecialPower.ON_DEFEND, "on defend");
+    private static Minion piran = new Minion("piran", "no effect by poison", 400, 3028, 0, 12, 20, 8, AttackType.Melee,Minion.ActivateTimeOfSpecialPower.ON_DEFEND, "on defend");
+    private static Minion giv = new Minion("giv", "no effect by negative buff", 450, 3029, 5, 7, 5, 4, AttackType.Ranged,Minion.ActivateTimeOfSpecialPower.ON_DEFEND, "on defend");
+    private static Minion bahman = new Minion("bahman", "random decrease enemy minion decrease 16 HP", 450, 3030, 0, 9, 16, 8, AttackType.Melee,Minion.ActivateTimeOfSpecialPower.ON_RESPAWN, "on respawn");
+    private static Minion ashkbos = new Minion("ashkbos", "no effect by enemy that attack power lower than", 400, 3031, 0, 8, 14, 7, AttackType.Melee,Minion.ActivateTimeOfSpecialPower.ON_DEFEND, "on defend");
+    private static Minion iraj = new Minion("iraj", "", 500, 3032, 3, 20, 6, 4, AttackType.Ranged,Minion.ActivateTimeOfSpecialPower.NOTHING, "");
+    private static Minion bigGiant = new Minion("bigGiant", "", 600, 3033, 2, 8, 30, 9, AttackType.Hybrid,Minion.ActivateTimeOfSpecialPower.NOTHING, "");
+    private static Minion twoHeadGiant = new Minion("twoHeadGiant", "destroy all holly buff minion that attacked", 550, 3034, 0, 4, 10, 4, AttackType.Melee,Minion.ActivateTimeOfSpecialPower.PASSIVE, "passive");
+    private static Minion coldMother = new Minion("coldMother", "stun around minion ", 500, 3035, 5, 4, 3, 3, AttackType.Ranged,Minion.ActivateTimeOfSpecialPower.ON_RESPAWN, "on respawn");
+    private static Minion steelArmor  = new Minion("steelArmor", "convert randomly to enemy minions ", 650, 3036, 0, 1, 1, 3, AttackType.Melee, Minion.ActivateTimeOfSpecialPower.ON_RESPAWN,"on respawn");
+    private static Minion siavash  = new Minion("siavash", "on death attack 6 AP to enemy hero", 350, 3037, 0, 5, 8, 4, AttackType.Melee,Minion.ActivateTimeOfSpecialPower.ON_DEATH, "on death");
+    private static Minion kingGiant  = new Minion("kingGiant", "for any giant take part in combo enemy 1 turn disarm", 600, 3038, 0, 4, 10, 5, AttackType.Melee, Minion.ActivateTimeOfSpecialPower.COMBO, "combo");
+    private static Minion arjangGoblin  = new Minion("arjangGoblin", "fo any goblin take part in attack add 3 to weakness", 600, 3039, 0, 6, 6, 3, AttackType.Melee,Minion.ActivateTimeOfSpecialPower.COMBO, "combo");
 }

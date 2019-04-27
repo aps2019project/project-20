@@ -3,8 +3,8 @@ package Model;
 import java.util.ArrayList;
 
 public class BattleGround {
-    private final static int rows=5;
-    private final static int cols=9;
+    private final static int rows = 5;
+    private final static int cols = 9;
 
     public enum CellsEffect {
         NOTHING,
@@ -12,6 +12,7 @@ public class BattleGround {
         FIRE,
         HOLY
     }
+
     private ArrayList<ArrayList<Asset>> ground = new ArrayList<>();
     private ArrayList<ArrayList<CellsEffect>> effectsPosition = new ArrayList<>();
     private ArrayList<ArrayList<Integer>> effectsLifeTimePosition = new ArrayList<>();

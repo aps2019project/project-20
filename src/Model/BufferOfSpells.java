@@ -6,9 +6,10 @@ public class BufferOfSpells {
     private Type type;
     private boolean isUsed;
     private int value;
+    private int turnActivate;
 
     public enum Type{
-        POWER_BUFF,HOLY_BUFF,DISARM_BUFF,STUN_BUFF,WEAKNESS_BUFF_HEALTH,WEAKNESS_BUFF_POWER,POISON_BUFF
+        POWER_BUFF_ATTACK,POWER_BUFF_HEALTH,HOLY_BUFF,DISARM_BUFF,STUN_BUFF,WEAKNESS_BUFF_HEALTH,WEAKNESS_BUFF_POWER,POISON_BUFF
     }
 
     public BufferOfSpells(int lifeTime,boolean lifeEndless,Type type) {
@@ -24,6 +25,15 @@ public class BufferOfSpells {
         this.type = type;
         this.value = value;
     }
+
+    public BufferOfSpells(int lifeTime,boolean lifeEndless,Type type,int value,int turnActivate) {
+        this.lifeTime = lifeTime;
+        this.lifeEndless = lifeEndless;
+        this.turnActivate=turnActivate;
+        this.type = type;
+        this.value = value;
+    }
+
 
     public int getValue() {
         return value;

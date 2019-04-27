@@ -15,8 +15,26 @@ public class Minion extends Card{
         NOTHING,ON_RESPAWN,PASSIVE,ON_DEATH,ON_ATTACK,ON_DEFEND,COMBO
     }
     private ActivateTimeOfSpecialPower activateTimeOfSpecialPower;
+    private boolean isDisarm=true;
+    private boolean isPoision=true;
 
-    public Minion(String name,String desc, int price, int ID,int range, int AP, int HP,int MP, AttackType attackType,ActivateTimeOfSpecialPower activateTimeOfSpecialPower,String action) {
+    public boolean isDisarm() {
+        return isDisarm;
+    }
+
+    public void setDisarm(boolean disarm) {
+        isDisarm = disarm;
+    }
+
+    public boolean isPoision() {
+        return isPoision;
+    }
+
+    public void setPoision(boolean poision) {
+        isPoision = poision;
+    }
+
+    public Minion(String name, String desc, int price, int ID, int range, int AP, int HP, int MP, AttackType attackType, ActivateTimeOfSpecialPower activateTimeOfSpecialPower, String action) {
         this.setName(name);
         this.setDesc(desc);
         this.setPrice(price);
