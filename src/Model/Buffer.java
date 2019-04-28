@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import static Model.BufferOfSpells.Type.*;
+import static Model.Buffer.*;
 
 public class Buffer {
 
@@ -26,7 +27,7 @@ public class Buffer {
         x--;
         y--;
         for (int i = 0; i < 2 && i + x < BattleGround.getRows(); i++) {
-            for (int j = 0; j < 2 && j + y < BattleGround.getCols(); j++) {
+            for (int j = 0; j < 2 && j + y < BattleGround.getColumns(); j++) {
                 if (battleGround.getGround().get(x + j).get(y + i) != null && battleGround.getGround().get(x + j).get(y + i) instanceof Card) {
                     for (int k = 0; k < ((Card) battleGround.getGround().get(x + j).get(y + i)).getBufferEffected().size(); k++) {
                         if (battleGround.getGround().get(x + j).get(y + i).getOwner() == player) {
@@ -73,11 +74,11 @@ public class Buffer {
         y--;
         if (battleGround.getGround().get(x).get(y).getOwner() == opponent && battleGround.getGround().get(x).get(y) instanceof Card) {
             if (battleGround.getGround().get(x).get(y) instanceof Hero) {
-                ((Hero) battleGround.getGround().get(x).get(y)).setHP(((Hero) battleGround.getGround().get(x).get(y)).getHP() - 4);
+                ((Hero) battleGround.getGround().get(x).get(y)).changeHP( - 4);
                 return;
             }
             if (battleGround.getGround().get(x).get(y) instanceof Minion) {
-                ((Minion) battleGround.getGround().get(x).get(y)).setHP(((Minion) battleGround.getGround().get(x).get(y)).getHP() - 4);
+                ((Minion) battleGround.getGround().get(x).get(y)).changeHP( - 4);
                 return;
             }
             throw new TargetSelectedException_Spell();
@@ -99,7 +100,7 @@ public class Buffer {
         x--;
         y--;
         for (int i = 0; i < 2 && i + x < BattleGround.getRows(); i++) {
-            for (int j = 0; j < 2 && j + y < BattleGround.getCols(); j++) {
+            for (int j = 0; j < 2 && j + y < BattleGround.getColumns(); j++) {
                 if (battleGround.getEffectsPosition().get(x + j).get(y + i) != BattleGround.CellsEffect.FIRE) {
                     battleGround.getEffectsPosition().get(x + j).set(y + i, BattleGround.CellsEffect.FIRE);
                     battleGround.getEffectsLifeTimePosition().get(x + j).set(y + i, 2);
@@ -112,7 +113,7 @@ public class Buffer {
         x--;
         y--;
         if (battleGround.getGround().get(x).get(y).getOwner() == opponent && battleGround.getGround().get(x).get(y) instanceof Hero) {
-            ((Hero) battleGround.getGround().get(x).get(y)).setHP(((Hero) battleGround.getGround().get(x).get(y)).getHP() - 8);
+            ((Hero) battleGround.getGround().get(x).get(y)).changeHP( - 8);
             return;
         }
         throw new TargetSelectedException_Spell();
@@ -122,7 +123,7 @@ public class Buffer {
         x--;
         y--;
         for (int i = 0; i < 3 && i + x < BattleGround.getRows(); i++) {
-            for (int j = 0; j < 3 && j + y < BattleGround.getCols(); j++) {
+            for (int j = 0; j < 3 && j + y < BattleGround.getColumns(); j++) {
                 if (battleGround.getEffectsPosition().get(x + j).get(y + i) != BattleGround.CellsEffect.POISON) {
                     battleGround.getEffectsPosition().get(x + j).set(y + i, BattleGround.CellsEffect.POISON);
                     battleGround.getEffectsLifeTimePosition().get(x + j).set(y + i, 1);
@@ -156,7 +157,7 @@ public class Buffer {
 
     public void allDisarmAction(Account opponent, BattleGround battleGround) {
         for (int i = 0; i < BattleGround.getRows(); i++) {
-            for (int j = 0; j < BattleGround.getCols(); j++) {
+            for (int j = 0; j < BattleGround.getColumns(); j++) {
                 if (battleGround.getGround().get(i).get(j) instanceof Card && battleGround.getGround().get(i).get(j).getOwner() == opponent) {
                     ((Card) battleGround.getGround().get(i).get(j)).getBufferEffected().add(new BufferOfSpells(1,  BufferOfSpells.Type.DISARM_BUFF));
                 }
@@ -166,7 +167,7 @@ public class Buffer {
 
     public void allPoisonAction(Account opponent, BattleGround battleGround) {
         for (int i = 0; i < BattleGround.getRows(); i++) {
-            for (int j = 0; j < BattleGround.getCols(); j++) {
+            for (int j = 0; j < BattleGround.getColumns(); j++) {
                 if (battleGround.getGround().get(i).get(j) instanceof Card && battleGround.getGround().get(i).get(j).getOwner() == opponent) {
                     ((Hero) battleGround.getGround().get(i).get(j)).getBufferEffected().add(new BufferOfSpells(4, POISON_BUFF));
                 }
@@ -206,14 +207,14 @@ public class Buffer {
         if (battleGround.getGround().get(x).get(y).getOwner() == player && battleGround.getGround().get(x).get(y) instanceof Card) {
             if (battleGround.getGround().get(x).get(y) instanceof Hero) {
                 ((Hero) battleGround.getGround().get(x).get(y)).getBufferEffected().add(new BufferOfSpells(0, BufferOfSpells.Type.WEAKNESS_BUFF_HEALTH, 6));
-                ((Hero) battleGround.getGround().get(x).get(y)).setHP(((Hero) battleGround.getGround().get(x).get(y)).getHP() - 6);
+                ((Hero) battleGround.getGround().get(x).get(y)).changeHP( - 6);
                 ((Hero) battleGround.getGround().get(x).get(y)).getBufferEffected().add(new BufferOfSpells(3,  BufferOfSpells.Type.HOLY_BUFF));
                 ((Hero) battleGround.getGround().get(x).get(y)).getBufferEffected().add(new BufferOfSpells(3,  BufferOfSpells.Type.HOLY_BUFF));
                 return;
             }
             if (battleGround.getGround().get(x).get(y) instanceof Minion) {
                 ((Minion) battleGround.getGround().get(x).get(y)).getBufferEffected().add(new BufferOfSpells(0,  BufferOfSpells.Type.WEAKNESS_BUFF_HEALTH));
-                ((Minion) battleGround.getGround().get(x).get(y)).setHP(((Hero) battleGround.getGround().get(x).get(y)).getHP() - 6);
+                ((Minion) battleGround.getGround().get(x).get(y)).changeHP( - 6);
                 ((Minion) battleGround.getGround().get(x).get(y)).getBufferEffected().add(new BufferOfSpells(3,  BufferOfSpells.Type.HOLY_BUFF));
                 ((Minion) battleGround.getGround().get(x).get(y)).getBufferEffected().add(new BufferOfSpells(3,  BufferOfSpells.Type.HOLY_BUFF));
                 return;
@@ -244,7 +245,7 @@ public class Buffer {
 
     public void allPowerAction(Account player, BattleGround battleGround) {
         for (int i = 0; i < BattleGround.getRows(); i++) {
-            for (int j = 0; j < BattleGround.getCols(); j++) {
+            for (int j = 0; j < BattleGround.getColumns(); j++) {
                 if (battleGround.getGround().get(i).get(j) instanceof Card && battleGround.getGround().get(i).get(j).getOwner() == player) {
                     ((Card) battleGround.getGround().get(i).get(j)).getBufferEffected().add(new BufferOfSpells(0,  POWER_BUFF_HEALTH, 2));
                 }
@@ -256,10 +257,10 @@ public class Buffer {
         for (int i = 0; i < BattleGround.getRows(); i++) {
             if (battleGround.getGround().get(i).get(col) instanceof Card && battleGround.getGround().get(i).get(col).getOwner() == opponent) {
                 if (battleGround.getGround().get(i).get(col) instanceof Hero) {
-                    ((Hero) battleGround.getGround().get(i).get(col)).setHP(((Hero) battleGround.getGround().get(i).get(col)).getHP() - 6);
+                    ((Hero) battleGround.getGround().get(i).get(col)).changeHP( - 6);
 
                 } else if (battleGround.getGround().get(i).get(col) instanceof Minion) {
-                    ((Minion) battleGround.getGround().get(i).get(col)).setHP(((Minion) battleGround.getGround().get(i).get(col)).getHP() - 6);
+                    ((Minion) battleGround.getGround().get(i).get(col)).changeHP( - 6);
 
                 }
             }
@@ -280,8 +281,8 @@ public class Buffer {
         x--;
         y--;
         if (battleGround.getGround().get(x).get(y).getOwner() == player && battleGround.getGround().get(x).get(y) instanceof Minion) {
-            player.getMainDeck().getHero().setHP(player.getMainDeck().getHero().getHP() + ((Minion) battleGround.getGround().get(x).get(y)).getHP());
-            ((Minion) battleGround.getGround().get(x).get(y)).setHP(0);
+            player.getMainDeck().getHero().changeHP( + ((Minion) battleGround.getGround().get(x).get(y)).getHP());
+            ((Minion) battleGround.getGround().get(x).get(y)).changeHP(-((Minion) battleGround.getGround().get(x).get(y)).getHP());
 //            player.getMainDeck().getCards().remove(((Minion) battleGround.getGround().get(x).get(y)).getHP());
             return;
         }
@@ -294,7 +295,7 @@ public class Buffer {
         int X = player.getMainDeck().getHero().getXInGround();
         int Y = player.getMainDeck().getHero().getYInGround();
         if (battleGround.getGround().get(x).get(y).getOwner() == opponent && battleGround.getGround().get(x).get(y) instanceof Minion && (x - X <= 1 && x - X >= -1 && y - Y <= 1 && y - Y >= -1)) {
-            ((Minion) battleGround.getGround().get(x).get(y)).setHP(0);
+            ((Minion) battleGround.getGround().get(x).get(y)).changeHP(-((Minion) battleGround.getGround().get(x).get(y)).getHP());
             return;
         }
         throw new TargetSelectedException_Spell();
@@ -330,9 +331,9 @@ public class Buffer {
         for (int i = 0; i < playerMinion.getAttackedCards().size(); i++) {
             if (enemyCard == playerMinion.getAttackedCards().get(i)) {
                 if (enemyCard instanceof Hero) {
-                    ((Hero) enemyCard).setHP(((Hero) enemyCard).getHP() - 5 * playerMinion.getMultiplicityOfEachAttackedCard().get(i));
+                    ((Hero) enemyCard).changeHP( - 5 * playerMinion.getMultiplicityOfEachAttackedCard().get(i));
                 } else if (enemyCard instanceof Minion) {
-                    ((Minion) enemyCard).setHP(((Minion) enemyCard).getHP() - 5 * playerMinion.getMultiplicityOfEachAttackedCard().get(i));
+                    ((Minion) enemyCard).changeHP(- 5 * playerMinion.getMultiplicityOfEachAttackedCard().get(i));
                 }
                 playerMinion.getMultiplicityOfEachAttackedCard().set(i, playerMinion.getMultiplicityOfEachAttackedCard().get(i) + 1);
                 return;
@@ -344,9 +345,9 @@ public class Buffer {
         for (Card comboCard : ComboCards) {
             if (comboCard.getName().substring(0, 3).equals("fars")) {
                 if (enemyCard instanceof Hero) {
-                    ((Hero) enemyCard).setHP(((Hero) enemyCard).getHP() - 4);
+                    ((Hero) enemyCard).changeHP( - 4);
                 } else if (enemyCard instanceof Minion) {
-                    ((Minion) enemyCard).setHP(((Minion) enemyCard).getHP() - 4);
+                    ((Minion) enemyCard).changeHP( - 4);
                 }
             }
         }
@@ -361,9 +362,9 @@ public class Buffer {
         for (Card comboCard : ComboCards) {
             if (comboCard.getID() == 3010 || comboCard.getID() == 3009 || comboCard.getID() == 3008 || comboCard.getID() == 3007 || comboCard.getID() == 3006) {
                 if (enemyCard instanceof Hero) {
-                    ((Hero) enemyCard).setHP(((Hero) enemyCard).getHP() - 4);
+                    ((Hero) enemyCard).changeHP( - 4);
                 } else if (enemyCard instanceof Minion) {
-                    ((Minion) enemyCard).setHP(((Minion) enemyCard).getHP() - 4);
+                    ((Minion) enemyCard).changeHP( - 4);
                 }
             }
         }
@@ -379,8 +380,8 @@ public class Buffer {
             for (int j = -1; j <= 1; j++) {
                 int xCell = playerMinion.getXInGround() + i;
                 int yCell = playerMinion.getYInGround() + j;
-                if (xCell < BattleGround.getRows() && yCell < BattleGround.getCols() && battleGround.getGround().get(xCell).get(yCell) instanceof Minion)
-                    ((Minion) battleGround.getGround().get(xCell).get(yCell)).setHP(((Minion) battleGround.getGround().get(xCell).get(yCell)).getHP() - 2);
+                if (xCell < BattleGround.getRows() && yCell < BattleGround.getColumns() && battleGround.getGround().get(xCell).get(yCell) instanceof Minion)
+                    ((Minion) battleGround.getGround().get(xCell).get(yCell)).changeHP( - 2);
             }
         }
 
@@ -400,8 +401,8 @@ public class Buffer {
                 if (Math.abs(i + j) <= 2) {
                     int xCell = playerMinion.getXInGround() + i;
                     int yCell = playerMinion.getYInGround() + j;
-                    if (xCell < BattleGround.getRows() && yCell < BattleGround.getCols() && battleGround.getGround().get(xCell).get(yCell) instanceof Minion) {
-                        ((Minion) battleGround.getGround().get(xCell).get(yCell)).setHP(((Minion) battleGround.getGround().get(xCell).get(yCell)).getHP() - 1);
+                    if (xCell < BattleGround.getRows() && yCell < BattleGround.getColumns() && battleGround.getGround().get(xCell).get(yCell) instanceof Minion) {
+                        ((Minion) battleGround.getGround().get(xCell).get(yCell)).changeHP( - 1);
                     }
                 }
             }
@@ -435,7 +436,7 @@ public class Buffer {
             for (int j = -1; j <= 1; j++) {
                 int xCell = playerMinion.getXInGround() + i;
                 int yCell = playerMinion.getYInGround() + j;
-                if (xCell < BattleGround.getRows() && yCell < BattleGround.getCols() && battleGround.getGround().get(xCell).get(yCell) instanceof Minion && battleGround.getGround().get(xCell).get(yCell).getOwner() == player) {
+                if (xCell < BattleGround.getRows() && yCell < BattleGround.getColumns() && battleGround.getGround().get(xCell).get(yCell) instanceof Minion && battleGround.getGround().get(xCell).get(yCell).getOwner() == player) {
                     BufferOfSpells bufferOfSpells = new BufferOfSpells(1, POWER_BUFF_ATTACK, 2, 1);
                     BufferOfSpells bufferOfSpells1 = new BufferOfSpells(1, WEAKNESS_BUFF_HEALTH, 1, 1);
                 }
@@ -448,7 +449,7 @@ public class Buffer {
             for (int j = -1; j <= 1; j++) {
                 int xCell = playerMinion.getXInGround() + i;
                 int yCell = playerMinion.getYInGround() + j;
-                if (xCell < BattleGround.getRows() && yCell < BattleGround.getCols() && battleGround.getGround().get(xCell).get(yCell) instanceof Minion && battleGround.getGround().get(xCell).get(yCell).getOwner() == player) {
+                if (xCell < BattleGround.getRows() && yCell < BattleGround.getColumns() && battleGround.getGround().get(xCell).get(yCell) instanceof Minion && battleGround.getGround().get(xCell).get(yCell).getOwner() == player) {
                     BufferOfSpells bufferOfSpells = new BufferOfSpells(1,  POWER_BUFF_ATTACK, 2);
                     BufferOfSpells bufferOfSpells1 = new BufferOfSpells(1,  HOLY_BUFF);
                 }
@@ -457,7 +458,7 @@ public class Buffer {
     }
 
     public void elfAction(Account player, Minion playerMinion, BattleGround battleGround) {
-        for (int i = 0; i <= BattleGround.getCols(); i++) {
+        for (int i = 0; i <= BattleGround.getColumns(); i++) {
             for (int j = 0; j <= BattleGround.getRows(); j++) {
                 if (battleGround.getGround().get(i).get(j) instanceof Minion && battleGround.getGround().get(i).get(j).getOwner() == player) {
                     BufferOfSpells bufferOfSpells = new BufferOfSpells(1,  POWER_BUFF_ATTACK, 1);
@@ -490,7 +491,7 @@ public class Buffer {
     public void bahmanAction(Account player, Account enemy, BattleGround battleGround) {
         int numberOfEnemyMinions = 0;
         ArrayList<Minion> enemyMinion = new ArrayList<>();
-        for (int i = 0; i <= BattleGround.getCols(); i++) {
+        for (int i = 0; i <= BattleGround.getColumns(); i++) {
             for (int j = 0; j <= BattleGround.getRows(); j++) {
                 if (battleGround.getGround().get(i).get(j) instanceof Minion && battleGround.getGround().get(i).get(j).getOwner() == enemy) {
                     numberOfEnemyMinions++;
@@ -499,7 +500,7 @@ public class Buffer {
             }
             Random rand = new Random();
             int randomNumber = rand.nextInt(numberOfEnemyMinions) + 1;
-            enemyMinion.get(randomNumber).setHP(enemyMinion.get(randomNumber).getHP() - 16);
+            enemyMinion.get(randomNumber).changeHP(-16);
 
 
         }
@@ -507,7 +508,7 @@ public class Buffer {
 
     public void ashkbosAction(Minion playerMinion, Minion enemyMinion) {
         if (enemyMinion.getAP() < playerMinion.getAP()) {
-            playerMinion.setHP(playerMinion.getHP() + enemyMinion.getAP());
+            playerMinion.changeHP(+ enemyMinion.getAP());
         }
     }
 
@@ -519,7 +520,7 @@ public class Buffer {
             for (int j = -1; j <= 1; j++) {
                 int xCell = playerMinion.getXInGround() + i;
                 int yCell = playerMinion.getYInGround() + j;
-                if ((xCell == 0 && yCell == 00) && xCell < BattleGround.getRows() && yCell < BattleGround.getCols() && battleGround.getGround().get(xCell).get(yCell) instanceof Minion && battleGround.getGround().get(xCell).get(yCell).getOwner() == enemy) {
+                if ((xCell == 0 && yCell == 00) && xCell < BattleGround.getRows() && yCell < BattleGround.getColumns() && battleGround.getGround().get(xCell).get(yCell) instanceof Minion && battleGround.getGround().get(xCell).get(yCell).getOwner() == enemy) {
                     BufferOfSpells bufferOfSpells = new BufferOfSpells(1,  STUN_BUFF);
             }
             }
@@ -531,6 +532,6 @@ public class Buffer {
     }
 
     public void siavashAction(Hero enemyhero) {
-        enemyhero.setHP(enemyhero.getHP() - 6);
+        enemyhero.changeHP(- 6);
     }
 }

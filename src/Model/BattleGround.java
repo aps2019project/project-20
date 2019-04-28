@@ -12,10 +12,10 @@ public class BattleGround {
 
         private int effectLifetime;
 
-        //       CellsEffect(int effectLifetime) {
-        //         this.effectLifetime = effectLifetime;
-        //   }
-        //        CellsEffect(){}
+               CellsEffect(int effectLifetime) {
+                 this.effectLifetime = effectLifetime;
+           }
+                CellsEffect(){}
     }
 
     private ArrayList<ArrayList<Asset>> ground = new ArrayList<>();
