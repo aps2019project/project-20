@@ -6,6 +6,12 @@ public class Card extends Asset {
     private int MP;
     private ArrayList<BufferOfSpells> bufferEffected = new ArrayList<>();
 
+    public Card(){}
+
+    public Card(String name, String desc, int price, int ID, boolean doesHaveAction) {
+        super(name, desc, price, ID, doesHaveAction);
+    }
+
     public ArrayList<BufferOfSpells> getBufferEffected() {
         return bufferEffected;
     }

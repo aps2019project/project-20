@@ -15,6 +15,23 @@ public class Asset {
     private String action;
     private Buffer buffer;
 
+    public Asset() {
+
+    }
+    public Asset(String name, String desc, int price, int ID, boolean doesHaveAction) {
+        this.name = name;
+        this.desc = desc;
+        this.price = price;
+        this.ID = ID;
+        this.xInGround = 0;
+        this.yInGround = 0;
+        this.owner = null;
+        if (doesHaveAction)
+            this.action = name + "Action";
+        else
+            this.action = "NoAction";
+    }
+
     public String getDesc() {
         return desc;
     }
@@ -133,7 +150,7 @@ public class Asset {
         return xInGround;
     }
 
-    public void setXInGround(int xInGround) {
+    public void setxInGround(int xInGround) {
         this.xInGround = xInGround;
     }
 
@@ -141,7 +158,7 @@ public class Asset {
         return yInGround;
     }
 
-    public void setYInGround(int yInGround) {
+    public void setyInGround(int yInGround) {
         this.yInGround = yInGround;
     }
 }

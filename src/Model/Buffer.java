@@ -5,7 +5,6 @@ import Exceptions.TargetSelectedException_Spell;
 import java.util.ArrayList;
 import java.util.Random;
 
-import static Model.BufferOfSpells.*;
 import static Model.BufferOfSpells.Type.*;
 
 public class Buffer {
@@ -356,7 +355,6 @@ public class Buffer {
     public void TooraniSpyAction(Minion playerMinion, Card enemyCard) {
         enemyCard.getBufferEffected().add(new BufferOfSpells(1,  BufferOfSpells.Type.DISARM_BUFF));
         enemyCard.getBufferEffected().add(new BufferOfSpells(4,  POISON_BUFF));
-
     }
 
     public void TooraniPrinceAction(Minion playerMinion, ArrayList<Card> ComboCards, Card enemyCard) {
@@ -374,7 +372,6 @@ public class Buffer {
 
     public void EagleAction(Minion playerMinion) {
         BufferOfSpells bufferOfSpells = new BufferOfSpells(0,  POWER_BUFF_HEALTH, 10);
-        playerMinion.getBufferEffected().add(bufferOfSpells);
     }
 
     public void OneEyeGiantAction(Minion playerMinion, BattleGround battleGround) {
@@ -391,12 +388,10 @@ public class Buffer {
 
     public void PoisonSnakeAction(Minion playerMinion, Minion enemyMinion) {
         BufferOfSpells bufferOfSpells = new BufferOfSpells(3, POISON_BUFF);
-        playerMinion.getBufferEffected().add(bufferOfSpells);
     }
 
     public void DrainLionAction(Minion playerMinion, Minion enemyMinion) {
         BufferOfSpells bufferOfSpells = new BufferOfSpells(3,  BufferOfSpells.Type.HOLY_BUFF, playerMinion.getAP() - 1);
-        playerMinion.getBufferEffected().add(bufferOfSpells);
     }
 
     public void giantSnakeAction(Minion playerMinion, Minion enemyMinion, BattleGround battleGround) {
@@ -414,26 +409,22 @@ public class Buffer {
 
     }
 
-    public void whiteWolfAction(Minion playerMinion, Card enemyCard) {
+    public void whiteWolfAction(Minion minion, Card enemyCard) {
         if (enemyCard instanceof Minion) {
             BufferOfSpells bufferOfSpells = new BufferOfSpells(1,  POISON_BUFF, 6, 1);
             BufferOfSpells bufferOfSpells1 = new BufferOfSpells(1,  POISON_BUFF, 4, 2);
-            playerMinion.getBufferEffected().add(bufferOfSpells);
-            playerMinion.getBufferEffected().add(bufferOfSpells1);
         }
     }
 
     public void tigerAction(Minion playerMinion, Card enemyCard) {
         if (enemyCard instanceof Minion) {
             BufferOfSpells bufferOfSpells = new BufferOfSpells(1, POWER_BUFF_HEALTH, 8, 1);
-            playerMinion.getBufferEffected().add(bufferOfSpells);
         }
     }
 
     public void WolfAction(Minion playerMinion, Card enemyCard) {
         if (enemyCard instanceof Minion) {
             BufferOfSpells bufferOfSpells = new BufferOfSpells(1,  POISON_BUFF, 6, 1);
-            playerMinion.getBufferEffected().add(bufferOfSpells);
         }
 
     }
@@ -447,8 +438,6 @@ public class Buffer {
                 if (xCell < BattleGround.getRows() && yCell < BattleGround.getCols() && battleGround.getGround().get(xCell).get(yCell) instanceof Minion && battleGround.getGround().get(xCell).get(yCell).getOwner() == player) {
                     BufferOfSpells bufferOfSpells = new BufferOfSpells(1, POWER_BUFF_ATTACK, 2, 1);
                     BufferOfSpells bufferOfSpells1 = new BufferOfSpells(1, WEAKNESS_BUFF_HEALTH, 1, 1);
-                    playerMinion.getBufferEffected().add(bufferOfSpells);
-                    playerMinion.getBufferEffected().add(bufferOfSpells1);
                 }
             }
         }
@@ -462,8 +451,6 @@ public class Buffer {
                 if (xCell < BattleGround.getRows() && yCell < BattleGround.getCols() && battleGround.getGround().get(xCell).get(yCell) instanceof Minion && battleGround.getGround().get(xCell).get(yCell).getOwner() == player) {
                     BufferOfSpells bufferOfSpells = new BufferOfSpells(1,  POWER_BUFF_ATTACK, 2);
                     BufferOfSpells bufferOfSpells1 = new BufferOfSpells(1,  HOLY_BUFF);
-                    playerMinion.getBufferEffected().add(bufferOfSpells);
-                    playerMinion.getBufferEffected().add(bufferOfSpells1);
                 }
             }
         }
@@ -474,7 +461,6 @@ public class Buffer {
             for (int j = 0; j <= BattleGround.getRows(); j++) {
                 if (battleGround.getGround().get(i).get(j) instanceof Minion && battleGround.getGround().get(i).get(j).getOwner() == player) {
                     BufferOfSpells bufferOfSpells = new BufferOfSpells(1,  POWER_BUFF_ATTACK, 1);
-                    playerMinion.getBufferEffected().add(bufferOfSpells);
                 }
             }
         }
@@ -535,7 +521,6 @@ public class Buffer {
                 int yCell = playerMinion.getYInGround() + j;
                 if ((xCell == 0 && yCell == 00) && xCell < BattleGround.getRows() && yCell < BattleGround.getCols() && battleGround.getGround().get(xCell).get(yCell) instanceof Minion && battleGround.getGround().get(xCell).get(yCell).getOwner() == enemy) {
                     BufferOfSpells bufferOfSpells = new BufferOfSpells(1,  STUN_BUFF);
-                    playerMinion.getBufferEffected().add(bufferOfSpells);
             }
             }
         }
@@ -545,7 +530,7 @@ public class Buffer {
         BufferOfSpells bufferOfSpells = new BufferOfSpells(1, HOLY_BUFF, 12);
     }
 
-    public void siavashAction(Hero enemyHero) {
-        enemyHero.setHP(enemyHero.getHP() - 6);
+    public void siavashAction(Hero enemyhero) {
+        enemyhero.setHP(enemyhero.getHP() - 6);
     }
 }

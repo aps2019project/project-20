@@ -1,5 +1,7 @@
 package Model;
 
+// TODO: The difference between continuous and permanent buff must be noticed.
+
 public class BufferOfSpells {
     private int lifeTime;
     private boolean lifeEndless;
@@ -9,7 +11,8 @@ public class BufferOfSpells {
     private int turnCountdownUntilActivation;
 
     public enum Type{
-        POWER_BUFF_ATTACK,POWER_BUFF_HEALTH,HOLY_BUFF,DISARM_BUFF,STUN_BUFF,WEAKNESS_BUFF_HEALTH,WEAKNESS_BUFF_POWER,POISON_BUFF
+        POWER_BUFF_ATTACK,POWER_BUFF_HEALTH,HOLY_BUFF,DISARM_BUFF,STUN_BUFF,WEAKNESS_BUFF_HEALTH,WEAKNESS_BUFF_POWER,
+        POISON_BUFF
     }
 
     public BufferOfSpells(int lifeTime, Type type) {

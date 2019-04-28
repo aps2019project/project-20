@@ -39,8 +39,8 @@ public class Minion extends Card{
         this.setDesc(desc);
         this.setPrice(price);
         this.setID(ID);
-        this.setXInGround(0);
-        this.setYInGround(0);
+        this.setxInGround(0);
+        this.setyInGround(0);
         this.setOwner(null);
         this.setAction(action);
         this.range = range;
@@ -105,8 +105,8 @@ public class Minion extends Card{
         return HP;
     }
 
-    public void setHP(int HP) {
-        this.HP = HP;
+    public void changeHP(int valueOfChange) {
+        this.HP += valueOfChange;
     }
 
     public int getAP() {
