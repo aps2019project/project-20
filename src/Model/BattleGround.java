@@ -5,7 +5,6 @@ import java.util.ArrayList;
 public class BattleGround {
     private final static int ROWS = 5;
     private final static int COLUMNS = 9;
-
     // How to fix the error. We need to input effectLifetime of any member of CellsEffect.
     public enum CellsEffect {
         NOTHING, POISON, FIRE, HOLY;
