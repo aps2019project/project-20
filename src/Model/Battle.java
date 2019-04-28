@@ -60,11 +60,11 @@ public class Battle {
             if (card.getID()==opponentCardId){
                 if(card.getOwner()==opponent){
                     if (card instanceof Minion){
-                        ((Minion) card).setHP(((Minion) card).getHP()-((Minion)player1CardSelected).getAP());
+                        ((Minion) card).changeHP(-((Minion)player1CardSelected).getAP());
 
                     }
                     else if(card instanceof Hero){
-                        ((Hero) card).setHP(((Hero) card).getHP()-((Minion)player1CardSelected).getAP());
+                        ((Hero) card).changeHP(-((Minion)player1CardSelected).getAP());
                     }
                 }
                 else
