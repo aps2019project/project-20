@@ -7,6 +7,7 @@ import java.util.Random;
 
 import static Model.AttackType.*;
 import static Model.BufferOfSpells.Type.*;
+import static Model.Buffer.*;
 
 public class Buffer {
 
@@ -90,11 +91,11 @@ public class Buffer {
         y--;
         if (battleGround.getGround().get(x).get(y).getOwner() == opponent && battleGround.getGround().get(x).get(y) instanceof Card) {
             if (battleGround.getGround().get(x).get(y) instanceof Hero) {
-                ((Hero) battleGround.getGround().get(x).get(y)).changeHP(((Hero) battleGround.getGround().get(x).get(y)).getHP() - 4);
+                ((Hero) battleGround.getGround().get(x).get(y)).changeHP( - 4);
                 return;
             }
             if (battleGround.getGround().get(x).get(y) instanceof Minion) {
-                ((Minion) battleGround.getGround().get(x).get(y)).changeHP(((Minion) battleGround.getGround().get(x).get(y)).getHP() - 4);
+                ((Minion) battleGround.getGround().get(x).get(y)).changeHP( - 4);
                 return;
             }
             throw new TargetSelectedException_Spell();
@@ -129,7 +130,7 @@ public class Buffer {
         x--;
         y--;
         if (battleGround.getGround().get(x).get(y).getOwner() == opponent && battleGround.getGround().get(x).get(y) instanceof Hero) {
-            ((Hero) battleGround.getGround().get(x).get(y)).changeHP(((Hero) battleGround.getGround().get(x).get(y)).getHP() - 8);
+            ((Hero) battleGround.getGround().get(x).get(y)).changeHP( - 8);
             return;
         }
         throw new TargetSelectedException_Spell();
@@ -273,10 +274,10 @@ public class Buffer {
         for (int i = 0; i < BattleGround.getRows(); i++) {
             if (battleGround.getGround().get(i).get(col) instanceof Card && battleGround.getGround().get(i).get(col).getOwner() == opponent) {
                 if (battleGround.getGround().get(i).get(col) instanceof Hero) {
-                    ((Hero) battleGround.getGround().get(i).get(col)).changeHP(((Hero) battleGround.getGround().get(i).get(col)).getHP() - 6);
+                    ((Hero) battleGround.getGround().get(i).get(col)).changeHP( - 6);
 
                 } else if (battleGround.getGround().get(i).get(col) instanceof Minion) {
-                    ((Minion) battleGround.getGround().get(i).get(col)).changeHP(((Minion) battleGround.getGround().get(i).get(col)).getHP() - 6);
+                    ((Minion) battleGround.getGround().get(i).get(col)).changeHP( - 6);
 
                 }
             }
@@ -297,8 +298,8 @@ public class Buffer {
         x--;
         y--;
         if (battleGround.getGround().get(x).get(y).getOwner() == player && battleGround.getGround().get(x).get(y) instanceof Minion) {
-            player.getMainDeck().getHero().changeHP(player.getMainDeck().getHero().getHP() + ((Minion) battleGround.getGround().get(x).get(y)).getHP());
-            ((Minion) battleGround.getGround().get(x).get(y)).changeHP(0);
+            player.getMainDeck().getHero().changeHP( + ((Minion) battleGround.getGround().get(x).get(y)).getHP());
+            ((Minion) battleGround.getGround().get(x).get(y)).changeHP(-((Minion) battleGround.getGround().get(x).get(y)).getHP());
 //            player.getMainDeck().getCards().remove(((Minion) battleGround.getGround().get(x).get(y)).getHP());
             return;
         }
@@ -311,7 +312,7 @@ public class Buffer {
         int X = player.getMainDeck().getHero().getXInGround();
         int Y = player.getMainDeck().getHero().getYInGround();
         if (battleGround.getGround().get(x).get(y).getOwner() == opponent && battleGround.getGround().get(x).get(y) instanceof Minion && (x - X <= 1 && x - X >= -1 && y - Y <= 1 && y - Y >= -1)) {
-            ((Minion) battleGround.getGround().get(x).get(y)).changeHP(0);
+            ((Minion) battleGround.getGround().get(x).get(y)).changeHP(-((Minion) battleGround.getGround().get(x).get(y)).getHP());
             return;
         }
         throw new TargetSelectedException_Spell();
@@ -347,9 +348,9 @@ public class Buffer {
         for (int i = 0; i < playerMinion.getAttackedCards().size(); i++) {
             if (enemyCard == playerMinion.getAttackedCards().get(i)) {
                 if (enemyCard instanceof Hero) {
-                    ((Hero) enemyCard).changeHP(((Hero) enemyCard).getHP() - 5 * playerMinion.getMultiplicityOfEachAttackedCard().get(i));
+                    ((Hero) enemyCard).changeHP( - 5 * playerMinion.getMultiplicityOfEachAttackedCard().get(i));
                 } else if (enemyCard instanceof Minion) {
-                    ((Minion) enemyCard).changeHP(((Minion) enemyCard).getHP() - 5 * playerMinion.getMultiplicityOfEachAttackedCard().get(i));
+                    ((Minion) enemyCard).changeHP(- 5 * playerMinion.getMultiplicityOfEachAttackedCard().get(i));
                 }
                 playerMinion.getMultiplicityOfEachAttackedCard().set(i, playerMinion.getMultiplicityOfEachAttackedCard().get(i) + 1);
                 return;
@@ -361,9 +362,9 @@ public class Buffer {
         for (Card comboCard : ComboCards) {
             if (comboCard.getName().substring(0, 3).equals("fars")) {
                 if (enemyCard instanceof Hero) {
-                    ((Hero) enemyCard).changeHP(((Hero) enemyCard).getHP() - 4);
+                    ((Hero) enemyCard).changeHP( - 4);
                 } else if (enemyCard instanceof Minion) {
-                    ((Minion) enemyCard).changeHP(((Minion) enemyCard).getHP() - 4);
+                    ((Minion) enemyCard).changeHP( - 4);
                 }
             }
         }
@@ -378,9 +379,9 @@ public class Buffer {
         for (Card comboCard : ComboCards) {
             if (comboCard.getID() == 3010 || comboCard.getID() == 3009 || comboCard.getID() == 3008 || comboCard.getID() == 3007 || comboCard.getID() == 3006) {
                 if (enemyCard instanceof Hero) {
-                    ((Hero) enemyCard).changeHP(((Hero) enemyCard).getHP() - 4);
+                    ((Hero) enemyCard).changeHP( - 4);
                 } else if (enemyCard instanceof Minion) {
-                    ((Minion) enemyCard).changeHP(((Minion) enemyCard).getHP() - 4);
+                    ((Minion) enemyCard).changeHP( - 4);
                 }
             }
         }
@@ -397,7 +398,7 @@ public class Buffer {
                 int xCell = playerMinion.getXInGround() + i;
                 int yCell = playerMinion.getYInGround() + j;
                 if (xCell < BattleGround.getRows() && yCell < BattleGround.getColumns() && battleGround.getGround().get(xCell).get(yCell) instanceof Minion)
-                    ((Minion) battleGround.getGround().get(xCell).get(yCell)).changeHP(((Minion) battleGround.getGround().get(xCell).get(yCell)).getHP() - 2);
+                    ((Minion) battleGround.getGround().get(xCell).get(yCell)).changeHP( - 2);
             }
         }
 
@@ -418,7 +419,7 @@ public class Buffer {
                     int xCell = playerMinion.getXInGround() + i;
                     int yCell = playerMinion.getYInGround() + j;
                     if (xCell < BattleGround.getRows() && yCell < BattleGround.getColumns() && battleGround.getGround().get(xCell).get(yCell) instanceof Minion) {
-                        ((Minion) battleGround.getGround().get(xCell).get(yCell)).changeHP(((Minion) battleGround.getGround().get(xCell).get(yCell)).getHP() - 1);
+                        ((Minion) battleGround.getGround().get(xCell).get(yCell)).changeHP( - 1);
                     }
                 }
             }
@@ -515,13 +516,13 @@ public class Buffer {
                 }
             }
             int randomNumber = randomNumberGenerator(numberOfEnemyMinions) + 1;
-            enemyMinion.get(randomNumber).changeHP(enemyMinion.get(randomNumber).getHP() - 16);
+            enemyMinion.get(randomNumber).changeHP(-16);
         }
     }
 
     public void ashkbosAction(Minion playerMinion, Minion enemyMinion) {
         if (enemyMinion.getAP() < playerMinion.getAP()) {
-            playerMinion.changeHP(playerMinion.getHP() + enemyMinion.getAP());
+            playerMinion.changeHP(+ enemyMinion.getAP());
         }
     }
 
@@ -545,7 +546,7 @@ public class Buffer {
     }
 
     public void siavashAction(Hero enemyhero) {
-        enemyhero.changeHP(enemyhero.getHP() - 6);
+        enemyhero.changeHP(-6);
     }
 
     //Heroes

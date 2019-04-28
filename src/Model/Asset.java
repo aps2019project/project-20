@@ -150,7 +150,7 @@ public class Asset {
         return xInGround;
     }
 
-    public void setxInGround(int xInGround) {
+    public void setXInGround(int xInGround) {
         this.xInGround = xInGround;
     }
 
@@ -158,7 +158,7 @@ public class Asset {
         return yInGround;
     }
 
-    public void setyInGround(int yInGround) {
+    public void setYInGround(int yInGround) {
         this.yInGround = yInGround;
     }
 }
