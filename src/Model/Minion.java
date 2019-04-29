@@ -3,8 +3,6 @@ package Model;
 import java.util.ArrayList;
 
 public class Minion extends Warrior{
-    private int lifeTimeChangedAP = 0;
-    private int amountOfChangedAP = 0;
     private ArrayList<Card> attackedCards = new ArrayList<>();
     private ArrayList<Integer>  multiplicityOfEachAttackedCard = new ArrayList<>();
     public enum ActivateTimeOfSpecialPower{
@@ -63,19 +61,4 @@ public class Minion extends Warrior{
         this.activateTimeOfSpecialPower = activateTimeOfSpecialPower;
     }
 
-    public int getAmountOfChangedAP() {
-        return amountOfChangedAP;
-    }
-
-    public void setAmountOfChangedAP(int amountOfChangedAP) {
-        this.amountOfChangedAP = amountOfChangedAP;
-    }
-
-    public int getLifeTimeChangedAP() {
-        return lifeTimeChangedAP;
-    }
-
-    public void setLifeTimeChangedAP(int lifeTimeChangedAP) {
-        this.lifeTimeChangedAP = lifeTimeChangedAP;
-    }
-}
+   }

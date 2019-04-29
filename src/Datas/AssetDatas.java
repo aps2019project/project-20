@@ -45,10 +45,8 @@ public class AssetDatas {
     private static Minion TooraniCatapult = new Minion("TooraniCatapult","TooraniCatapult",500,3007,7,2,4,1, RANGED);
     private static Minion TooraniSpear = new Minion("TooraniSpear","TooraniSpear",600,3008,3,4,4,1, HYBRID);
     private static Minion TooraniSpy = new Minion("TooraniSpy","TooraniSpy",700,3009,0,6,6,4, MELEE, ON_ATTACK);
-
-
-    private static Minion tooraniSwampy = new Minion("tooraniSwampy", "tooraniSwampy", 450, 3010, 0, 10, 3, 2, MELEE);
-    private static Minion tooraniPrince = new Minion("tooraniPrince", "sor any not torani plus 4 attackpower", 800, 3011, 0, 10, 6, 6, MELEE,COMBO);
+    private static Minion TooraniSwampy = new Minion("tooraniSwampy", "tooraniSwampy", 450, 3010, 0, 10, 3, 2, MELEE);
+    private static Minion TooraniPrince = new Minion("tooraniPrince", "sor any not torani plus 4 attackpower", 800, 3011, 0, 10, 6, 6, MELEE,COMBO);
     private static Minion blackGoblin = new Minion("blackGoblin", "", 300, 3012, 7, 10, 14, 9, HYBRID);
     private static Minion throwStoneGiant = new Minion("throwStoneGiant", "", 300, 3013, 7, 12, 12, 9, RANGED);
     private static Minion eagle = new Minion("eagle", "plus 10 power buff with increase HP", 300, 3014, 3, 2, 0, 2, RANGED, PASSIVE);

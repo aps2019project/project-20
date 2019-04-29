@@ -6,6 +6,8 @@ public class Warrior extends Card {
     private int range;
     private int HP;
     private int AP;
+    private int lifeTimeChangedAP = 0;
+    private int amountOfChangedAP = 0;
     private AttackType attackType;
 
     private ArrayList<BufferOfSpells> bufferEffected = new ArrayList<>();
@@ -51,4 +53,20 @@ public class Warrior extends Card {
     public void changeHP(int valueOfChange) {
         this.HP += valueOfChange;
     }
+    public int getAmountOfChangedAP() {
+        return amountOfChangedAP;
+    }
+
+    public void setAmountOfChangedAP(int amountOfChangedAP) {
+        this.amountOfChangedAP = amountOfChangedAP;
+    }
+
+    public int getLifeTimeChangedAP() {
+        return lifeTimeChangedAP;
+    }
+
+    public void setLifeTimeChangedAP(int lifeTimeChangedAP) {
+        this.lifeTimeChangedAP = lifeTimeChangedAP;
+    }
+
 }

@@ -18,7 +18,7 @@ public class BattleGround {
     }
 
     private ArrayList<ArrayList<Asset>> ground = new ArrayList<>();
-    private ArrayList<ArrayList<BufferOfSpells>> effectsPosition = new ArrayList<>();
+    private ArrayList<ArrayList<CellsEffect>> effectsPosition = new ArrayList<>();
     private ArrayList<ArrayList<Integer>> effectsLifeTimePosition = new ArrayList<>();
 
     public ArrayList<ArrayList<Integer>> getEffectsLifeTimePosition() {
@@ -41,11 +41,11 @@ public class BattleGround {
         this.ground = ground;
     }
 
-    public ArrayList<ArrayList<BufferOfSpells>> getEffectsPosition() {
+    public ArrayList<ArrayList<CellsEffect>> getEffectsPosition() {
         return effectsPosition;
     }
 
-    public void setEffectsPosition(ArrayList<ArrayList<BufferOfSpells>> effectsPosition) {
+    public void setEffectsPosition(ArrayList<ArrayList<CellsEffect>> effectsPosition) {
         this.effectsPosition = effectsPosition;
     }
 }
