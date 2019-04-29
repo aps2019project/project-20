@@ -5,6 +5,8 @@ import Exceptions.CardNotFoundInDeckException;
 import Exceptions.MoreThanNormalDistanceException;
 import Exceptions.ThisCellFilledException;
 
+import static Model.BufferOfSpells.Type.*;
+
 public class Battle {
     final int MAX_MANA_IN_LATE_TURNS = 9;
     private int turn;
@@ -22,7 +24,7 @@ public class Battle {
     private GraveYard firstPlayerGraveYard;
     private GraveYard secondPlayerGraveYard;
     private int battleID;
-    //private View view;
+
 
     public static void handleBattleEvent() {
     }
@@ -30,50 +32,63 @@ public class Battle {
     public static void gameInfo() {
     }
 
-    public void selectCard(Account firstPlayer,int cardID) {
+    public void selectCard(Account firstPlayer, int cardID) {
         for (Card card : firstPlayer.getMainDeck().getCards()) {
-            if (card.getID()==cardID ) {
-                firstPlayerSelectedCard=card;
+            if (card.getID() == cardID) {
+                firstPlayerSelectedCard = card;
                 return;
             }
         }
         throw new CardNotFoundInDeckException();
     }
 
-    public  void cardMoveTo(int x, int y, Account account ,BattleGround battleGround) {
-        if (Math.abs(x-firstPlayerSelectedCard.getXInGround())+Math.abs(x-firstPlayerSelectedCard.getXInGround())>2){
+    public void cardMoveTo(int x, int y, Account account, BattleGround battleGround) {
+        if (Math.abs(x - firstPlayerSelectedCard.getXInGround()) + Math.abs(x - firstPlayerSelectedCard.getXInGround()) > 2) {
             throw new MoreThanNormalDistanceException();
         }
 
-        if(battleGround.getGround().get(x).get(y) instanceof Item){
-            selectItem(account,battleGround.getGround().get(x).get(y).getID());
-        }
-        else if(battleGround.getGround().get(x).get(y) instanceof Card){
+        if (battleGround.getGround().get(x).get(y) instanceof Item) {
+            selectItem(account, battleGround.getGround().get(x).get(y).getID());
+        } else if (battleGround.getGround().get(x).get(y) instanceof Card) {
             throw new ThisCellFilledException();
-        }else {
+        } else {
             firstPlayerSelectedCard.setXInGround(x);
             firstPlayerSelectedCard.setYInGround(y);
         }
     }
 
-    public  void attack(Account player, Account opponent, int opponentCardId,BattleGround battleGround) {
+    public void attack(Account player, Account opponent, int opponentCardId, BattleGround battleGround) {
         for (Card card : opponent.getMainDeck().getCards()) {
-            if (card.getID()==opponentCardId){
-                if(card.getOwner()==opponent){
-                    if (card instanceof Minion){
-                        ((Minion) card).changeHP(-((Minion)firstPlayerSelectedCard).getAP());
+            if (card.getID() == opponentCardId) {
+                if (card.getOwner() == opponent) {
+                    if (card instanceof Warrior && firstPlayerMana >= card.getMP()) {
+                        ((Warrior) card).changeHP(-((Warrior) firstPlayerSelectedCard).getAP());
+                        firstPlayerMana -= card.getMP();
+                        if (card instanceof Minion) {
+                            for (int i = 0; i < card.getBufferEffected().size(); i++) {
+                                if (((Minion) card).getActivateTimeOfSpecialPower().equals(Minion.ActivateTimeOfSpecialPower.ON_ATTACK)) {
+                                    //Todo
+                                }
+                                if (((Minion) card).getActivateTimeOfSpecialPower().equals(Minion.ActivateTimeOfSpecialPower.ON_DEATH)) {
+                                    //Todo
+                                }
+                                if (((Minion) card).getActivateTimeOfSpecialPower().equals(Minion.ActivateTimeOfSpecialPower.ON_DEFEND)) {
+                                    //Todo
+                                }
+                                if (((Minion) card).getActivateTimeOfSpecialPower().equals(Minion.ActivateTimeOfSpecialPower.ON_RESPAWN)) {
+                                    //Todo
 
+                                }
+                            }
+                        }
                     }
-                    else if(card instanceof Hero){
-                        ((Hero) card).changeHP(-((Minion)firstPlayerSelectedCard).getAP());
-                    }
-                }
-                else
+                } else
                     throw new AttackOwnCardException();
             }
         }
         throw new CardNotFoundInDeckException();
     }
+
 
     public static void attackCombo(Account player, Account opponent, int opponentCardId, int MyCardID) {
     }
@@ -84,14 +99,13 @@ public class Battle {
     public static void useSpecialPower(Account player, int x, int y) {
     }
 
-    public  void insertIn(Account player, String cardName, int x, int y,BattleGround battleGround) {
+    public void insertIn(Account player, String cardName, int x, int y, BattleGround battleGround) {
         for (Card card : player.getMainDeck().getCards()) {
-            if (card.getName().equals(cardName)){
-                if(! (battleGround.getGround().get(x).get(y) instanceof Card)){
-                     throw new ThisCellFilledException();
+            if (card.getName().equals(cardName)) {
+                if (!(battleGround.getGround().get(x).get(y) instanceof Card)) {
+                    throw new ThisCellFilledException();
                 }
-                //else
-                   // battleGround.getGround().get(x).get(y).;
+                battleGround.getGround().get(x).set(y, card);
 
             }
         }
@@ -103,13 +117,14 @@ public class Battle {
         setPlayersMana();
     }
 
-    public  void selectItem(Account player, int collectableItemID) {
+    public void selectItem(Account player, int collectableItemID) {
     }
 
     public static void useItem(Account player, Item playerItemSelected) {
     }
 
     public static void enterGraveYard(Account player) {
+
     }
 
     public static void help() {
@@ -223,13 +238,12 @@ public class Battle {
     }
 
     public void setPlayersMana() {
-        if (1 < turn && turn <= 14){
+        if (1 < turn && turn <= 14) {
             if (turn % 2 == 0)
                 firstPlayerMana++;
             else
                 secondPlayerMana++;
-        }
-        else {
+        } else {
             firstPlayerMana = MAX_MANA_IN_LATE_TURNS;
             secondPlayerMana = MAX_MANA_IN_LATE_TURNS;
         }
