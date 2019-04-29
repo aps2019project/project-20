@@ -1,6 +1,7 @@
 package Model;
 
 import Exceptions.TargetSelectedException_Spell;
+import com.sun.xml.internal.bind.v2.TODO;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -423,11 +424,21 @@ public class Buffer {
     }
 
     public void wildBoarAction(Minion playerMinion) {
-        playerMinion.setDisarm(false);
+        for (int i = 0; i < playerMinion.getBufferEffected().size(); i++) {
+            if (playerMinion.getBufferEffected().get(i).getType() == DISARM_BUFF ) {
+                playerMinion.getBufferEffected().remove(i);
+                i--;
+            }
+        }
     }
 
     public void piranAction(Minion playerMinion) {
-        playerMinion.setPoision(false);
+        for (int i = 0; i < playerMinion.getBufferEffected().size(); i++) {
+            if (playerMinion.getBufferEffected().get(i).getType() == POISON_BUFF) {
+                playerMinion.getBufferEffected().remove(i);
+                i--;
+            }
+        }
     }
 
     public void givAction(Minion playerMinion) {
@@ -464,7 +475,16 @@ public class Buffer {
         }
     }
 
-    public void twoHeadGiantAction() {
+    public void twoHeadGiantAction(Minion enemyMinion) {
+
+        for (int i = 0; i < enemyMinion.getBufferEffected().size(); i++) {
+            if (enemyMinion.getBufferEffected().get(i).getType() == POWER_BUFF_ATTACK ||
+                    enemyMinion.getBufferEffected().get(i).getType() == POWER_BUFF_HEALTH ||
+                    enemyMinion.getBufferEffected().get(i).getType() == HOLY_BUFF ) {
+                enemyMinion.getBufferEffected().remove(i);
+                i--;
+            }
+        }
     }
 
     public void coldMotherAction(Minion playerMinion, Minion enemyMinion, BattleGround battleGround, Account enemy) {

@@ -25,7 +25,7 @@ public class Minion extends Warrior{
     }
 
     public void setPoision(boolean poision) {
-        isPoision = poision;
+        isPoison = poision;
     }
 
     public Minion(String name, String desc, int price, int ID, int range, int AP, int HP, int MP, AttackType attackType, ActivateTimeOfSpecialPower activateTimeOfSpecialPower, String action) {
@@ -33,15 +33,11 @@ public class Minion extends Warrior{
         this.setDesc(desc);
         this.setPrice(price);
         this.setID(ID);
-        this.setxInGround(0);
-        this.setyInGround(0);
+        this.setXInGround(0);
+        this.setYInGround(0);
         this.setOwner(null);
         this.setAction(action);
-        this.range = range;
-        this.AP = AP;
-        this.HP = HP;
         this.setMP(MP);
-        this.attackType = attackType;
         this.activateTimeOfSpecialPower=activateTimeOfSpecialPower;
     }
 
@@ -73,55 +69,7 @@ public class Minion extends Warrior{
         this.activateTimeOfSpecialPower = activateTimeOfSpecialPower;
     }
 
-    public int getAmountOfChangedAP() {
-        return amountOfChangedAP;
-    }
 
-    public void setAmountOfChangedAP(int amountOfChangedAP) {
-        this.amountOfChangedAP = amountOfChangedAP;
-    }
-
-    public int getLifeTimeChangedAP() {
-        return LifeTimeChangedAP;
-    }
-
-    public void setLifeTimeChangedAP(int lifeTimeChangedAP) {
-        LifeTimeChangedAP = lifeTimeChangedAP;
-    }
-
-
-    public int getRange() {
-        return range;
-    }
-
-    public void setRange(int range) {
-        this.range = range;
-    }
-
-
-    public int getHP() {
-        return HP;
-    }
-
-    public void changeHP(int valueOfChange) {
-        this.HP += valueOfChange;
-    }
-
-    public int getAP() {
-        return AP;
-    }
-
-    public void setAP(int AP) {
-        this.AP = AP;
-    }
-
-    public AttackType getAttackType() {
-        return attackType;
-    }
-
-    public void setAttackType(AttackType attackType) {
-        this.attackType = attackType;
-    }
 
 
 
