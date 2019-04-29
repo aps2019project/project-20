@@ -3,9 +3,7 @@ package Model;
 import Exceptions.AttackOwnCardException;
 import Exceptions.CardNotFoundInDeckException;
 import Exceptions.MoreThanNormalDistanceException;
-import Exceptions.ThiCellFillException;
-
-import java.util.ArrayList;
+import Exceptions.ThisCellFilledException;
 
 public class Battle {
     private int turn;
@@ -48,7 +46,7 @@ public class Battle {
             selectItem(account,battleGround.getGround().get(x).get(y).getID());
         }
         else if(battleGround.getGround().get(x).get(y) instanceof Card){
-            throw new ThiCellFillException();
+            throw new ThisCellFilledException();
         }else {
             player1CardSelected.setXInGround(x);
             player1CardSelected.setYInGround(y);
@@ -83,7 +81,18 @@ public class Battle {
     public static void useSpecialPower(Account player, int x, int y) {
     }
 
-    public static void insertIn(Account player, String cardName, int x, int y) {
+    public  void insertIn(Account player, String cardName, int x, int y,BattleGround battleGround) {
+        for (Card card : player.getMainDeck().getCards()) {
+            if (card.getName().equals(cardName)){
+                if(! (battleGround.getGround().get(x).get(y) instanceof Card)){
+                     throw new ThisCellFilledException();
+                }
+                //else
+                   // battleGround.getGround().get(x).get(y).;
+
+            }
+        }
+        throw new CardNotFoundInDeckException();
     }
 
     public static void endTurn(Account player) {
