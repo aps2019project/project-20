@@ -1,6 +1,6 @@
 package Model;
 
 public enum AttackType {
-    Melee, Ranged, Hybrid;
+    MELEE, RANGED, HYBRID;
 
 }

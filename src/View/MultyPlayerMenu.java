@@ -15,5 +15,5 @@ public class MultyPlayerMenu {
 //    public void startGame(Mode mode,int  numberOfFlags){}
 
     public void showMessage(){}
-    public void showhelp(){}
+    public void showHelp(){}
 }

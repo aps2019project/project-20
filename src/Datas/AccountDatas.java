@@ -1,6 +1,7 @@
 package Datas;
 
 import Model.Account;
+
 import java.util.ArrayList;
 
 public class AccountDatas {
@@ -15,15 +16,16 @@ public class AccountDatas {
         return accounts;
     }
 
-    public Account SearchAccount (String username){
+    public Account SearchAccount(String username) {
         for (Account account : accounts) {
-            if(account.getUserName().compareTo(username)==0){
+            if (account.getUserName().compareTo(username) == 0) {
                 return account;
             }
         }
         return null;
     }
 
-    public void SetAccount (){}
+    public void SetAccount() {
+    }
 
 }
