@@ -5,7 +5,6 @@ import java.util.ArrayList;
 public class BattleGround {
     private final static int ROWS = 5;
     private final static int COLUMNS = 9;
-
     // How to fix the error. We need to input effectLifetime of any member of CellsEffect.
     public enum CellsEffect {
         NOTHING, POISON, FIRE, HOLY;
@@ -19,7 +18,7 @@ public class BattleGround {
     }
 
     private ArrayList<ArrayList<Asset>> ground = new ArrayList<>();
-    private ArrayList<ArrayList<BufferOfSpells>> effectsPosition = new ArrayList<>();
+    private ArrayList<ArrayList<CellsEffect>> effectsPosition = new ArrayList<>();
     private ArrayList<ArrayList<Integer>> effectsLifeTimePosition = new ArrayList<>();
 
     public ArrayList<ArrayList<Integer>> getEffectsLifeTimePosition() {
@@ -42,11 +41,11 @@ public class BattleGround {
         this.ground = ground;
     }
 
-    public ArrayList<ArrayList<BufferOfSpells>> getEffectsPosition() {
+    public ArrayList<ArrayList<CellsEffect>> getEffectsPosition() {
         return effectsPosition;
     }
 
-    public void setEffectsPosition(ArrayList<ArrayList<BufferOfSpells>> effectsPosition) {
+    public void setEffectsPosition(ArrayList<ArrayList<CellsEffect>> effectsPosition) {
         this.effectsPosition = effectsPosition;
     }
 }

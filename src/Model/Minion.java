@@ -2,13 +2,7 @@ package Model;
 
 import java.util.ArrayList;
 
-public class Minion extends Card{
-    private int range;
-    private int HP;
-    private int AP;
-    private int LifeTimeChangedAP = 0;
-    private int amountOfChangedAP = 0;
-    private AttackType attackType;
+public class Minion extends Warrior{
     private ArrayList<Card> attackedCards = new ArrayList<>();
     private ArrayList<Integer>  multiplicityOfEachAttackedCard = new ArrayList<>();
     public enum ActivateTimeOfSpecialPower{
@@ -16,7 +10,7 @@ public class Minion extends Card{
     }
     private ActivateTimeOfSpecialPower activateTimeOfSpecialPower;
     private boolean isDisarm=true;
-    private boolean isPoision=true;
+    private boolean isPoison =true;
 
     public boolean isDisarm() {
         return isDisarm;
@@ -27,7 +21,7 @@ public class Minion extends Card{
     }
 
     public boolean isPoision() {
-        return isPoision;
+        return isPoison;
     }
 
     public void setPoision(boolean poision) {
@@ -39,8 +33,8 @@ public class Minion extends Card{
         this.setDesc(desc);
         this.setPrice(price);
         this.setID(ID);
-        this.setXInGround(0);
-        this.setYInGround(0);
+        this.setxInGround(0);
+        this.setyInGround(0);
         this.setOwner(null);
         this.setAction(action);
         this.range = range;
@@ -49,6 +43,10 @@ public class Minion extends Card{
         this.setMP(MP);
         this.attackType = attackType;
         this.activateTimeOfSpecialPower=activateTimeOfSpecialPower;
+    }
+
+    public Minion(String name, String desc, int price, int ID, int range, int AP, int HP, int MP, AttackType attackType) {
+        super(name, desc, price, ID, AP, HP, range, attackType, false);
     }
 
     public ArrayList<Card> getAttackedCards() {

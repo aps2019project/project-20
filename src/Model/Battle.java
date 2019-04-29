@@ -6,18 +6,21 @@ import Exceptions.MoreThanNormalDistanceException;
 import Exceptions.ThisCellFilledException;
 
 public class Battle {
+    final int MAX_MANA_IN_LATE_TURNS = 9;
     private int turn;
-    private Account player1;
-    private Account player2;
+    private Account firstPlayer;
+    private Account secondPlayer;
     private BattleGround battleGround;
-    private Card player1CardSelected;
-    private Card player2CardSelected;
-    private Item player1ItemSelected;
-    private Item player2ItemSelected;
-    private Card player1NextCardFromDeck;
-    private Card player2NextCardFromDeck;
-    private GraveYard player1GraveYard;
-    private GraveYard player2GraveYard;
+    private int firstPlayerMana = 2;
+    private int secondPlayerMana = 2;
+    private Card firstPlayerSelectedCard;
+    private Card secondPlayerSelectedCard;
+    private Item firstPlayerSelectedItem;
+    private Item secondPlayerSelectedItem;
+    private Card firstPlayerNextCardFromDeck;
+    private Card secondPlayerNextCardFromDeck;
+    private GraveYard firstPlayerGraveYard;
+    private GraveYard secondPlayerGraveYard;
     private int battleID;
     //private View view;
 
@@ -27,10 +30,10 @@ public class Battle {
     public static void gameInfo() {
     }
 
-    public void selectCard(Account player1,int cardID) {
-        for (Card card : player1.getMainDeck().getCards()) {
+    public void selectCard(Account firstPlayer,int cardID) {
+        for (Card card : firstPlayer.getMainDeck().getCards()) {
             if (card.getID()==cardID ) {
-                player1CardSelected=card;
+                firstPlayerSelectedCard=card;
                 return;
             }
         }
@@ -38,7 +41,7 @@ public class Battle {
     }
 
     public  void cardMoveTo(int x, int y, Account account ,BattleGround battleGround) {
-        if (Math.abs(x-player1CardSelected.getXInGround())+Math.abs(x-player1CardSelected.getXInGround())>2){
+        if (Math.abs(x-firstPlayerSelectedCard.getXInGround())+Math.abs(x-firstPlayerSelectedCard.getXInGround())>2){
             throw new MoreThanNormalDistanceException();
         }
 
@@ -48,8 +51,8 @@ public class Battle {
         else if(battleGround.getGround().get(x).get(y) instanceof Card){
             throw new ThisCellFilledException();
         }else {
-            player1CardSelected.setXInGround(x);
-            player1CardSelected.setYInGround(y);
+            firstPlayerSelectedCard.setXInGround(x);
+            firstPlayerSelectedCard.setYInGround(y);
         }
     }
 
@@ -58,11 +61,11 @@ public class Battle {
             if (card.getID()==opponentCardId){
                 if(card.getOwner()==opponent){
                     if (card instanceof Minion){
-                        ((Minion) card).changeHP(-((Minion)player1CardSelected).getAP());
+                        ((Minion) card).changeHP(-((Minion)firstPlayerSelectedCard).getAP());
 
                     }
                     else if(card instanceof Hero){
-                        ((Hero) card).changeHP(-((Minion)player1CardSelected).getAP());
+                        ((Hero) card).changeHP(-((Minion)firstPlayerSelectedCard).getAP());
                     }
                 }
                 else
@@ -95,7 +98,9 @@ public class Battle {
         throw new CardNotFoundInDeckException();
     }
 
-    public static void endTurn(Account player) {
+    public void endTurn(Account player) {
+        turn++;
+        setPlayersMana();
     }
 
     public  void selectItem(Account player, int collectableItemID) {
@@ -122,19 +127,19 @@ public class Battle {
     }
 
     public Account getPlayer1() {
-        return player1;
+        return firstPlayer;
     }
 
-    public void setPlayer1(Account player1) {
-        this.player1 = player1;
+    public void setPlayer1(Account firstPlayer) {
+        this.firstPlayer = firstPlayer;
     }
 
     public Account getPlayer2() {
-        return player2;
+        return secondPlayer;
     }
 
-    public void setPlayer2(Account player2) {
-        this.player2 = player2;
+    public void setPlayer2(Account secondPlayer) {
+        this.secondPlayer = secondPlayer;
     }
 
     public BattleGround getBattleGround() {
@@ -146,67 +151,67 @@ public class Battle {
     }
 
     public Card getPlayer1CardSelected() {
-        return player1CardSelected;
+        return firstPlayerSelectedCard;
     }
 
-    public void setPlayer1CardSelected(Card player1CardSelected) {
-        this.player1CardSelected = player1CardSelected;
+    public void setPlayer1CardSelected(Card firstPlayerSelectedCard) {
+        this.firstPlayerSelectedCard = firstPlayerSelectedCard;
     }
 
     public Card getPlayer2CardSelected() {
-        return player2CardSelected;
+        return secondPlayerSelectedCard;
     }
 
-    public void setPlayer2CardSelected(Card player2CardSelected) {
-        this.player2CardSelected = player2CardSelected;
+    public void setPlayer2CardSelected(Card secondPlayerSelectedCard) {
+        this.secondPlayerSelectedCard = secondPlayerSelectedCard;
     }
 
     public Item getPlayer1ItemSelected() {
-        return player1ItemSelected;
+        return firstPlayerSelectedItem;
     }
 
-    public void setPlayer1ItemSelected(Item player1ItemSelected) {
-        this.player1ItemSelected = player1ItemSelected;
+    public void setPlayer1ItemSelected(Item firstPlayerSelectedItem) {
+        this.firstPlayerSelectedItem = firstPlayerSelectedItem;
     }
 
     public Item getPlayer2ItemSelected() {
-        return player2ItemSelected;
+        return secondPlayerSelectedItem;
     }
 
-    public void setPlayer2ItemSelected(Item player2ItemSelected) {
-        this.player2ItemSelected = player2ItemSelected;
+    public void setPlayer2ItemSelected(Item secondPlayerSelectedItem) {
+        this.secondPlayerSelectedItem = secondPlayerSelectedItem;
     }
 
     public Card getPlayer1NextCardFromDeck() {
-        return player1NextCardFromDeck;
+        return firstPlayerNextCardFromDeck;
     }
 
-    public void setPlayer1NextCardFromDeck(Card player1NextCardFromDeck) {
-        this.player1NextCardFromDeck = player1NextCardFromDeck;
+    public void setPlayer1NextCardFromDeck(Card firstPlayerNextCardFromDeck) {
+        this.firstPlayerNextCardFromDeck = firstPlayerNextCardFromDeck;
     }
 
     public Card getPlayer2NextCardFromDeck() {
-        return player2NextCardFromDeck;
+        return secondPlayerNextCardFromDeck;
     }
 
-    public void setPlayer2NextCardFromDeck(Card player2NextCardFromDeck) {
-        this.player2NextCardFromDeck = player2NextCardFromDeck;
+    public void setPlayer2NextCardFromDeck(Card secondPlayerNextCardFromDeck) {
+        this.secondPlayerNextCardFromDeck = secondPlayerNextCardFromDeck;
     }
 
     public GraveYard getPlayer1GraveYard() {
-        return player1GraveYard;
+        return firstPlayerGraveYard;
     }
 
-    public void setPlayer1GraveYard(GraveYard player1GraveYard) {
-        this.player1GraveYard = player1GraveYard;
+    public void setPlayer1GraveYard(GraveYard firstPlayerGraveYard) {
+        this.firstPlayerGraveYard = firstPlayerGraveYard;
     }
 
     public GraveYard getPlayer2GraveYard() {
-        return player2GraveYard;
+        return secondPlayerGraveYard;
     }
 
-    public void setPlayer2GraveYard(GraveYard player2GraveYard) {
-        this.player2GraveYard = player2GraveYard;
+    public void setPlayer2GraveYard(GraveYard secondPlayerGraveYard) {
+        this.secondPlayerGraveYard = secondPlayerGraveYard;
     }
 
     public int getBattleID() {
@@ -215,5 +220,18 @@ public class Battle {
 
     public void setBattleID(int battleID) {
         this.battleID = battleID;
+    }
+
+    public void setPlayersMana() {
+        if (1 < turn && turn <= 14){
+            if (turn % 2 == 0)
+                firstPlayerMana++;
+            else
+                secondPlayerMana++;
+        }
+        else {
+            firstPlayerMana = MAX_MANA_IN_LATE_TURNS;
+            secondPlayerMana = MAX_MANA_IN_LATE_TURNS;
+        }
     }
 }

@@ -1,6 +1,7 @@
 package View;
 
 import Datas.AccountDatas;
+import Exceptions.InvalidSelectMainDeckException;
 import Model.Account;
 import Model.MatchHistory;
 import Presenter.AccountMenuPresenter;
@@ -27,6 +28,12 @@ public class AccountMenu {
                 ShopMenu shopMenu = new ShopMenu();
                 shopMenu.handleEvents(scanner);
             } else if (option.compareTo("3") == 0) {
+                try{
+                    accountMenuPresenter.beforeEnterBattleCheck();
+                }catch (InvalidSelectMainDeckException e){
+                    System.out.println("Selected Deck Is InValid");
+                    continue;
+                }
                 BeforeBattleMenu beforeBattleMenu = new BeforeBattleMenu();
                 beforeBattleMenu.handleEvents(scanner);
             } else if (option.compareTo("4") == 0) {
