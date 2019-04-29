@@ -2,7 +2,7 @@ package View;
 
 import java.util.Scanner;
 
-public class StoryGameMenu {
+public class GameModeMenu {
     private final static int BACK = 12;
     private final static int BACK_TO_ACCOUNT_MENU = 13;
     public int handleEvents(Scanner scanner) {
@@ -10,15 +10,15 @@ public class StoryGameMenu {
             showStoryGameMenu();
             String option = scanner.next();
             if (option.compareTo("1") == 0) {
-                if(selectLevelToPlay(1)==BACK_TO_ACCOUNT_MENU){
+                if(selectModeToPlay(scanner,1)==BACK_TO_ACCOUNT_MENU){
                     return BACK_TO_ACCOUNT_MENU;
                 }
             } else if (option.compareTo("2") == 0) {
-                if(selectLevelToPlay(2)==BACK_TO_ACCOUNT_MENU){
+                if(selectModeToPlay(scanner,2)==BACK_TO_ACCOUNT_MENU){
                     return BACK_TO_ACCOUNT_MENU;
                 }
             } else if (option.compareTo("3") == 0) {
-                if(selectLevelToPlay(3)==BACK_TO_ACCOUNT_MENU){
+                if(selectModeToPlay(scanner,3)==BACK_TO_ACCOUNT_MENU){
                     return BACK_TO_ACCOUNT_MENU;
                 }
             }else if (option.compareTo("4") == 0) {
@@ -30,14 +30,14 @@ public class StoryGameMenu {
     }
 
     public void showStoryGameMenu(){
-        System.out.println("\n--->> Battle --->> Single PLayer --->> Story : ");
-        System.out.println("            1.Enemy || Hero : White Ghoul   Mode : Until Death  Reward : 500 DR ");
-        System.out.println("            2.Enemy || Hero : Zahhak   Mode : Single Flag Mode  Reward : 1000 DR ");
-        System.out.println("            3.Enemy || Hero : Arash   Mode : Collecting Flag Mode  Reward : 1500 DR ");
+        System.out.println("\n--->> Battle --->> Single PLayer --->> Choose Game Mode : ");
+        System.out.println("            1.Until Death");
+        System.out.println("            2.Single Flag Mode");
+        System.out.println("            3.Collecting Flag Mode");
         System.out.println("            4.Back");
     }
 
-    public int selectLevelToPlay(int levelNumber){
+    public int selectModeToPlay(Scanner scanner,int levelNumber){
         return BACK_TO_ACCOUNT_MENU;
     }
 
@@ -45,7 +45,7 @@ public class StoryGameMenu {
         new Help(){
             @Override
             public void show() {
-                System.out.println("            1,2,3 ----> Choose You Level");
+                System.out.println("            1,2,3 ----> Choose You Mode");
                 System.out.println("            4 ----> Go Back");
             }
         }.show();

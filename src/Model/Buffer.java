@@ -37,7 +37,7 @@ public class Buffer {
                             }
                         } else if (battleGround.getGround().get(x + j).get(y + i).getOwner() == opponent) {
                             if (((Card) battleGround.getGround().get(x + j).get(y + i)).getBufferEffected().get(k).getType() == BufferOfSpells.Type.HOLY_BUFF ||
-                                    ((Card) battleGround.getGround().get(x + j).get(y + i)).getBufferEffected().get(k).getType() == BufferOfSpells.Type.POWER_BUFF){
+                                    ((Card) battleGround.getGround().get(x + j).get(y + i)).getBufferEffected().get(k).getType() == BufferOfSpells.Type.POWER_BUFF_ATTACK){
                                 ((Card) battleGround.getGround().get(x + j).get(y + i)).getBufferEffected().remove(k);
                                 k--;
                             }
@@ -187,7 +187,7 @@ public class Buffer {
                     }
                 } else if (battleGround.getGround().get(x).get(y).getOwner() == opponent) {
                     if (((Card) battleGround.getGround().get(x).get(y)).getBufferEffected().get(k).getType() == BufferOfSpells.Type.HOLY_BUFF ||
-                            ((Card) battleGround.getGround().get(x).get(y)).getBufferEffected().get(k).getType() == BufferOfSpells.Type.POWER_BUFF){
+                            ((Card) battleGround.getGround().get(x).get(y)).getBufferEffected().get(k).getType() == BufferOfSpells.Type.POWER_BUFF_ATTACK){
                         ((Card) battleGround.getGround().get(x).get(y)).getBufferEffected().remove(k);
                         k--;
                     }
@@ -226,11 +226,11 @@ public class Buffer {
         y--;
         if (battleGround.getGround().get(x).get(y).getOwner() == player && battleGround.getGround().get(x).get(y) instanceof Card) {
             if (battleGround.getGround().get(x).get(y) instanceof Hero) {
-                ((Hero) battleGround.getGround().get(x).get(y)).getBufferEffected().add(new BufferOfSpells(0,true,BufferOfSpells.Type.POWER_BUFF,((Hero) battleGround.getGround().get(x).get(y)).getHP()));
+                ((Hero) battleGround.getGround().get(x).get(y)).getBufferEffected().add(new BufferOfSpells(0,true,BufferOfSpells.Type.POWER_BUFF_ATTACK,((Hero) battleGround.getGround().get(x).get(y)).getHP()));
                 return;
             }
             if (battleGround.getGround().get(x).get(y) instanceof Minion) {
-                ((Minion) battleGround.getGround().get(x).get(y)).getBufferEffected().add(new BufferOfSpells(0,true,BufferOfSpells.Type.POWER_BUFF,((Minion) battleGround.getGround().get(x).get(y)).getHP()));
+                ((Minion) battleGround.getGround().get(x).get(y)).getBufferEffected().add(new BufferOfSpells(0,true,BufferOfSpells.Type.POWER_BUFF_ATTACK,((Minion) battleGround.getGround().get(x).get(y)).getHP()));
                 return;
             }
             throw new TargetSelectedException_Spell();
@@ -243,7 +243,7 @@ public class Buffer {
         for (int i = 0; i < BattleGround.getRows(); i++) {
             for (int j = 0; j < BattleGround.getCols(); j++) {
                 if (battleGround.getGround().get(i).get(j) instanceof Card && battleGround.getGround().get(i).get(j).getOwner() == player) {
-                    ((Card) battleGround.getGround().get(i).get(j)).getBufferEffected().add(new BufferOfSpells(0,true,BufferOfSpells.Type.POWER_BUFF,2));
+                    ((Card) battleGround.getGround().get(i).get(j)).getBufferEffected().add(new BufferOfSpells(0,true,BufferOfSpells.Type.POWER_BUFF_ATTACK,2));
                 }
             }
         }

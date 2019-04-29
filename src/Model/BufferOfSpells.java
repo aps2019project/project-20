@@ -8,7 +8,7 @@ public class BufferOfSpells {
     private int value;
 
     public enum Type{
-        POWER_BUFF,HOLY_BUFF,DISARM_BUFF,STUN_BUFF,WEAKNESS_BUFF_HEALTH,WEAKNESS_BUFF_POWER,POISON_BUFF
+        POWER_BUFF_ATTACK,POWER_BUFF_HEALTH,HOLY_BUFF,DISARM_BUFF,STUN_BUFF,WEAKNESS_BUFF_HEALTH,WEAKNESS_BUFF_POWER,POISON_BUFF
     }
 
     public BufferOfSpells(int lifeTime,boolean lifeEndless,Type type) {
