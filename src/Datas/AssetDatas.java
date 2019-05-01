@@ -109,4 +109,364 @@ public class AssetDatas {
     private static Item soulEater = new Item("soulEater", "When each own warrior dies, a power buff increasing one own warrior's AP by 1 unit is activated.", 25000, 1017);
     private static Item baptism = new Item("baptism", "Each minion has holy buff for 2 turns after being spawned.", 20000, 1018);
     private static Item chineseSword = new Item("chineseSword", "Increases warrior's AP by 5 units(Only for melee).", 1019);
+
+    public static Spell getTotalDisarm() {
+        return totalDisarm;
+    }
+
+    public static Spell getAreaDispel() {
+        return areaDispel;
+    }
+
+    public static Spell getEmpower() {
+        return empower;
+    }
+
+    public static Spell getFireball() {
+        return fireball;
+    }
+
+    public static Spell getGodStrength() {
+        return godStrength;
+    }
+
+    public static Spell getHellFire() {
+        return hellFire;
+    }
+
+    public static Spell getLightingBolt() {
+        return lightingBolt;
+    }
+
+    public static Spell getPoisonLake() {
+        return poisonLake;
+    }
+
+    public static Spell getMadness() {
+        return madness;
+    }
+
+    public static Spell getAllDisarm() {
+        return allDisarm;
+    }
+
+    public static Spell getAllPoison() {
+        return allPoison;
+    }
+
+    public static Spell getDispel() {
+        return dispel;
+    }
+
+    public static Spell getHealthWithProfit() {
+        return healthWithProfit;
+    }
+
+    public static Spell getGhazaBokhorJoonBegiri() {
+        return ghazaBokhorJoonBegiri;
+    }
+
+    public static Spell getAllPower() {
+        return allPower;
+    }
+
+    public static Spell getAllAttack() {
+        return allAttack;
+    }
+
+    public static Spell getWeakening() {
+        return weakening;
+    }
+
+    public static Spell getSacrifice() {
+        return sacrifice;
+    }
+
+    public static Spell getKingsGuard() {
+        return kingsGuard;
+    }
+
+    public static Spell getShock() {
+        return shock;
+    }
+
+    public static Minion getFarsArcher() {
+        return farsArcher;
+    }
+
+    public static Minion getFarsSwordsman() {
+        return farsSwordsman;
+    }
+
+    public static Minion getFarsSpear() {
+        return farsSpear;
+    }
+
+    public static Minion getFarsHorseman() {
+        return farsHorseman;
+    }
+
+    public static Minion getFarsChampion() {
+        return farsChampion;
+    }
+
+    public static Minion getFarsChief() {
+        return farsChief;
+    }
+
+    public static Minion getTooraniArcher() {
+        return TooraniArcher;
+    }
+
+    public static Minion getTooraniCatapult() {
+        return TooraniCatapult;
+    }
+
+    public static Minion getTooraniSpear() {
+        return TooraniSpear;
+    }
+
+    public static Minion getTooraniSpy() {
+        return TooraniSpy;
+    }
+
+    public static Minion getTooraniSwampy() {
+        return TooraniSwampy;
+    }
+
+    public static Minion getTooraniPrince() {
+        return TooraniPrince;
+    }
+
+    public static Minion getBlackGoblin() {
+        return blackGoblin;
+    }
+
+    public static Minion getThrowStoneGiant() {
+        return throwStoneGiant;
+    }
+
+    public static Minion getEagle() {
+        return eagle;
+    }
+
+    public static Minion getHogRiderGoblin() {
+        return hogRiderGoblin;
+    }
+
+    public static Minion getOneEyeGiant() {
+        return oneEyeGiant;
+    }
+
+    public static Minion getPoisonSnake() {
+        return poisonSnake;
+    }
+
+    public static Minion getThrowFireDragon() {
+        return throwFireDragon;
+    }
+
+    public static Minion getDrainLion() {
+        return drainLion;
+    }
+
+    public static Minion getGiantSnake() {
+        return giantSnake;
+    }
+
+    public static Minion getWhiteWolf() {
+        return whiteWolf;
+    }
+
+    public static Minion getTiger() {
+        return tiger;
+    }
+
+    public static Minion getWolf() {
+        return wolf;
+    }
+
+    public static Minion getWizard() {
+        return wizard;
+    }
+
+    public static Minion getGreatWizard() {
+        return greatWizard;
+    }
+
+    public static Minion getElf() {
+        return elf;
+    }
+
+    public static Minion getWildBoar() {
+        return wildBoar;
+    }
+
+    public static Minion getPiran() {
+        return piran;
+    }
+
+    public static Minion getGiv() {
+        return giv;
+    }
+
+    public static Minion getBahman() {
+        return bahman;
+    }
+
+    public static Minion getAshkbos() {
+        return ashkbos;
+    }
+
+    public static Minion getIraj() {
+        return iraj;
+    }
+
+    public static Minion getBigGiant() {
+        return bigGiant;
+    }
+
+    public static Minion getTwoHeadGiant() {
+        return twoHeadGiant;
+    }
+
+    public static Minion getColdMother() {
+        return coldMother;
+    }
+
+    public static Minion getSteelArmor() {
+        return steelArmor;
+    }
+
+    public static Minion getSiavash() {
+        return siavash;
+    }
+
+    public static Minion getKingGiant() {
+        return kingGiant;
+    }
+
+    public static Minion getArjangGoblin() {
+        return arjangGoblin;
+    }
+
+    public static Hero getWhiteDamn() {
+        return whiteDamn;
+    }
+
+    public static Hero getSimorgh() {
+        return simorgh;
+    }
+
+    public static Hero getSevenHeadDragon() {
+        return sevenHeadDragon;
+    }
+
+    public static Hero getRakhsh() {
+        return rakhsh;
+    }
+
+    public static Hero getZahhak() {
+        return zahhak;
+    }
+
+    public static Hero getKaveh() {
+        return kaveh;
+    }
+
+    public static Hero getArash() {
+        return arash;
+    }
+
+    public static Hero getLegend() {
+        return legend;
+    }
+
+    public static Hero getEsfandiar() {
+        return esfandiar;
+    }
+
+    public static Hero getRostam() {
+        return rostam;
+    }
+
+    public static Item getKnowledgeCrown() {
+        return knowledgeCrown;
+    }
+
+    public static Item getNamoos_e_separ() {
+        return namoos_e_separ;
+    }
+
+    public static Item getDamoolArch() {
+        return damoolArch;
+    }
+
+    public static Item getNooshdaroo() {
+        return nooshdaroo;
+    }
+
+    public static Item getTwoHornArrow() {
+        return twoHornArrow;
+    }
+
+    public static Item getSimorghWing() {
+        return simorghWing;
+    }
+
+    public static Item getElixir() {
+        return elixir;
+    }
+
+    public static Item getManaMixture() {
+        return manaMixture;
+    }
+
+    public static Item getInvulnerableMixture() {
+        return invulnerableMixture;
+    }
+
+    public static Item getDeathCurse() {
+        return deathCurse;
+    }
+
+    public static Item getRandomDamage() {
+        return randomDamage;
+    }
+
+    public static Item getTerrorHood() {
+        return terrorHood;
+    }
+
+    public static Item getBladesOfAgility() {
+        return bladesOfAgility;
+    }
+
+    public static Item getKingWisdom() {
+        return kingWisdom;
+    }
+
+    public static Item getAssassinationDagger() {
+        return assassinationDagger;
+    }
+
+    public static Item getPoisonousDagger() {
+        return poisonousDagger;
+    }
+
+    public static Item getShockHammer() {
+        return shockHammer;
+    }
+
+    public static Item getSoulEater() {
+        return soulEater;
+    }
+
+    public static Item getBaptism() {
+        return baptism;
+    }
+
+    public static Item getChineseSword() {
+        return chineseSword;
+    }
 }

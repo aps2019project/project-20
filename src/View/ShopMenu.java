@@ -3,12 +3,14 @@ package View;
 import Exceptions.AssetNotFoundException;
 import Exceptions.InsufficientMoneyInBuyFromShopException;
 import Exceptions.MaximumNumberOfItemsInBuyException;
+import Presenter.CurrentAccount;
 import Presenter.ShopMenuPresenter;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class ShopMenu {
+
     private final static int BACK = 12;
     private ShopMenuPresenter shopMenuPresenter = new ShopMenuPresenter();
 
@@ -52,7 +54,7 @@ public class ShopMenu {
             showMessage(2);
             return;
         }
-        showMessage(6);
+        showMessage(9);
     }
 
     public void buy(Scanner scanner) {
@@ -110,6 +112,7 @@ public class ShopMenu {
 
     public void showMenu() {
         System.out.println("\n-->> Shop :");
+        System.out.println("    Your Budget : "+ CurrentAccount.getCurrentAccount().getBudget()+" DR\n");
         System.out.println("    1.Show Shop Collection");
         System.out.println("    2.Show My Collection");
         System.out.println("    3.Search Card Or Item In Shop");
@@ -139,6 +142,9 @@ public class ShopMenu {
                 break;
             case 6:
                 System.out.println("        This Card/Item Was Bought Successfully!!!");
+                break;
+            case 9:
+                System.out.println("        This Card/Item Sold Successfully!!!");
                 break;
             case 7:
                 System.out.println("        Please Enter Integer ID!!!");

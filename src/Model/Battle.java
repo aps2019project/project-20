@@ -5,16 +5,22 @@ import Exceptions.CardNotFoundInDeckException;
 import Exceptions.MoreThanNormalDistanceException;
 import Exceptions.ThiCellFillException;
 
-import java.util.ArrayList;
-
 public class Battle {
+
+    public enum Mode{
+        NORMAL,FLAG_KEEPING,FLAG_COLLECTING;
+    }
+    private Mode mode ;
     final int MAX_MANA_IN_LATE_TURNS = 9;
+    final int DEFAULLT_MANA_START = 2;
     private int turn;
     private Account firstPlayer;
     private Account secondPlayer;
+    private Deck firstPlayerDeck;
+    private Deck secondPlayerDeck;
     private BattleGround battleGround;
-    private int firstPlayerMana = 2;
-    private int secondPlayerMana = 2;
+    private int firstPlayerMana ;
+    private int secondPlayerMana ;
     private Card firstPlayerSelectedCard;
     private Card secondPlayerSelectedCard;
     private Item firstPlayerSelectedItem;
@@ -24,7 +30,32 @@ public class Battle {
     private GraveYard firstPlayerGraveYard;
     private GraveYard secondPlayerGraveYard;
     private int battleID;
-    //private View view;
+    private int reward;
+
+    public Battle(Mode mode,Account firstPlayer,Account secondPlayer, Deck firstplayerDeck, Deck secondPlayerDeck, BattleGround battleGround, int reward) {
+        this.mode = mode;
+        this.turn = 0;
+        this.firstPlayer=firstPlayer;
+        this.secondPlayer = secondPlayer;
+        this.firstPlayerDeck = firstplayerDeck;
+        this.secondPlayerDeck = secondPlayerDeck;
+        this.battleGround = battleGround;
+        this.firstPlayerMana = DEFAULLT_MANA_START;
+        this.secondPlayerMana = DEFAULLT_MANA_START;
+        this.firstPlayerSelectedCard = null;
+        this.secondPlayerSelectedCard = null;
+        this.firstPlayerSelectedItem = null;
+        this.secondPlayerSelectedItem = null;
+        this.firstPlayerNextCardFromDeck = null;
+        this.secondPlayerNextCardFromDeck = null;
+        this.firstPlayerGraveYard = null;
+        this.secondPlayerGraveYard = null;
+        this.reward = reward;
+    }
+
+    public int getReward() {
+        return reward;
+    }
 
     public static void handleBattleEvent() {
     }

@@ -5,6 +5,7 @@
 //do the changes affect the card in the shop and other places or not.
 package Model;
 import Datas.AccountDatas;
+import Datas.DeckDatas;
 import Exceptions.RepeatedUserNameException;
 import Exceptions.UserNotFoundException;
 import Exceptions.WrongPasswordException;
@@ -46,6 +47,9 @@ public class Account implements Comparable<Account>{
         this.userName = userName;
         this.password = password;
         AccountDatas.getAccounts().add(this);
+        this.setMainDeck( new Deck("defaultDeck", DeckDatas.getEnemyDeckInStoryGameLevel1().getHero(),DeckDatas.getEnemyDeckInStoryGameLevel1().getItems(),DeckDatas.getEnemyDeckInStoryGameLevel1().getCards()));
+        this.collection.setAssetsOfCollectionFromADeck(mainDeck);
+        decks.add(mainDeck);
     }
 
     public String getUserName() {
@@ -139,4 +143,5 @@ public class Account implements Comparable<Account>{
             }
         throw new UserNotFoundException("User not found.");
     }
+
 }

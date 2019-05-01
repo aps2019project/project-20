@@ -32,4 +32,10 @@ public class Collection {
     public static void save() {
     }
 
+    public void setAssetsOfCollectionFromADeck(Deck deck){
+        assets.add(deck.getHero());
+        assets.addAll(deck.getCards());
+        assets.addAll(deck.getItems());
+    }
+
 }
