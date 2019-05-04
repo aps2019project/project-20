@@ -14,7 +14,6 @@ import java.lang.*;
 import java.util.ArrayList;
 public class Account implements Comparable<Account>{
     final static int PRIMARY_BUDGET = 15000;
-    final static int numberOfCardsInHand = 5;
     private String userName;
     private String password;
     private Collection collection = new Collection();

@@ -1,8 +1,6 @@
 package Model;
 
 public class Hero extends Warrior{
-    // extending 10 heroes
-    // private Spell specialPower;
     private int coolDown;
 
     public Hero(String name, int price, int ID, int range, int AP, int HP, boolean doesHaveAction, AttackType attackType) {
@@ -18,14 +16,6 @@ public class Hero extends Warrior{
     public Hero(String name, int price, int ID, int range, int AP, int HP, AttackType attackType) {
         this(name, price, ID, range, AP, HP, false, attackType);
     }
-//
-//    public Spell getSpecialPower() {
-//        return specialPower;
-//    }
-//
-//    public void setSpecialPower(Spell specialPower) {
-//        this.specialPower = specialPower;
-//    }
     public int getCoolDown() {
         return coolDown;
     }

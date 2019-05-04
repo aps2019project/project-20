@@ -8,16 +8,9 @@ public class BattleGround {
     // How to fix the error. We need to input effectLifetime of any member of CellsEffect.
     public enum CellsEffect {
         NOTHING, POISON, FIRE, HOLY;
-
-        private int effectLifetime;
-
-               CellsEffect(int effectLifetime) {
-                 this.effectLifetime = effectLifetime;
-           }
-                CellsEffect(){}
     }
 
-    private ArrayList<ArrayList<Asset>> ground = new ArrayList<>();
+    private ArrayList<ArrayList<Asset>> ground;
     private ArrayList<ArrayList<CellsEffect>> effectsPosition = new ArrayList<>();
     private ArrayList<ArrayList<Integer>> effectsLifeTimePosition = new ArrayList<>();
 
