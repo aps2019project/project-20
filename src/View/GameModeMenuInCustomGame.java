@@ -51,7 +51,7 @@ public class GameModeMenuInCustomGame {
             System.out.println("           Your Hero Not Found!!!");
             return 0;
         }
-        new BattleEnvironment(new BattleEnvironmentPresenter(new GameMenuPresenter().prepareForSingleGame(0,customHero))).handleEvents(scanner);
+        new BattleEnvironment(new BattleEnvironmentPresenter(new GameMenuPresenter().prepareForSingleGame(0,customHero))).handleMainBattleMenuEvents(scanner);
         return BACK_TO_ACCOUNT_MENU;
     }
 

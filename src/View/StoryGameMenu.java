@@ -42,7 +42,7 @@ public class StoryGameMenu {
     }
 
     public int selectLevelToPlay(Scanner scanner,int levelNumber){
-        new BattleEnvironment(new BattleEnvironmentPresenter(new GameMenuPresenter().prepareForSingleGame(levelNumber,null))).handleEvents(scanner);
+        new BattleEnvironment(new BattleEnvironmentPresenter(new GameMenuPresenter().prepareForSingleGame(levelNumber,null))).handleMainBattleMenuEvents(scanner);
         return BACK_TO_ACCOUNT_MENU;
     }
 
