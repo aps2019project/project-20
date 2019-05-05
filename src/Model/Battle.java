@@ -1,3 +1,4 @@
+//TODO: shop must be singleton
 package Model;
 
 import Exceptions.*;
@@ -7,19 +8,26 @@ import java.util.Iterator;
 public class Battle {
     private final int FIRST_LATE_TURN = 15;
     private final int MAX_MANA_IN_LATE_TURNS = 9;
-    private final int eachPlayerPrimaryMana = 2;
+    private int eachPlayerManaAtFirstOfTurn = 2;
     private final int NUMBER_OF_CARDS_IN_HAND = 5;
     private int turn;
     private Account[] players = new Account[2];
     private BattleGround battleGround;
-    private int[] playersMana = {eachPlayerPrimaryMana, eachPlayerPrimaryMana};
+    private int[] playersMana = {eachPlayerManaAtFirstOfTurn, eachPlayerManaAtFirstOfTurn};
     private ArrayList<BufferOfSpells>[] playersManaBuffEffected = new ArrayList[2];{
-        playersManaBuffEffected[0] = new ArrayList<BufferOfSpells>();
-        playersManaBuffEffected[1] = new ArrayList<BufferOfSpells>();
+        playersManaBuffEffected[0] = new ArrayList<>();
+        playersManaBuffEffected[1] = new ArrayList<>();
     }
     private Card[] playersSelectedCard = new Card[2];
     private Item[] playersSelectedItem = new Item[2];
-    private Card[][] playersHand = new Card[2][NUMBER_OF_CARDS_IN_HAND];
+    private Card[][] playersHand = new Card[2][NUMBER_OF_CARDS_IN_HAND];{
+        for (int i = 0; i <= 1; i++)
+            for (int j = 0; j < NUMBER_OF_CARDS_IN_HAND; j++) {
+                int nextCardFromDeckIndex = players[i].getMainDeck().getNextCardFromDeckIndex();
+                playersHand[i][j] = players[i].getMainDeck().getCards().get(nextCardFromDeckIndex);
+                players[i].getMainDeck().setNextCardFromDeckIndex(nextCardFromDeckIndex + 1);
+            }
+    }
     private Card[] playersNextCardFromDeck = new Card[2];
     private GraveYard[] playersGraveYard = new GraveYard[2];
     private int battleID;
@@ -99,6 +107,14 @@ public class Battle {
             case HYBRID:
                 hybridAttackOrCounterAttack(attacker, opponentWarrior, distance, "attack");
         }
+        if (attacker.getHP() <= 0) {
+            playersGraveYard[playerIndex].getDeadCards().add(attacker);
+            battleGround.getGround().remove(attacker);
+        }
+        if (opponentWarrior.getHP() <= 0) {
+            playersGraveYard[playerIndex].getDeadCards().add(opponentWarrior);
+            battleGround.getGround().remove(opponentWarriorID);
+        }
     }
 
     public void counterAttack(Warrior counterAttacker, Warrior opponentWarrior) {
@@ -127,7 +143,7 @@ public class Battle {
                 Class bufferClass = buffer.getClass();
                 bufferClass.getMethod(attacker.getAction(), attacker, opponentWarrior);
             }
-            attacker.changeHP(-1 * attacker.getAP());
+            opponentWarrior.changeHP(-1 * attacker.getAP());
             if (status.equals("attack"))
                 counterAttack(opponentWarrior, attacker);
         }
@@ -168,21 +184,46 @@ public class Battle {
     }
 
     public void insertIn(Account player, String cardName, int x, int y, BattleGround battleGround) {
-        for (Card card : player.getMainDeck().getCards()) {
-            if (card.getName().equals(cardName)) {
-                if (!(battleGround.getGround().get(x).get(y) instanceof Card)) {
-                    throw new ThisCellFilledException();
+        x--;
+        y--;
+        int playerIndex = 0;
+        boolean isThereAnyAdjacentOwnWarrior = false;
+        if (player == players[1])
+            playerIndex = 1;
+        if (battleGround.getGround().get(x).get(y) != null)
+            throw new InvalidInsertInBattleGroundException("The selected cell is filled.");
+        outer: for (int i = -1; i <= 1; i++){
+            for (int j = -1; j <=1; j++){
+                if (i == 0 && j == 0)
+                    continue;
+                if (battleGround.getGround().get(x + i).get(y + j).getOwner() == player){
+                    isThereAnyAdjacentOwnWarrior = true;
+                    break outer;
                 }
-                battleGround.getGround().get(x).set(y, card);
-
             }
         }
-        throw new CardNotFoundInDeckException();
+        if (!isThereAnyAdjacentOwnWarrior)
+            throw new InvalidInsertInBattleGroundException("Invalid target");
+        for (int i = 0; i < NUMBER_OF_CARDS_IN_HAND; i++){
+            Card card = playersHand[playerIndex][i];
+            if (card.getName().equals(cardName)) {
+                if (playersMana[playerIndex] >= card.getMP()) {
+                    battleGround.getGround().get(x).set(y, card);
+                    playersMana[playerIndex] -= card.getMP();
+                    playersHand[playerIndex][i] = null;
+                    return;
+                }
+                else
+                    throw new InvalidInsertInBattleGroundException("You don't have enough mana.");
+            }
+        }
+        throw new InvalidInsertInBattleGroundException("Invalid card name");
     }
 
     public void endTurn(Account player) {
         applyAndHandleManaBuffers();
         applyEffectedBuffersOfAllWarriorsAtEndOfTurn();
+        fillEmptyPlacesOfHandFromDeck(player);
         turn++;
         setPlayersManaByDefault();
     }
@@ -244,6 +285,18 @@ public class Battle {
         }
     }
 
+    public void fillEmptyPlacesOfHandFromDeck(Account player) {
+        for (int i = 0; i <= 1; i++){
+            for (int j = 0; j < NUMBER_OF_CARDS_IN_HAND; j++){
+                int nextCardFromDeckIndex = player.getMainDeck().getNextCardFromDeckIndex();
+                if (playersHand[i][j] == null && nextCardFromDeckIndex < Deck.STANDARD_NUMBER_OF_MINIONS_AND_SPELLS) {
+                    playersHand[i][j] = player.getMainDeck().getCards().get(nextCardFromDeckIndex);
+                    player.getMainDeck().setNextCardFromDeckIndex(nextCardFromDeckIndex + 1);
+                }
+            }
+        }
+    }
+
     public void selectItem(Account player, int collectableItemID) {
     }
 
@@ -288,8 +341,9 @@ public class Battle {
     }
 
     public void setPlayersManaByDefault() {
+        eachPlayerManaAtFirstOfTurn++;
         if (turn < FIRST_LATE_TURN)
-            playersMana[2 - (turn % 2)]++;
+            playersMana[2 - (turn % 2)] = eachPlayerManaAtFirstOfTurn;
         else
             playersMana[2 - (turn % 2)] = MAX_MANA_IN_LATE_TURNS;
     }

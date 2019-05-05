@@ -7,32 +7,32 @@ import static Model.Minion.ActivateTimeOfSpecialPower.*;
 import static Model.Spell.TargetType.*;
 
 public class AssetDatas {
-    //spells ID:starts from 4000
-    //Heroes ID:starts from 2000
-    //Items ID:starts from 1000
-    //Minions ID:starts from 3000
+    //Spells ID: starts from 4000
+    //Heroes ID: starts from 2000
+    //Items ID: starts from 1000
+    //Minions ID: starts from 3000
 
     //spells
-    private static Spell totalDisarm = new Spell("TotalDisarm","Disarming a Card of Enemy forever",1000,4000,0, ENEMY,"totalDisarmAction");
-    private static Spell areaDispel = new Spell("AreaDispel","Destroy Positive Buffs of Enemy Cards And Negative Buffs Of your Cards",1500,4001,2, CELLS,2,"areaDispelAction");
-    private static Spell empower = new Spell("empower","Improve َAp Of One Of Your Cards",250,4002,1, PLAYER,"empowerAction");
-    private static Spell fireball = new Spell("fireball","Do damage to Card Of An Enemy",400,4003,1, ENEMY,"fireballAction");
-    private static Spell godStrength = new Spell("fireball","Increase AP Of Your Hero",450,4004,2, PLAYER,"godStrengthAction");
-    private static Spell hellFire = new Spell("hellFire","For two turns Creates a Fiery House In Targeted Cells",600,4005,3, CELLS,2,"hellFireAction");
-    private static Spell lightingBolt = new Spell("lightingBolt","Do damage to Hero Of An Enemy",1250,4006,2, ENEMY,"lightingBoltAction");
-    private static Spell poisonLake = new Spell("poisonLake","For one turn Creates a Poisonous House In Targeted Cells",900,4007,5, CELLS,3,"poisonLakeAction");
-    private static Spell madness = new Spell("madness","For three turns Improve Ap Of Your Card But Make It Disarm",650,4008,0, PLAYER,"madnessAction");
-    private static Spell allDisarm = new Spell("allDisarm","For one turn Disarms the All Cards Of Enemy",2000,4009,9, ENEMY,"allDisarmAction");
-    private static Spell allPoison = new Spell("allPoison","For four turns Disarms the All Cards Of Enemy",1500,4010,8, ENEMY,"allPoisonAction");
-    private static Spell dispel = new Spell("dispel","Destroy Positive Buffs of Enemy Cards And Negative Buffs Of your Cards",2100,4011,0, WHOLE_OF_GROUND,"dispelAction");
-    private static Spell healthWithProfit = new Spell("healthWithProfit","For Three Turns Gives Two Holy Buffs But Give Weakness Buff To Your Card",2250,4012,0, PLAYER,"healthWithProfitAction");
-    private static Spell powerUp = new Spell("powerUp","Give Power Buff To Your Card Which Equals With It's Current Hp Forever",2500,4013,2, PLAYER,"ghazaBokhorJoonBegiriAction");
-    private static Spell allPower = new Spell("allPower","Give Power Buff To All Of Your Cards Forever",2000,4014,4, PLAYER,"allPowerAction");
-    private static Spell allAttack = new Spell("allAttack","Do damage To All Of Enemies Cards",1500,4015,4, ENEMY,"allAttackAction");
-    private static Spell weakening = new Spell("weakening","Give Weakness Buff  To A Card Of Enemy",1000,4016,1, ENEMY,"weakeningAction");
-    private static Spell sacrifice = new Spell("sacrifice","Give All Hp Of A Minion To Your Hero",1600,4017,3, PLAYER,"sacrificeAction");
-    private static Spell kingsGuard = new Spell("kingsGuard","Kill A Card Of Enemy",1750,4018,3, ENEMY,"kingsGuardAction");
-    private static Spell shock = new Spell("shock","Stunning Card Of Enemy For Two Turns",1200,4019,1, ENEMY,"shockAction");
+    private static Spell totalDisarm = new Spell("totalDisarm","Disarming a Card of Enemy forever",1000,4000,0, ENEMY);
+    private static Spell areaDispel = new Spell("areaDispel","Destroy Positive Buffs of Enemy Cards And Negative Buffs Of your Cards",1500,4001,2, CELLS, 2);
+    private static Spell empower = new Spell("empower","Improve َAp Of One Of Your Cards",250,4002,1, PLAYER);
+    private static Spell fireball = new Spell("fireball","Do damage to Card Of An Enemy",400,4003,1, ENEMY);
+    private static Spell godStrength = new Spell("fireball","Increase AP Of Your Hero",450,4004,2, PLAYER);
+    private static Spell hellFire = new Spell("hellFire","For two turns Creates a Fiery House In Targeted Cells",600,4005,3, CELLS, 2);
+    private static Spell lightingBolt = new Spell("lightingBolt","Do damage to Hero Of An Enemy",1250,4006,2, ENEMY);
+    private static Spell poisonLake = new Spell("poisonLake","For one turn Creates a Poisonous House In Targeted Cells",900,4007,5, CELLS, 3);
+    private static Spell madness = new Spell("madness","For three turns Improve Ap Of Your Card But Make It Disarm",650,4008,0, PLAYER);
+    private static Spell allDisarm = new Spell("allDisarm","For one turn Disarms the All Cards Of Enemy",2000,4009,9, ENEMY);
+    private static Spell allPoison = new Spell("allPoison","For four turns Disarms the All Cards Of Enemy",1500,4010,8, ENEMY);
+    private static Spell dispel = new Spell("dispel","Destroy Positive Buffs of Enemy Cards And Negative Buffs Of your Cards",2100,4011,0, WHOLE_OF_GROUND);
+    private static Spell healthWithProfit = new Spell("healthWithProfit","For Three Turns Gives Two Holy Buffs But Give Weakness Buff To Your Card",2250,4012,0, PLAYER);
+    private static Spell powerUp = new Spell("powerUp","Give Power Buff To Your Card Which Equals With It's Current Hp Forever",2500,4013,2, PLAYER);
+    private static Spell allPower = new Spell("allPower","Give Power Buff To All Of Your Cards Forever",2000,4014,4, PLAYER);
+    private static Spell allAttack = new Spell("allAttack","Do damage To All Of Enemies Cards",1500,4015,4, ENEMY);
+    private static Spell weakening = new Spell("weakening","Give Weakness Buff  To A Card Of Enemy",1000,4016,1, ENEMY);
+    private static Spell sacrifice = new Spell("sacrifice","Give All Hp Of A Minion To Your Hero",1600,4017,3, PLAYER);
+    private static Spell kingsGuard = new Spell("kingsGuard","Kill A Card Of Enemy",1750,4018,3, ENEMY);
+    private static Spell shock = new Spell("shock","Stunning Card Of Enemy For Two Turns",1200,4019,1, ENEMY);
 
     //minions
     private static Minion farsArcher = new Minion("farsArcher","farsArcher",300,3000,7,4,6,2, RANGED);

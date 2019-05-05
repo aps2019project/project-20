@@ -1,5 +1,6 @@
 package Model;
 
+import Datas.AssetDatas;
 import Exceptions.AssetNotFoundException;
 import Exceptions.InsufficientMoneyInBuyFromShopException;
 import Exceptions.MaximumNumberOfItemsInBuyException;
@@ -9,8 +10,14 @@ import java.util.ArrayList;
 public class Shop {
 
     final static int MAX_NUMBER_OF_ITEMS_IN_COLLECTION = 3;
-
+    private static Shop shop = new Shop();
     private static ArrayList<Asset> assets = new ArrayList<>();
+
+    private Shop() {}
+
+    public static Shop getShop() {
+        return shop;
+    }
 
     public static ArrayList<Asset> getAssets() {
         return assets;

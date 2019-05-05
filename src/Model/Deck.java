@@ -6,12 +6,17 @@ import Presenter.CurrentAccount;
 import java.util.ArrayList;
 
 public class Deck {
-    private static final int STANDARD_NUMBER_OF_HEROES = 1;
-    private static final int STANDARD_NUMBER_OF_MINIONS_AND_SPELLS = 20;
+    public static final int STANDARD_NUMBER_OF_HEROES = 1;
+    public static final int STANDARD_NUMBER_OF_MINIONS_AND_SPELLS = 20;
     private String name;
     private ArrayList<Card> cards = new ArrayList<>();
     private Hero hero;
-    private ArrayList<Item> items =new ArrayList<>();
+    private ArrayList<Item> items = new ArrayList<>();
+    private int nextCardFromDeckIndex = 0;
+
+    public int getNextCardFromDeckIndex() {
+        return nextCardFromDeckIndex;
+    }
 
     public Deck(String name) {
         this.name = name;
@@ -45,7 +50,11 @@ public class Deck {
         return cards;
     }
 
-    public void addToDeck(Account account,int ID) {
+    public void setNextCardFromDeckIndex(int nextCardFromDeckIndex) {
+        this.nextCardFromDeckIndex = nextCardFromDeckIndex;
+    }
+
+    public void addToDeck(Account account, int ID) {
         Asset asset;
         try {
             asset = Asset.searchAsset(account.getCollection().getAssets(),ID);

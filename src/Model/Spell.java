@@ -2,37 +2,21 @@ package Model;
 
 public class Spell extends Card {
     private int squareSideLength;
+    private TargetType targetType;
 
     public enum TargetType {
         ENEMY, PLAYER, CELLS, WHOLE_OF_GROUND
     }
 
-    private TargetType targetType;
 
-    public Spell(String name,String desc, int price, int ID,int MP, TargetType targetType,String action) {
-        this.setName(name);
-        this.setDesc(desc);
-        this.setPrice(price);
-        this.setID(ID);
-        this.setxInGround(0);
-        this.setyInGround(0);
-        this.setOwner(null);
-        this.setAction(action);
-        this.setMP(MP);
+    public Spell(String name,String desc, int price, int ID,int MP, TargetType targetType) {
+        super(name, desc, price, ID, MP, true);
         this.targetType = targetType;
         this.squareSideLength = 0;
     }
 
-    public Spell(String name,String desc, int price, int ID,int MP, TargetType targetType,int squareSideLength,String action) {
-        this.setName(name);
-        this.setDesc(desc);
-        this.setPrice(price);
-        this.setID(ID);
-        this.setxInGround(0);
-        this.setyInGround(0);
-        this.setOwner(null);
-        this.setAction(action);
-        this.setMP(MP);
+    public Spell(String name,String desc, int price, int ID,int MP, TargetType targetType, int squareSideLength) {
+        super();
         this.targetType = targetType;
         this.squareSideLength = squareSideLength;
     }
