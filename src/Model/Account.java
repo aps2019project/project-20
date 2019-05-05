@@ -4,6 +4,7 @@
 //or not. And also I don't know if they are the same and some changes are made to the card, for example in a battle,
 //do the changes affect the card in the shop and other places or not.
 package Model;
+
 import Datas.AccountDatas;
 import Exceptions.RepeatedUserNameException;
 import Exceptions.UserNotFoundException;
@@ -12,8 +13,9 @@ import Exceptions.WrongPasswordException;
 import java.util.*;
 import java.lang.*;
 import java.util.ArrayList;
-public class Account implements Comparable<Account>{
-    final static int PRIMARY_BUDGET = 15000;
+
+public class Account implements Comparable<Account> {
+    private final static int PRIMARY_BUDGET = 15000;
     private String userName;
     private String password;
     private Collection collection = new Collection();
@@ -39,6 +41,10 @@ public class Account implements Comparable<Account>{
 
     public ArrayList<Deck> getDecks() {
         return decks;
+    }
+
+    public Account() {
+
     }
 
     public Account(String userName, String password) {
@@ -85,7 +91,7 @@ public class Account implements Comparable<Account>{
 
     public static Account createAccount(String userName, String password) {
         try {
-            searchAccount(AccountDatas.getAccounts(),userName);
+            searchAccount(AccountDatas.getAccounts(), userName);
         } catch (UserNotFoundException e) {
             return new Account(userName, password);
         }
@@ -98,44 +104,45 @@ public class Account implements Comparable<Account>{
 
     public static Account login(String userName, String password) {
         try {
-            searchAccount(AccountDatas.getAccounts(),userName, password);
+            searchAccount(AccountDatas.getAccounts(), userName, password);
         } catch (UserNotFoundException | WrongPasswordException e) {
             throw e;
         }
-        return searchAccount(AccountDatas.getAccounts(),userName, password);
+        return searchAccount(AccountDatas.getAccounts(), userName, password);
     }
 
     @Override
     public int compareTo(Account account) {
-        if (this.numberOfWins > account.numberOfWins)
-            return 1;
-        else if (this.numberOfWins < account.numberOfWins)
-            return -1;
-        return 0;
+//        if (this.numberOfWins > account.numberOfWins)
+//            return 1;
+//        else if (this.numberOfWins < account.numberOfWins)
+//            return -1;
+//        return 0;
+        return this.numberOfWins -account.numberOfWins;
     }
 
     public static void sortAccounts(ArrayList<Account> accounts) {
         Collections.sort(accounts);
     }
 
-    public static Account searchAccount(ArrayList<Account> accounts ,String userName, String password) {
-            for (Account account : accounts) {
-                if (userName.equals(account.getUserName())) {
-                    if (password.equals(account.getPassword()))
-                        return account;
-                    else
-                        throw new WrongPasswordException("The password is incorrect.");
-                }
+    public static Account searchAccount(ArrayList<Account> accounts, String userName, String password) {
+        for (Account account : accounts) {
+            if (userName.equals(account.getUserName())) {
+                if (password.equals(account.getPassword()))
+                    return account;
+                else
+                    throw new WrongPasswordException("The password is incorrect.");
             }
+        }
         throw new UserNotFoundException("User not found.");
     }
 
-    public static Account searchAccount(ArrayList<Account> accounts ,String userName) {
-            for (Account account : accounts) {
-                if (userName.equals(account.getUserName())) {
-                    return account;
-                }
+    public static Account searchAccount(ArrayList<Account> accounts, String userName) {
+        for (Account account : accounts) {
+            if (userName.equals(account.getUserName())) {
+                return account;
             }
+        }
         throw new UserNotFoundException("User not found.");
     }
 }

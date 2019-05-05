@@ -15,6 +15,13 @@ public class Shop {
     public static ArrayList<Asset> getAssets() {
         return assets;
     }
+    //for singleton
+    private Shop() { }
+    private static Shop ourShop=new Shop();
+    public static Shop getOurShop() {
+        return ourShop;
+    }
+
 
     public static void sell(Account account, int assetID) {
         Asset asset;
