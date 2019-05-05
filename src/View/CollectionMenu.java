@@ -162,13 +162,13 @@ public class CollectionMenu {
     public static void printHeroFormat(Hero hero, int format) {
         switch (format) {
             case 1:
-                System.out.printf(" : Name : %s - AP : %d – HP : %d – Class : %s – Special power: %s - Sell Cost : %d\n", hero.getName(), hero.getAP(), hero.getHP(), hero.getAttackType(), hero.getSpecialPower(), hero.getPrice());
+                System.out.printf(" : Name : %s - AP : %d – HP : %d – Class : %s – Special power: %s - Sell Cost : %d\n", hero.getName(), hero.getAP(), hero.getHP(), hero.getAttackType(), hero.getPrice());
                 break;
             case 2:
-                System.out.printf(" : Name : %s - AP : %d – HP : %d – Class : %s – Special power: %s\n", hero.getName(), hero.getAP(), hero.getHP(), hero.getAttackType(), hero.getSpecialPower());
+                System.out.printf(" : Name : %s - AP : %d – HP : %d – Class : %s – Special power: %s\n", hero.getName(), hero.getAP(), hero.getHP(), hero.getAttackType());
                 break;
             case 3:
-                System.out.printf(" : Name : %s - AP : %d – HP : %d – Class : %s – Special power: %s - Buy Cost : %d\n", hero.getName(), hero.getAP(), hero.getHP(), hero.getAttackType(), hero.getSpecialPower(), hero.getPrice());
+                System.out.printf(" : Name : %s - AP : %d – HP : %d – Class : %s – Special power: %s - Buy Cost : %d\n", hero.getName(), hero.getAP(), hero.getHP(), hero.getAttackType(), hero.getPrice());
                 break;
 
         }
@@ -207,13 +207,13 @@ public class CollectionMenu {
     public static void printMinionFormat(Minion minion, int format) {
         switch (format) {
             case 1:
-                System.out.printf(" Type : Minion : Name : %s - Class : %s - AP : %d – HP : %d – MP : %d – Special power: %s - Sell Cost : %d\n", minion.getName(), minion.getAttackType(), minion.getAP(), minion.getHP(), minion.getMP(), minion.getSpecialPower(), minion.getPrice());
+                System.out.printf(" Type : Minion : Name : %s - Class : %s - AP : %d – HP : %d – MP : %d – Special power: %s - Sell Cost : %d\n", minion.getName(), minion.getAttackType(), minion.getAP(), minion.getHP(), minion.getMP(), minion.getPrice());
                 break;
             case 2:
-                System.out.printf(" Type : Minion : Name : %s - Class : %s - AP : %d – HP : %d – MP : %d – Special power: %s\n", minion.getName(), minion.getAttackType(), minion.getAP(), minion.getHP(), minion.getMP(), minion.getSpecialPower());
+                System.out.printf(" Type : Minion : Name : %s - Class : %s - AP : %d – HP : %d – MP : %d – Special power: %s\n", minion.getName(), minion.getAttackType(), minion.getAP(), minion.getHP(), minion.getMP());
                 break;
             case 3:
-                System.out.printf(" Type : Minion : Name : %s - Class : %s - AP : %d – HP : %d – MP : %d – Special power: %s - Buy Cost : %d\n", minion.getName(), minion.getAttackType(), minion.getAP(), minion.getHP(), minion.getMP(), minion.getSpecialPower(), minion.getPrice());
+                System.out.printf(" Type : Minion : Name : %s - Class : %s - AP : %d – HP : %d – MP : %d – Special power: %s - Buy Cost : %d\n", minion.getName(), minion.getAttackType(), minion.getAP(), minion.getHP(), minion.getMP(), minion.getPrice());
                 break;
 
         }

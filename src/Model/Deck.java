@@ -58,7 +58,8 @@ public class Deck {
         Asset asset;
         try {
             asset = Asset.searchAsset(account.getCollection().getAssets(),ID);
-        }catch (AssetNotFoundException e){
+        }
+        catch (AssetNotFoundException e){
             throw e;
         }
         if (asset instanceof Hero) {
@@ -117,13 +118,13 @@ public class Deck {
     }
 
     public static void selectMainDeck(Account account, String deckName) {
-        Deck deck ;
+        Deck deck;
         try {
             deck = Deck.findDeck(account.getDecks(), deckName);
         } catch (DeckNotFoundException e) {
             throw e;
         }
-        if(account.getMainDeck()!=null && account.getMainDeck().getName().equals(deckName)){
+        if (account.getMainDeck() != null && account.getMainDeck().getName().equals(deckName)) {
             throw new RepeatedDeckException("");
         }
         if (deck.isValidOfMainDeck())
@@ -157,17 +158,18 @@ public class Deck {
         throw new RepeatedDeckException("");
     }
 
-    public static void deleteDeck(Account account,String deckName) {
-        Deck deck ;
+    public static void deleteDeck(Account account, String deckName) {
+        Deck deck;
         try {
             deck = Deck.findDeck(account.getDecks(),deckName);
-        }catch (DeckNotFoundException e){
+        }
+        catch (DeckNotFoundException e){
             throw e;
         }
         account.getDecks().remove(deck);
     }
 
     public boolean isValidOfMainDeck() {
-        return  (this.getHero() != null && this.getCards().size() == STANDARD_NUMBER_OF_MINIONS_AND_SPELLS);
+        return (this.getHero() != null && this.getCards().size() == STANDARD_NUMBER_OF_MINIONS_AND_SPELLS);
     }
 }

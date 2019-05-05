@@ -1,4 +1,3 @@
-//TODO: shop must be singleton
 package Model;
 
 import Exceptions.*;
@@ -10,6 +9,9 @@ public class Battle {
     private final int MAX_MANA_IN_LATE_TURNS = 9;
     private int eachPlayerManaAtFirstOfTurn = 2;
     private final int NUMBER_OF_CARDS_IN_HAND = 5;
+    private final int EXIT = 1234;
+    private final int CONTINUE = 12345;
+    private final int PRIZE=1000;
     private int turn;
     private Account[] players = new Account[2];
     private BattleGround battleGround;
@@ -96,7 +98,8 @@ public class Battle {
         catch (AssetNotFoundException e) {
             throw new AssetNotFoundException("Invalid card id");
         }
-        distance = Math.abs(opponentWarrior.getXInGround() - attacker.getXInGround()) + Math.abs(opponentWarrior.getYInGround() - attacker.getYInGround());
+        distance = Math.abs(opponentWarrior.getXInGround() - attacker.getXInGround())
+                + Math.abs(opponentWarrior.getYInGround() - attacker.getYInGround());
         switch (attacker.getAttackType()) {
             case MELEE:
                 meleeAttackOrCounterAttack(attacker, opponentWarrior, distance, "attack");
@@ -135,13 +138,13 @@ public class Battle {
         }
     }
 
-    public  void meleeAttackOrCounterAttack(Warrior attacker, Warrior opponentWarrior, int distance, String status) {
-        if (distance == 1 || (distance == 2 && Math.abs(attacker.getXInGround() - opponentWarrior.getXInGround()) == 1) ) {
+    public void meleeAttackOrCounterAttack(Warrior attacker, Warrior opponentWarrior, int distance, String status) {
+        if (distance == 1 || (distance == 2 && Math.abs(attacker.getXInGround() - opponentWarrior.getXInGround()) == 1)) {
             if (!attacker.getAction().equals("NoAction")) {
                 //TODO: special power
                 Buffer buffer = new Buffer();
                 Class bufferClass = buffer.getClass();
-                bufferClass.getMethod(attacker.getAction(), attacker, opponentWarrior);
+                //bufferClass.getMethod(attacker.getAction(), attacker, opponentWarrior);
             }
             opponentWarrior.changeHP(-1 * attacker.getAP());
             if (status.equals("attack"))
@@ -151,8 +154,8 @@ public class Battle {
             throw new InvalidAttackException("Opponent warrior is unavailable for attack");
     }
 
-    public  void rangedAttackOrCounterAttack(Warrior attacker, Warrior opponentWarrior, int distance, String status) {
-        if (distance <= attacker.getRange() && !( distance == 1 || (distance == 2 && Math.abs(attacker.getXInGround() - opponentWarrior.getXInGround()) == 1) ) ) {
+    public void rangedAttackOrCounterAttack(Warrior attacker, Warrior opponentWarrior, int distance, String status) {
+        if (distance <= attacker.getRange() && !(distance == 1 || (distance == 2 && Math.abs(attacker.getXInGround() - opponentWarrior.getXInGround()) == 1))) {
             //TODO: special power
 
             opponentWarrior.changeHP(-1 * attacker.getAP());
@@ -163,7 +166,7 @@ public class Battle {
             throw new InvalidAttackException("Opponent warrior is unavailable for attack");
     }
 
-    public  void hybridAttackOrCounterAttack(Warrior attacker, Warrior opponentWarrior, int distance, String status) {
+    public void hybridAttackOrCounterAttack(Warrior attacker, Warrior opponentWarrior, int distance, String status) {
         //TODO: special power
 
         try {
@@ -177,7 +180,15 @@ public class Battle {
         }
     }
 
-    public static void attackCombo(Account player, Account opponent, int opponentCardId, int MyCardID) {
+    public void attackCombo(Account player, Minion[] playerMinion, int opponentCardId) {
+
+        for (int i = 0; i < playerMinion.length; i++) {
+            if (playerMinion[i].getOwner() == player && playerMinion[i].getActivateTimeOfSpecialPower() == Minion.ActivateTimeOfSpecialPower.COMBO) {
+                attack(player, playerMinion[i], opponentCardId);
+            } else {
+                throw new NotComboException();
+            }
+        }
     }
 
     public static void useSpecialPower(Account player, int x, int y) {
@@ -300,15 +311,87 @@ public class Battle {
     public void selectItem(Account player, int collectableItemID) {
     }
 
-    public static void useItem(Account player, Item playerItemSelected) {
+
+    public static void useItem(Account player, Account enemy,Card enemyWarrior,Card myCard,Item playerItemSelected){
+        switch (playerItemSelected.getID()){
+            case 1000:
+                playerItemSelected.getBuffer().knowledgeCrownAction(player);
+                break;
+            case 1001:
+                playerItemSelected.getBuffer().namoos_e_separAction(player.getMainDeck().getHero());
+                break;
+            case 1002:
+                playerItemSelected.getBuffer().damoolArchAction(player.getMainDeck().getHero(),enemyWarrior);
+                break;
+            case 1003:
+                playerItemSelected.getBuffer().nooshdaroo();
+                break;
+            case 1004:
+                playerItemSelected.getBuffer().twoHornArrowAction();
+                break;
+            case 1005:
+                playerItemSelected.getBuffer().simorghWingAction(enemy);
+                break;
+            case 1006:
+                playerItemSelected.getBuffer().elixirAction((Warrior) myCard);
+                break;
+            case 1007:
+                playerItemSelected.getBuffer().manaMixtureAction((Warrior) myCard);
+                break;
+            case 1008:
+                playerItemSelected.getBuffer().invulnerableMixtureAction();
+                break;
+            case 1009:
+                playerItemSelected.getBuffer().deathCurseAction();
+                break;
+            case 1010:
+                playerItemSelected.getBuffer().randomDamageAction();
+                break;
+            case 1011:
+                playerItemSelected.getBuffer().terrorHoodAction(enemy);
+                break;
+            case 1012:
+                playerItemSelected.getBuffer().bladesOfAgilityAction();
+                break;
+            case 1013:
+                playerItemSelected.getBuffer().kingWisdomAction(player);
+                break;
+            case 1014:
+                playerItemSelected.getBuffer().assassinationDaggerAction(enemy);
+                break;
+            case 1015:
+                playerItemSelected.getBuffer().poisonousDaggerAction(enemy);
+                break;
+            case 1016:
+                playerItemSelected.getBuffer().shockHammerAction((Warrior) enemyWarrior);
+                break;
+            case 1017:
+                playerItemSelected.getBuffer().soulEaterAction(enemy,(Warrior)myCard);
+                break;
+            case 1018:
+                playerItemSelected.getBuffer().baptismAction((Minion)myCard);
+                break;
+            case 1019:
+                playerItemSelected.getBuffer().chineseSwordAction((Warrior)myCard);
+                break;
+        }
 
     }
 
-    public static void enterGraveYard(Account player) {
-
+    public void enterGraveYard(Account player, Card playerCard) {
+        playersGraveYard[0].getDeadCard().add(playerCard);
     }
 
-    public static void endGame() {
+    public int endGame() {
+        if (players[0].getMainDeck().getHero().getHP() <= 0 ) {
+            players[1].setBudget(players[1].getBudget()+PRIZE);
+            return EXIT;
+        }else if( players[1].getMainDeck().getHero().getHP() <= 0){
+            players[0].setBudget(players[0].getBudget()+PRIZE);
+            return EXIT;
+        }
+        return CONTINUE;
+        //TODO: State of all the cards must be reset.
     }
 
     //Getters and Setters
@@ -348,7 +431,7 @@ public class Battle {
             playersMana[2 - (turn % 2)] = MAX_MANA_IN_LATE_TURNS;
     }
 
-    public void changePlayerMana(int playerIndex, int value){
+    public void changePlayerMana(int playerIndex, int value) {
         playersMana[playerIndex] += value;
     }
 
@@ -401,7 +484,7 @@ public class Battle {
     }
 
     public Warrior searchWarriorInBattleGround(int warriorID) {
-        for (int i = 0; i < BattleGround.getRows(); i++){
+        for (int i = 0; i < BattleGround.getRows(); i++) {
             for (int j = 0; j < BattleGround.getColumns(); j++)
                 if (battleGround.getGround().get(i).get(j) instanceof Warrior && warriorID == battleGround.getGround().get(i).get(j).getID())
                     return (Warrior) battleGround.getGround().get(i).get(j);
@@ -420,7 +503,7 @@ public class Battle {
     }
 
     public static boolean isValidCoordinates(int x, int y) {
-        if (x > BattleGround.getColumns() || x < 1 || y > BattleGround.getRows() || y <1)
+        if (x > BattleGround.getColumns() || x < 1 || y > BattleGround.getRows() || y < 1)
             return false;
         return true;
     }
