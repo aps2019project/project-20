@@ -4,12 +4,21 @@ import java.util.ArrayList;
 
 public class Card extends Asset {
     private int MP;
+    private String InGameID;
     private ArrayList<BufferOfSpells> bufferEffected = new ArrayList<>();
 
     public Card(){}
 
     public Card(String name, String desc, int price, int ID, boolean doesHaveAction) {
         super(name, desc, price, ID, doesHaveAction);
+    }
+
+    public String getInGameID() {
+        return InGameID;
+    }
+
+    public void setInGameID(String inGameID) {
+        InGameID = inGameID;
     }
 
     public ArrayList<BufferOfSpells> getBufferEffected() {

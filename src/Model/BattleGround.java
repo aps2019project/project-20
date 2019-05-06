@@ -1,5 +1,7 @@
 package Model;
 
+import Exceptions.AssetNotFoundException;
+
 import java.util.ArrayList;
 
 public class BattleGround {
@@ -8,16 +10,9 @@ public class BattleGround {
     // How to fix the error. We need to input effectLifetime of any member of CellsEffect.
     public enum CellsEffect {
         NOTHING, POISON, FIRE, HOLY;
-
-        private int effectLifetime;
-
-               CellsEffect(int effectLifetime) {
-                 this.effectLifetime = effectLifetime;
-           }
-                CellsEffect(){}
     }
 
-    private ArrayList<ArrayList<Asset>> ground = new ArrayList<>();
+    private ArrayList<ArrayList<Asset>> ground;
     private ArrayList<ArrayList<CellsEffect>> effectsPosition = new ArrayList<>();
     private ArrayList<ArrayList<Integer>> effectsLifeTimePosition = new ArrayList<>();
 
@@ -47,6 +42,17 @@ public class BattleGround {
 
     public void setEffectsPosition(ArrayList<ArrayList<CellsEffect>> effectsPosition) {
         this.effectsPosition = effectsPosition;
+    }
+
+    public Asset searchAssetInBattleGround(Account owner,String cardName){
+        for (ArrayList<Asset> assets : ground) {
+            for (Asset asset : assets) {
+                if(asset.getName().equals(cardName) && owner==asset.getOwner()){
+                    return asset;
+                }
+            }
+        }
+        throw new AssetNotFoundException();
     }
 }
 

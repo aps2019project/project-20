@@ -105,6 +105,16 @@ public class Asset implements Cloneable{
         throw new AssetNotFoundException("");
     }
 
+    public static Card searchCard(ArrayList<Card> cards, String name){
+        for (Card card : cards) {
+            if(card.getName().compareTo(name)==0){
+                return card;
+            }
+        }
+        throw new AssetNotFoundException("");
+    }
+
+
     public static Asset searchAsset(ArrayList<Asset> assets, int ID){
         for (Asset asset : assets) {
             if(asset.getID() == ID){

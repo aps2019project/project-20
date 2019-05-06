@@ -71,7 +71,7 @@ public class AccountMenu {
 
     public void showMenu() {
         System.out.println("\n<<<GameMenu>>>");
-        System.out.println("User : " + CurrentAccount.getCurrentAccount().getUserName() + "\n");
+        System.out.println("User : " + CurrentAccount.getCurrentAccount().getName() + "\n");
         System.out.println("1.Collection");
         System.out.println("2.Shop");
         System.out.println("3.Battle");
@@ -88,7 +88,7 @@ public class AccountMenu {
         accountMenuPresenter.showLeaderBoardPresenter();
         int i = 1;
         for (Account account : AccountDatas.getAccounts()) {
-            System.out.println(i++ + " : UserName : " + account.getUserName() + " - Wins : " + account.getNumberOfWins());
+            System.out.println(i++ + " : UserName : " + account.getName() + " - Wins : " + account.getNumberOfWins());
         }
     }
 

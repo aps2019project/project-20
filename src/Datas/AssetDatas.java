@@ -26,7 +26,7 @@ public class AssetDatas {
     private static Spell allPoison = new Spell("allPoison","For four turns Disarms the All Cards Of Enemy",1500,4010,8, ENEMY,"allPoisonAction");
     private static Spell dispel = new Spell("dispel","Destroy Positive Buffs of Enemy Cards And Negative Buffs Of your Cards",2100,4011,0, WHOLE_OF_GROUND,"dispelAction");
     private static Spell healthWithProfit = new Spell("healthWithProfit","For Three Turns Gives Two Holy Buffs But Give Weakness Buff To Your Card",2250,4012,0, PLAYER,"healthWithProfitAction");
-    private static Spell ghazaBokhorJoonBegiri = new Spell("ghazaBokhorJoonBegiri","Give Power Buff To Your Card Which Equals With It's Current Hp Forever",2500,4013,2, PLAYER,"ghazaBokhorJoonBegiriAction");
+    private static Spell powerUp = new Spell("powerUp","Give Power Buff To Your Card Which Equals With It's Current Hp Forever",2500,4013,2, PLAYER,"ghazaBokhorJoonBegiriAction");
     private static Spell allPower = new Spell("allPower","Give Power Buff To All Of Your Cards Forever",2000,4014,4, PLAYER,"allPowerAction");
     private static Spell allAttack = new Spell("allAttack","Do damage To All Of Enemies Cards",1500,4015,4, ENEMY,"allAttackAction");
     private static Spell weakening = new Spell("weakening","Give Weakness Buff  To A Card Of Enemy",1000,4016,1, ENEMY,"weakeningAction");
@@ -36,7 +36,7 @@ public class AssetDatas {
 
     //minions
     private static Minion farsArcher = new Minion("farsArcher","farsArcher",300,3000,7,4,6,2, RANGED);
-    private static Minion farsSwordsman = new Minion("farsSwordsman","farsSwordsman",400,3001,0,4,6,2, MELEE, PASSIVE);
+    private static Minion farsSwordsman = new Minion("farsSwordsman","farsSwordsman",400,3001,0,4,6,2, MELEE, ON_ATTACK);
     private static Minion farsSpear = new Minion("farsSpear","farsSpear",500,3002,3,3,5,1, HYBRID);
     private static Minion farsHorseman = new Minion("farsHorseman","farsSpear",200,3003,0,6,10,4, MELEE);
     private static Minion farsChampion = new Minion("farsChampion","farsChampion",600,3004,0,6,24,9, MELEE, ON_ATTACK);
@@ -55,7 +55,7 @@ public class AssetDatas {
     private static Minion poisonSnake = new Minion("poisonSnake", "for 3 turn poisoned enemy", 300, 3017, 4, 6, 5, 4, RANGED, ON_ATTACK);
     private static Minion throwFireDragon = new Minion("throwFireDragon", "", 250, 3018, 4, 5, 9, 5, RANGED);
     private static Minion drainLion = new Minion("drainLion", "no effect from holly buff", 600, 3019, 0, 8, 1, 2, MELEE, ON_ATTACK);
-    private static Minion giantSnake = new Minion("giantSnake", "not holly buff", 500, 3020, 5, 7, 14, 8, RANGED, ON_RESPAWN);
+    private static Minion giantSnake = new Minion("giantSnake", "not holly buff", 500, 3020, 5, 7, 14, 8, RANGED, ON_SPAWN);
     private static Minion whiteWolf = new Minion("whiteWolf", "4 and 6 decrease minion HP for two after turn", 400, 3021, 0, 2, 8, 5, MELEE, ON_ATTACK);
     private static Minion tiger = new Minion("tiger", "decrease 8 HP in after turn from minion that attacked", 400, 3022, 0, 2, 6, 4, MELEE, ON_ATTACK);
     private static Minion wolf = new Minion("wolf", "decrease 6 HP in after turn from minion that attacked", 400, 3023, 0, 1, 6, 3, MELEE, ON_ATTACK);
@@ -65,19 +65,19 @@ public class AssetDatas {
     private static Minion wildBoar = new Minion("wildBoar", "no effect by disarm", 500, 3027, 0, 14, 10, 6, MELEE, ON_DEFEND);
     private static Minion piran = new Minion("piran", "no effect by poison", 400, 3028, 0, 12, 20, 8, MELEE, ON_DEFEND);
     private static Minion giv = new Minion("giv", "no effect by negative buff", 450, 3029, 5, 7, 5, 4, RANGED,ON_DEFEND);
-    private static Minion bahman = new Minion("bahman", "random decrease enemy minion decrease 16 HP", 450, 3030, 0, 9, 16, 8, MELEE,ON_RESPAWN);
+    private static Minion bahman = new Minion("bahman", "random decrease enemy minion decrease 16 HP", 450, 3030, 0, 9, 16, 8, MELEE, ON_SPAWN);
     private static Minion ashkbos = new Minion("ashkbos", "no effect by enemy that attack power lower than", 400, 3031, 0, 8, 14, 7, MELEE,ON_DEFEND);
     private static Minion iraj = new Minion("iraj", "", 500, 3032, 3, 20, 6, 4, RANGED);
     private static Minion bigGiant = new Minion("bigGiant", "", 600, 3033, 2, 8, 30, 9, HYBRID);
-    private static Minion twoHeadGiant = new Minion("twoHeadGiant", "destroy all holly buff minion that attacked", 550, 3034, 0, 4, 10, 4, MELEE, PASSIVE);
-    private static Minion coldMother = new Minion("coldMother", "stun around minion ", 500, 3035, 5, 4, 3, 3, RANGED,ON_RESPAWN);
-    private static Minion steelArmor  = new Minion("steelArmor", "convert randomly to enemy minions ", 650, 3036, 0, 1, 1, 3, MELEE, ON_RESPAWN);
+    private static Minion twoHeadGiant = new Minion("twoHeadGiant", "destroy all holly buff minion that attacked", 550, 3034, 0, 4, 10, 4, MELEE, ON_ATTACK);
+    private static Minion coldMother = new Minion("coldMother", "stun around minion ", 500, 3035, 5, 4, 3, 3, RANGED, ON_SPAWN);
+    private static Minion steelArmor  = new Minion("steelArmor", "convert randomly to enemy minions ", 650, 3036, 0, 1, 1, 3, MELEE, PASSIVE);
     private static Minion siavash  = new Minion("siavash", "on death attack 6 AP to enemy hero", 350, 3037, 0, 5, 8, 4, MELEE,ON_DEATH);
     private static Minion kingGiant  = new Minion("kingGiant", "for any giant take part in combo enemy 1 turn disarm", 600, 3038, 0, 4, 10, 5, MELEE, COMBO);
     private static Minion arjangGoblin  = new Minion("arjangGoblin", "fo any goblin take part in attack add 3 to weakness", 600, 3039, 0, 6, 6, 3, MELEE, COMBO);
 
     //Heroes
-    private static Hero whiteDamn = new Hero("whiteDamn", 8000, 2000, 0, 4, 50, 1, 2, MELEE);
+    private static Hero whiteGoblin = new Hero("whiteGoblin", 8000, 2000, 0, 4, 50, 1, 2, MELEE);
     private static Hero simorgh = new Hero("simorgh", 9000, 2001, 0, 4, 50, 3, 8, MELEE);
     private static Hero sevenHeadDragon = new Hero("sevenHeadDragon", 8000, 2002, 0, 4, 50, 0, 1, MELEE);
     private static Hero rakhsh = new Hero("rakhsh", 8000, 2003, 0, 4, 50, 1, 2, MELEE);

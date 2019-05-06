@@ -6,10 +6,13 @@ public class Warrior extends Card {
     private int range;
     private int HP;
     private int AP;
+    private boolean isDisarm;
+    private boolean isPoison;
+    private boolean isStun;
+    private boolean isAttackedThisTurn;
     private int lifeTimeChangedAP = 0;
     private int amountOfChangedAP = 0;
     private AttackType attackType;
-
     private ArrayList<BufferOfSpells> bufferEffected = new ArrayList<>();
 
     public Warrior(){}
@@ -55,6 +58,38 @@ public class Warrior extends Card {
     }
     public int getAmountOfChangedAP() {
         return amountOfChangedAP;
+    }
+
+    public boolean isStun() {
+        return isStun;
+    }
+
+    public void setStun(boolean stun) {
+        isStun = stun;
+    }
+
+    public boolean isDisarm() {
+        return isDisarm;
+    }
+
+    public void setDisarm(boolean disarm) {
+        isDisarm = disarm;
+    }
+
+    public boolean isPoison() {
+        return isPoison;
+    }
+
+    public void setPoison(boolean poison) {
+        isPoison = poison;
+    }
+
+    public boolean isAttackedThisTurn() {
+        return isAttackedThisTurn;
+    }
+
+    public void setAttackedThisTurn(boolean attackedThisTurn) {
+        this.isAttackedThisTurn = attackedThisTurn;
     }
 
     public void setAmountOfChangedAP(int amountOfChangedAP) {

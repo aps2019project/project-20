@@ -1,9 +1,11 @@
 package View;
 
 
-import Model.Battle;
+import Exceptions.*;
+import Model.*;
 import Presenter.BattleEnvironmentPresenter;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class BattleEnvironment {
@@ -23,23 +25,31 @@ public class BattleEnvironment {
             } else if (option.compareTo("2") == 0) {
                 selectItem(scanner);
             } else if (option.compareTo("3") == 0) {
-                attackCombo();
+                attackCombo(scanner);
             } else if (option.compareTo("4") == 0) {
                 showHand();
             } else if (option.compareTo("5") == 0) {
                 showNextCard();
             } else if (option.compareTo("6") == 0) {
-                insertCard();
+                showMyMinions();
             } else if (option.compareTo("7") == 0) {
-                showCollectableItems();
+                showOpponentMinions();
             } else if (option.compareTo("8") == 0) {
-               enterGraveYard();
+                insertCardInBattleGround(scanner);
             } else if (option.compareTo("9") == 0) {
-                endTurn();
-            }else if (option.compareTo("10") == 0) {
-                showhelp();
+                showCollectableItems();
+            } else if (option.compareTo("10") == 0) {
+                showGameInfo();
             } else if (option.compareTo("11") == 0) {
-                return ;
+                showInfoOfCard(scanner);
+            } else if (option.compareTo("12") == 0) {
+                enterGraveYard(scanner);
+            } else if (option.compareTo("13") == 0) {
+                endTurn();
+            } else if (option.compareTo("14") == 0) {
+                showhelp();
+            } else if (option.compareTo("15") == 0) {
+                return;
             } else {
                 System.out.println("InValid Command");
             }
@@ -64,14 +74,14 @@ public class BattleEnvironment {
         }
     }
 
-    public int handlItemUseMenuEvents(Scanner scanner) {
+    public int handleItemUseMenuEvents(Scanner scanner) {
         while (true) {
             showItemUseMenu();
             String option = scanner.next();
             if (option.compareTo("1") == 0) {
                 showItemInfo();
             } else if (option.compareTo("2") == 0) {
-                useItem();
+                useItem(scanner);
             } else if (option.compareTo("3") == 0) {
                 return BACK;
             } else {
@@ -85,24 +95,51 @@ public class BattleEnvironment {
             showGraveYardMenu();
             String option = scanner.next();
             if (option.compareTo("1") == 0) {
-              showCardsInGraveYard();
+                showCardsInGraveYard();
             } else if (option.compareTo("2") == 0) {
-                showCardInfoInGraveYard();
+                showCardInfoInGraveYard(scanner);
             } else if (option.compareTo("3") == 0) {
-               return BACK;
+                return BACK;
             } else {
                 System.out.println("InValid Command");
             }
         }
     }
 
-    public void setPlayer() {
+    public void showInfoOfCard(Scanner scanner) {
+        System.out.println("Enter Card ID : ");
+        String cardID = scanner.next();
+        Card card;
+        try {
+            card = battleEnvironmentPresenter.showInfoOfCard(cardID);
+        } catch (InvalidInGameAssetIDFormatException e) {
+            showMessage(1);
+            return;
+        } catch (AssetNotFoundException e) {
+            showMessage(2);
+            return;
+        }
+        if (card instanceof Hero) {
+            printInGameHeroFormat((Hero) card);
+        }
+        if (card instanceof Minion) {
+            printInGameMinionFormat((Minion) card, 2);
+        }
+        if (card instanceof Spell) {
+            printInGameSpellFormat((Spell) card);
+        }
     }
 
-    public void setOpponent() {
-    }
-
-    public void gameInfo() {
+    public void showGameInfo() {
+        if (battleEnvironmentPresenter.getBattle().getMode() == Battle.Mode.NORMAL) {
+            System.out.printf("Your Hero HP : %s - %s : Opponent Hero HP", battleEnvironmentPresenter.getBattle().getPlayersDeck()[0].getHero().getHP(), battleEnvironmentPresenter.getBattle().getPlayersDeck()[1].getHero().getHP());
+        }
+        if (battleEnvironmentPresenter.getBattle().getMode() == Battle.Mode.FLAG_KEEPING) {
+            //todo
+        }
+        if (battleEnvironmentPresenter.getBattle().getMode() == Battle.Mode.FLAG_COLLECTING) {
+            //todo
+        }
     }
 
     public void selectCard(Scanner scanner) {
@@ -110,57 +147,251 @@ public class BattleEnvironment {
         String cardID = scanner.next();
         try {
             battleEnvironmentPresenter.selectCardPresenter(cardID);
-        }catch ()
+        } catch (InvalidInGameAssetIDFormatException e) {
+            showMessage(1);
+            return;
+        } catch (AssetNotFoundException e) {
+            showMessage(2);
+            return;
+        }
+        handleCardInGroundMenuEvents(scanner);
     }
 
-    public void cardMoveTo(int x, int y) {
+    public void cardMoveTo(Scanner scanner) {
+        System.out.println("Enter X-destination : ");
+        int x = scanner.nextInt();
+        System.out.println("Enter Y-destination : ");
+        int y = scanner.nextInt();
+        try {
+            battleEnvironmentPresenter.cardMoveToPresenter(x, y);
+        } catch (InvalidTargetException e) {
+            showMessage(7);
+            return;
+        }
+        System.out.printf("%s moved to %d %d", battleEnvironmentPresenter.getBattle().getPlayersSelectedCard()[0].getInGameID(), x, y);
     }
 
-    public void attack(int opponentCardID, int myCardID) {
+    public void attack(Scanner scanner) {
+        System.out.println("Enter Opponent Card ID : ");
+        String OpponentID = scanner.next();
+        try {
+            battleEnvironmentPresenter.attackPresenter(OpponentID);
+        } catch (AssetNotFoundException e) {
+            showMessage(2);
+            return;
+        } catch (InvalidAttackException e) {
+            System.out.println(e.getMessage());
+            return;
+        }
     }
 
-    public void attackCombo(int opponentCardID, int myCardID) {
+    public void attackCombo(Scanner scanner) {
+        System.out.println("Enter Opponent Card ID :");
+        String Opponent = scanner.next();
+        System.out.println("Enter Your Card IDs :");
+        String[] myCards = scanner.next().split("\\s");
+        try {
+            battleEnvironmentPresenter.attackComboPresenter(Opponent, myCards);
+        } catch (InvalidInGameAssetIDFormatException e) {
+            showMessage(1);
+            return;
+        } catch (AssetNotFoundException e) {
+            showMessage(2);
+            return;
+        }
     }
 
-    public void showCardsInGraveYard(){
+    public void showCardsInGraveYard() {
+        for (Card card : battleEnvironmentPresenter.getBattle().getPlayersGraveYard()[0].getCards()) {
+            if (card instanceof Minion) {
+                printInGameMinionFormat((Minion) card, 2);
+            }
+            if (card instanceof Spell) {
+                printInGameSpellFormat((Spell) card);
+            }
+        }
     }
 
-    public void useSpecialPower(int x, int y) {
+    public void useSpecialPower(Scanner scanner) {
+        System.out.println("Enter X-destination : ");
+        int x = scanner.nextInt();
+        System.out.println("Enter Y-destination : ");
+        int y = scanner.nextInt();
+        try {
+            battleEnvironmentPresenter.useSpecialPowerPresenter(x, y);
+        } catch (SpecialPowerMisMatchException e) {
+            showMessage(8);
+            return;
+        } catch (DontHaveEnoughManaException e) {
+            showMessage(9);
+            return;
+        }
     }
 
-    public void insertCard(String cardName, int x, int y) {
+    public void insertCardInBattleGround(Scanner scanner) {
+        System.out.println("Enter Card Name : ");
+        String cardName = scanner.next();
+        System.out.println("Enter X-destination : ");
+        int x = scanner.nextInt();
+        System.out.println("Enter Y-destination : ");
+        int y = scanner.nextInt();
+        try {
+            battleEnvironmentPresenter.insertCardPresenter(cardName, x, y);
+        } catch (AssetNotFoundException e) {
+            showMessage(2);
+            return;
+        } catch (InValidDestinationSelectException e) {
+            showMessage(4);
+            return;
+        } catch (ThisCellFilledException e) {
+            showMessage(5);
+            return;
+        }
+        showMessage(6);
     }
 
     public void endTurn() {
+        battleEnvironmentPresenter.endTurnPresenter();
     }
 
     public void selectItem(Scanner scanner) {
+        System.out.println("Enter Item ID: ");
+        int itemID = scanner.nextInt();
+        try {
+            battleEnvironmentPresenter.selectItemPresenter(itemID);
+        } catch (InvalidInGameAssetIDFormatException e) {
+            showMessage(1);
+            return;
+        } catch (AssetNotFoundException e) {
+            showMessage(3);
+            return;
+        }
+        handleItemUseMenuEvents(scanner);
     }
 
-    public void enterGraveYard() {
+    public void enterGraveYard(Scanner scanner) {
+        handleGraveYardMenuEvents(scanner);
     }
 
-    public void useItem(){}
-
-    public void endGame() {
+    public void useItem(Scanner scanner) {
+        System.out.println("Enter X-destination : ");
+        int x = scanner.nextInt();
+        System.out.println("Enter Y-destination : ");
+        int y = scanner.nextInt();
+        try {
+            battleEnvironmentPresenter.useItemPresenter(x, y);
+        } catch (InvalidTargetException e) {
+            showMessage(7);
+            return;
+        }
     }
 
     public void showMyMinions() {
+        showInMinionCollectionInBattle(battleEnvironmentPresenter.getBattle().getPlayers()[0]);
+    }
+
+    public void showInMinionCollectionInBattle(Account account) {
+        for (ArrayList<Asset> rows : battleEnvironmentPresenter.getBattle().getBattleGround().getGround()) {
+            for (Asset asset : rows) {
+                if (asset instanceof Minion && asset.getOwner() == account) {
+                    printInGameMinionFormat((Minion) asset, 1);
+                }
+            }
+        }
     }
 
     public void showOpponentMinions() {
+        showInMinionCollectionInBattle(battleEnvironmentPresenter.getBattle().getPlayers()[1]);
     }
 
-    public void showCardInfoInGraveYard(String cardID) {
+    public void showCardInfoInGraveYard(Scanner scanner) {
+        System.out.println("Enter Card ID : ");
+        String cardID = scanner.next();
+        Card card;
+        try {
+            card = battleEnvironmentPresenter.showCardInfoInGraveYardPresenter(cardID);
+        } catch (AssetNotFoundException e) {
+            showMessage(10);
+            return;
+        }
+        if (card instanceof Minion) {
+            printInGameMinionFormat((Minion) card, 2);
+        }
+        if (card instanceof Spell) {
+            printInGameSpellFormat((Spell) card);
+        }
     }
 
     public void showHand() {
+        for (Card card : battleEnvironmentPresenter.getBattle().getPlayersHand()[0]) {
+            if (card instanceof Minion) {
+                printInGameMinionFormat((Minion) card, 2);
+            }
+            if (card instanceof Spell) {
+                printInGameSpellFormat((Spell) card);
+            }
+        }
     }
 
     public void showNextCard() {
+        if (battleEnvironmentPresenter.getBattle().getPlayersNextCardFromDeck()[0] instanceof Minion) {
+            printInGameMinionFormat((Minion) battleEnvironmentPresenter.getBattle().getPlayersNextCardFromDeck()[0], 2);
+        }
+        if (battleEnvironmentPresenter.getBattle().getPlayersNextCardFromDeck()[0] instanceof Spell) {
+            printInGameSpellFormat((Spell) battleEnvironmentPresenter.getBattle().getPlayersNextCardFromDeck()[0]);
+        }
     }
 
     public void showItemInfo() {
+        printInGameItemFormat(battleEnvironmentPresenter.getBattle().getPlayersSelectedItem()[0]);
+    }
+
+    public void showCollectableItems() {
+        System.out.println("My Items : ");
+        for (Item item : battleEnvironmentPresenter.getBattle().getPlayersCollectableItems()[0]) {
+            printInGameItemFormat(item);
+        }
+    }
+
+    public static void printInGameMinionFormat(Minion minion, int number) {
+        switch (number) {
+            case 1:
+                System.out.printf("%d : %s , health : %d , location : [( %d, %d )] ; power : %d", minion.getID(), minion.getName(), minion.getHP(), minion.getYInGround() + 1, minion.getXInGround() + 1, minion.getAP());
+                break;
+            case 2:
+                System.out.printf("Minion:\n" +
+                        "Name: %s\n" +
+                        "HP: %d AP: %d MP: %d\n" +
+                        "Range: %d\n" +
+                        "Combo-ability: %s\n" +
+                        "Cost: %d\n" +
+                        "Desc: %s\n", minion.getName(), minion.getHP(), minion.getAP(), minion.getMP(), minion.getRange(), minion.getAttackType(), minion.getPrice(), minion.getDesc());
+                break;
+        }
+    }
+
+    public static void printInGameHeroFormat(Hero hero) {
+        System.out.printf("Hero:\n" +
+                "Name: %s\n" +
+                "Cost: %d\n" +
+                "Desc: %s\n", hero.getName(), hero.getPrice(), hero.getDesc());
+
+    }
+
+    public static void printInGameItemFormat(Item item) {
+        System.out.printf(
+                "Name: %s\n" +
+                        "Cost: %d\n" +
+                        "Desc: %s\n", item.getName(), item.getPrice(), item.getDesc());
+
+    }
+
+    public static void printInGameSpellFormat(Spell spell) {
+        System.out.printf("Spell:\n" +
+                "Name: %s\n" +
+                "MP: %d\n" +
+                "Cost: %d\n" +
+                "Desc: %s\n", spell.getName(), spell.getMP(), spell.getPrice(), spell.getDesc());
     }
 
     public void showMainBattleMenu() {
@@ -170,26 +401,33 @@ public class BattleEnvironment {
         System.out.println("3.Attack Combo");
         System.out.println("4.Show hand");
         System.out.println("5.Show Next Card");
-        System.out.println("6.Insert A Card From Your Hand");
-        System.out.println("7.Show collectables");
-        System.out.println("8.Enter Grave Yard");
-        System.out.println("9.End Turn");
-        System.out.println("10.Help");
-        System.out.println("11.Exit From Battle");
+        System.out.println("6.Show My Minions");
+        System.out.println("7.Show Opponent Minions");
+        System.out.println("8.Insert A Card From Your Hand");
+        System.out.println("9.Show collectables");
+        System.out.println("10.Show Game Info");
+        System.out.println("11.Show Info Of Card");
+        System.out.println("12.Enter Grave Yard");
+        System.out.println("13.End Turn");
+        System.out.println("14.Help");
+        System.out.println("15.Exit From Battle");
     }
+
     public void showCardInGroundMenu() {
-        System.out.println("\n--->> " + battleEnvironmentPresenter.getBattle().getPlayer1CardSelected().getName()+" Selected :");
+        System.out.println("\n--->> " + battleEnvironmentPresenter.getBattle().getPlayersSelectedCard()[0].getName() + " Selected :");
         System.out.println("    1.Move Your Card");
         System.out.println("    2.Attack");
         System.out.println("    3.Use Special Power");
         System.out.println("    4.Back");
     }
+
     public void showItemUseMenu() {
-        System.out.println("\n--->> " + battleEnvironmentPresenter.getBattle().getPlayer1ItemSelected().getName()+" Selected :");
+        System.out.println("\n--->> " + battleEnvironmentPresenter.getBattle().getPlayersSelectedItem()[0].getName() + " Selected :");
         System.out.println("    1.Show Item Info");
         System.out.println("    2.Use This Item");
         System.out.println("    3.Back");
     }
+
     public void showGraveYardMenu() {
         System.out.println("---> Grave Yard :");
         System.out.println("    1.Show Cards");
@@ -197,7 +435,39 @@ public class BattleEnvironment {
         System.out.println("    3.Back");
     }
 
-    public void showCollectableItems() {
+    public void showMessage(int number) {
+        switch (number) {
+            case 1:
+                System.out.println("Your Input ID Format Is Incorrect!!!\nthe Correct Form Is [Player name] _[card Name] _[Turn Use].");
+                break;
+            case 2:
+                System.out.println("There is No Card With This ID In Battle Ground!!!");
+                break;
+            case 10:
+                System.out.println("There is No Card With This ID In Grave Yard!!!");
+                break;
+            case 3:
+                System.out.println("You Have No Item With This ID!!!");
+                break;
+            case 4:
+                System.out.println("Your Destination Is Out Of Ground!!!");
+                break;
+            case 5:
+                System.out.println("Your Destination Is filled!!!");
+                break;
+            case 6:
+                System.out.println("Your Card Inserted.");
+                break;
+            case 7:
+                System.out.println("Invalid Target!!!");
+                break;
+            case 8:
+                System.out.println("This Card Can't Use Special Power Right Now!!!");
+                break;
+            case 9:
+                System.out.println("You Don't Have Enough Mana!!!");
+                break;
+        }
     }
 
     public void showhelp() {

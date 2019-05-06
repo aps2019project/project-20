@@ -18,7 +18,7 @@ public class AccountDatas {
 
     public Account SearchAccount(String username) {
         for (Account account : accounts) {
-            if (account.getUserName().compareTo(username) == 0) {
+            if (account.getName().compareTo(username) == 0) {
                 return account;
             }
         }

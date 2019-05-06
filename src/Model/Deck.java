@@ -6,8 +6,8 @@ import Presenter.CurrentAccount;
 import java.util.ArrayList;
 
 public class Deck implements Cloneable {
-    private static final int StandardNumberOfHeroes = 1;
-    private static final int StandardNumberOfMinionsAndSpells = 20;
+    private static final int STANDARD_NUMBER_OF_HEROES = 1;
+    private static final int STANDARD_NUMBER_OF_MINIONS_AND_SPELLS = 20;
     private String name;
     private ArrayList<Card> cards = new ArrayList<>();
     private Hero hero;
@@ -53,11 +53,11 @@ public class Deck implements Cloneable {
     }
 
     public static int getStandardNumberOfHeroes() {
-        return StandardNumberOfHeroes;
+        return STANDARD_NUMBER_OF_HEROES;
     }
 
     public static int getStandardNumberOfMinionsAndSpells() {
-        return StandardNumberOfMinionsAndSpells;
+        return STANDARD_NUMBER_OF_MINIONS_AND_SPELLS;
     }
 
     public ArrayList<Item> getItems() {
@@ -170,18 +170,17 @@ public class Deck implements Cloneable {
         throw new RepeatedDeckException("");
     }
 
-    public static void deleteDeck(Account account, String deckName) {
-        Deck deck;
+    public static void deleteDeck(Account account,String deckName) {
+        Deck deck ;
         try {
-            deck = Deck.findDeck(account.getDecks(), deckName);
-        } catch (DeckNotFoundException e) {
+            deck = Deck.findDeck(account.getDecks(),deckName);
+        }catch (DeckNotFoundException e){
             throw e;
         }
         account.getDecks().remove(deck);
     }
 
     public boolean isValidOfMainDeck() {
-        return (this.getHero() != null && this.getCards().size() == StandardNumberOfMinionsAndSpells);
+        return  (this.getHero() != null && this.getCards().size() == STANDARD_NUMBER_OF_MINIONS_AND_SPELLS);
     }
-
 }

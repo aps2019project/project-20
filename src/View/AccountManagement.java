@@ -51,7 +51,7 @@ public class AccountManagement {
     }
     public void showManageAccountMenu(){
         System.out.println("\n --->>> Edit My Profile :");
-        System.out.println("    UserName : " + CurrentAccount.getCurrentAccount().getUserName());
+        System.out.println("    UserName : " + CurrentAccount.getCurrentAccount().getName());
         System.out.println("    PassWord : " + CurrentAccount.getCurrentAccount().getPassword()+"\n");
         System.out.println("    1.Change UserName");
         System.out.println("    2.Change PassWord");
