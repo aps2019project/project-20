@@ -18,7 +18,7 @@ public class SinglePlayerMenu {
                         return BACK_TO_ACCOUNT_MENU;
                 }
             } else if (option.compareTo("2") == 0) {
-                GameModeMenu gameModeMenu = new GameModeMenu();
+                GameModeMenuInCustomGame gameModeMenu = new GameModeMenuInCustomGame();
                 switch (gameModeMenu.handleEvents(scanner)){
                     case BACK:
                         break;

@@ -8,10 +8,10 @@ public class GraveYard {
     private ArrayList<Card> deadCard = new ArrayList<>();
     private Account owner;
 
-    private int searchInGraveYard(String cardName) {
+    public Card searchInGraveYard(String cardName) {
         for (Card card : deadCard) {
             if (card.getName().equals(cardName)) {
-                return card.getID();
+                return card;
             }
         }
         throw new CardNotFoundInGraveYardException();

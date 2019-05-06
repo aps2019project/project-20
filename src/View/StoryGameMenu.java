@@ -1,5 +1,9 @@
 package View;
 
+import Model.Battle;
+import Presenter.BattleEnvironmentPresenter;
+import Presenter.GameMenuPresenter;
+
 import java.util.Scanner;
 
 public class StoryGameMenu {
@@ -10,15 +14,15 @@ public class StoryGameMenu {
             showStoryGameMenu();
             String option = scanner.next();
             if (option.compareTo("1") == 0) {
-                if(selectLevelToPlay(1)==BACK_TO_ACCOUNT_MENU){
+                if(selectLevelToPlay(scanner,1)==BACK_TO_ACCOUNT_MENU){
                     return BACK_TO_ACCOUNT_MENU;
                 }
             } else if (option.compareTo("2") == 0) {
-                if(selectLevelToPlay(2)==BACK_TO_ACCOUNT_MENU){
+                if(selectLevelToPlay(scanner,2)==BACK_TO_ACCOUNT_MENU){
                     return BACK_TO_ACCOUNT_MENU;
                 }
             } else if (option.compareTo("3") == 0) {
-                if(selectLevelToPlay(3)==BACK_TO_ACCOUNT_MENU){
+                if(selectLevelToPlay(scanner,3)==BACK_TO_ACCOUNT_MENU){
                     return BACK_TO_ACCOUNT_MENU;
                 }
             }else if (option.compareTo("4") == 0) {
@@ -37,7 +41,8 @@ public class StoryGameMenu {
         System.out.println("            4.Back");
     }
 
-    public int selectLevelToPlay(int levelNumber){
+    public int selectLevelToPlay(Scanner scanner,int levelNumber){
+        new BattleEnvironment(new BattleEnvironmentPresenter(new GameMenuPresenter().prepareForSingleGame(levelNumber,null))).handleMainBattleMenuEvents(scanner);
         return BACK_TO_ACCOUNT_MENU;
     }
 

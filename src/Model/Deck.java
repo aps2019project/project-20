@@ -5,7 +5,7 @@ import Presenter.CurrentAccount;
 
 import java.util.ArrayList;
 
-public class Deck {
+public class Deck implements Cloneable{
     public static final int STANDARD_NUMBER_OF_HEROES = 1;
     public static final int STANDARD_NUMBER_OF_MINIONS_AND_SPELLS = 20;
     private String name;
@@ -20,6 +20,29 @@ public class Deck {
 
     public Deck(String name) {
         this.name = name;
+    }
+
+    public Deck(String name, Hero hero, Asset... cards) {
+        this(name);
+        this.hero = (Hero) hero.clone();
+        for (Asset card : cards) {
+            if (card instanceof Item) {
+                items.add((Item) card.clone());
+            } else {
+                this.cards.add((Card) card.clone());
+            }
+        }
+    }
+
+    public Deck(String name, Hero hero,ArrayList<Item> items, ArrayList<Card> cards) {
+        this(name);
+        this.hero = (Hero) hero.clone();
+        for (Item item : items) {
+            this.items.add((Item) item.clone());
+        }
+        for (Card card : cards) {
+                this.cards.add((Card) card.clone());
+        }
     }
 
     public String getName() {
@@ -49,26 +72,23 @@ public class Deck {
     public ArrayList<Card> getCards() {
         return cards;
     }
-
     public void setNextCardFromDeckIndex(int nextCardFromDeckIndex) {
         this.nextCardFromDeckIndex = nextCardFromDeckIndex;
     }
 
-    public void addToDeck(Account account, int ID) {
+    public void addToDeck(Account account,int ID) {
         Asset asset;
         try {
             asset = Asset.searchAsset(account.getCollection().getAssets(),ID);
-        }
-        catch (AssetNotFoundException e){
+        }catch (AssetNotFoundException e){
             throw e;
         }
         if (asset instanceof Hero) {
-             if (hero == null)
-                 hero = (Hero) asset;
-             else
-                 throw new IllegalHeroAddToDeckException("The deck's hero is already selected.");
-        }
-        else if (!(asset instanceof Card)){
+            if (hero == null)
+                hero = (Hero) asset;
+            else
+                throw new IllegalHeroAddToDeckException("The deck's hero is already selected.");
+        } else if (!(asset instanceof Item)) {
             if (cards.size() < 20)
                 cards.add((Card) asset);
             else
@@ -118,13 +138,13 @@ public class Deck {
     }
 
     public static void selectMainDeck(Account account, String deckName) {
-        Deck deck;
+        Deck deck ;
         try {
             deck = Deck.findDeck(account.getDecks(), deckName);
         } catch (DeckNotFoundException e) {
             throw e;
         }
-        if (account.getMainDeck() != null && account.getMainDeck().getName().equals(deckName)) {
+        if(account.getMainDeck()!=null && account.getMainDeck().getName().equals(deckName)){
             throw new RepeatedDeckException("");
         }
         if (deck.isValidOfMainDeck())
@@ -158,18 +178,17 @@ public class Deck {
         throw new RepeatedDeckException("");
     }
 
-    public static void deleteDeck(Account account, String deckName) {
-        Deck deck;
+    public static void deleteDeck(Account account,String deckName) {
+        Deck deck ;
         try {
             deck = Deck.findDeck(account.getDecks(),deckName);
-        }
-        catch (DeckNotFoundException e){
+        }catch (DeckNotFoundException e){
             throw e;
         }
         account.getDecks().remove(deck);
     }
 
     public boolean isValidOfMainDeck() {
-        return (this.getHero() != null && this.getCards().size() == STANDARD_NUMBER_OF_MINIONS_AND_SPELLS);
+        return  (this.getHero() != null && this.getCards().size() == STANDARD_NUMBER_OF_MINIONS_AND_SPELLS);
     }
 }

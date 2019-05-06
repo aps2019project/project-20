@@ -31,7 +31,7 @@ public class AccountPresenter {
     }
 
     public void changeUserName(String userName){
-        CurrentAccount.getCurrentAccount().setUserName(userName);
+        CurrentAccount.getCurrentAccount().setName(userName);
     }
 
     public void deleteAccount(){

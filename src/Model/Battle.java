@@ -7,6 +7,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class Battle {
+    public enum Mode{
+        NORMAL,FLAG_KEEPING,FLAG_COLLECTING;
+    }
+    private Mode mode ;
     private final int FIRST_LATE_TURN = 15;
     private final int MAX_MANA_IN_LATE_TURNS = 9;
     private int eachPlayerManaAtFirstOfTurn = 2;
@@ -16,6 +20,7 @@ public class Battle {
     private final int PRIZE = 1000;
     private int turn;
     private Account[] players = new Account[2];
+    private Deck[] playersDeck = new Deck[2];
     private BattleGround battleGround;
     private int[] playersMana = {eachPlayerManaAtFirstOfTurn, eachPlayerManaAtFirstOfTurn};
     private ArrayList<BufferOfSpells>[] playersManaBuffEffected = new ArrayList[2];
@@ -27,6 +32,7 @@ public class Battle {
 
     private Card[] playersSelectedCard = new Card[2];
     private Item[] playersSelectedItem = new Item[2];
+    private ArrayList<Item>[] playersCollectableItems = new ArrayList[2];
     private Card[][] playersHand = new Card[2][NUMBER_OF_CARDS_IN_HAND];
 
     {
@@ -41,11 +47,56 @@ public class Battle {
     private Card[] playersNextCardFromDeck = new Card[2];
     private GraveYard[] playersGraveYard = new GraveYard[2];
     private int battleID;
+    private int reward;
+
+    public Card[][] getPlayersHand() {
+        return playersHand;
+    }
+
+    public ArrayList<Item>[] getPlayersCollectableItems() {
+        return playersCollectableItems;
+    }
+
+    public Deck[] getPlayersDeck() {
+        return playersDeck;
+    }
+
+    public Battle(Mode mode, Account firstPlayer, Account secondPlayer, Deck firstplayerDeck, Deck secondPlayerDeck, BattleGround battleGround, int reward) {
+        this.mode = mode;
+        this.turn = 0;
+        this.players[0]=firstPlayer;
+        this.players[1] = secondPlayer;
+        this.playersDeck[0] = null;
+        this.playersDeck[1] = null;
+        this.battleGround = battleGround;
+        this.playersSelectedCard[0] = null;
+        this.playersSelectedCard[1] = null;
+        this.playersSelectedItem[0] = null;
+        this.playersSelectedItem[1] = null;
+        this.playersNextCardFromDeck[0] = null;
+        this.playersNextCardFromDeck[1] = null;
+        this.playersManaBuffEffected[0] = new ArrayList<BufferOfSpells>();
+        this.playersManaBuffEffected[1] = new ArrayList<BufferOfSpells>();
+        this.playersGraveYard[0] = null;
+        this.playersGraveYard[1] = null;
+        this.reward = reward;
+    }
+
+    public Mode getMode() {
+        return mode;
+    }
+
+    public int getReward() {
+        return reward;
+    }
+
+    public static void handleBattleEvent() {
+    }
 
     public static void gameInfo() {
     }
 
-    public void selectCard(Account player, int cardID) {
+    public void selectCard(Account player, int cardID,String inGameCardID) {
         int playerIndex = 0;
         Warrior warrior;
         if (player == players[1])
@@ -56,6 +107,7 @@ public class Battle {
             throw new AssetNotFoundException("Invalid card id");
         }
         playersSelectedCard[playerIndex] = warrior;
+        warrior.setInGameID(inGameCardID);
     }
 
     public void cardMoveTo(Account player, Warrior warrior, int x, int y) {
@@ -183,12 +235,12 @@ public class Battle {
         }
     }
 
-    public void attackCombo(Account player, Warrior[] playerWarrior, int opponentCardId) {
+    public void attackCombo(Account player, ArrayList<Warrior> playerWarrior, int opponentCardId) {
 
-        for (int i = 0; i < playerWarrior.length; i++) {
-            if (playerWarrior[i].getOwner() == player) {
-                if ((playerWarrior[i]).getActivateTimeOfSpecialPower() == Warrior.ActivateTimeOfSpecialPower.COMBO)
-                    attack(player, playerWarrior[i], opponentCardId);
+        for (int i = 0; i < playerWarrior.size(); i++) {
+            if (playerWarrior.get(i).getOwner() == player) {
+                if ((playerWarrior.get(i)).getActivateTimeOfSpecialPower() == Warrior.ActivateTimeOfSpecialPower.COMBO)
+                    attack(player, playerWarrior.get(i), opponentCardId);
                 else {
                     throw new NotComboException();
                 }
@@ -196,8 +248,7 @@ public class Battle {
         }
     }
 
-    public  void useSpecialPower(Account player, int x, int y) {
-    }
+    public  void useSpecialPower(Account player, int x, int y) { }
 
     public void insertIn(Account player, String cardName, int x, int y, BattleGround battleGround) {
         x--;
@@ -313,8 +364,8 @@ public class Battle {
     }
 
     public void selectItem(Account player, int collectableItemID) {
-    }
 
+    }
 
     public static void useItem(Account player, Account enemy, Card enemyWarrior, Card myCard, Item playerItemSelected) {
         switch (playerItemSelected.getID()) {
@@ -527,4 +578,10 @@ public class Battle {
             return false;
         return true;
     }
+
+    public Card searchCardWithInGameCardID(ArrayList<Asset> cards,String cardId){
+        String cardName = cardId.split("_")[1];
+        return (Card) Asset.searchAsset(cards,cardName);
+    }
+
 }

@@ -4,8 +4,8 @@
 //or not. And also I don't know if they are the same and some changes are made to the card, for example in a battle,
 //do the changes affect the card in the shop and other places or not.
 package Model;
-
 import Datas.AccountDatas;
+import Datas.DeckDatas;
 import Exceptions.RepeatedUserNameException;
 import Exceptions.UserNotFoundException;
 import Exceptions.WrongPasswordException;
@@ -13,10 +13,9 @@ import Exceptions.WrongPasswordException;
 import java.util.*;
 import java.lang.*;
 import java.util.ArrayList;
-
-public class Account implements Comparable<Account> {
-    private final static int PRIMARY_BUDGET = 15000;
-    private String userName;
+public class Account implements Comparable<Account>{
+    final static int PRIMARY_BUDGET = 15000;
+    private String Name;
     private String password;
     private Collection collection = new Collection();
     private ArrayList<Deck> decks = new ArrayList<>();
@@ -25,8 +24,8 @@ public class Account implements Comparable<Account> {
     private int numberOfLoses = 0;
     private Deck mainDeck;
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setName(String name) {
+        this.Name = name;
     }
 
     public void setPassword(String password) {
@@ -42,19 +41,22 @@ public class Account implements Comparable<Account> {
     public ArrayList<Deck> getDecks() {
         return decks;
     }
-
     public Account() {
 
     }
 
+
     public Account(String userName, String password) {
-        this.userName = userName;
+        this.Name = userName;
         this.password = password;
         AccountDatas.getAccounts().add(this);
+        this.setMainDeck( new Deck("defaultDeck", DeckDatas.getEnemyDeckInStoryGameLevel1().getHero(),DeckDatas.getEnemyDeckInStoryGameLevel1().getItems(),DeckDatas.getEnemyDeckInStoryGameLevel1().getCards()));
+        this.collection.setAssetsOfCollectionFromADeck(mainDeck);
+        decks.add(mainDeck);
     }
 
-    public String getUserName() {
-        return userName;
+    public String getName() {
+        return Name;
     }
 
     public String getPassword() {
@@ -125,24 +127,24 @@ public class Account implements Comparable<Account> {
         Collections.sort(accounts);
     }
 
-    public static Account searchAccount(ArrayList<Account> accounts, String userName, String password) {
-        for (Account account : accounts) {
-            if (userName.equals(account.getUserName())) {
-                if (password.equals(account.getPassword()))
-                    return account;
-                else
-                    throw new WrongPasswordException("The password is incorrect.");
+    public static Account searchAccount(ArrayList<Account> accounts ,String userName, String password) {
+            for (Account account : accounts) {
+                if (userName.equals(account.getName())) {
+                    if (password.equals(account.getPassword()))
+                        return account;
+                    else
+                        throw new WrongPasswordException("The password is incorrect.");
+                }
             }
-        }
         throw new UserNotFoundException("User not found.");
     }
 
-    public static Account searchAccount(ArrayList<Account> accounts, String userName) {
-        for (Account account : accounts) {
-            if (userName.equals(account.getUserName())) {
-                return account;
+    public static Account searchAccount(ArrayList<Account> accounts ,String userName) {
+            for (Account account : accounts) {
+                if (userName.equals(account.getName())) {
+                    return account;
+                }
             }
-        }
         throw new UserNotFoundException("User not found.");
     }
 }

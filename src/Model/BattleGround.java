@@ -1,5 +1,7 @@
 package Model;
 
+import Exceptions.AssetNotFoundException;
+
 import java.util.ArrayList;
 
 public class BattleGround {
@@ -40,6 +42,17 @@ public class BattleGround {
 
     public void setEffectsPosition(ArrayList<ArrayList<CellsEffect>> effectsPosition) {
         this.effectsPosition = effectsPosition;
+    }
+
+    public Asset searchAssetInBattleGround(Account owner,String cardName){
+        for (ArrayList<Asset> assets : ground) {
+            for (Asset asset : assets) {
+                if(asset.getName().equals(cardName) && owner==asset.getOwner()){
+                    return asset;
+                }
+            }
+        }
+        throw new AssetNotFoundException();
     }
 }
 

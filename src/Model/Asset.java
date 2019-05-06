@@ -4,7 +4,7 @@ import Exceptions.AssetNotFoundException;
 
 import java.util.ArrayList;
 
-public class Asset {
+public class Asset implements Cloneable{
     private String name;
     private String desc;
     private int price;
@@ -105,6 +105,16 @@ public class Asset {
         throw new AssetNotFoundException("");
     }
 
+    public static Card searchCard(ArrayList<Card> cards, String name){
+        for (Card card : cards) {
+            if(card.getName().compareTo(name)==0){
+                return card;
+            }
+        }
+        throw new AssetNotFoundException("");
+    }
+
+
     public static Asset searchAsset(ArrayList<Asset> assets, int ID){
         for (Asset asset : assets) {
             if(asset.getID() == ID){
@@ -112,6 +122,17 @@ public class Asset {
             }
         }
         throw new AssetNotFoundException("");
+    }
+
+    @Override
+    protected Object clone() {
+        Object obj;
+        try {
+             obj = super.clone();
+       }catch (CloneNotSupportedException i) {
+            return null;
+       }
+        return obj;
     }
 
     public String getName() {
@@ -160,5 +181,13 @@ public class Asset {
 
     public void setYInGround(int yInGround) {
         this.yInGround = yInGround;
+    }
+
+    public int getxInGround() {
+        return xInGround;
+    }
+
+    public int getyInGround() {
+        return yInGround;
     }
 }

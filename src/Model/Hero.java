@@ -1,5 +1,7 @@
 package Model;
 
+import Exceptions.HeroNotFoundException;
+
 public class Hero extends Warrior{
     private int coolDown;
 
@@ -22,5 +24,14 @@ public class Hero extends Warrior{
 
     public void setCoolDown(int coolDown) {
         this.coolDown = coolDown;
+    }
+
+    public static Hero searchHeroForCustomGame(String heroName){
+        for (Asset asset : Shop.getAssets()) {
+            if(asset instanceof Hero && asset.getName().compareTo(heroName)==0){
+                return (Hero)asset.clone();
+            }
+        }
+        throw new HeroNotFoundException();
     }
 }
