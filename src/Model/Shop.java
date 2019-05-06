@@ -23,12 +23,11 @@ public class Shop {
         return assets;
     }
     //for singleton
-    private Shop() { }
-    private static Shop ourShop=new Shop();
-    public static Shop getOurShop() {
-        return ourShop;
-    }
 
+
+    public static void setAssets(ArrayList<Asset> assets) {
+        Shop.assets = assets;
+    }
 
     public static void sell(Account account, int assetID) {
         Asset asset;

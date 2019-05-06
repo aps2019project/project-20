@@ -1,23 +1,120 @@
 package Model;
 
-import java.util.Random;
+import java.util.*;
 
 public class AI extends Account {
+    public void handleAIEvent(Account player, Battle battle) {
+        int event = makeRandomNumber(3);
+
+        switch (event) {
+            case 1:
+                //insert card
+
+                insertAICard(battle);
+                break;
+            case 2:
+                //select card
+
+                selectAICard(battle);
+                break;
+            case 3:
+                //move card
+
+                moveAICard(battle);
+                break;
+        }
+
+        event = makeRandomNumber(3);
+        switch (event) {
+            case 1:
+                //attack
+                AIAttack(battle);
+                break;
+            case 2:
+                //combo attack
+
+                AIComboAttack(player, battle);
+                break;
+            case 3:
+                //use special power
+
+                AIUseSpecialPower(battle);
+                break;
+        }
+    }
+
     public int makeRandomNumber(int value) {
         Random rand = new Random();
         return rand.nextInt(value) + 1;
     }
 
-    public void handleAIEvent(Account player, Battle battle,BattleGround battleGround) {
-        int event = makeRandomNumber(3);
-        switch (event) {
-            case 1:
-                //insert card
-                //battle.insertIn(this,this.getMainDeck().getCards().get(makeRandomNumber(this.getMainDeck().getCards().size())).getName(),makeRandomNumber())
-            case 2:
-                //move card
-            case 3:
-                //attack
+    public void AIUseSpecialPower(Battle battle) {
+        battle.useSpecialPower(this, makeRandomNumber(BattleGround.getRows()), makeRandomNumber(BattleGround.getColumns()));
+    }
+
+    public void AIComboAttack(Account player, Battle battle) {
+        Asset playerAsset;
+        Warrior[] warriors = new Warrior[50];
+        int index = 0;
+        while (true) {
+            playerAsset = battle.getBattleGround().getGround().get(BattleGround.getColumns()).get(BattleGround.getRows());
+            if (playerAsset.getOwner() == player)
+                break;
         }
+        for (int i = 0; i < BattleGround.getRows(); i++) {
+            for (int j = 0; j < BattleGround.getColumns(); j++) {
+                Warrior warrior = (Warrior) battle.getBattleGround().getGround().get(i).get(j);
+                if (warrior.getOwner() == this && warrior.getActivateTimeOfSpecialPower() == Warrior.ActivateTimeOfSpecialPower.COMBO) {
+                    warriors[index] = warrior;
+                    index++;
+                }
+            }
+        }
+        battle.attackCombo(this, warriors, playerAsset.getID());
+    }
+
+    public void AIAttack(Battle battle) {
+        Asset attacker;
+        Asset playerCard;
+        while (true) {
+            attacker = battle.getBattleGround().getGround().get(BattleGround.getColumns()).get(BattleGround.getRows());
+            if (attacker instanceof Warrior && attacker.getOwner() == this)
+                break;
+        }
+        while (true) {
+            playerCard = battle.getBattleGround().getGround().get(BattleGround.getColumns()).get(BattleGround.getRows());
+            if (playerCard instanceof Warrior && playerCard.getOwner() == this)
+                break;
+        }
+        battle.attack(this, (Warrior) attacker, playerCard.getID());
+    }
+
+    public void moveAICard(Battle battle) {
+        Asset moveWarrior;
+        while (true) {
+            moveWarrior = battle.getBattleGround().getGround().get(BattleGround.getColumns()).get(BattleGround.getRows());
+            if (moveWarrior instanceof Warrior && moveWarrior.getOwner() == this)
+                break;
+        }
+        battle.cardMoveTo(this, (Warrior) moveWarrior, BattleGround.getColumns(), BattleGround.getRows());
+    }
+
+    public void selectAICard(Battle battle) {
+        Asset selectedCard;
+        while (true) {
+            selectedCard = battle.getBattleGround().getGround().get(makeRandomNumber(BattleGround.getColumns())).get(BattleGround.getRows());
+            if (selectedCard.getOwner() == this)
+                break;
+        }
+        battle.selectCard(this, selectedCard.getID());
+    }
+
+    public void insertAICard(Battle battle) {
+        Card[] AIHand = battle.getPlayersHand()[1];
+
+        Card insertedCard = AIHand[makeRandomNumber(battle.getNUMBER_OF_CARDS_IN_HAND()) - 1];
+        battle.insertIn(this, insertedCard.getName()
+                , makeRandomNumber(BattleGround.getColumns()), makeRandomNumber(BattleGround.getRows()), battle.getBattleGround());
+        battle.selectCard(this, insertedCard.getID());
     }
 }
