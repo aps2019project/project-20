@@ -1,6 +1,7 @@
 package Model;
 
 import Exceptions.*;
+import Model.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -381,7 +382,7 @@ public class Battle {
     }
 
     public void enterGraveYard(Account player, Card playerCard) {
-        playersGraveYard[0].getDeadCard().add(playerCard);
+        playersGraveYard[0].getDeadCards().add(playerCard);
     }
 
     public int endGame() {

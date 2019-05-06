@@ -18,7 +18,7 @@ public class GraveYard {
     }
 
 
-    public ArrayList<Card> getDeadCard() {
+    public ArrayList<Card> getDeadCards() {
         return deadCard;
     }
 

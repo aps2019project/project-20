@@ -13,7 +13,7 @@ public class AI extends Account {
         switch (event) {
             case 1:
                 //insert card
-                battle.insertIn(this,this.getMainDeck().getCards().get(makeRandomNumber(this.getMainDeck().getCards().size())).getName(),makeRandomNumber())
+                //battle.insertIn(this,this.getMainDeck().getCards().get(makeRandomNumber(this.getMainDeck().getCards().size())).getName(),makeRandomNumber())
             case 2:
                 //move card
             case 3:
