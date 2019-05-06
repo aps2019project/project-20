@@ -49,9 +49,6 @@ public class Battle {
     private int battleID;
     private int reward;
 
-    public Card[][] getPlayersHand() {
-        return playersHand;
-    }
 
     public ArrayList<Item>[] getPlayersCollectableItems() {
         return playersCollectableItems;

@@ -65,7 +65,7 @@ public class AI extends Account {
             for (int j = 0; j < BattleGround.getColumns(); j++) {
                 Warrior warrior = (Warrior) battle.getBattleGround().getGround().get(i).get(j);
                 if (warrior.getOwner() == this && warrior.getActivateTimeOfSpecialPower() == Warrior.ActivateTimeOfSpecialPower.COMBO) {
-                    warriors[index] = warrior;
+                    warriors.add(warrior);
                     index++;
                 }
             }
@@ -106,7 +106,7 @@ public class AI extends Account {
             if (selectedCard.getOwner() == this)
                 break;
         }
-        battle.selectCard(this, selectedCard.getID());
+        battle.selectCard(this, selectedCard.getID(),((Warrior)selectedCard).getInGameID());
     }
 
     public void insertAICard(Battle battle) {
@@ -115,6 +115,6 @@ public class AI extends Account {
         Card insertedCard = AIHand[makeRandomNumber(battle.getNUMBER_OF_CARDS_IN_HAND()) - 1];
         battle.insertIn(this, insertedCard.getName()
                 , makeRandomNumber(BattleGround.getColumns()), makeRandomNumber(BattleGround.getRows()), battle.getBattleGround());
-        battle.selectCard(this, insertedCard.getID());
+        battle.selectCard(this, insertedCard.getID(),((Warrior)insertedCard).getInGameID());
     }
 }
