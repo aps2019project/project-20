@@ -12,7 +12,7 @@ public class Battle {
     private final int NUMBER_OF_CARDS_IN_HAND = 5;
     private final int EXIT = 1234;
     private final int CONTINUE = 12345;
-    private final int PRIZE=1000;
+    private final int PRIZE = 1000;
     private int turn;
     private Account[] players = new Account[2];
     private BattleGround battleGround;
@@ -164,13 +164,15 @@ public class Battle {
         }
     }
 
-    public void attackCombo(Account player, Minion[] playerMinion, int opponentCardId) {
+    public void attackCombo(Account player, Warrior[] playerWarrior, int opponentCardId) {
 
-        for (int i = 0; i < playerMinion.length; i++) {
-            if (playerMinion[i].getOwner() == player && playerMinion[i].getActivateTimeOfSpecialPower() == Minion.ActivateTimeOfSpecialPower.COMBO) {
-                attack(player, playerMinion[i], opponentCardId);
-            } else {
-                throw new NotComboException();
+        for (int i = 0; i < playerWarrior.length; i++) {
+            if (playerWarrior[i].getOwner() == player) {
+                if ((playerWarrior[i]).getActivateTimeOfSpecialPower() == Warrior.ActivateTimeOfSpecialPower.COMBO)
+                    attack(player, playerWarrior[i], opponentCardId);
+                else {
+                    throw new NotComboException();
+                }
             }
         }
     }
@@ -259,8 +261,8 @@ public class Battle {
 
     }
 
-    public static void useItem(Account player, Account enemy,Card enemyWarrior,Card myCard,Item playerItemSelected){
-        switch (playerItemSelected.getID()){
+    public static void useItem(Account player, Account enemy, Card enemyWarrior, Card myCard, Item playerItemSelected) {
+        switch (playerItemSelected.getID()) {
             case 1000:
                 playerItemSelected.getBuffer().knowledgeCrownAction(player);
                 break;
@@ -268,7 +270,7 @@ public class Battle {
                 playerItemSelected.getBuffer().namoos_e_separAction(player.getMainDeck().getHero());
                 break;
             case 1002:
-                playerItemSelected.getBuffer().damoolArchAction(player.getMainDeck().getHero(),enemyWarrior);
+                playerItemSelected.getBuffer().damoolArchAction(player.getMainDeck().getHero(), enemyWarrior);
                 break;
             case 1003:
                 playerItemSelected.getBuffer().nooshdaroo();
@@ -313,13 +315,13 @@ public class Battle {
                 playerItemSelected.getBuffer().shockHammerAction((Warrior) enemyWarrior);
                 break;
             case 1017:
-                playerItemSelected.getBuffer().soulEaterAction(enemy,(Warrior)myCard);
+                playerItemSelected.getBuffer().soulEaterAction(enemy, (Warrior) myCard);
                 break;
             case 1018:
-                playerItemSelected.getBuffer().baptismAction((Minion)myCard);
+                playerItemSelected.getBuffer().baptismAction((Minion) myCard);
                 break;
             case 1019:
-                playerItemSelected.getBuffer().chineseSwordAction((Warrior)myCard);
+                playerItemSelected.getBuffer().chineseSwordAction((Warrior) myCard);
                 break;
         }
 
@@ -330,11 +332,11 @@ public class Battle {
     }
 
     public int endGame() {
-        if (players[0].getMainDeck().getHero().getHP() <= 0 ) {
-            players[1].setBudget(players[1].getBudget()+PRIZE);
+        if (players[0].getMainDeck().getHero().getHP() <= 0) {
+            players[1].setBudget(players[1].getBudget() + PRIZE);
             return EXIT;
-        }else if( players[1].getMainDeck().getHero().getHP() <= 0){
-            players[0].setBudget(players[0].getBudget()+PRIZE);
+        } else if (players[1].getMainDeck().getHero().getHP() <= 0) {
+            players[0].setBudget(players[0].getBudget() + PRIZE);
             return EXIT;
         }
         return CONTINUE;

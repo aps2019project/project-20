@@ -14,6 +14,16 @@ public class Warrior extends Card {
     private int amountOfChangedAP = 0;
     private AttackType attackType;
     private ArrayList<BufferOfSpells> bufferEffected = new ArrayList<>();
+    public enum ActivateTimeOfSpecialPower{
+        ON_SPAWN,PASSIVE,ON_DEATH,ON_ATTACK,ON_DEFEND,COMBO
+    }
+
+    public ActivateTimeOfSpecialPower getActivateTimeOfSpecialPower() {
+        return activateTimeOfSpecialPower;
+    }
+
+    private ActivateTimeOfSpecialPower activateTimeOfSpecialPower;
+
 
     public Warrior(){}
 
