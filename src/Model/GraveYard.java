@@ -1,15 +1,28 @@
 package Model;
 
+import Exceptions.*;
+
 import java.util.ArrayList;
 
 public class GraveYard {
-  ArrayList<Card> cards = new ArrayList<>();
+    private ArrayList<Card> deadCard = new ArrayList<>();
+    private Account owner;
 
-    public ArrayList<Card> getCards() {
-        return cards;
+    public Card searchInGraveYard(String cardName) {
+        for (Card card : deadCard) {
+            if (card.getName().equals(cardName)) {
+                return card;
+            }
+        }
+        throw new CardNotFoundInGraveYardException();
     }
 
-    public void setCards(ArrayList<Card> cards) {
-        this.cards = cards;
+
+    public ArrayList<Card> getDeadCards() {
+        return deadCard;
+    }
+
+    public void setDeadCard(ArrayList<Card> deadCard) {
+        this.deadCard = deadCard;
     }
 }

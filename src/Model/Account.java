@@ -41,6 +41,10 @@ public class Account implements Comparable<Account>{
     public ArrayList<Deck> getDecks() {
         return decks;
     }
+    public Account() {
+
+    }
+
 
     public Account(String userName, String password) {
         this.Name = userName;
@@ -89,7 +93,7 @@ public class Account implements Comparable<Account>{
 
     public static Account createAccount(String userName, String password) {
         try {
-            searchAccount(AccountDatas.getAccounts(),userName);
+            searchAccount(AccountDatas.getAccounts(), userName);
         } catch (UserNotFoundException e) {
             return new Account(userName, password);
         }
@@ -102,20 +106,21 @@ public class Account implements Comparable<Account>{
 
     public static Account login(String userName, String password) {
         try {
-            searchAccount(AccountDatas.getAccounts(),userName, password);
+            searchAccount(AccountDatas.getAccounts(), userName, password);
         } catch (UserNotFoundException | WrongPasswordException e) {
             throw e;
         }
-        return searchAccount(AccountDatas.getAccounts(),userName, password);
+        return searchAccount(AccountDatas.getAccounts(), userName, password);
     }
 
     @Override
     public int compareTo(Account account) {
-        if (this.numberOfWins > account.numberOfWins)
-            return 1;
-        else if (this.numberOfWins < account.numberOfWins)
-            return -1;
-        return 0;
+//        if (this.numberOfWins > account.numberOfWins)
+//            return 1;
+//        else if (this.numberOfWins < account.numberOfWins)
+//            return -1;
+//        return 0;
+        return this.numberOfWins -account.numberOfWins;
     }
 
     public static void sortAccounts(ArrayList<Account> accounts) {
@@ -142,5 +147,4 @@ public class Account implements Comparable<Account>{
             }
         throw new UserNotFoundException("User not found.");
     }
-
 }

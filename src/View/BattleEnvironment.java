@@ -9,7 +9,9 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class BattleEnvironment {
+    private final static int GAME_ENDED = 321;
     private final static int BACK = 12;
+
     private BattleEnvironmentPresenter battleEnvironmentPresenter;
 
     public BattleEnvironment(BattleEnvironmentPresenter battleEnvironmentPresenter) {
@@ -90,7 +92,7 @@ public class BattleEnvironment {
         }
     }
 
-    public int handleGraveYardMenuEvents(Scanner scanner) {
+    public void handleGraveYardMenuEvents(Scanner scanner) {
         while (true) {
             showGraveYardMenu();
             String option = scanner.next();
@@ -99,7 +101,7 @@ public class BattleEnvironment {
             } else if (option.compareTo("2") == 0) {
                 showCardInfoInGraveYard(scanner);
             } else if (option.compareTo("3") == 0) {
-                return BACK;
+                return;
             } else {
                 System.out.println("InValid Command");
             }
@@ -198,11 +200,14 @@ public class BattleEnvironment {
         } catch (AssetNotFoundException e) {
             showMessage(2);
             return;
+        }  catch (NotComboException e) {
+            showMessage(11);
+            return;
         }
     }
 
     public void showCardsInGraveYard() {
-        for (Card card : battleEnvironmentPresenter.getBattle().getPlayersGraveYard()[0].getCards()) {
+        for (Card card : battleEnvironmentPresenter.getBattle().getPlayersGraveYard()[0].getDeadCards()) {
             if (card instanceof Minion) {
                 printInGameMinionFormat((Minion) card, 2);
             }
@@ -240,7 +245,7 @@ public class BattleEnvironment {
         } catch (AssetNotFoundException e) {
             showMessage(2);
             return;
-        } catch (InValidDestinationSelectException e) {
+        } catch (InvalidInsertInBattleGroundException e) {
             showMessage(4);
             return;
         } catch (ThisCellFilledException e) {
@@ -310,7 +315,7 @@ public class BattleEnvironment {
         Card card;
         try {
             card = battleEnvironmentPresenter.showCardInfoInGraveYardPresenter(cardID);
-        } catch (AssetNotFoundException e) {
+        } catch (CardNotFoundInGraveYardException e) {
             showMessage(10);
             return;
         }
@@ -467,11 +472,29 @@ public class BattleEnvironment {
             case 9:
                 System.out.println("You Don't Have Enough Mana!!!");
                 break;
+            case 11:
+                System.out.println("Some Of Your Minions Can't Attack Combo!!!");
+                break;
         }
     }
 
     public void showhelp() {
-
+        System.out.println("Duelyst is played between two players on a 9x5 board. At the beginning of the game, the board is occupied by the players' Generals. The goal of a game is to reduce the health of the other player's general to 0.\n" +
+                "\n" +
+                "Each player starts with a deck of cards. Cards come in three varieties: minions; spells; and artifacts. Play takes place in turns. On their turn, a player may move their general and minions and attack adjacent enemies with their minions and general; summon new minions adjacent to their general, cast spells, and equip artifacts to their general. The player may also replace one of their cards. The player's actions are limited by the amount of mana they have and the number of cards they hold. There is also a time limit of 90 seconds per turn. The amount of mana available to the player increases every turn until it reaches its maximum. Players can also gain a one-time boost to their mana total by capturing one of the mana springs around the center of the board. Players draw an extra card from their deck at the end of their turn.\n" +
+                "\n" +
+                "These general rules are subject to exceptions. Many minions have abilities that alter the normal rules of gameplay. Spells and artifacts can also alter the game's basic rules. Common abilities are indicated by \"keywords\" on cards. For example, a minion with the ranged keyword can attack any enemy, not just those adjacent to it. More unusual abilities are described in text on their cards.\n" +
+                "You start with a collection of basic cards. These cannot be crafted or disenchanted, but you can gain more basic cards for each faction (including the secondary general) by leveling that faction up to level 11 (see Faction Progression).\n" +
+                "Other cards are gained from opening spirit orbs.\n" +
+                "Spirit orbs contain cards. They can be bought with gold or diamonds (obtained with real-world money) and are also offered as rewards for in-game events such as Gauntlet and Boss Battles.\n" +
+                "Each spirit orbs belongs to a set (such as the Core set or the Shim'zar set). It only contains cards from that set.\n" +
+                "Most cards can be crafted with spirit or disenchanted to gain spirit.\n" +
+                "Each card has a particular rarity level that affects how frequently it appears in orbs and how much spirit it is worth.\n" +
+                "There are also \"prismatic\" versions of every card.\n" +
+                "Prismatic cards cost more spirit to craft and yield more spirit when disenchanted.\n" +
+                "Prismatic cards have no special gameplay effect, but have a shiny appearance.\n" +
+                "Cards from the Rise of the Bloodbound and Ancient Bonds sets cannot be crafted or disenchanted.\n" +
+                "A few cards -- the Seven Sisters -- can only be obtained by having a certain number of other cards in your collection.");
     }
 
 
