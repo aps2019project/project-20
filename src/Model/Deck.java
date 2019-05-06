@@ -6,12 +6,17 @@ import Presenter.CurrentAccount;
 import java.util.ArrayList;
 
 public class Deck {
-    private static final int STANDARD_NUMBER_OF_HEROES = 1;
-    private static final int STANDARD_NUMBER_OF_MINIONS_AND_SPELLS = 20;
+    public static final int STANDARD_NUMBER_OF_HEROES = 1;
+    public static final int STANDARD_NUMBER_OF_MINIONS_AND_SPELLS = 20;
     private String name;
     private ArrayList<Card> cards = new ArrayList<>();
     private Hero hero;
     private ArrayList<Item> items = new ArrayList<>();
+    private int nextCardFromDeckIndex = 0;
+
+    public int getNextCardFromDeckIndex() {
+        return nextCardFromDeckIndex;
+    }
 
     public Deck(String name) {
         this.name = name;
@@ -45,19 +50,25 @@ public class Deck {
         return cards;
     }
 
+    public void setNextCardFromDeckIndex(int nextCardFromDeckIndex) {
+        this.nextCardFromDeckIndex = nextCardFromDeckIndex;
+    }
+
     public void addToDeck(Account account, int ID) {
         Asset asset;
         try {
-            asset = Asset.searchAsset(account.getCollection().getAssets(), ID);
-        } catch (AssetNotFoundException e) {
+            asset = Asset.searchAsset(account.getCollection().getAssets(),ID);
+        }
+        catch (AssetNotFoundException e){
             throw e;
         }
         if (asset instanceof Hero) {
-            if (hero == null)
-                hero = (Hero) asset;
-            else
-                throw new IllegalHeroAddToDeckException("The deck's hero is already selected.");
-        } else if (!(asset instanceof Card)) {
+             if (hero == null)
+                 hero = (Hero) asset;
+             else
+                 throw new IllegalHeroAddToDeckException("The deck's hero is already selected.");
+        }
+        else if (!(asset instanceof Card)){
             if (cards.size() < 20)
                 cards.add((Card) asset);
             else
@@ -69,12 +80,12 @@ public class Deck {
         if (hero != null && assetID == hero.getID())
             hero = null;
         else {
-            for (Item item : items)
+            for (Item item: items)
                 if (assetID == item.getID()) {
                     items.remove(item);
                     return;
                 }
-            for (Card card : cards)
+            for (Card card: cards)
                 if (assetID == card.getID()) {
                     cards.remove(card);
                     return;
@@ -87,11 +98,11 @@ public class Deck {
         if (assetID == hero.getID())
             return hero;
         else {
-            for (Item item : items) {
+            for (Item item: items) {
                 if (assetID == item.getID())
                     return item;
             }
-            for (Card card : cards) {
+            for (Card card: cards) {
                 if (assetID == card.getID())
                     return card;
             }
@@ -99,8 +110,8 @@ public class Deck {
         throw new AssetNotFoundException("Asset not found in the deck");
     }
 
-    public static Deck findDeck(ArrayList<Deck> decks, String deckName) {
-        for (Deck deck : decks)
+    public static Deck findDeck (ArrayList<Deck> decks,String deckName){
+        for (Deck deck: decks)
             if (deckName.equals(deck.getName()))
                 return deck;
         throw new DeckNotFoundException("The deck not found.");
@@ -150,8 +161,9 @@ public class Deck {
     public static void deleteDeck(Account account, String deckName) {
         Deck deck;
         try {
-            deck = Deck.findDeck(account.getDecks(), deckName);
-        } catch (DeckNotFoundException e) {
+            deck = Deck.findDeck(account.getDecks(),deckName);
+        }
+        catch (DeckNotFoundException e){
             throw e;
         }
         account.getDecks().remove(deck);

@@ -27,8 +27,8 @@ public class Warrior extends Card {
 
     public Warrior(){}
 
-    public Warrior(String name, String desc, int price, int ID, int AP, int HP, int range, AttackType attackType, boolean doesHaveAction) {
-        super(name, desc, price, ID, doesHaveAction);
+    public Warrior(String name, String desc, int price, int ID, int AP, int HP, int MP, int range, AttackType attackType, boolean doesHaveAction) {
+        super(name, desc, price, ID, MP, doesHaveAction);
         this.AP = AP;
         this.HP = HP;
         this.range = range;
