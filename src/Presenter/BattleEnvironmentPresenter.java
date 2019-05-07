@@ -79,7 +79,7 @@ public class BattleEnvironmentPresenter {
 
     public void endTurnPresenter() {
         battle.endTurn(battle.getPlayers()[0]);
-        ((AI)battle.getPlayers()[1]).handleAIEvent(battle.getPlayers()[0],battle,battle.getBattleGround());
+        ((AI)battle.getPlayers()[1]).handleAIEvent(battle.getPlayers()[0],battle);
     }
 
     public void selectItemPresenter(int collectableID) {
