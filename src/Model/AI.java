@@ -4,42 +4,131 @@ import java.util.*;
 
 public class AI extends Account {
     public void handleAIEvent(Account player, Battle battle) {
-        int event = makeRandomNumber(3);
 
-        switch (event) {
+        int key = makeRandomNumber(3);
+        switch (key) {
             case 1:
-                //insert card
+                int event1 = makeRandomNumber(3);
 
-                insertAICard(battle);
+                switch (event1) {
+                    case 1:  //insert card
+
+
+                        insertAICard(battle);
+                        break;
+                    case 2:
+                        //select card
+
+                        selectAICard(battle);
+                        break;
+                    case 3:
+                        //move card
+
+                        moveAICard(battle);
+                        break;
+                }
+
+                event1 = makeRandomNumber(3);
+                switch (event1) {
+                    case 1:
+                        //attack
+
+                        AIAttack(battle);
+                        break;
+                    case 2:
+                        //combo attack
+
+                        AIComboAttack(player, battle);
+                        break;
+                    case 3:
+                        //use special power
+
+                        AIUseSpecialPower(battle);
+                        break;
+                }
                 break;
             case 2:
-                //select card
+                int event3 = makeRandomNumber(3);
 
-                selectAICard(battle);
-                break;
-            case 3:
-                //move card
+                switch (event3) {
+                    case 1:
+                        //attack
 
-                moveAICard(battle);
-                break;
-        }
+                        AIAttack(battle);
+                        break;
 
-        event = makeRandomNumber(3);
-        switch (event) {
-            case 1:
-                //attack
-                AIAttack(battle);
-                break;
-            case 2:
-                //combo attack
+                    case 2:
+                        //insert card
 
-                AIComboAttack(player, battle);
-                break;
-            case 3:
-                //use special power
+                        insertAICard(battle);
+                        break;
+                    case 3:
+                        //select card
 
-                AIUseSpecialPower(battle);
-                break;
+                        selectAICard(battle);
+                        break;
+                }
+
+                event3 = makeRandomNumber(3);
+                switch (event3) {
+                    case 1:
+                        //use special power
+
+                        AIUseSpecialPower(battle);
+                        break;
+
+                    case 2:
+                        //move card
+
+                        moveAICard(battle);
+                        break;
+
+                    case 3:
+                        //combo attack
+
+                        AIComboAttack(player, battle);
+                        break;
+
+                }
+            default:
+                int event2 = makeRandomNumber(3);
+
+                switch (event2) {
+                    case 1:
+                        //insert card
+
+                        insertAICard(battle);
+                        break;
+                    case 2:
+                        //attack
+
+                        AIAttack(battle);
+                        break;
+                    case 3:
+                        //use special power
+
+                        AIUseSpecialPower(battle);
+                        break;
+                }
+
+                event2 = makeRandomNumber(3);
+                switch (event2) {
+                    case 1:
+                        //select card
+
+                        selectAICard(battle);
+                        break;
+                    case 2:
+                        //combo attack
+
+                        AIComboAttack(player, battle);
+                        break;
+                    case 3:
+                        //move card
+
+                        moveAICard(battle);
+                        break;
+                }
         }
     }
 
@@ -54,7 +143,8 @@ public class AI extends Account {
 
     public void AIComboAttack(Account player, Battle battle) {
         Asset playerAsset;
-        Warrior[] warriors = new Warrior[50];
+//        Warrior[] warriors = new Warrior[50];
+        ArrayList<Warrior> warriors = new ArrayList<>();
         int index = 0;
         while (true) {
             playerAsset = battle.getBattleGround().getGround().get(BattleGround.getColumns()).get(BattleGround.getRows());
@@ -106,15 +196,15 @@ public class AI extends Account {
             if (selectedCard.getOwner() == this)
                 break;
         }
-        battle.selectCard(this, selectedCard.getID(),((Warrior)selectedCard).getInGameID());
+        battle.selectCard(this, selectedCard.getID(), ((Warrior) selectedCard).getInGameID());
     }
 
     public void insertAICard(Battle battle) {
         Card[] AIHand = battle.getPlayersHand()[1];
 
         Card insertedCard = AIHand[makeRandomNumber(battle.getNUMBER_OF_CARDS_IN_HAND()) - 1];
-        battle.insertIn(this, insertedCard.getName()
-                , makeRandomNumber(BattleGround.getColumns()), makeRandomNumber(BattleGround.getRows()), battle.getBattleGround());
-        battle.selectCard(this, insertedCard.getID(),((Warrior)insertedCard).getInGameID());
+        battle.insertIn(this, insertedCard.getName(), makeRandomNumber(BattleGround.getColumns())
+                , makeRandomNumber(BattleGround.getRows()), battle.getBattleGround());
+        battle.selectCard(this, insertedCard.getID(), insertedCard.getInGameID());
     }
 }
