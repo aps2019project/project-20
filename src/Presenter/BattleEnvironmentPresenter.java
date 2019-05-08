@@ -37,7 +37,7 @@ public class BattleEnvironmentPresenter {
         }catch (AssetNotFoundException e){
             throw e;
         }
-        battle.selectCard(battle.getPlayers()[0], asset.getID(),cardID);
+        battle.selectWarrior(battle.getPlayers()[0], asset.getID(),cardID);
 
     }
 

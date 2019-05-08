@@ -1,20 +1,33 @@
 package Model;
 
 import Exceptions.AssetNotFoundException;
-
+import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
+import static Model.BattleGround.CellsEffect.*;
 
 public class BattleGround {
     private final static int ROWS = 5;
     private final static int COLUMNS = 9;
-    // How to fix the error. We need to input effectLifetime of any member of CellsEffect.
+    private ArrayList<ArrayList<Asset>> ground = new ArrayList<>();
+    private ArrayList<ArrayList<CellsEffect>> effectsPosition = new ArrayList<>();
+    private ArrayList<ArrayList<Integer>> effectsLifeTimePosition = new ArrayList<>();
+
     public enum CellsEffect {
         NOTHING, POISON, FIRE, HOLY;
     }
 
-    private ArrayList<ArrayList<Asset>> ground;
-    private ArrayList<ArrayList<CellsEffect>> effectsPosition = new ArrayList<>();
-    private ArrayList<ArrayList<Integer>> effectsLifeTimePosition = new ArrayList<>();
+    public BattleGround() {
+        for (int i = 0; i < ROWS; i++){
+            ground.add(new ArrayList<>());
+            effectsPosition.add(new ArrayList<>());
+            effectsLifeTimePosition.add(new ArrayList<>());
+            for (int j = 0; j < COLUMNS; j++) {
+                ground.get(i).add(null);
+                effectsPosition.get(i).add(NOTHING);
+                effectsLifeTimePosition.get(i).add(-1);
+            }
+        }
+    }
 
     public ArrayList<ArrayList<Integer>> getEffectsLifeTimePosition() {
         return effectsLifeTimePosition;

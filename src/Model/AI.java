@@ -1,6 +1,7 @@
 package Model;
 
 import java.util.*;
+import static Model.Minion.ActivateTimeOfSpecialPower.*;
 
 public class AI extends Account {
     public void handleAIEvent(Account player, Battle battle) {
@@ -169,7 +170,7 @@ public class AI extends Account {
 
     public void AIComboAttack(Account player, Battle battle) {
         Asset playerAsset;
-        ArrayList<Warrior> warriors = new ArrayList<>();
+        ArrayList<Minion> minions = new ArrayList<>();
         while (true) {
             playerAsset = battle.getBattleGround().getGround().get(BattleGround.getColumns()).get(BattleGround.getRows());
             if (playerAsset.getOwner() == player)
@@ -177,13 +178,13 @@ public class AI extends Account {
         }
         for (int i = 0; i < BattleGround.getRows(); i++) {
             for (int j = 0; j < BattleGround.getColumns(); j++) {
-                Warrior warrior = (Warrior) battle.getBattleGround().getGround().get(i).get(j);
-                if (warrior.getOwner() == this && warrior.getActivateTimeOfSpecialPower() == Warrior.ActivateTimeOfSpecialPower.COMBO) {
-                    warriors.add(warrior);
+                Minion minion = (Minion) battle.getBattleGround().getGround().get(i).get(j);
+                if (minion.getOwner() == this && minion.getActivateTimeOfSpecialPower() == COMBO) {
+                    minions.add(minion);
                 }
             }
         }
-        battle.attackCombo(this, warriors, playerAsset.getID());
+        battle.attackCombo(this, minions, playerAsset.getID());
     }
 
     public void AIAttackWarriors(Account player, Battle battle) {
@@ -232,7 +233,7 @@ public class AI extends Account {
             if (selectedCard.getOwner() == this)
                 break;
         }
-        battle.selectCard(this, selectedCard.getID(), ((Warrior) selectedCard).getInGameID());
+        battle.selectWarrior(this, selectedCard.getID(), ((Warrior) selectedCard).getInGameID());
     }
 
     public void insertAICard(Battle battle) {
@@ -241,7 +242,7 @@ public class AI extends Account {
         Card insertedCard = AIHand[makeRandomNumber(battle.getNUMBER_OF_CARDS_IN_HAND()) - 1];
         battle.insertIn(this, insertedCard.getName(), makeRandomNumber(BattleGround.getColumns())
                 , makeRandomNumber(BattleGround.getRows()), battle.getBattleGround());
-        battle.selectCard(this, insertedCard.getID(), insertedCard.getInGameID());
+        battle.selectWarrior(this, insertedCard.getID(), insertedCard.getInGameID());
     }
 
     public Asset findPlayerHero(Account player, Battle battle) {

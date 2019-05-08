@@ -353,7 +353,7 @@ public class BattleEnvironment {
 
     public void showCollectableItems() {
         System.out.println("My Items : ");
-        for (Item item : battleEnvironmentPresenter.getBattle().getPlayersCollectableItems()[0]) {
+        for (Item item : battleEnvironmentPresenter.getBattle().getPlayersCollectibleItems()[0]) {
             printInGameItemFormat(item);
         }
     }

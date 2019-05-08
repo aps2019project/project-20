@@ -2,7 +2,7 @@ package Model;
 
 import java.util.ArrayList;
 
-public class Warrior extends Card {
+public abstract class Warrior extends Card {
     private int range;
     private int HP;
     private int AP;
@@ -14,17 +14,7 @@ public class Warrior extends Card {
     private int amountOfChangedAP = 0;
     private AttackType attackType;
     private ArrayList<BufferOfSpells> bufferEffected = new ArrayList<>();
-
-    public enum ActivateTimeOfSpecialPower {
-        ON_SPAWN, PASSIVE, ON_DEATH, ON_ATTACK, ON_DEFEND, COMBO
-    }
-
-    public ActivateTimeOfSpecialPower getActivateTimeOfSpecialPower() {
-        return activateTimeOfSpecialPower;
-    }
-
-    private ActivateTimeOfSpecialPower activateTimeOfSpecialPower;
-
+    private Flag collectedFlag = null;
 
     public Warrior() {
     }
@@ -43,6 +33,14 @@ public class Warrior extends Card {
 
     public void setBufferEffected(ArrayList<BufferOfSpells> bufferEffected) {
         this.bufferEffected = bufferEffected;
+    }
+
+    public Flag getCollectedFlag() {
+        return collectedFlag;
+    }
+
+    public void setCollectedFlag(Flag collectedFlag) {
+        this.collectedFlag = collectedFlag;
     }
 
     public int getRange() {

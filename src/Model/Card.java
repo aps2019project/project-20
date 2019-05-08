@@ -2,7 +2,7 @@ package Model;
 
 import java.util.ArrayList;
 
-public class Card extends Asset {
+public abstract class Card extends Asset {
     private int MP;
     private String InGameID;
     private ArrayList<BufferOfSpells> bufferEffected = new ArrayList<>();
