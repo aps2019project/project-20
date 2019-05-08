@@ -10,8 +10,6 @@ public class BeforeBattleMenu {
             showBeforeBattleMenu();
             String option = scanner.next();
             if (option.compareTo("1") == 0) {
-                System.out.println("       Enter Hero Of Enemy Name : ");
-                String EnemyHeroName = scanner.next();
                 SinglePlayerMenu singlePlayerMenu = new SinglePlayerMenu();
                 switch (singlePlayerMenu.handleEvents(scanner)){
                     case BACK:

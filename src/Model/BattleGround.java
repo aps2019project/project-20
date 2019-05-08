@@ -12,6 +12,7 @@ public class BattleGround {
         NOTHING, POISON, FIRE, HOLY;
     }
 
+
     private ArrayList<ArrayList<Asset>> ground;
     private ArrayList<ArrayList<CellsEffect>> effectsPosition = new ArrayList<>();
     private ArrayList<ArrayList<Integer>> effectsLifeTimePosition = new ArrayList<>();

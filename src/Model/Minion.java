@@ -11,12 +11,12 @@ public class Minion extends Warrior{
     private ActivateTimeOfSpecialPower activateTimeOfSpecialPower;
 
     public Minion(String name, String desc, int price, int ID, int range, int AP, int HP, int MP, AttackType attackType, ActivateTimeOfSpecialPower activateTimeOfSpecialPower) {
-        super(name, desc, price, ID, AP, HP, range, attackType, true);
+        super(name, desc, price, ID, AP, HP,0, range, attackType, true);
         this.activateTimeOfSpecialPower=activateTimeOfSpecialPower;
     }
 
     public Minion(String name, String desc, int price, int ID, int range, int AP, int HP, int MP, AttackType attackType) {
-        super(name, desc, price, ID, AP, HP, range, attackType, false);
+        super(name, desc, price, ID, AP, HP,0, range, attackType, false);
     }
 
     public ArrayList<Card> getAttackedCards() {
@@ -35,9 +35,6 @@ public class Minion extends Warrior{
         this.multiplicityOfEachAttackedCard = multiplicityOfEachAttackedCard;
     }
 
-    public ActivateTimeOfSpecialPower getActivateTimeOfSpecialPower() {
-        return activateTimeOfSpecialPower;
-    }
 
     public void setActivateTimeOfSpecialPower(ActivateTimeOfSpecialPower activateTimeOfSpecialPower) {
         this.activateTimeOfSpecialPower = activateTimeOfSpecialPower;

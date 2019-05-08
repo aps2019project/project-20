@@ -54,7 +54,7 @@ public class AI extends Account {
 
     public void AIComboAttack(Account player, Battle battle) {
         Asset playerAsset;
-        Warrior[] warriors = new Warrior[50];
+        ArrayList<Warrior> warriors = new ArrayList<Warrior>();
         int index = 0;
         while (true) {
             playerAsset = battle.getBattleGround().getGround().get(BattleGround.getColumns()).get(BattleGround.getRows());

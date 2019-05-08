@@ -36,12 +36,7 @@ public class Battle {
     private Card[][] playersHand = new Card[2][NUMBER_OF_CARDS_IN_HAND];
 
     {
-        for (int i = 0; i <= 1; i++)
-            for (int j = 0; j < NUMBER_OF_CARDS_IN_HAND; j++) {
-                int nextCardFromDeckIndex = players[i].getMainDeck().getNextCardFromDeckIndex();
-                playersHand[i][j] = players[i].getMainDeck().getCards().get(nextCardFromDeckIndex);
-                players[i].getMainDeck().setNextCardFromDeckIndex(nextCardFromDeckIndex + 1);
-            }
+
     }
 
     private Card[] playersNextCardFromDeck = new Card[2];
@@ -77,6 +72,13 @@ public class Battle {
         this.playersGraveYard[0] = null;
         this.playersGraveYard[1] = null;
         this.reward = reward;
+        for (int i = 0; i <= 1; i++){
+            for (int j = 0; j < NUMBER_OF_CARDS_IN_HAND; j++) {
+                int nextCardFromDeckIndex = players[i].getMainDeck().getNextCardFromDeckIndex();
+                playersHand[i][j] = players[i].getMainDeck().getCards().get(nextCardFromDeckIndex);
+                players[i].getMainDeck().setNextCardFromDeckIndex(nextCardFromDeckIndex + 1);
+            }
+        }
     }
 
     public Mode getMode() {
