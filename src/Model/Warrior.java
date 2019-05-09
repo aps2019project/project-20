@@ -2,7 +2,7 @@ package Model;
 
 import java.util.ArrayList;
 
-public class Warrior extends Card {
+public abstract class Warrior extends Card {
     private int range;
     private int HP;
     private int AP;
@@ -14,20 +14,12 @@ public class Warrior extends Card {
     private int amountOfChangedAP = 0;
     private AttackType attackType;
     private ArrayList<BufferOfSpells> bufferEffected = new ArrayList<>();
-    public enum ActivateTimeOfSpecialPower{
-        ON_SPAWN,PASSIVE,ON_DEATH,ON_ATTACK,ON_DEFEND,COMBO
+    private Flag collectedFlag = null;
+
+    public Warrior() {
     }
 
-    public ActivateTimeOfSpecialPower getActivateTimeOfSpecialPower() {
-        return activateTimeOfSpecialPower;
-    }
-
-    private ActivateTimeOfSpecialPower activateTimeOfSpecialPower;
-
-
-    public Warrior(){}
-
-    public Warrior(String name, String desc, int price, int ID, int AP, int HP, int MP, int range, AttackType attackType, boolean doesHaveAction) {
+    public Warrior(String name, String desc, int price, int ID, int AP, int HP, int MP, int range, boolean doesHaveAction, AttackType attackType) {
         super(name, desc, price, ID, MP, doesHaveAction);
         this.AP = AP;
         this.HP = HP;
@@ -41,6 +33,14 @@ public class Warrior extends Card {
 
     public void setBufferEffected(ArrayList<BufferOfSpells> bufferEffected) {
         this.bufferEffected = bufferEffected;
+    }
+
+    public Flag getCollectedFlag() {
+        return collectedFlag;
+    }
+
+    public void setCollectedFlag(Flag collectedFlag) {
+        this.collectedFlag = collectedFlag;
     }
 
     public int getRange() {
@@ -66,6 +66,7 @@ public class Warrior extends Card {
     public void changeHP(int valueOfChange) {
         this.HP += valueOfChange;
     }
+
     public int getAmountOfChangedAP() {
         return amountOfChangedAP;
     }

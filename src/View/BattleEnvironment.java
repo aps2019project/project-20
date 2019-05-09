@@ -6,6 +6,7 @@ import Model.*;
 import Presenter.BattleEnvironmentPresenter;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class BattleEnvironment {
@@ -23,9 +24,13 @@ public class BattleEnvironment {
             showMainBattleMenu();
             String option = scanner.next();
             if (option.compareTo("1") == 0) {
-                selectCard(scanner);
+                if (selectCard(scanner) == GAME_ENDED) {
+                    return;
+                }
             } else if (option.compareTo("2") == 0) {
-                selectItem(scanner);
+                if (selectItem(scanner) == GAME_ENDED) {
+                    return;
+                }
             } else if (option.compareTo("3") == 0) {
                 attackCombo(scanner);
             } else if (option.compareTo("4") == 0) {
@@ -55,6 +60,9 @@ public class BattleEnvironment {
             } else {
                 System.out.println("InValid Command");
             }
+            if (battleEnvironmentPresenter.endGamePresenter() != -1) {
+                return;
+            }
         }
     }
 
@@ -73,6 +81,9 @@ public class BattleEnvironment {
             } else {
                 System.out.println("InValid Command");
             }
+            if (battleEnvironmentPresenter.endGamePresenter() != -1) {
+                return GAME_ENDED;
+            }
         }
     }
 
@@ -88,6 +99,9 @@ public class BattleEnvironment {
                 return BACK;
             } else {
                 System.out.println("InValid Command");
+            }
+            if (battleEnvironmentPresenter.endGamePresenter() != -1) {
+                return GAME_ENDED;
             }
         }
     }
@@ -133,30 +147,50 @@ public class BattleEnvironment {
     }
 
     public void showGameInfo() {
+        System.out.printf("Your Mana : %s - %s : Opponent Mana\n", battleEnvironmentPresenter.getBattle().getPlayersMana()[0], battleEnvironmentPresenter.getBattle().getPlayersMana()[1]);
         if (battleEnvironmentPresenter.getBattle().getMode() == Battle.Mode.NORMAL) {
             System.out.printf("Your Hero HP : %s - %s : Opponent Hero HP", battleEnvironmentPresenter.getBattle().getPlayersDeck()[0].getHero().getHP(), battleEnvironmentPresenter.getBattle().getPlayersDeck()[1].getHero().getHP());
         }
         if (battleEnvironmentPresenter.getBattle().getMode() == Battle.Mode.FLAG_KEEPING) {
-            //todo
+            System.out.printf("Flag Position : (%d,%d)\n", ((KeepFlagBattle) battleEnvironmentPresenter.getBattle()).getSingleFlag().getXInGround(), ((KeepFlagBattle) battleEnvironmentPresenter.getBattle()).getSingleFlag().getYInGround());
+            if(((KeepFlagBattle) battleEnvironmentPresenter.getBattle()).getSingleFlag().getOwner()!=null) {
+                System.out.printf("Flag Owner : %s", ((KeepFlagBattle) battleEnvironmentPresenter.getBattle()).getSingleFlag().getOwner().getName());
+            }
+            System.out.println();
         }
         if (battleEnvironmentPresenter.getBattle().getMode() == Battle.Mode.FLAG_COLLECTING) {
-            //todo
+            System.out.println(battleEnvironmentPresenter.getBattle().getPlayers()[0].getName() + " Flags :");
+            for (Flag flag : ((CollectFlagBattle) battleEnvironmentPresenter.getBattle()).getFlags()) {
+                if (flag.getOwner()!=null && flag.getOwner() == battleEnvironmentPresenter.getBattle().getPlayers()[0]) {
+                    System.out.println("     " + flag.getOwner().getName());
+                }
+            }
+            System.out.println();
+            System.out.println(battleEnvironmentPresenter.getBattle().getPlayers()[0].getName() + " Flags :");
+            for (Flag flag : ((CollectFlagBattle) battleEnvironmentPresenter.getBattle()).getFlags()) {
+                if (flag.getOwner()!=null && flag.getOwner() == battleEnvironmentPresenter.getBattle().getPlayers()[1]) {
+                    System.out.println("     " + flag.getOwner().getName());
+                }
+            }
+            System.out.println();
         }
     }
 
-    public void selectCard(Scanner scanner) {
+    public int selectCard(Scanner scanner) {
         System.out.println("Enter In Game Card ID : ");
         String cardID = scanner.next();
         try {
             battleEnvironmentPresenter.selectCardPresenter(cardID);
         } catch (InvalidInGameAssetIDFormatException e) {
             showMessage(1);
-            return;
+            return 0;
         } catch (AssetNotFoundException e) {
             showMessage(2);
-            return;
+            return 0;
         }
-        handleCardInGroundMenuEvents(scanner);
+        if (handleCardInGroundMenuEvents(scanner) == GAME_ENDED)
+            return GAME_ENDED;
+        return 0;
     }
 
     public void cardMoveTo(Scanner scanner) {
@@ -170,7 +204,7 @@ public class BattleEnvironment {
             showMessage(7);
             return;
         }
-        System.out.printf("%s moved to %d %d", battleEnvironmentPresenter.getBattle().getPlayersSelectedCard()[0].getInGameID(), x, y);
+        System.out.printf("%s moved to %d %d", battleEnvironmentPresenter.getBattle().getPlayersSelectedCard()[0].getName(), x, y);
     }
 
     public void attack(Scanner scanner) {
@@ -190,8 +224,9 @@ public class BattleEnvironment {
     public void attackCombo(Scanner scanner) {
         System.out.println("Enter Opponent Card ID :");
         String Opponent = scanner.next();
+        scanner.nextLine();
         System.out.println("Enter Your Card IDs :");
-        String[] myCards = scanner.next().split("\\s");
+        String[] myCards = scanner.nextLine().split("\\s");
         try {
             battleEnvironmentPresenter.attackComboPresenter(Opponent, myCards);
         } catch (InvalidInGameAssetIDFormatException e) {
@@ -200,19 +235,21 @@ public class BattleEnvironment {
         } catch (AssetNotFoundException e) {
             showMessage(2);
             return;
-        }  catch (NotComboException e) {
+        } catch (NotComboException e) {
             showMessage(11);
             return;
         }
     }
 
     public void showCardsInGraveYard() {
-        for (Card card : battleEnvironmentPresenter.getBattle().getPlayersGraveYard()[0].getDeadCards()) {
-            if (card instanceof Minion) {
-                printInGameMinionFormat((Minion) card, 2);
-            }
-            if (card instanceof Spell) {
-                printInGameSpellFormat((Spell) card);
+        if (battleEnvironmentPresenter.getBattle().getPlayersGraveYard()[0] != null) {
+            for (Card card : battleEnvironmentPresenter.getBattle().getPlayersGraveYard()[0].getDeadCards()) {
+                if (card instanceof Minion) {
+                    printInGameMinionFormat((Minion) card, 2);
+                }
+                if (card instanceof Spell) {
+                    printInGameSpellFormat((Spell) card);
+                }
             }
         }
     }
@@ -251,6 +288,9 @@ public class BattleEnvironment {
         } catch (ThisCellFilledException e) {
             showMessage(5);
             return;
+        } catch (DontHaveEnoughManaException e) {
+            showMessage(9);
+            return;
         }
         showMessage(6);
     }
@@ -259,19 +299,38 @@ public class BattleEnvironment {
         battleEnvironmentPresenter.endTurnPresenter();
     }
 
-    public void selectItem(Scanner scanner) {
+    public static void ShowEndGame(Account player1, Account player2, Battle battle, Battle.Mode mode, int status) {
+        if (status == 0) {
+            System.out.println("  NoOne Wins!!!");
+        }
+        if (status == 1) {
+            System.out.println(player1.getName() + " Wins!!!");
+        }
+        if (status == 2) {
+            System.out.println(player2.getName() + " Wins!!!");
+        }
+        if (mode == Battle.Mode.FLAG_COLLECTING) {
+            System.out.println(player1.getName() + " : " + CollectFlagBattle.getNumberOfPlayerFlags(player1, ((CollectFlagBattle) battle).getFlags()) + "  -  " + CollectFlagBattle.getNumberOfPlayerFlags(player2, ((CollectFlagBattle) battle).getFlags()) + " : " + player1.getName());
+        }
+    }
+
+    public int selectItem(Scanner scanner) {
         System.out.println("Enter Item ID: ");
         int itemID = scanner.nextInt();
         try {
             battleEnvironmentPresenter.selectItemPresenter(itemID);
-        } catch (InvalidInGameAssetIDFormatException e) {
-            showMessage(1);
-            return;
-        } catch (AssetNotFoundException e) {
-            showMessage(3);
-            return;
+        }catch (InputMismatchException e){
+            showMessage(12);
+            return 0;
         }
-        handleItemUseMenuEvents(scanner);
+        catch (AssetNotFoundException e) {
+            showMessage(3);
+            return 0;
+        }
+        if (handleItemUseMenuEvents(scanner) == GAME_ENDED) {
+            return GAME_ENDED;
+        }
+        return 0;
     }
 
     public void enterGraveYard(Scanner scanner) {
@@ -315,7 +374,11 @@ public class BattleEnvironment {
         Card card;
         try {
             card = battleEnvironmentPresenter.showCardInfoInGraveYardPresenter(cardID);
-        } catch (CardNotFoundInGraveYardException e) {
+        } catch (InvalidInGameAssetIDFormatException e) {
+            showMessage(1);
+            return;
+        }
+        catch (CardNotFoundInGraveYardException | NullPointerException e) {
             showMessage(10);
             return;
         }
@@ -353,15 +416,17 @@ public class BattleEnvironment {
 
     public void showCollectableItems() {
         System.out.println("My Items : ");
-        for (Item item : battleEnvironmentPresenter.getBattle().getPlayersCollectableItems()[0]) {
-            printInGameItemFormat(item);
+        if(battleEnvironmentPresenter.getBattle().getPlayersCollectibleItems()[0]!=null) {
+            for (int i = 0; i < battleEnvironmentPresenter.getBattle().getPlayersCollectibleItems()[0].size(); i++) {
+                printInGameItemFormat(battleEnvironmentPresenter.getBattle().getPlayersCollectibleItems()[0].get(i));
+            }
         }
     }
 
     public static void printInGameMinionFormat(Minion minion, int number) {
         switch (number) {
             case 1:
-                System.out.printf("%d : %s , health : %d , location : [( %d, %d )] ; power : %d", minion.getID(), minion.getName(), minion.getHP(), minion.getYInGround() + 1, minion.getXInGround() + 1, minion.getAP());
+                System.out.printf("%d : %s , health : %d , location : [( %d, %d )] ; power : %d\n", minion.getID(), minion.getName(), minion.getHP(), minion.getYInGround() + 1, minion.getXInGround() + 1, minion.getAP());
                 break;
             case 2:
                 System.out.printf("Minion:\n" +
@@ -370,7 +435,7 @@ public class BattleEnvironment {
                         "Range: %d\n" +
                         "Combo-ability: %s\n" +
                         "Cost: %d\n" +
-                        "Desc: %s\n", minion.getName(), minion.getHP(), minion.getAP(), minion.getMP(), minion.getRange(), minion.getAttackType(), minion.getPrice(), minion.getDesc());
+                        "Desc: %s\n\n", minion.getName(), minion.getHP(), minion.getAP(), minion.getMP(), minion.getRange(), minion.getAttackType(), minion.getPrice(), minion.getDesc());
                 break;
         }
     }
@@ -379,7 +444,7 @@ public class BattleEnvironment {
         System.out.printf("Hero:\n" +
                 "Name: %s\n" +
                 "Cost: %d\n" +
-                "Desc: %s\n", hero.getName(), hero.getPrice(), hero.getDesc());
+                "Desc: %s\n\n", hero.getName(), hero.getPrice(), hero.getDesc());
 
     }
 
@@ -387,7 +452,7 @@ public class BattleEnvironment {
         System.out.printf(
                 "Name: %s\n" +
                         "Cost: %d\n" +
-                        "Desc: %s\n", item.getName(), item.getPrice(), item.getDesc());
+                        "Desc: %s\n\n", item.getName(), item.getPrice(), item.getDesc());
 
     }
 
@@ -396,7 +461,7 @@ public class BattleEnvironment {
                 "Name: %s\n" +
                 "MP: %d\n" +
                 "Cost: %d\n" +
-                "Desc: %s\n", spell.getName(), spell.getMP(), spell.getPrice(), spell.getDesc());
+                "Desc: %s\n\n", spell.getName(), spell.getMP(), spell.getPrice(), spell.getDesc());
     }
 
     public void showMainBattleMenu() {
@@ -474,6 +539,9 @@ public class BattleEnvironment {
                 break;
             case 11:
                 System.out.println("Some Of Your Minions Can't Attack Combo!!!");
+                break;
+            case 12:
+                System.out.println("Please Enter Integer ID!!!");
                 break;
         }
     }

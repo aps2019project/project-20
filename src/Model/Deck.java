@@ -5,7 +5,7 @@ import Presenter.CurrentAccount;
 
 import java.util.ArrayList;
 
-public class Deck implements Cloneable{
+public class Deck{
     public static final int STANDARD_NUMBER_OF_HEROES = 1;
     public static final int STANDARD_NUMBER_OF_MINIONS_AND_SPELLS = 20;
     private String name;
@@ -72,6 +72,7 @@ public class Deck implements Cloneable{
     public ArrayList<Card> getCards() {
         return cards;
     }
+
     public void setNextCardFromDeckIndex(int nextCardFromDeckIndex) {
         this.nextCardFromDeckIndex = nextCardFromDeckIndex;
     }

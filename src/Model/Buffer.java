@@ -35,8 +35,8 @@ public class Buffer {
     public void totalDisarmAction(Account opponent, BattleGround battleGround, int x, int y) {
         x--;
         y--;
-        if (battleGround.getGround().get(x).get(y).getOwner() == opponent && battleGround.getGround().get(x).get(y) instanceof Warrior) {
-            ((Warrior) battleGround.getGround().get(x).get(y)).getBufferEffected().add(new BufferOfSpells(DISARM_BUFF, 1, false));
+        if (battleGround.getGround().get(y).get(x).getOwner() == opponent && battleGround.getGround().get(y).get(x) instanceof Warrior) {
+            ((Warrior) battleGround.getGround().get(y).get(x)).getBufferEffected().add(new BufferOfSpells(DISARM_BUFF, 1, false));
             return;
         }
         throw new TargetSelectedException_Spell();
@@ -47,12 +47,12 @@ public class Buffer {
         y--;
         for (int i = 0; i < 2 && i + x < BattleGround.getColumns(); i++) {
             for (int j = 0; j < 2 && j + y < BattleGround.getRows(); j++) {
-                if (battleGround.getGround().get(x + i).get(y + j) != null && battleGround.getGround().get(x + i).get(y + j) instanceof Warrior) {
-                    Warrior warrior = (Warrior) battleGround.getGround().get(x + i).get(y + j);
+                if (battleGround.getGround().get(y + j).get(x + i) != null && battleGround.getGround().get(y + j).get(x + i) instanceof Warrior) {
+                    Warrior warrior = (Warrior) battleGround.getGround().get(y + j).get(x + i);
                     Iterator<BufferOfSpells> iterator = warrior.getBufferEffected().iterator();
                     while (iterator.hasNext()) {
                         BufferOfSpells bufferOfSpells = iterator.next();
-                        if (battleGround.getGround().get(x + i).get(y + j).getOwner() == player) {
+                        if (battleGround.getGround().get(y + j).get(x + i).getOwner() == player) {
                             if (bufferOfSpells.getType() == DISARM_BUFF || bufferOfSpells.getType() == POISON_BUFF ||
                                     bufferOfSpells.getType() == STUN_BUFF || bufferOfSpells.getType() == WEAKNESS_BUFF_HEALTH ||
                                     bufferOfSpells.getType() == WEAKNESS_BUFF_ATTACK) {
@@ -63,7 +63,7 @@ public class Buffer {
                                     iterator.remove();
                                 }
                             }
-                        } else if (battleGround.getGround().get(x + i).get(y + j).getOwner() == opponent) {
+                        } else if (battleGround.getGround().get(y + j).get(x + i).getOwner() == opponent) {
                             if (bufferOfSpells.getType() == HOLY_BUFF || bufferOfSpells.getType() == POWER_BUFF_HEALTH
                                     || bufferOfSpells.getType() == POWER_BUFF_ATTACK) {
                                 if (bufferOfSpells.isContinuous())
@@ -83,8 +83,8 @@ public class Buffer {
     public void empowerAction(Account player, BattleGround battleGround, int x, int y) {
         x--;
         y--;
-        if (battleGround.getGround().get(x).get(y).getOwner() == player && battleGround.getGround().get(x).get(y) instanceof Warrior) {
-            ((Warrior) battleGround.getGround().get(x).get(y)).changeAP(2);
+        if (battleGround.getGround().get(y).get(x).getOwner() == player && battleGround.getGround().get(y).get(x) instanceof Warrior) {
+            ((Warrior) battleGround.getGround().get(y).get(x)).changeAP(2);
             return;
         }
         throw new TargetSelectedException_Spell();
@@ -93,8 +93,8 @@ public class Buffer {
     public void fireballAction(Account opponent, BattleGround battleGround, int x, int y) {
         x--;
         y--;
-        if (battleGround.getGround().get(x).get(y).getOwner() == opponent && battleGround.getGround().get(x).get(y) instanceof Warrior) {
-            ((Warrior) battleGround.getGround().get(x).get(y)).changeHP(-4);
+        if (battleGround.getGround().get(y).get(x).getOwner() == opponent && battleGround.getGround().get(y).get(x) instanceof Warrior) {
+            ((Warrior) battleGround.getGround().get(y).get(x)).changeHP(-4);
             return;
         }
         throw new TargetSelectedException_Spell();
@@ -103,8 +103,8 @@ public class Buffer {
     public void godStrengthAction(Account player, BattleGround battleGround, int x, int y) {
         x--;
         y--;
-        if (battleGround.getGround().get(x).get(y).getOwner() == player && battleGround.getGround().get(x).get(y) instanceof Hero) {
-            ((Hero) battleGround.getGround().get(x).get(y)).changeAP(4);
+        if (battleGround.getGround().get(y).get(x).getOwner() == player && battleGround.getGround().get(y).get(x) instanceof Hero) {
+            ((Hero) battleGround.getGround().get(y).get(x)).changeAP(4);
             return;
         }
         throw new TargetSelectedException_Spell();
@@ -115,9 +115,9 @@ public class Buffer {
         y--;
         for (int i = 0; i < 2 && i + x < BattleGround.getColumns(); i++) {
             for (int j = 0; j < 2 && j + y < BattleGround.getRows(); j++) {
-                if (battleGround.getEffectsPosition().get(x + i).get(y + j) != BattleGround.CellsEffect.FIRE) {
-                    battleGround.getEffectsPosition().get(x + i).set(y + j, BattleGround.CellsEffect.FIRE);
-                    battleGround.getEffectsLifeTimePosition().get(x + i).set(y + j, 2);
+                if (battleGround.getEffectsPosition().get(y + j).get(x + i) != BattleGround.CellsEffect.FIRE) {
+                    battleGround.getEffectsPosition().get(y + j).set(x + i, BattleGround.CellsEffect.FIRE);
+                    battleGround.getEffectsLifeTimePosition().get(y + j).set(x + i, 2);
                 }
             }
         }
@@ -126,8 +126,8 @@ public class Buffer {
     public void lightingBoltAction(Account opponent, BattleGround battleGround, int x, int y) {
         x--;
         y--;
-        if (battleGround.getGround().get(x).get(y).getOwner() == opponent && battleGround.getGround().get(x).get(y) instanceof Hero) {
-            ((Hero) battleGround.getGround().get(x).get(y)).changeHP(-8);
+        if (battleGround.getGround().get(y).get(x).getOwner() == opponent && battleGround.getGround().get(y).get(x) instanceof Hero) {
+            ((Hero) battleGround.getGround().get(y).get(x)).changeHP(-8);
             return;
         }
         throw new TargetSelectedException_Spell();
@@ -138,9 +138,9 @@ public class Buffer {
         y--;
         for (int i = 0; i < 3 && i + x < BattleGround.getRows(); i++) {
             for (int j = 0; j < 3 && j + y < BattleGround.getColumns(); j++) {
-                if (battleGround.getEffectsPosition().get(x + i).get(y + j) != BattleGround.CellsEffect.POISON) {
-                    battleGround.getEffectsPosition().get(x + i).set(y + j, BattleGround.CellsEffect.POISON);
-                    battleGround.getEffectsLifeTimePosition().get(x + i).set(y + j, 1);
+                if (battleGround.getEffectsPosition().get(y + j).get(x + i) != BattleGround.CellsEffect.POISON) {
+                    battleGround.getEffectsPosition().get(y + j).set(x + i, BattleGround.CellsEffect.POISON);
+                    battleGround.getEffectsLifeTimePosition().get(y + j).set(x + i, 1);
                 }
             }
         }
@@ -149,8 +149,8 @@ public class Buffer {
     public void madnessAction(Account player, BattleGround battleGround, int x, int y) {
         x--;
         y--;
-        if (battleGround.getGround().get(x).get(y).getOwner() == player && battleGround.getGround().get(x).get(y) instanceof Warrior) {
-            Warrior warrior = (Warrior) battleGround.getGround().get(x).get(y);
+        if (battleGround.getGround().get(y).get(x).getOwner() == player && battleGround.getGround().get(y).get(x) instanceof Warrior) {
+            Warrior warrior = (Warrior) battleGround.getGround().get(y).get(x);
             warrior.getBufferEffected().add(new BufferOfSpells(3, POWER_BUFF_ATTACK, 4));
             warrior.getBufferEffected().add(new BufferOfSpells(3, DISARM_BUFF));
             return;
@@ -180,8 +180,8 @@ public class Buffer {
         x--;
         y--;
         Warrior targetWarrior;
-        if (battleGround.getGround().get(x).get(y) != null && battleGround.getGround().get(x).get(y) instanceof Warrior) {
-            targetWarrior = (Warrior) battleGround.getGround().get(x).get(y);
+        if (battleGround.getGround().get(y).get(x) != null && battleGround.getGround().get(y).get(x) instanceof Warrior) {
+            targetWarrior = (Warrior) battleGround.getGround().get(y).get(x);
             Iterator<BufferOfSpells> iterator = targetWarrior.getBufferEffected().iterator();
             while (iterator.hasNext()) {
                 BufferOfSpells bufferOfSpells = iterator.next();
@@ -214,8 +214,8 @@ public class Buffer {
         x--;
         y--;
         Warrior targetWarrior;
-        if (battleGround.getGround().get(x).get(y).getOwner() == player && battleGround.getGround().get(x).get(y) instanceof Warrior) {
-            targetWarrior = (Warrior) battleGround.getGround().get(x).get(y);
+        if (battleGround.getGround().get(y).get(x).getOwner() == player && battleGround.getGround().get(y).get(x) instanceof Warrior) {
+            targetWarrior = (Warrior) battleGround.getGround().get(y).get(x);
             targetWarrior.getBufferEffected().add(new BufferOfSpells(WEAKNESS_BUFF_HEALTH, 6, false));
             targetWarrior.getBufferEffected().add(new BufferOfSpells(3, HOLY_BUFF, 2));
             return;
@@ -227,8 +227,8 @@ public class Buffer {
     public void powerUpAction(Account player, BattleGround battleGround, int x, int y) {
         x--;
         y--;
-        if (battleGround.getGround().get(x).get(y).getOwner() == player && battleGround.getGround().get(x).get(y) instanceof Warrior) {
-            ((Warrior) battleGround.getGround().get(x).get(y)).getBufferEffected().add(new BufferOfSpells(POWER_BUFF_ATTACK, 6, false));
+        if (battleGround.getGround().get(y).get(x).getOwner() == player && battleGround.getGround().get(y).get(x) instanceof Warrior) {
+            ((Warrior) battleGround.getGround().get(y).get(x)).getBufferEffected().add(new BufferOfSpells(POWER_BUFF_ATTACK, 6, false));
             return;
         }
         throw new TargetSelectedException_Spell();
@@ -254,8 +254,8 @@ public class Buffer {
     public void weakeningAction(Account opponent, BattleGround battleGround, int x, int y) {
         x--;
         y--;
-        if (battleGround.getGround().get(x).get(y).getOwner() == opponent && battleGround.getGround().get(x).get(y) instanceof Minion) {
-            ((Minion) battleGround.getGround().get(x).get(y)).getBufferEffected().add(new BufferOfSpells(WEAKNESS_BUFF_ATTACK, 4, false));
+        if (battleGround.getGround().get(y).get(x).getOwner() == opponent && battleGround.getGround().get(y).get(x) instanceof Minion) {
+            ((Minion) battleGround.getGround().get(y).get(x)).getBufferEffected().add(new BufferOfSpells(WEAKNESS_BUFF_ATTACK, 4, false));
             return;
         }
         throw new TargetSelectedException_Spell();
@@ -264,8 +264,8 @@ public class Buffer {
     public void sacrificeAction(Account player, BattleGround battleGround, int x, int y) {
         x--;
         y--;
-        if (battleGround.getGround().get(x).get(y).getOwner() == player && battleGround.getGround().get(x).get(y) instanceof Minion) {
-            Minion minion = (Minion) battleGround.getGround().get(x).get(y);
+        if (battleGround.getGround().get(y).get(x).getOwner() == player && battleGround.getGround().get(y).get(x) instanceof Minion) {
+            Minion minion = (Minion) battleGround.getGround().get(y).get(x);
             minion.getBufferEffected().add(new BufferOfSpells(WEAKNESS_BUFF_HEALTH, 6, false));
             minion.getBufferEffected().add(new BufferOfSpells(POWER_BUFF_ATTACK, 8, false));
             return;
@@ -278,8 +278,8 @@ public class Buffer {
         y--;
         int X = player.getMainDeck().getHero().getXInGround();
         int Y = player.getMainDeck().getHero().getYInGround();
-        if (battleGround.getGround().get(x).get(y).getOwner() == opponent && battleGround.getGround().get(x).get(y) instanceof Minion && (x - X <= 1 && x - X >= -1 && y - Y <= 1 && y - Y >= -1)) {
-            ((Minion) battleGround.getGround().get(x).get(y)).changeHP(-((Minion) battleGround.getGround().get(x).get(y)).getHP());
+        if (battleGround.getGround().get(y).get(x).getOwner() == opponent && battleGround.getGround().get(y).get(x) instanceof Minion && (x - X <= 1 && x - X >= -1 && y - Y <= 1 && y - Y >= -1)) {
+            ((Minion) battleGround.getGround().get(y).get(x)).changeHP(-((Minion) battleGround.getGround().get(y).get(x)).getHP());
             return;
         }
         throw new TargetSelectedException_Spell();
@@ -288,8 +288,8 @@ public class Buffer {
     public void shockAction(Account opponent, BattleGround battleGround, int x, int y) {
         x--;
         y--;
-        if (battleGround.getGround().get(x).get(y).getOwner() == opponent && battleGround.getGround().get(x).get(y) instanceof Warrior) {
-            ((Warrior) battleGround.getGround().get(x).get(y)).getBufferEffected().add(new BufferOfSpells(2, STUN_BUFF));
+        if (battleGround.getGround().get(y).get(x).getOwner() == opponent && battleGround.getGround().get(y).get(x) instanceof Warrior) {
+            ((Warrior) battleGround.getGround().get(y).get(x)).getBufferEffected().add(new BufferOfSpells(2, STUN_BUFF));
             return;
         }
         throw new TargetSelectedException_Spell();
@@ -343,13 +343,13 @@ public class Buffer {
         playerMinion.getBufferEffected().add(new BufferOfSpells(POWER_BUFF_HEALTH, 10, false));
     }
 
-    public void OneEyeGiantAction(Minion playerMinion, BattleGround battleGround) {
+    public void oneEyeGiantAction(Warrior playerWarrior, BattleGround battleGround) {
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
-                int xCell = playerMinion.getXInGround() + i;
-                int yCell = playerMinion.getYInGround() + j;
-                if (xCell < BattleGround.getRows() && yCell < BattleGround.getColumns() && battleGround.getGround().get(xCell).get(yCell) instanceof Minion)
-                    ((Minion) battleGround.getGround().get(xCell).get(yCell)).changeHP(-2);
+                int xCell = playerWarrior.getXInGround() + i;
+                int yCell = playerWarrior.getYInGround() + j;
+                if (xCell < BattleGround.getColumns() && yCell < BattleGround.getRows() && battleGround.getGround().get(yCell).get(xCell) instanceof Minion)
+                    ((Minion) battleGround.getGround().get(yCell).get(xCell)).changeHP(-2);
             }
         }
     }
@@ -369,8 +369,8 @@ public class Buffer {
                 if (Math.abs(i + j) <= 2) {
                     int xCell = playerMinion.getXInGround() + i;
                     int yCell = playerMinion.getYInGround() + j;
-                    if (xCell < BattleGround.getRows() && yCell < BattleGround.getColumns() && battleGround.getGround().get(xCell).get(yCell) instanceof Minion) {
-                        ((Minion) battleGround.getGround().get(xCell).get(yCell)).changeHP(-1);
+                    if (xCell < BattleGround.getRows() && yCell < BattleGround.getColumns() && battleGround.getGround().get(yCell).get(xCell) instanceof Minion) {
+                        ((Minion) battleGround.getGround().get(yCell).get(xCell)).changeHP(-1);
                     }
                 }
             }
@@ -401,7 +401,7 @@ public class Buffer {
             for (int j = -1; j <= 1; j++) {
                 int xCell = playerMinion.getXInGround() + i;
                 int yCell = playerMinion.getYInGround() + j;
-                if (xCell < BattleGround.getRows() && yCell < BattleGround.getColumns() && battleGround.getGround().get(xCell).get(yCell) instanceof Minion && battleGround.getGround().get(xCell).get(yCell).getOwner() == player) {
+                if (xCell < BattleGround.getRows() && yCell < BattleGround.getColumns() && battleGround.getGround().get(yCell).get(xCell) instanceof Minion && battleGround.getGround().get(yCell).get(xCell).getOwner() == player) {
                     playerMinion.getBufferEffected().add(new BufferOfSpells(1, POWER_BUFF_ATTACK, 2));
                     playerMinion.getBufferEffected().add(new BufferOfSpells(1, WEAKNESS_BUFF_HEALTH, 1));
                 }
@@ -414,7 +414,7 @@ public class Buffer {
             for (int j = -1; j <= 1; j++) {
                 int xCell = playerMinion.getXInGround() + i;
                 int yCell = playerMinion.getYInGround() + j;
-                if (xCell < BattleGround.getRows() && yCell < BattleGround.getColumns() && battleGround.getGround().get(xCell).get(yCell) instanceof Minion && battleGround.getGround().get(xCell).get(yCell).getOwner() == player) {
+                if (xCell < BattleGround.getRows() && yCell < BattleGround.getColumns() && battleGround.getGround().get(yCell).get(xCell) instanceof Minion && battleGround.getGround().get(yCell).get(xCell).getOwner() == player) {
                     playerMinion.getBufferEffected().add(new BufferOfSpells(POWER_BUFF_ATTACK, 2, true));
                     playerMinion.getBufferEffected().add(new BufferOfSpells(HOLY_BUFF, true));
                 }
@@ -423,34 +423,10 @@ public class Buffer {
     }
 
     public void elfAction(Account player, Minion playerMinion, BattleGround battleGround) {
-        for (int i = 0; i < BattleGround.getColumns(); i++) {
-            for (int j = 0; j < BattleGround.getRows(); j++) {
+        for (int i = 0; i < BattleGround.getRows(); i++) {
+            for (int j = 0; j < BattleGround.getColumns(); j++) {
                 if (battleGround.getGround().get(i).get(j) instanceof Minion && battleGround.getGround().get(i).get(j).getOwner() == player)
                     playerMinion.getBufferEffected().add(new BufferOfSpells(POWER_BUFF_ATTACK, 1, true));
-            }
-        }
-    }
-
-    public void wildBoarAction(Minion playerMinion) {
-        //TODO: wrong implementation
-        playerMinion.setDisarm(false);
-    }
-
-    public void piranAction(Minion playerMinion) {
-        //TODO: piranAction is not properly implemented.
-        playerMinion.setPoison(false);
-    }
-
-    public void givAction(Minion playerMinion) {
-        //TODO: wrong implementation
-        Iterator<BufferOfSpells> iterator = playerMinion.getBufferEffected().iterator();
-        while (iterator.hasNext()) {
-            BufferOfSpells bufferOfSpells = iterator.next();
-            if (bufferOfSpells.getType() == DISARM_BUFF || bufferOfSpells.getType() == STUN_BUFF ||
-                    bufferOfSpells.getType() == WEAKNESS_BUFF_HEALTH || bufferOfSpells.getType() == WEAKNESS_BUFF_ATTACK ||
-                    bufferOfSpells.getType() == POISON_BUFF) {
-                bufferOfSpells.deactivate(playerMinion);
-                iterator.remove();
             }
         }
     }
@@ -458,8 +434,8 @@ public class Buffer {
     public void bahmanAction(Account player, Account enemy, BattleGround battleGround) {
         int numberOfEnemyMinions = 0;
         ArrayList<Minion> enemyMinion = new ArrayList<>();
-        for (int i = 0; i < BattleGround.getColumns(); i++) {
-            for (int j = 0; j < BattleGround.getRows(); j++) {
+        for (int i = 0; i < BattleGround.getRows(); i++) {
+            for (int j = 0; j < BattleGround.getColumns(); j++) {
                 if (battleGround.getGround().get(i).get(j) instanceof Minion && battleGround.getGround().get(i).get(j).getOwner() == enemy) {
                     numberOfEnemyMinions++;
                     enemyMinion.add((Minion) battleGround.getGround().get(i).get(j));
@@ -467,12 +443,6 @@ public class Buffer {
             }
             int randomNumber = randomNumberGenerator(numberOfEnemyMinions) + 1;
             enemyMinion.get(randomNumber).changeHP(-16);
-        }
-    }
-
-    public void ashkbosAction(Minion playerMinion, Minion enemyMinion) {
-        if (enemyMinion.getAP() < playerMinion.getAP()) {
-            playerMinion.changeHP(+enemyMinion.getAP());
         }
     }
 
@@ -493,7 +463,7 @@ public class Buffer {
             for (int j = -1; j <= 1; j++) {
                 int xCell = playerMinion.getXInGround() + i;
                 int yCell = playerMinion.getYInGround() + j;
-                if ((xCell == 0 && yCell == 0) && xCell < BattleGround.getRows() && yCell < BattleGround.getColumns() && battleGround.getGround().get(xCell).get(yCell) instanceof Minion && battleGround.getGround().get(xCell).get(yCell).getOwner() == enemy) {
+                if ((xCell == 0 && yCell == 0) && xCell < BattleGround.getRows() && yCell < BattleGround.getColumns() && battleGround.getGround().get(yCell).get(xCell) instanceof Minion && battleGround.getGround().get(yCell).get(xCell).getOwner() == enemy) {
                     playerMinion.getBufferEffected().add(new BufferOfSpells(1, STUN_BUFF));
                 }
             }
@@ -504,7 +474,7 @@ public class Buffer {
         playerMinion.getBufferEffected().add(new BufferOfSpells(HOLY_BUFF, 12, true));
     }
 
-    public void siavashAction(Hero enemyhero) {
+    public void siavashAction(Warrior enemyhero) {
         enemyhero.changeHP(-6);
     }
 
@@ -536,8 +506,8 @@ public class Buffer {
     }
 
     public void kavehAction(BattleGround battleGround, int x, int y) {
-        battleGround.getEffectsPosition().get(x).set(y, HOLY);
-        battleGround.getEffectsLifeTimePosition().get(x).set(y, 3);
+        battleGround.getEffectsPosition().get(y).set(x, HOLY);
+        battleGround.getEffectsLifeTimePosition().get(y).set(x, 3);
     }
 
     public void arashAction(Account player, BattleGround battleGround) {

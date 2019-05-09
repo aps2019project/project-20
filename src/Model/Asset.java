@@ -4,20 +4,21 @@ import Exceptions.AssetNotFoundException;
 
 import java.util.ArrayList;
 
-public class Asset implements Cloneable{
+public abstract class Asset implements Cloneable {
     private String name;
     private String desc;
     private int price;
     private int ID;
-    private int xInGround;
-    private int yInGround;
-    private Account owner;
+    protected int xInGround;
+    protected int yInGround;
+    protected Account owner;
     private String action;
     private Buffer buffer;
 
     public Asset() {
 
     }
+
     public Asset(String name, String desc, int price, int ID, boolean doesHaveAction) {
         this.name = name;
         this.desc = desc;
@@ -56,7 +57,7 @@ public class Asset implements Cloneable{
         this.buffer = buffer;
     }
 
-    public static ArrayList<Hero> getHeroesOfAssetCollection(ArrayList<Asset> cardAndItems){
+    public static ArrayList<Hero> getHeroesOfAssetCollection(ArrayList<Asset> cardAndItems) {
         ArrayList<Hero> heroes = new ArrayList<>();
         for (Asset asset : cardAndItems) {
             if (asset instanceof Hero) {
@@ -66,7 +67,7 @@ public class Asset implements Cloneable{
         return heroes;
     }
 
-    public static ArrayList<Item> getItemsOfAssetCollection(ArrayList<Asset> cardAndItems){
+    public static ArrayList<Item> getItemsOfAssetCollection(ArrayList<Asset> cardAndItems) {
         ArrayList<Item> items = new ArrayList<>();
         for (Asset asset : cardAndItems) {
             if (asset instanceof Item) {
@@ -76,7 +77,7 @@ public class Asset implements Cloneable{
         return items;
     }
 
-    public static ArrayList<Spell> getSpellsOfAssetCollection(ArrayList<Asset> cardAndItems){
+    public static ArrayList<Spell> getSpellsOfAssetCollection(ArrayList<Asset> cardAndItems) {
         ArrayList<Spell> spells = new ArrayList<>();
         for (Asset asset : cardAndItems) {
             if (asset instanceof Spell) {
@@ -86,7 +87,7 @@ public class Asset implements Cloneable{
         return spells;
     }
 
-    public static ArrayList<Minion> getMinionsOfAssetCollection(ArrayList<Asset> cardAndItems){
+    public static ArrayList<Minion> getMinionsOfAssetCollection(ArrayList<Asset> cardAndItems) {
         ArrayList<Minion> minions = new ArrayList<>();
         for (Asset asset : cardAndItems) {
             if (asset instanceof Minion) {
@@ -96,18 +97,18 @@ public class Asset implements Cloneable{
         return minions;
     }
 
-    public static Asset searchAsset(ArrayList<Asset> cardAndItems, String name){
+    public static Asset searchAsset(ArrayList<Asset> cardAndItems, String name) {
         for (Asset asset : cardAndItems) {
-            if(asset.getName().compareTo(name)==0){
+            if (asset.getName().compareTo(name) == 0) {
                 return asset;
             }
         }
         throw new AssetNotFoundException("");
     }
 
-    public static Card searchCard(ArrayList<Card> cards, String name){
+    public static Card searchCard(ArrayList<Card> cards, String name) {
         for (Card card : cards) {
-            if(card.getName().compareTo(name)==0){
+            if (card.getName().compareTo(name) == 0) {
                 return card;
             }
         }
@@ -115,9 +116,9 @@ public class Asset implements Cloneable{
     }
 
 
-    public static Asset searchAsset(ArrayList<Asset> assets, int ID){
+    public static Asset searchAsset(ArrayList<Asset> assets, int ID) {
         for (Asset asset : assets) {
-            if(asset.getID() == ID){
+            if (asset.getID() == ID) {
                 return asset;
             }
         }
@@ -126,13 +127,28 @@ public class Asset implements Cloneable{
 
     @Override
     protected Object clone() {
-        Object obj;
-        try {
-             obj = super.clone();
-       }catch (CloneNotSupportedException i) {
-            return null;
-       }
-        return obj;
+        if (this instanceof Hero) {
+            if (this.getAction().equals("NoAction")) {
+                return new Hero(this.getName(), this.getPrice(), this.getID(), ((Hero) this).getRange(), ((Hero) this).getAP(), ((Hero) this).getHP(), false, ((Hero) this).getAttackType());
+            }
+            return new Hero(this.getName(), this.getPrice(), this.getID(), ((Hero) this).getRange(), ((Hero) this).getAP(), ((Hero) this).getHP(), ((Hero) this).getMP(), ((Hero) this).getCoolDown(), ((Hero) this).getAttackType());
+        }
+        if (this instanceof Minion) {
+            if (this.getAction().equals("NoAction")) {
+                return new Minion(this.getName(), this.getDesc(), this.getPrice(), this.getID(), ((Minion) this).getRange(), ((Minion) this).getAP(), ((Minion) this).getHP(), ((Minion) this).getMP(), ((Minion) this).getAttackType());
+            }
+            return new Minion(this.getName(), this.getDesc(), this.getPrice(), this.getID(), ((Minion) this).getRange(), ((Minion) this).getAP(), ((Minion) this).getHP(), ((Minion) this).getMP(), ((Minion) this).getAttackType(), ((Minion) this).getActivateTimeOfSpecialPower());
+        }
+        if (this instanceof Spell) {
+            if (((Spell) this).getTargetType() == Spell.TargetType.CELLS) {
+                return new Spell(this.getName(), this.getDesc(), this.getPrice(), this.getID(), ((Spell) this).getMP(), ((Spell) this).getTargetType(), ((Spell) this).getSquareSideLength());
+            }
+            return new Spell(this.getName(), this.getDesc(), this.getPrice(), this.getID(), ((Spell) this).getMP(), ((Spell) this).getTargetType());
+        }
+        if (this instanceof Item) {
+            return new Item(this.getName(), this.getDesc(), this.getPrice(), this.getID());
+        }
+        return null;
     }
 
     public String getName() {
@@ -181,13 +197,5 @@ public class Asset implements Cloneable{
 
     public void setYInGround(int yInGround) {
         this.yInGround = yInGround;
-    }
-
-    public int getxInGround() {
-        return xInGround;
-    }
-
-    public int getyInGround() {
-        return yInGround;
     }
 }

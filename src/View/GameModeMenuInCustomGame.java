@@ -15,15 +15,15 @@ public class GameModeMenuInCustomGame {
             showGameModeMenu();
             String option = scanner.next();
             if (option.compareTo("1") == 0) {
-                if(selectModeToPlay(scanner)==BACK_TO_ACCOUNT_MENU){
+                if(selectModeToPlay(scanner,0)==BACK_TO_ACCOUNT_MENU){
                     return BACK_TO_ACCOUNT_MENU;
                 }
             } else if (option.compareTo("2") == 0) {
-                if(selectModeToPlay(scanner)==BACK_TO_ACCOUNT_MENU){
+                if(selectModeToPlay(scanner,-1)==BACK_TO_ACCOUNT_MENU){
                     return BACK_TO_ACCOUNT_MENU;
                 }
             } else if (option.compareTo("3") == 0) {
-                if(selectModeToPlay(scanner)==BACK_TO_ACCOUNT_MENU){
+                if(selectModeToPlay(scanner,-2)==BACK_TO_ACCOUNT_MENU){
                     return BACK_TO_ACCOUNT_MENU;
                 }
             }else if (option.compareTo("4") == 0) {
@@ -42,7 +42,7 @@ public class GameModeMenuInCustomGame {
         System.out.println("            4.Back");
     }
 
-    public int selectModeToPlay(Scanner scanner){
+    public int selectModeToPlay(Scanner scanner,int mode){
         System.out.println("           Enter Name Of Hero : ");
         Hero customHero;
         try {
@@ -51,7 +51,11 @@ public class GameModeMenuInCustomGame {
             System.out.println("           Your Hero Not Found!!!");
             return 0;
         }
-        new BattleEnvironment(new BattleEnvironmentPresenter(new GameMenuPresenter().prepareForSingleGame(0,customHero))).handleMainBattleMenuEvents(scanner);
+        if(mode==-2){
+            System.out.println("            Enter Number Of Flags :");
+            GameMenuPresenter.setNumberOfFlags(scanner.nextInt());
+        }
+        new BattleEnvironment(new BattleEnvironmentPresenter(new GameMenuPresenter().prepareForSingleGame(mode,customHero))).handleMainBattleMenuEvents(scanner);
         return BACK_TO_ACCOUNT_MENU;
     }
 

@@ -9,9 +9,11 @@ public class GraveYard {
     private Account owner;
 
     public Card searchInGraveYard(String cardName) {
-        for (Card card : deadCard) {
-            if (card.getName().equals(cardName)) {
-                return card;
+        if(deadCard!=null) {
+            for (Card card : deadCard) {
+                if (card.getName().equals(cardName)) {
+                    return card;
+                }
             }
         }
         throw new CardNotFoundInGraveYardException();

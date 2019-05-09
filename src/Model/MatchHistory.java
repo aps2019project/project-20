@@ -5,11 +5,17 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class MatchHistory {
-    enum Result {WIN, LOSE, DRAW}
+    public enum Result {WIN, LOOSE, DRAW}
 
     private long time;
     private Result result;
     private String opponentName;
+
+    public MatchHistory(long time, Result result, String opponentName) {
+        this.time = time;
+        this.result = result;
+        this.opponentName = opponentName;
+    }
 
     public long getTime() {
         return time;
