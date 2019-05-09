@@ -261,11 +261,8 @@ public class BattleEnvironment {
         int y = scanner.nextInt();
         try {
             battleEnvironmentPresenter.useSpecialPowerPresenter(x, y);
-        } catch (SpecialPowerMisMatchException e) {
+        } catch (SpecialPowerMisMatchException | NoAvailableBufferForCardException e) {
             showMessage(8);
-            return;
-        } catch (DontHaveEnoughManaException e) {
-            showMessage(9);
             return;
         }
     }

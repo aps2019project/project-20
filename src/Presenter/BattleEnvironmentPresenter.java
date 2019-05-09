@@ -3,6 +3,7 @@ package Presenter;
 import Exceptions.AssetNotFoundException;
 import Exceptions.InvalidInGameAssetIDFormatException;
 import Exceptions.InvalidTargetException;
+import Exceptions.SpecialPowerMisMatchException;
 import Model.*;
 import View.BattleEnvironment;
 
@@ -66,7 +67,12 @@ public class BattleEnvironmentPresenter {
     }
 
     public void useSpecialPowerPresenter(int x, int y) {
-        battle.useSpecialPower(battle.getPlayers()[0], x, y);
+        x--;
+        y--;
+        if(battle.getBattleGround().getGround().get(y).get(x).getOwner()!=null && battle.getBattleGround().getGround().get(y).get(x).getOwner()!=battle.getPlayers()[1]) {
+            battle.applySpecialPower(battle.getPlayersDeck()[0].getHero(),(Warrior)battle.getBattleGround().getGround().get(y).get(x),((Minion)battle.getBattleGround().getGround().get(y).get(x)).getActivateTimeOfSpecialPower());
+        }
+        throw new SpecialPowerMisMatchException();
     }
 
     public void insertCardPresenter(String cardName, int x, int y) {

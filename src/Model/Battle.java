@@ -290,8 +290,6 @@ public abstract class Battle {
         }
     }
 
-    public  void useSpecialPower(Account player, int x, int y) { }
-
     public void insertIn(Account player, String cardName, int x, int y, BattleGround battleGround) {
         x--;
         y--;
