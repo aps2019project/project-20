@@ -117,8 +117,6 @@ public class BattleEnvironmentPresenter {
     public int endGamePresenter() {
         int status = battle.endGame();
         if(status!=-1) {
-//            battle.getPlayers()[0].setMainDeck(battle.getPlayersDeck()[0]);
-//            battle.getPlayers()[1].setMainDeck(battle.getPlayersDeck()[1]);
             switch (status) {
                 case 0:
                     BattleEnvironment.ShowEndGame(battle.getPlayers()[0], battle.getPlayers()[1], battle, battle.getMode(), 0);

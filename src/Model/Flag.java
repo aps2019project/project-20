@@ -21,7 +21,7 @@ public class Flag extends Asset {
             else
                 randomX = BattleGround.getColumns() / 2 + 1;
             for (Flag flag: currentFlags) {
-                if (flag != null &&( flag.getXInGround() == randomX || flag.getYInGround() == randomY))
+                if (flag != null && flag.getXInGround() == randomX && flag.getYInGround() == randomY)
                     continue outer;
             }
             break outer;

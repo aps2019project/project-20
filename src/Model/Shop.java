@@ -70,7 +70,7 @@ public class Shop {
         assets.add(AssetDatas.getAllPoison());
         assets.add(AssetDatas.getDispel());
         assets.add(AssetDatas.getHealthWithProfit());
-        assets.add(AssetDatas.getGhazaBokhorJoonBegiri());
+        assets.add(AssetDatas.getPowerUp());
         assets.add(AssetDatas.getAllPower());
         assets.add(AssetDatas.getAllAttack());
         assets.add(AssetDatas.getWeakening());

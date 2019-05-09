@@ -1,7 +1,6 @@
 package Model;
 
 import Exceptions.AssetNotFoundException;
-import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
 import static Model.BattleGround.CellsEffect.*;
 

@@ -18,8 +18,6 @@ public class AI extends Account {
 
                 switch (event1) {
                     case 1:  //insert card
-
-
                         insertAICard(battle);
                         break;
                     case 2:

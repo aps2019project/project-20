@@ -26,7 +26,7 @@ public class AssetDatas {
     private static Spell allPoison = new Spell("allPoison","For four turns Disarms the All Cards Of Enemy",1500,4010,8, ENEMY);
     private static Spell dispel = new Spell("dispel","Destroy Positive Buffs of Enemy Cards And Negative Buffs Of your Cards",2100,4011,0, WHOLE_OF_GROUND);
     private static Spell healthWithProfit = new Spell("healthWithProfit","For Three Turns Gives Two Holy Buffs But Give Weakness Buff To Your Card",2250,4012,0, PLAYER);
-    private static Spell ghazaBokhorJoonBegiri = new Spell("powerUp","Give Power Buff To Your Card Which Equals With It's Current Hp Forever",2500,4013,2, PLAYER);
+    private static Spell powerUp = new Spell("powerUp","Give Power Buff To Your Card Which Equals With It's Current Hp Forever",2500,4013,2, PLAYER);
     private static Spell allPower = new Spell("allPower","Give Power Buff To All Of Your Cards Forever",2000,4014,4, PLAYER);
     private static Spell allAttack = new Spell("allAttack","Do damage To All Of Enemies Cards",1500,4015,4, ENEMY);
     private static Spell weakening = new Spell("weakening","Give Weakness Buff  To A Card Of Enemy",1000,4016,1, ENEMY);
@@ -41,12 +41,12 @@ public class AssetDatas {
     private static Minion farsHorseman = new Minion("farsHorseman","farsSpear",200,3003,0,6,10,4, MELEE);
     private static Minion farsChampion = new Minion("farsChampion","farsChampion",600,3004,0,6,24,9, MELEE, ON_ATTACK);
     private static Minion farsChief = new Minion("farsChief","farsChief",800,3005,0,4,12,7, MELEE, COMBO);
-    private static Minion TooraniArcher = new Minion("TooraniArcher","TooraniArcher",500,3006,5,4,3,1, RANGED);
-    private static Minion TooraniCatapult = new Minion("TooraniCatapult","TooraniCatapult",500,3007,7,2,4,1, RANGED);
-    private static Minion TooraniSpear = new Minion("TooraniSpear","TooraniSpear",600,3008,3,4,4,1, HYBRID);
-    private static Minion TooraniSpy = new Minion("TooraniSpy","TooraniSpy",700,3009,0,6,6,4, MELEE, ON_ATTACK);
-    private static Minion TooraniSwampy = new Minion("tooraniSwampy", "tooraniSwampy", 450, 3010, 0, 10, 3, 2, MELEE);
-    private static Minion TooraniPrince = new Minion("tooraniPrince", "sor any not torani plus 4 attackpower", 800, 3011, 0, 10, 6, 6, MELEE,COMBO);
+    private static Minion tooraniArcher = new Minion("tooraniArcher","tooraniArcher",500,3006,5,4,3,1, RANGED);
+    private static Minion tooraniCatapult = new Minion("tooraniCatapult","tooraniCatapult",500,3007,7,2,4,1, RANGED);
+    private static Minion tooraniSpear = new Minion("tooraniSpear","tooraniSpear",600,3008,3,4,4,1, HYBRID);
+    private static Minion tooraniSpy = new Minion("tooraniSpy","tooraniSpy",700,3009,0,6,6,4, MELEE, ON_ATTACK);
+    private static Minion tooraniSwampy = new Minion("tooraniSwampy", "tooraniSwampy", 450, 3010, 0, 10, 3, 2, MELEE);
+    private static Minion tooraniPrince = new Minion("tooraniPrince", "sor any not torani plus 4 attackpower", 800, 3011, 0, 10, 6, 6, MELEE,COMBO);
     private static Minion blackGoblin = new Minion("blackGoblin", "", 300, 3012, 7, 10, 14, 9, HYBRID);
     private static Minion throwStoneGiant = new Minion("throwStoneGiant", "", 300, 3013, 7, 12, 12, 9, RANGED);
     private static Minion eagle = new Minion("eagle", "plus 10 power buff with increase HP", 300, 3014, 3, 2, 0, 2, RANGED, PASSIVE);
@@ -74,7 +74,7 @@ public class AssetDatas {
     private static Minion steelArmor  = new Minion("steelArmor", "convert randomly to enemy minions ", 650, 3036, 0, 1, 1, 3, MELEE, PASSIVE);
     private static Minion siavash  = new Minion("siavash", "on death attack 6 AP to enemy hero", 350, 3037, 0, 5, 8, 4, MELEE,ON_DEATH);
     private static Minion kingGiant  = new Minion("kingGiant", "for any giant take part in combo enemy 1 turn disarm", 600, 3038, 0, 4, 10, 5, MELEE, COMBO);
-    private static Minion arjangGoblin  = new Minion("arjangGoblin", "fo any goblin take part in attack add 3 to weakness", 600, 3039, 0, 6, 6, 3, MELEE, COMBO);
+    private static Minion arjangGoblin  = new Minion("arjangGoblin", "for any goblin take part in attack add 3 to weakness", 600, 3039, 0, 6, 6, 3, MELEE, COMBO);
 
     //Heroes
     private static Hero whiteDamn = new Hero("whiteGoblin", 8000, 2000, 0, 4, 50, 1, 2, MELEE);
@@ -162,8 +162,8 @@ public class AssetDatas {
         return healthWithProfit;
     }
 
-    public static Spell getGhazaBokhorJoonBegiri() {
-        return ghazaBokhorJoonBegiri;
+    public static Spell getPowerUp() {
+        return powerUp;
     }
 
     public static Spell getAllPower() {
@@ -215,27 +215,27 @@ public class AssetDatas {
     }
 
     public static Minion getTooraniArcher() {
-        return TooraniArcher;
+        return tooraniArcher;
     }
 
     public static Minion getTooraniCatapult() {
-        return TooraniCatapult;
+        return tooraniCatapult;
     }
 
     public static Minion getTooraniSpear() {
-        return TooraniSpear;
+        return tooraniSpear;
     }
 
     public static Minion getTooraniSpy() {
-        return TooraniSpy;
+        return tooraniSpy;
     }
 
     public static Minion getTooraniSwampy() {
-        return TooraniSwampy;
+        return tooraniSwampy;
     }
 
     public static Minion getTooraniPrince() {
-        return TooraniPrince;
+        return tooraniPrince;
     }
 
     public static Minion getBlackGoblin() {
