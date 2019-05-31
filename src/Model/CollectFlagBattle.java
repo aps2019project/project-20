@@ -7,24 +7,17 @@ public class CollectFlagBattle extends Battle{
     private static int numberOfFlags;
     private Flag[] flags;
 
+
     public CollectFlagBattle(Mode mode, Account firstPlayer, Account secondPlayer, Deck firstPlayerDeck, Deck secondPlayerDeck, BattleGround battleGround, int reward) {
         super(mode, firstPlayer, secondPlayer, firstPlayerDeck, secondPlayerDeck, battleGround, reward);
         numberOfFlags = DEFAULT_NUMBER_OF_FLAGS;
-        flags = new Flag[numberOfFlags];
-        for (int i = 0; i < numberOfFlags; i++) {
-            flags[i] = new Flag(flags, i);
-            battleGround.getGround().get(flags[i].getYInGround()).set(flags[i].getXInGround(), flags[i]);
-        }
+        flags = Flag.insertFlagsInBattleGround(this,numberOfFlags);
     }
 
     public CollectFlagBattle(Mode mode, Account firstPlayer, Account secondPlayer, Deck firstPlayerDeck, Deck secondPlayerDeck, BattleGround battleGround, int reward, int numberOfFlags) {
-        this(mode, firstPlayer, secondPlayer, firstPlayerDeck, secondPlayerDeck, battleGround, reward);
-        flags = new Flag[numberOfFlags];
-        for (int i = 0; i < numberOfFlags; i++) {
-            flags[i] = new Flag(flags, i);
-            battleGround.getGround().get(flags[i].getYInGround()).set(flags[i].getXInGround(), flags[i]);
-        }
+        super(mode, firstPlayer, secondPlayer, firstPlayerDeck, secondPlayerDeck, battleGround, reward);
         CollectFlagBattle.numberOfFlags = numberOfFlags;
+        flags = Flag.insertFlagsInBattleGround(this,numberOfFlags);
     }
 
     @Override

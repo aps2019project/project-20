@@ -4,6 +4,7 @@ import Datas.AssetDatas;
 import Exceptions.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import Model.Minion.*;
 import static Model.Minion.ActivateTimeOfSpecialPower.*;
@@ -32,16 +33,14 @@ public abstract class Battle {
     protected ArrayList<BufferOfSpells>[] playersManaBuffEffected = new ArrayList[2];
     protected Card[] playersSelectedCard = new Card[2];
     protected Item[] playersSelectedItem = new Item[2];
-    protected ArrayList<Item>[] playersCollectibleItems = new ArrayList[2];
     protected Card[][] playersHand = new Card[2][NUMBER_OF_CARDS_IN_HAND];
     protected Card[] playersNextCardFromDeck = new Card[2];
+    protected ArrayList<Item> collectibleItems = new ArrayList<>();
     protected GraveYard[] playersGraveYard = new GraveYard[2];
+    private ArrayList<Integer> itemsCoordinates = new ArrayList<>();
     protected int battleID;
     protected int reward;
 
-    public ArrayList<Item>[] getPlayersCollectibleItems() {
-        return playersCollectibleItems;
-    }
 
     public Deck[] getPlayersDeck() {
         return playersDeck;
@@ -63,8 +62,8 @@ public abstract class Battle {
         this.playersNextCardFromDeck[1] = null;
         this.playersManaBuffEffected[0] = new ArrayList<BufferOfSpells>();
         this.playersManaBuffEffected[1] = new ArrayList<BufferOfSpells>();
-        this.playersGraveYard[0] = null;
-        this.playersGraveYard[1] = null;
+        this.playersGraveYard[0] = new GraveYard();
+        this.playersGraveYard[1] = new GraveYard();
         this.reward = reward;
         //Filling Players' hands
         for (int i = 0; i <= 1; i++) {
@@ -78,19 +77,34 @@ public abstract class Battle {
         }
         //Locating heroes
         battleGround.getGround().get(BattleGround.getRows() / 2).set(0, playersDeck[0].getHero());
+        playersDeck[0].getHero().setYInGround(BattleGround.getRows() / 2);
+        playersDeck[0].getHero().setXInGround(0);
         battleGround.getGround().get(BattleGround.getRows() / 2).set(BattleGround.getColumns() - 1, playersDeck[1].getHero());
+        playersDeck[1].getHero().setYInGround(BattleGround.getRows() / 2);
+        playersDeck[1].getHero().setXInGround(BattleGround.getColumns() - 1);
+
         //Locating collectible Items
-        ArrayList<Integer> itemsCoordinates =
-                differentRandomNumbersGenerator(9, BattleGround.getColumns() * BattleGround.getRows());
-        battleGround.getGround().get(itemsCoordinates.get(0) % BattleGround.getRows()).set(itemsCoordinates.get(0) % BattleGround.getColumns(), AssetDatas.getNooshdaroo());
-        battleGround.getGround().get(itemsCoordinates.get(1) % BattleGround.getRows()).set(itemsCoordinates.get(1) % BattleGround.getColumns(), AssetDatas.getTwoHornArrow());
-        battleGround.getGround().get(itemsCoordinates.get(2) % BattleGround.getRows()).set(itemsCoordinates.get(2) % BattleGround.getColumns(), AssetDatas.getElixir());
-        battleGround.getGround().get(itemsCoordinates.get(3) % BattleGround.getRows()).set(itemsCoordinates.get(3) % BattleGround.getColumns(), AssetDatas.getManaMixture());
-        battleGround.getGround().get(itemsCoordinates.get(4) % BattleGround.getRows()).set(itemsCoordinates.get(4) % BattleGround.getColumns(), AssetDatas.getInvulnerableMixture());
-        battleGround.getGround().get(itemsCoordinates.get(5) % BattleGround.getRows()).set(itemsCoordinates.get(5) % BattleGround.getColumns(), AssetDatas.getDeathCurse());
-        battleGround.getGround().get(itemsCoordinates.get(6) % BattleGround.getRows()).set(itemsCoordinates.get(6) % BattleGround.getColumns(), AssetDatas.getRandomDamage());
-        battleGround.getGround().get(itemsCoordinates.get(7) % BattleGround.getRows()).set(itemsCoordinates.get(7) % BattleGround.getColumns(), AssetDatas.getBladesOfAgility());
-        battleGround.getGround().get(itemsCoordinates.get(8) % BattleGround.getRows()).set(itemsCoordinates.get(8) % BattleGround.getColumns(), AssetDatas.getChineseSword());
+        itemsCoordinates = differentRandomNumbersGenerator(9, BattleGround.getColumns() * BattleGround.getRows(), 18, 26);
+        collectibleItems.add(AssetDatas.getNooshdaroo());
+        collectibleItems.add(AssetDatas.getTwoHornArrow());
+        collectibleItems.add(AssetDatas.getElixir());
+        collectibleItems.add(AssetDatas.getManaMixture());
+        collectibleItems.add(AssetDatas.getInvulnerableMixture());
+        collectibleItems.add(AssetDatas.getDeathCurse());
+        collectibleItems.add(AssetDatas.getRandomDamage());
+        collectibleItems.add(AssetDatas.getBladesOfAgility());
+        collectibleItems.add(AssetDatas.getChineseSword());
+        for (int i = 0; i < collectibleItems.size(); i++)
+            battleGround.getGround().get(itemsCoordinates.get(i) / BattleGround.getColumns()).set(itemsCoordinates.get(i) % BattleGround.getColumns(), collectibleItems.get(i));
+//        battleGround.getGround().get(itemsCoordinates.get(0) / BattleGround.getColumns()).set(itemsCoordinates.get(0) % BattleGround.getColumns(), );
+//        battleGround.getGround().get(itemsCoordinates.get(1) / BattleGround.getColumns()).set(itemsCoordinates.get(1) % BattleGround.getColumns(), );
+//        battleGround.getGround().get(itemsCoordinates.get(2) / BattleGround.getColumns()).set(itemsCoordinates.get(2) % BattleGround.getColumns(), );
+//        battleGround.getGround().get(itemsCoordinates.get(3) / BattleGround.getColumns()).set(itemsCoordinates.get(3) % BattleGround.getColumns(), );
+//        battleGround.getGround().get(itemsCoordinates.get(4) / BattleGround.getColumns()).set(itemsCoordinates.get(4) % BattleGround.getColumns(), );
+//        battleGround.getGround().get(itemsCoordinates.get(5) / BattleGround.getColumns()).set(itemsCoordinates.get(5) % BattleGround.getColumns(), );
+//        battleGround.getGround().get(itemsCoordinates.get(6) / BattleGround.getColumns()).set(itemsCoordinates.get(6) % BattleGround.getColumns(), );
+//        battleGround.getGround().get(itemsCoordinates.get(7) / BattleGround.getColumns()).set(itemsCoordinates.get(7) % BattleGround.getColumns(), );
+//        battleGround.getGround().get(itemsCoordinates.get(8) / BattleGround.getColumns()).set(itemsCoordinates.get(8) % BattleGround.getColumns(), );
     }
 
 
@@ -115,6 +129,9 @@ public abstract class Battle {
             playerIndex = 1;
         int pathLength = Math.abs(x - playersSelectedCard[playerIndex].getXInGround())
                         + Math.abs(y - playersSelectedCard[playerIndex].getYInGround());
+//        if(playersSelectedCard[playerIndex] instanceof Warrior && ((Warrior)playersSelectedCard[playerIndex]).isHasMoved()){
+//            throw new WarriorSecondMoveInTurnException();
+//        }
         if (pathLength > 2)
             throw new InvalidTargetException("Invalid target");
         else if (pathLength == 2) {
@@ -134,10 +151,17 @@ public abstract class Battle {
             battleGround.getGround().get(y).remove(x);
         }
         else if (battleGround.getGround().get(y).get(x) instanceof Card)
-            throw new InvalidTargetException("Invalid target");
+            throw new ThisCellFilledException();
+        ////////
+        battleGround.getGround().get(playersSelectedCard[playerIndex].getYInGround()).set(playersSelectedCard[playerIndex].getXInGround(),null);
         playersSelectedCard[playerIndex].setXInGround(x);
         playersSelectedCard[playerIndex].setYInGround(y);
+        if(playersSelectedCard[playerIndex] instanceof Warrior){
+            ((Warrior)playersSelectedCard[playerIndex]).setHasMoved(true);
+        }
+        battleGround.getGround().get(y).set(x,playersSelectedCard[playerIndex]);
     }
+
 
     public void attack(Account player, Warrior attacker, int opponentWarriorID) throws RuntimeException {
         if (attacker.isStun() || attacker.isAttackedThisTurn())
@@ -175,6 +199,7 @@ public abstract class Battle {
         determineDeadWarriors(opponentWarrior, playerIndex);
     }
 
+
     public void counterAttack(Warrior counterAttacker, Warrior opponentWarrior) {
         applyEffectedBuffersOfWarrior(counterAttacker, COUNTER_ATTACK);
         if (counterAttacker.isDisarm())
@@ -197,9 +222,12 @@ public abstract class Battle {
     public void determineDeadWarriors(Warrior warrior, int playerIndex) {
         if (warrior.getHP() <= 0) {
             battleGround.getGround().get(warrior.getYInGround()).set(warrior.getXInGround(), warrior.getCollectedFlag());
-            warrior.getCollectedFlag().setKeptDuration(0);
+            if (warrior.getCollectedFlag() != null) {
+                warrior.getCollectedFlag().setKeptDuration(0);
+                warrior.getCollectedFlag().setOwner(null);
+            }
             playersGraveYard[playerIndex].getDeadCards().add(warrior);
-            warrior.getCollectedFlag().setOwner(null);
+            System.out.println(playersGraveYard[playerIndex].getDeadCards().get(0));
         }
     }
 
@@ -297,13 +325,11 @@ public abstract class Battle {
         boolean isThereAnyAdjacentOwnWarrior = false;
         if (player == players[1])
             playerIndex = 1;
-        if (battleGround.getGround().get(y).get(x) != null)
-            throw new ThisCellFilledException();
         outer: for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 if (i == 0 && j == 0)
                     continue;
-                if (battleGround.getGround().get(y + j).get(x + i) != null && battleGround.getGround().get(y + j).get(x + i).getOwner() == player) {
+                if (y+j >= 0 && x+i >= 0 && y+j<BattleGround.getRows() && x+i<BattleGround.getColumns() && battleGround.getGround().get(y + j).get(x + i) != null && battleGround.getGround().get(y + j).get(x + i).getOwner() == player) {
                     isThereAnyAdjacentOwnWarrior = true;
                     break outer;
                 }
@@ -313,14 +339,19 @@ public abstract class Battle {
             throw new InvalidInsertInBattleGroundException("Invalid target");
         for (int i = 0; i < NUMBER_OF_CARDS_IN_HAND; i++) {
             Card card = playersHand[playerIndex][i];
-            if (card.getName().equals(cardName)) {
+            if (card!=null && card.getName().equals(cardName)) {
                 if (playersMana[playerIndex] >= card.getMP()) {
                     playersMana[playerIndex] -= card.getMP();
                     playersHand[playerIndex][i] = null;
                     if (card instanceof Spell)
                         applySpellBuffers(player, players[1 - playerIndex], (Spell) card, x, y);
-                    else
+                    else {
+                        if (battleGround.getGround().get(y).get(x) != null)
+                            throw new ThisCellFilledException();
                         battleGround.getGround().get(y).set(x, card);
+                        card.setXInGround(x);
+                        card.setYInGround(y);
+                    }
                     return;
                 }
                 else
@@ -338,6 +369,13 @@ public abstract class Battle {
         turn++;
         resetIsAttackedThisTurn();
         setPlayersManaByDefault();
+        for (ArrayList<Asset> assets : battleGround.getGround()) {
+            for (Asset asset : assets) {
+                if(asset instanceof Warrior && asset.getOwner()==player){
+                    ((Warrior) asset).setHasMoved(false);
+                }
+            }
+        }
     }
 
     public void applyAndHandleManaBuffers() {
@@ -366,7 +404,8 @@ public abstract class Battle {
         Warrior warrior = null;
         for (int i = 0; i < BattleGround.getRows(); i++) {
             for (int j = 0; j < BattleGround.getColumns(); j++) {
-                if (battleGround.getGround().get(i).get(j) == null || battleGround.getGround().get(i).get(j) instanceof Item)
+                if (battleGround.getGround().get(i).get(j) == null || battleGround.getGround().get(i).get(j) instanceof Item
+                || battleGround.getGround().get(i).get(j) instanceof Flag)
                     continue;
                 warrior = (Warrior) battleGround.getGround().get(i).get(j);
                 applyEffectedBuffersOfWarrior(warrior, END_TURN);
@@ -637,6 +676,22 @@ public abstract class Battle {
         return reward;
     }
 
+    public ArrayList<Item> getCollectibleItems() {
+        return collectibleItems;
+    }
+
+    public void setCollectibleItems(ArrayList<Item> collectibleItems) {
+        this.collectibleItems = collectibleItems;
+    }
+
+    public ArrayList<Integer> getItemsCoordinates() {
+        return itemsCoordinates;
+    }
+
+    public void setItemsCoordinates(ArrayList<Integer> itemsCoordinates) {
+        this.itemsCoordinates = itemsCoordinates;
+    }
+
     public Warrior searchWarriorInBattleGround(int warriorID) {
         for (int i = 0; i < BattleGround.getRows(); i++) {
             for (int j = 0; j < BattleGround.getColumns(); j++) {
@@ -648,17 +703,25 @@ public abstract class Battle {
         throw new AssetNotFoundException("Asset not found in the battleground.");
     }
 
-    public static ArrayList<Integer> differentRandomNumbersGenerator(int numberOfRandomNumbers, int supremeValueOfRange) {
+    public static ArrayList<Integer> differentRandomNumbersGenerator(int numberOfRandomNumbers, int supremeValueOfRange, int ... invalidCells) {
         ArrayList<Integer> answer = new ArrayList<>();
+        boolean isValidRandomNumber;
         for (int i = 0; i < numberOfRandomNumbers; i++){
-            outer: while (true) {
+            while (true) {
+                isValidRandomNumber = true;
                 int temp = randomNumberGenerator(supremeValueOfRange);
-                for (Integer integer: answer) {
-                    if (integer != null && integer == temp)
-                        continue outer;
+                for (int j = 0; j < invalidCells.length; j++){
+                    if (temp == invalidCells[j])
+                        isValidRandomNumber = false;
                 }
-                answer.add(temp);
-                break outer;
+                for (Integer integer : answer) {
+                    if (integer == temp)
+                        isValidRandomNumber = false;
+                }
+                if (isValidRandomNumber) {
+                    answer.add(temp);
+                    break;
+                }
             }
         }
         return answer;
@@ -683,7 +746,7 @@ public abstract class Battle {
                 Math.abs(warrior.getYInGround() - y) == 2 && battleGround.getGround().get((warrior.getXInGround() + y) / 2).get(x).getOwner() == players[1 - playerIndex]))
             throw new InvalidTargetException("Invalid target");
         if (Math.abs(x - warrior.getXInGround()) == 1) {
-            if (battleGround.getGround().get(warrior.getYInGround()).get(x).getOwner() == players[1 - playerIndex]
+            if (battleGround.getGround().get(warrior.getYInGround()).get(x)!=null && battleGround.getGround().get(warrior.getYInGround()).get(x).getOwner() == players[1 - playerIndex]
                     && battleGround.getGround().get(y).get(warrior.getXInGround()).getOwner() == players[1 - playerIndex])
                 throw new InvalidTargetException("Invalid target");
         }

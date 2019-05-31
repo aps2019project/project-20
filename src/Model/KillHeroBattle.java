@@ -2,7 +2,7 @@ package Model;
 
 public class KillHeroBattle extends Battle{
     public KillHeroBattle(Mode mode, Account firstPlayer, Account secondPlayer, Deck firstPlayerDeck, Deck secondPlayerDeck, BattleGround battleGround, int reward) {
-        super(mode, firstPlayer, secondPlayer, secondPlayerDeck, firstPlayerDeck, battleGround, reward);
+        super(mode, firstPlayer, secondPlayer, firstPlayerDeck, secondPlayerDeck, battleGround, reward);
     }
 
     @Override

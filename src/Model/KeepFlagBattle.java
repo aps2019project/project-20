@@ -1,12 +1,15 @@
 package Model;
 
+import java.lang.reflect.Array;
+import java.util.List;
+
 public class KeepFlagBattle extends Battle{
-    private Flag singleFlag;
+    private Flag singleFlag = new Flag();
     private static final int DURATION_TO_WIN = 7;
 
     public KeepFlagBattle(Mode mode, Account firstPlayer, Account secondPlayer, Deck firstPlayerDeck, Deck secondPlayerDeck, BattleGround battleGround, int reward) {
         super(mode, firstPlayer, secondPlayer, firstPlayerDeck, secondPlayerDeck, battleGround, reward);
-        singleFlag = new Flag();
+        singleFlag = Flag.insertFlagsInBattleGround(this,1)[0];
     }
 
     @Override

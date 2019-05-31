@@ -15,6 +15,7 @@ public abstract class Warrior extends Card {
     private AttackType attackType;
     private ArrayList<BufferOfSpells> bufferEffected = new ArrayList<>();
     private Flag collectedFlag = null;
+    private boolean hasMoved = false;
 
     public Warrior() {
     }
@@ -115,4 +116,11 @@ public abstract class Warrior extends Card {
         this.lifeTimeChangedAP = lifeTimeChangedAP;
     }
 
+    public boolean isHasMoved() {
+        return hasMoved;
+    }
+
+    public void setHasMoved(boolean hasMoved) {
+        this.hasMoved = hasMoved;
+    }
 }

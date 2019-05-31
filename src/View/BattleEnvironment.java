@@ -21,6 +21,45 @@ public class BattleEnvironment {
 
     public void handleMainBattleMenuEvents(Scanner scanner) {
         while (true) {
+
+            System.out.println();
+            for (ArrayList<Asset> rows : battleEnvironmentPresenter.getBattle().getBattleGround().getGround()) {
+                for (Asset asset : rows) {
+                    if (asset != null) {
+                        if (asset instanceof Hero) {
+                            if (asset.getOwner() == battleEnvironmentPresenter.getBattle().getPlayers()[0])
+                                System.out.printf("H1");
+                            else
+                                System.out.printf("H2");
+
+                        }
+                        if (asset instanceof Minion) {
+                            if (asset.getOwner() == battleEnvironmentPresenter.getBattle().getPlayers()[0])
+                                System.out.printf("M1");
+                            else
+                                System.out.printf("M2");
+                        }
+                        if (asset instanceof Spell) {
+                            if (asset.getOwner() == battleEnvironmentPresenter.getBattle().getPlayers()[0])
+                                System.out.printf("S1");
+                            else
+                                System.out.printf("S2");
+                        }
+                        if (asset instanceof Flag) {
+                            System.out.printf("F");
+                        }
+                        if (asset instanceof Item) {
+                            System.out.printf("I");
+                        }
+                    } else {
+                        System.out.printf("*");
+                    }
+                    System.out.printf(" ");
+                }
+                System.out.println();
+            }
+
+
             showMainBattleMenu();
             String option = scanner.next();
             if (option.compareTo("1") == 0) {
@@ -152,8 +191,8 @@ public class BattleEnvironment {
             System.out.printf("Your Hero HP : %s - %s : Opponent Hero HP", battleEnvironmentPresenter.getBattle().getPlayersDeck()[0].getHero().getHP(), battleEnvironmentPresenter.getBattle().getPlayersDeck()[1].getHero().getHP());
         }
         if (battleEnvironmentPresenter.getBattle().getMode() == Battle.Mode.FLAG_KEEPING) {
-            System.out.printf("Flag Position : (%d,%d)\n", ((KeepFlagBattle) battleEnvironmentPresenter.getBattle()).getSingleFlag().getXInGround(), ((KeepFlagBattle) battleEnvironmentPresenter.getBattle()).getSingleFlag().getYInGround());
-            if(((KeepFlagBattle) battleEnvironmentPresenter.getBattle()).getSingleFlag().getOwner()!=null) {
+            System.out.printf("Flag Position : (%d,%d)\n", ((KeepFlagBattle) battleEnvironmentPresenter.getBattle()).getSingleFlag().getXInGround()+1, ((KeepFlagBattle) battleEnvironmentPresenter.getBattle()).getSingleFlag().getYInGround()+1);
+            if (((KeepFlagBattle) battleEnvironmentPresenter.getBattle()).getSingleFlag().getOwner() != null) {
                 System.out.printf("Flag Owner : %s", ((KeepFlagBattle) battleEnvironmentPresenter.getBattle()).getSingleFlag().getOwner().getName());
             }
             System.out.println();
@@ -161,14 +200,14 @@ public class BattleEnvironment {
         if (battleEnvironmentPresenter.getBattle().getMode() == Battle.Mode.FLAG_COLLECTING) {
             System.out.println(battleEnvironmentPresenter.getBattle().getPlayers()[0].getName() + " Flags :");
             for (Flag flag : ((CollectFlagBattle) battleEnvironmentPresenter.getBattle()).getFlags()) {
-                if (flag.getOwner()!=null && flag.getOwner() == battleEnvironmentPresenter.getBattle().getPlayers()[0]) {
+                if (flag.getOwner() != null && flag.getOwner() == battleEnvironmentPresenter.getBattle().getPlayers()[0]) {
                     System.out.println("     " + flag.getOwner().getName());
                 }
             }
             System.out.println();
-            System.out.println(battleEnvironmentPresenter.getBattle().getPlayers()[0].getName() + " Flags :");
+            System.out.println(battleEnvironmentPresenter.getBattle().getPlayers()[1].getName() + " Flags :");
             for (Flag flag : ((CollectFlagBattle) battleEnvironmentPresenter.getBattle()).getFlags()) {
-                if (flag.getOwner()!=null && flag.getOwner() == battleEnvironmentPresenter.getBattle().getPlayers()[1]) {
+                if (flag.getOwner() != null && flag.getOwner() == battleEnvironmentPresenter.getBattle().getPlayers()[1]) {
                     System.out.println("     " + flag.getOwner().getName());
                 }
             }
@@ -194,14 +233,24 @@ public class BattleEnvironment {
     }
 
     public void cardMoveTo(Scanner scanner) {
-        System.out.println("Enter X-destination : ");
-        int x = scanner.nextInt();
-        System.out.println("Enter Y-destination : ");
-        int y = scanner.nextInt();
+        int x, y;
         try {
+            System.out.println("Enter X-destination : ");
+            x = scanner.nextInt();
+            System.out.println("Enter Y-destination : ");
+            y = scanner.nextInt();
             battleEnvironmentPresenter.cardMoveToPresenter(x, y);
+        } catch (InputMismatchException e) {
+            showMessage(14);
+            return;
         } catch (InvalidTargetException e) {
             showMessage(7);
+            return;
+        } catch (ThisCellFilledException e) {
+            showMessage(15);
+            return;
+        } catch (WarriorSecondMoveInTurnException e) {
+            showMessage(13);
             return;
         }
         System.out.printf("%s moved to %d %d", battleEnvironmentPresenter.getBattle().getPlayersSelectedCard()[0].getName(), x, y);
@@ -256,11 +305,14 @@ public class BattleEnvironment {
 
     public void useSpecialPower(Scanner scanner) {
         System.out.println("Enter X-destination : ");
-        int x = scanner.nextInt();
-        System.out.println("Enter Y-destination : ");
-        int y = scanner.nextInt();
         try {
+            int x = scanner.nextInt();
+            System.out.println("Enter Y-destination : ");
+            int y = scanner.nextInt();
             battleEnvironmentPresenter.useSpecialPowerPresenter(x, y);
+        } catch (InputMismatchException e) {
+            showMessage(14);
+            return;
         } catch (SpecialPowerMisMatchException | NoAvailableBufferForCardException e) {
             showMessage(8);
             return;
@@ -270,12 +322,15 @@ public class BattleEnvironment {
     public void insertCardInBattleGround(Scanner scanner) {
         System.out.println("Enter Card Name : ");
         String cardName = scanner.next();
-        System.out.println("Enter X-destination : ");
-        int x = scanner.nextInt();
-        System.out.println("Enter Y-destination : ");
-        int y = scanner.nextInt();
         try {
+            System.out.println("Enter X-destination : ");
+            int x = scanner.nextInt();
+            System.out.println("Enter Y-destination : ");
+            int y = scanner.nextInt();
             battleEnvironmentPresenter.insertCardPresenter(cardName, x, y);
+        } catch (InputMismatchException e) {
+            showMessage(14);
+            return;
         } catch (AssetNotFoundException e) {
             showMessage(2);
             return;
@@ -313,14 +368,13 @@ public class BattleEnvironment {
 
     public int selectItem(Scanner scanner) {
         System.out.println("Enter Item ID: ");
-        int itemID = scanner.nextInt();
         try {
+        int itemID = scanner.nextInt();
             battleEnvironmentPresenter.selectItemPresenter(itemID);
-        }catch (InputMismatchException e){
+        } catch (InputMismatchException e) {
             showMessage(12);
             return 0;
-        }
-        catch (AssetNotFoundException e) {
+        } catch (AssetNotFoundException e) {
             showMessage(3);
             return 0;
         }
@@ -335,12 +389,15 @@ public class BattleEnvironment {
     }
 
     public void useItem(Scanner scanner) {
-        System.out.println("Enter X-destination : ");
-        int x = scanner.nextInt();
-        System.out.println("Enter Y-destination : ");
-        int y = scanner.nextInt();
         try {
+            System.out.println("Enter X-destination : ");
+            int x = scanner.nextInt();
+            System.out.println("Enter Y-destination : ");
+            int y = scanner.nextInt();
             battleEnvironmentPresenter.useItemPresenter(x, y);
+        } catch (InputMismatchException e) {
+            showMessage(14);
+            return;
         } catch (InvalidTargetException e) {
             showMessage(7);
             return;
@@ -348,10 +405,10 @@ public class BattleEnvironment {
     }
 
     public void showMyMinions() {
-        showInMinionCollectionInBattle(battleEnvironmentPresenter.getBattle().getPlayers()[0]);
+        showInMinionCollectionInBattleGround(battleEnvironmentPresenter.getBattle().getPlayers()[0]);
     }
 
-    public void showInMinionCollectionInBattle(Account account) {
+    public void showInMinionCollectionInBattleGround(Account account) {
         for (ArrayList<Asset> rows : battleEnvironmentPresenter.getBattle().getBattleGround().getGround()) {
             for (Asset asset : rows) {
                 if (asset instanceof Minion && asset.getOwner() == account) {
@@ -362,7 +419,7 @@ public class BattleEnvironment {
     }
 
     public void showOpponentMinions() {
-        showInMinionCollectionInBattle(battleEnvironmentPresenter.getBattle().getPlayers()[1]);
+        showInMinionCollectionInBattleGround(battleEnvironmentPresenter.getBattle().getPlayers()[1]);
     }
 
     public void showCardInfoInGraveYard(Scanner scanner) {
@@ -374,8 +431,7 @@ public class BattleEnvironment {
         } catch (InvalidInGameAssetIDFormatException e) {
             showMessage(1);
             return;
-        }
-        catch (CardNotFoundInGraveYardException | NullPointerException e) {
+        } catch (CardNotFoundInGraveYardException | NullPointerException e) {
             showMessage(10);
             return;
         }
@@ -413,9 +469,9 @@ public class BattleEnvironment {
 
     public void showCollectableItems() {
         System.out.println("My Items : ");
-        if(battleEnvironmentPresenter.getBattle().getPlayersCollectibleItems()[0]!=null) {
-            for (int i = 0; i < battleEnvironmentPresenter.getBattle().getPlayersCollectibleItems()[0].size(); i++) {
-                printInGameItemFormat(battleEnvironmentPresenter.getBattle().getPlayersCollectibleItems()[0].get(i));
+        if (battleEnvironmentPresenter.getBattle().getPlayersDeck()[0].getItems() != null) {
+            for (int i = 0; i < battleEnvironmentPresenter.getBattle().getPlayersDeck()[0].getItems().size(); i++) {
+                printInGameItemFormat(battleEnvironmentPresenter.getBattle().getPlayersDeck()[0].getItems().get(i));
             }
         }
     }
@@ -423,7 +479,7 @@ public class BattleEnvironment {
     public static void printInGameMinionFormat(Minion minion, int number) {
         switch (number) {
             case 1:
-                System.out.printf("%d : %s , health : %d , location : [( %d, %d )] ; power : %d\n", minion.getID(), minion.getName(), minion.getHP(), minion.getYInGround() + 1, minion.getXInGround() + 1, minion.getAP());
+                System.out.printf("%d : %s , health : %d , location : ( %d, %d ) ; power : %d\n", minion.getID(), minion.getName(), minion.getHP(), minion.getXInGround() + 1, minion.getYInGround() + 1, minion.getAP());
                 break;
             case 2:
                 System.out.printf("Minion:\n" +
@@ -446,10 +502,17 @@ public class BattleEnvironment {
     }
 
     public static void printInGameItemFormat(Item item) {
-        System.out.printf(
-                "Name: %s\n" +
-                        "Cost: %d\n" +
-                        "Desc: %s\n\n", item.getName(), item.getPrice(), item.getDesc());
+        if (item.getPrice() != 0) {
+            System.out.printf(
+                    "Name: %s\n" +
+                            "Cost: %d\n" +
+                            "Desc: %s\n\n", item.getName(), item.getPrice(), item.getDesc());
+        } else {
+            System.out.printf(
+                    "Name: %s\n" +
+                            "Type: Collectable\n" +
+                            "Desc: %s\n\n", item.getName(), item.getDesc());
+        }
 
     }
 
@@ -471,7 +534,7 @@ public class BattleEnvironment {
         System.out.println("6.Show My Minions");
         System.out.println("7.Show Opponent Minions");
         System.out.println("8.Insert A Card From Your Hand");
-        System.out.println("9.Show collectables");
+        System.out.println("9.Show My Items");
         System.out.println("10.Show Game Info");
         System.out.println("11.Show Info Of Card");
         System.out.println("12.Enter Grave Yard");
@@ -539,6 +602,15 @@ public class BattleEnvironment {
                 break;
             case 12:
                 System.out.println("Please Enter Integer ID!!!");
+                break;
+            case 13:
+                System.out.println("You Can't Move This Card Twice!!!");
+                break;
+            case 14:
+                System.out.println("Please Enter Integer Destination!!!");
+                break;
+            case 15:
+                System.out.println("There Is SomeOne In Your Destination!!");
                 break;
         }
     }

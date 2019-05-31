@@ -1,7 +1,9 @@
 package Model;
 
 import Exceptions.AssetNotFoundException;
+
 import java.util.ArrayList;
+
 import static Model.BattleGround.CellsEffect.*;
 
 public class BattleGround {
@@ -16,7 +18,7 @@ public class BattleGround {
     }
 
     public BattleGround() {
-        for (int i = 0; i < ROWS; i++){
+        for (int i = 0; i < ROWS; i++) {
             ground.add(new ArrayList<>());
             effectsPosition.add(new ArrayList<>());
             effectsLifeTimePosition.add(new ArrayList<>());
@@ -56,10 +58,10 @@ public class BattleGround {
         this.effectsPosition = effectsPosition;
     }
 
-    public Asset searchAssetInBattleGround(Account owner,String cardName){
+    public Asset searchAssetInBattleGround(Account owner, String cardName) {
         for (ArrayList<Asset> assets : ground) {
             for (Asset asset : assets) {
-                if(asset!=null && asset.getName().equals(cardName) && owner==asset.getOwner()){
+                if (asset != null && asset.getName().equals(cardName) && owner == asset.getOwner()) {
                     return asset;
                 }
             }

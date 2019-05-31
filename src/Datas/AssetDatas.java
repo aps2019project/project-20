@@ -18,7 +18,7 @@ public class AssetDatas {
     private static Spell empower = new Spell("empower","Improve َAp Of One Of Your Cards",250,4002,1, PLAYER);
     private static Spell fireball = new Spell("fireball","Do damage to Card Of An Enemy",400,4003,1, ENEMY);
     private static Spell godStrength = new Spell("fireball","Increase AP Of Your Hero",450,4004,2, PLAYER);
-    private static Spell hellFire = new Spell("hellFire","For two turns Creates a Fiery House In Targeted Cells",600,4005,3, CELLS, 2);
+    private static Spell hellFire = new Spell("hellFire","For two turns Creates a Fiery House In Targeted Cells",600,4005,1, CELLS, 2);//todo ::Mp 3
     private static Spell lightingBolt = new Spell("lightingBolt","Do damage to Hero Of An Enemy",1250,4006,2, ENEMY);
     private static Spell poisonLake = new Spell("poisonLake","For one turn Creates a Poisonous House In Targeted Cells",900,4007,5, CELLS, 3);
     private static Spell madness = new Spell("madness","For three turns Improve Ap Of Your Card But Make It Disarm",650,4008,0, PLAYER);
@@ -44,7 +44,7 @@ public class AssetDatas {
     private static Minion tooraniArcher = new Minion("tooraniArcher","tooraniArcher",500,3006,5,4,3,1, RANGED);
     private static Minion tooraniCatapult = new Minion("tooraniCatapult","tooraniCatapult",500,3007,7,2,4,1, RANGED);
     private static Minion tooraniSpear = new Minion("tooraniSpear","tooraniSpear",600,3008,3,4,4,1, HYBRID);
-    private static Minion tooraniSpy = new Minion("tooraniSpy","tooraniSpy",700,3009,0,6,6,4, MELEE, ON_ATTACK);
+    private static Minion tooraniSpy = new Minion("tooraniSpy","tooraniSpy",700,3009,0,6,6,1, MELEE, ON_ATTACK); //todo mp::4
     private static Minion tooraniSwampy = new Minion("tooraniSwampy", "tooraniSwampy", 450, 3010, 0, 10, 3, 2, MELEE);
     private static Minion tooraniPrince = new Minion("tooraniPrince", "sor any not torani plus 4 attackpower", 800, 3011, 0, 10, 6, 6, MELEE,COMBO);
     private static Minion blackGoblin = new Minion("blackGoblin", "", 300, 3012, 7, 10, 14, 9, HYBRID);
@@ -77,7 +77,7 @@ public class AssetDatas {
     private static Minion arjangGoblin  = new Minion("arjangGoblin", "for any goblin take part in attack add 3 to weakness", 600, 3039, 0, 6, 6, 3, MELEE, COMBO);
 
     //Heroes
-    private static Hero whiteDamn = new Hero("whiteGoblin", 8000, 2000, 0, 4, 50, 1, 2, MELEE);
+    private static Hero whiteDamn = new Hero("whiteDamn", 8000, 2000, 0, 4, 50, 1, 2, MELEE);
     private static Hero simorgh = new Hero("simorgh", 9000, 2001, 0, 4, 50, 3, 8, MELEE);
     private static Hero sevenHeadDragon = new Hero("sevenHeadDragon", 8000, 2002, 0, 4, 50, 0, 1, MELEE);
     private static Hero rakhsh = new Hero("rakhsh", 8000, 2003, 0, 4, 50, 1, 2, MELEE);
@@ -86,7 +86,7 @@ public class AssetDatas {
     private static Hero arash = new Hero("arash", 10000, 2006, 6, 2, 30, 2, 2, RANGED);
     private static Hero legend = new Hero("legend", 11000, 2007, 3, 3, 40, 1, 2, RANGED);
     private static Hero esfandiar = new Hero("esfandiar", 12000, 2008, 3, 3, 35, 0, 1, HYBRID);
-    private static Hero rostam = new Hero("rostam", 8000, 2009, 4, 7, 55, HYBRID);
+    private static Hero rostam = new Hero("rostam", 8000, 2009, 4, 7, 1, HYBRID); //todo HP::55
 
     //Items
     private static Item knowledgeCrown = new Item("KnowledgeCrown", "Increases Mana by 1 unit in the first three turns.", 300, 1000);

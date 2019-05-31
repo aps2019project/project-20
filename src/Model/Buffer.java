@@ -445,7 +445,6 @@ public class Buffer {
     }
 
     public void twoHeadGiantAction(Minion playerMinion, Warrior enemyWarrior) {
-        //TODO: concurrent
         Iterator<BufferOfSpells> iterator = enemyWarrior.getBufferEffected().iterator();
         while (iterator.hasNext()) {
             BufferOfSpells bufferOfSpells = iterator.next();
@@ -519,7 +518,6 @@ public class Buffer {
 
     public void legendAction(Warrior enemyWarrior) {
         ArrayList<BufferOfSpells> enemyWarriorBuffers = enemyWarrior.getBufferEffected();
-        // TODO: The following for will throw ConcurrentModificationException and must be edited.
         Iterator<BufferOfSpells> iterator = enemyWarriorBuffers.iterator();
         while (iterator.hasNext()) {
             BufferOfSpells bufferOfSpells = iterator.next();
@@ -539,6 +537,7 @@ public class Buffer {
     }
 
     //Items
+    //TODO: Items' methods call must be edited.
     Battle battle;
     BattleGround battleGround;
     public void knowledgeCrownAction(Account player) {

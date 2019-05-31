@@ -50,7 +50,7 @@ public class Account implements Comparable<Account>{
         this.Name = userName;
         this.password = password;
         AccountDatas.getAccounts().add(this);
-        this.setMainDeck( new Deck("defaultDeck", DeckDatas.getEnemyDeckInStoryGameLevel1().getHero(),DeckDatas.getEnemyDeckInStoryGameLevel1().getItems(),DeckDatas.getEnemyDeckInStoryGameLevel1().getCards()));
+        this.setMainDeck( new Deck(this,"defaultDeck", DeckDatas.getDefaultDeck().getHero(),DeckDatas.getDefaultDeck().getItems(),DeckDatas.getDefaultDeck().getCards()));
         this.collection.setAssetsOfCollectionFromADeck(mainDeck);
         decks.add(mainDeck);
     }

@@ -40,7 +40,7 @@ public class BattleEnvironmentPresenter {
     }
 
     public void attackPresenter(String opponentCardID) {
-        battle.attack(battle.getPlayers()[0], (Warrior) battle.getPlayersSelectedCard()[0], battle.getBattleGround().searchAssetInBattleGround(battle.getPlayers()[0], opponentCardID.split("_")[1]).getID());
+        battle.attack(battle.getPlayers()[0], (Warrior) battle.getPlayersSelectedCard()[0], battle.getBattleGround().searchAssetInBattleGround(battle.getPlayers()[1], opponentCardID.split("_")[1]).getID());
     }
 
     public void attackComboPresenter(String opponentCardID, String[] cardsID) {
@@ -69,7 +69,7 @@ public class BattleEnvironmentPresenter {
     public void useSpecialPowerPresenter(int x, int y) {
         x--;
         y--;
-        if(battle.getBattleGround().getGround().get(y).get(x).getOwner()!=null && battle.getBattleGround().getGround().get(y).get(x).getOwner()!=battle.getPlayers()[1]) {
+        if(battle.getBattleGround().getGround().get(y).get(x)!=null && battle.getBattleGround().getGround().get(y).get(x).getOwner()!=battle.getPlayers()[1]) {
             battle.applySpecialPower(battle.getPlayersDeck()[0].getHero(),(Warrior)battle.getBattleGround().getGround().get(y).get(x),((Minion)battle.getBattleGround().getGround().get(y).get(x)).getActivateTimeOfSpecialPower());
         }
         throw new SpecialPowerMisMatchException();
@@ -95,12 +95,10 @@ public class BattleEnvironmentPresenter {
     public void useItemPresenter(int x, int y) {
         x--;
         y--;
-        if (battle.getBattleGround().getGround().get(y).get(x) instanceof Warrior && battle.getBattleGround().getGround().get(y).get(x).getOwner() == battle.getPlayers()[1]) {
-            battle.useItem(battle.getPlayers()[0], battle.getPlayers()[1], (Warrior) battle.getBattleGround().getGround().get(y).get(x), battle.getPlayersSelectedCard()[0], battle.getPlayersSelectedItem()[0]);
-        } else {
-            throw new InvalidTargetException();
-        }
-
+//        if (!(battle.getBattleGround().getGround().get(y).get(x) instanceof Warrior)) {
+//            throw new InvalidTargetException();
+//        }
+        battle.useItem(battle.getPlayers()[0], battle.getPlayers()[1], (Warrior) battle.getBattleGround().getGround().get(y).get(x), battle.getPlayersSelectedCard()[0], battle.getPlayersSelectedItem()[0]);
     }
 
     public Card showInfoOfCard(String cardID) {
