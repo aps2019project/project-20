@@ -461,9 +461,10 @@ public abstract class Battle {
     public void setPlayersManaByDefault() {
         eachPlayerManaAtFirstOfTurn++;
         if (turn < FIRST_LATE_TURN)
-            playersMana[2 - (turn % 2)] = eachPlayerManaAtFirstOfTurn;
+            //todo 2 change 1
+            playersMana[1 - (turn % 2)] = eachPlayerManaAtFirstOfTurn;
         else
-            playersMana[2 - (turn % 2)] = MAX_MANA_IN_LATE_TURNS;
+            playersMana[1 - (turn % 2)] = MAX_MANA_IN_LATE_TURNS;
     }
 
     public void selectItem(Account player, int collectibleItemID) {

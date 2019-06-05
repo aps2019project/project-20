@@ -17,11 +17,11 @@ public class AI extends Account {
 
     public void handleAIEvent(Account player, Battle battle) {
         try {
-            int key = makeRandomNumber(4);
+            int key = makeRandomNumber(3);
             switch (key) {
                 case 1:
-                    int event1 = makeRandomNumber(3);
 
+                    int event1 = makeRandomNumber(3);
                     switch (event1) {
                         case 1:  //insert card
                             insertAICard(battle);
@@ -37,6 +37,7 @@ public class AI extends Account {
                             moveAICard(battle);
                             break;
                     }
+                    battle.endTurn(this);
 
                     event1 = makeRandomNumber(3);
                     switch (event1) {
@@ -56,8 +57,11 @@ public class AI extends Account {
                             AIUseSpecialPower(battle);
                             break;
                     }
+                    battle.endTurn(this);
                     break;
+
                 case 2:
+
                     int event2 = makeRandomNumber(3);
 
                     switch (event2) {
@@ -78,7 +82,7 @@ public class AI extends Account {
                             selectAICard(battle);
                             break;
                     }
-
+                    battle.endTurn(this);
                     event2 = makeRandomNumber(3);
                     switch (event2) {
                         case 1:
@@ -100,7 +104,9 @@ public class AI extends Account {
                             break;
 
                     }
+                    battle.endTurn(this);
                     break;
+
                 case 3:
                     int event3 = makeRandomNumber(3);
 
@@ -140,34 +146,12 @@ public class AI extends Account {
                             moveAICard(battle);
                             break;
                     }
+                    battle.endTurn(this);
                     break;
-                case 4:
-                    int event4 = makeRandomNumber(4);
 
-                    switch (event4) {
-                        case 1:
-                            //attac
-
-                            AIAttackWithStrongestAsset(player, battle);
-                            break;
-                        case 2:
-                            //attack
-
-                            AIAttackPlayerHero(player, battle);
-                            break;
-                        case 3:
-                            //attack
-
-                            AIAttackWarriors(player, battle);
-                            break;
-                        case 4:
-                            // attack
-
-                            AIAttackWeakWarriors(player, battle);
-                    }
             }
         } catch (Exception e) {
-            handleAIEvent(player,battle);
+            battle.endTurn(this);
         }
     }
 
@@ -235,31 +219,31 @@ public class AI extends Account {
 
     public void moveAICard(Battle battle) {
 
-            Asset moveWarrior = findPlayerMinion(this, battle);
-            battle.cardMoveTo(this, (Warrior) moveWarrior, BattleGround.getColumns(), BattleGround.getRows());
+        Asset moveWarrior = findPlayerMinion(this, battle);
+        battle.cardMoveTo(this, (Warrior) moveWarrior, BattleGround.getColumns(), BattleGround.getRows());
 
     }
 
     public void selectAICard(Battle battle) {
 
-            Asset selectedCard;
-            while (true) {
-                selectedCard = battle.getBattleGround().getGround().get(makeRandomNumber(BattleGround.getColumns())).get(BattleGround.getRows());
-                if (selectedCard.getOwner() == this)
-                    break;
-            }
-            battle.selectWarrior(this, selectedCard.getID());
+        Asset selectedCard;
+        while (true) {
+            selectedCard = battle.getBattleGround().getGround().get(makeRandomNumber(BattleGround.getColumns())).get(BattleGround.getRows());
+            if (selectedCard.getOwner() == this)
+                break;
+        }
+        battle.selectWarrior(this, selectedCard.getID());
 
     }
 
     public void insertAICard(Battle battle) {
 
-            Card[] AIHand = battle.getPlayersHand()[1];
+        Card[] AIHand = battle.getPlayersHand()[1];
 
-            Card insertedCard = AIHand[makeRandomNumber(battle.getNUMBER_OF_CARDS_IN_HAND()) - 1];
-            battle.insertIn(this, insertedCard.getName(), makeRandomNumber(BattleGround.getColumns())
-                    , makeRandomNumber(BattleGround.getRows()), battle.getBattleGround());
-            battle.selectWarrior(this, insertedCard.getID());
+        Card insertedCard = AIHand[makeRandomNumber(battle.getNUMBER_OF_CARDS_IN_HAND()) - 1];
+        battle.insertIn(this, insertedCard.getName(), makeRandomNumber(BattleGround.getColumns())
+                , makeRandomNumber(BattleGround.getRows()), battle.getBattleGround());
+        battle.selectWarrior(this, insertedCard.getID());
 
     }
 
