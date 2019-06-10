@@ -1,0 +1,16 @@
+*{
+    stageColor: #233f7a;
+}
+
+.jfx-decorator {
+    -fx-decorator-color: stageColor;
+}
+
+.jfx-decorator .jfx-decorator-buttons-container {
+    -fx-background-color: -fx-decorator-color;
+}
+
+.jfx-decorator .resize-border {
+    -fx-border-color: -fx-decorator-color;
+    -fx-border-width: 0 4 4 4;
+}

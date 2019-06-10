@@ -1,0 +1,41 @@
+*{
+    firstPageButtonColor : #182e6d;
+    firstPageButtonBorderColor : #59a1ff;
+
+}
+
+#firstPageButtons{
+    -fx-font-family:"Microsoft Tai Le";
+    -fx-font-size: 15.0 ;
+    -fx-font-weight: bold;
+    -fx-background-color: firstPageButtonColor;
+    -fx-border-color: firstPageButtonBorderColor;
+    -fx-border-width: 3;
+    -jfx-button-type: RAISED;
+    -fx-text-fill: white;
+}
+
+/*.jfx-button {*/
+
+    /*-fx-background-color: #182e6d;*/
+    /*-fx-border-color: #59a1ff;*/
+    /*-fx-border-width: 3;*/
+    /*-jfx-button-type: RAISED;*/
+    /*-fx-text-fill: white;*/
+/*}*/
+
+/*.button:focused {*/
+    /*-fx-border-color: #59a1ff;*/
+    /*-fx-border-width: 3,3;*/
+    /*-fx-border-radius: 0, 0;*/
+    /*-fx-border-insets: 1 1 1 1, 0;*/
+/*}*/
+
+/*.button:pressed {*/
+    /*-fx-background-color: black;*/
+    /*-fx-text-fill: white;*/
+/*}*/
+
+/*.button, .toggle-button {*/
+    /*-shrink-animate-on-press: true;*/
+/*}*/

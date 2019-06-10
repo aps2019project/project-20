@@ -1,0 +1,6 @@
+#mainMenuTextFlow{
+    -fx-font-family:"Microsoft Tai Le";
+    -fx-font-size: 23 ;
+    -fx-font-weight:bold;
+    -fx-text-fill:white;
+}
