@@ -8,8 +8,8 @@ public class Flag extends Asset {
     private int keptDuration = 0;
 
     public Flag(){
-
     }
+
     public Flag(int xInGround,int yInGround){
         this.xInGround = xInGround;
         this.yInGround = yInGround;
@@ -49,7 +49,6 @@ public class Flag extends Asset {
         for (int i = 0; i < flags.length; i++) {
             Flag tempFlag = new Flag(temp.get(i) % BattleGround.getColumns(), temp.get(i) / BattleGround.getColumns());
             flags[i] = tempFlag;
-//            System.out.println(temp.get(i) % BattleGround.getColumns() +" "+ (temp.get(i) / BattleGround.getColumns()) );
             battle.getBattleGround().getGround().get(flags[i].getYInGround()).set(flags[i].getXInGround(), flags[i]);
         }
         return flags;

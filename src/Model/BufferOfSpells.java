@@ -1,7 +1,5 @@
 package Model;
 
-import Model.Status.*;
-
 import static Model.Status.COUNTER_ATTACK;
 import static Model.Status.END_TURN;
 

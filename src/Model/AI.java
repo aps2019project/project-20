@@ -180,21 +180,21 @@ public class AI extends Account {
                 }
             }
         }
-        battle.attackCombo(this, minions, playerAsset.getID());
+        battle.attackCombo(this, minions, (Warrior) playerAsset);
     }
 
     public void AIAttackWarriors(Account player, Battle battle) {
         Asset attacker;
         attacker = findAttacker(battle);
         Asset playerCard = findPlayerMinion(player, battle);
-        battle.attack(this, (Warrior) attacker, playerCard.getID());
+        battle.attack(this, (Warrior) attacker, (Warrior) playerCard);
     }
 
     public void AIAttackWeakWarriors(Account player, Battle battle) {
         Asset attacker;
         attacker = findAttacker(battle);
         Asset playerCard = findPlayerWeakAsset(player, battle);
-        battle.attack(this, (Warrior) attacker, playerCard.getID());
+        battle.attack(this, (Warrior) attacker, (Warrior) playerCard);
     }
 
     public Asset findPlayerMinion(Account player, Battle battle) {
@@ -209,12 +209,12 @@ public class AI extends Account {
 
     public void AIAttackPlayerHero(Account player, Battle battle) {
         Asset attacker = findAttacker(battle);
-        battle.attack(this, (Warrior) attacker, findPlayerHero(player, battle).getID());
+        battle.attack(this, (Warrior) attacker, (Warrior) findPlayerHero(player, battle));
     }
 
     public void AIAttackWithStrongestAsset(Account player, Battle battle) {
         Asset attacker = findAIStrongAsset(battle);
-        battle.attack(this, (Warrior) attacker, findPlayerMinion(player, battle).getID());
+        battle.attack(this, (Warrior) attacker, (Warrior) findPlayerMinion(player, battle));
     }
 
     public void moveAICard(Battle battle) {
