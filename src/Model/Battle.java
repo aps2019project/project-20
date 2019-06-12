@@ -2,9 +2,7 @@ package Model;
 
 import Datas.AssetDatas;
 import Exceptions.*;
-
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import Model.Minion.*;
 import static Model.Minion.ActivateTimeOfSpecialPower.*;
@@ -23,13 +21,12 @@ public abstract class Battle {
     protected int endGameStatus = UNFINISHED_GAME;
     protected final int FIRST_LATE_TURN = 15;
     protected final int MAX_MANA_IN_LATE_TURNS = 9;
-    protected int eachPlayerManaAtFirstOfTurn = 2;
     protected final int NUMBER_OF_CARDS_IN_HAND = 5;
     protected int turn;
     protected Account[] players = new Account[2];
     protected Deck[] playersDeck = new Deck[2];
-    protected BattleGround battleGround = new BattleGround();
-    protected int[] playersMana = {eachPlayerManaAtFirstOfTurn, eachPlayerManaAtFirstOfTurn};
+    protected BattleGround battleGround;
+    protected int[] playersMana = {2, 2};
     protected ArrayList<BufferOfSpells>[] playersManaBuffEffected = new ArrayList[2];
     protected Card[] playersSelectedCard = new Card[2];
     protected Item[] playersSelectedItem = new Item[2];
@@ -37,7 +34,7 @@ public abstract class Battle {
     protected Card[] playersNextCardFromDeck = new Card[2];
     protected ArrayList<Item> collectibleItems = new ArrayList<>();
     protected GraveYard[] playersGraveYard = new GraveYard[2];
-    private ArrayList<Integer> itemsCoordinates = new ArrayList<>();
+    private ArrayList<Integer> itemsCoordinates;
     protected int battleID;
     protected int reward;
 
@@ -96,15 +93,6 @@ public abstract class Battle {
         collectibleItems.add(AssetDatas.getChineseSword());
         for (int i = 0; i < collectibleItems.size(); i++)
             battleGround.getGround().get(itemsCoordinates.get(i) / BattleGround.getColumns()).set(itemsCoordinates.get(i) % BattleGround.getColumns(), collectibleItems.get(i));
-//        battleGround.getGround().get(itemsCoordinates.get(0) / BattleGround.getColumns()).set(itemsCoordinates.get(0) % BattleGround.getColumns(), );
-//        battleGround.getGround().get(itemsCoordinates.get(1) / BattleGround.getColumns()).set(itemsCoordinates.get(1) % BattleGround.getColumns(), );
-//        battleGround.getGround().get(itemsCoordinates.get(2) / BattleGround.getColumns()).set(itemsCoordinates.get(2) % BattleGround.getColumns(), );
-//        battleGround.getGround().get(itemsCoordinates.get(3) / BattleGround.getColumns()).set(itemsCoordinates.get(3) % BattleGround.getColumns(), );
-//        battleGround.getGround().get(itemsCoordinates.get(4) / BattleGround.getColumns()).set(itemsCoordinates.get(4) % BattleGround.getColumns(), );
-//        battleGround.getGround().get(itemsCoordinates.get(5) / BattleGround.getColumns()).set(itemsCoordinates.get(5) % BattleGround.getColumns(), );
-//        battleGround.getGround().get(itemsCoordinates.get(6) / BattleGround.getColumns()).set(itemsCoordinates.get(6) % BattleGround.getColumns(), );
-//        battleGround.getGround().get(itemsCoordinates.get(7) / BattleGround.getColumns()).set(itemsCoordinates.get(7) % BattleGround.getColumns(), );
-//        battleGround.getGround().get(itemsCoordinates.get(8) / BattleGround.getColumns()).set(itemsCoordinates.get(8) % BattleGround.getColumns(), );
     }
 
 
@@ -124,14 +112,11 @@ public abstract class Battle {
     public void cardMoveTo(Account player, Warrior warrior, int x, int y) {
         x--;
         y--;
-        int playerIndex = 0;
-        if (player == players[1])
-            playerIndex = 1;
+        int playerIndex = getPlayerIndex(player);
         int pathLength = Math.abs(x - playersSelectedCard[playerIndex].getXInGround())
                         + Math.abs(y - playersSelectedCard[playerIndex].getYInGround());
-//        if(playersSelectedCard[playerIndex] instanceof Warrior && ((Warrior)playersSelectedCard[playerIndex]).isHasMoved()){
-//            throw new WarriorSecondMoveInTurnException();
-//        }
+        if(playersSelectedCard[playerIndex] instanceof Warrior && ((Warrior)playersSelectedCard[playerIndex]).isMovedThisTurn())
+            throw new WarriorSecondMoveInTurnException();
         if (pathLength > 2)
             throw new InvalidTargetException("Invalid target");
         else if (pathLength == 2) {
@@ -152,18 +137,16 @@ public abstract class Battle {
         }
         else if (battleGround.getGround().get(y).get(x) instanceof Card)
             throw new ThisCellFilledException();
-        ////////
         battleGround.getGround().get(playersSelectedCard[playerIndex].getYInGround()).set(playersSelectedCard[playerIndex].getXInGround(),null);
         playersSelectedCard[playerIndex].setXInGround(x);
         playersSelectedCard[playerIndex].setYInGround(y);
-        if(playersSelectedCard[playerIndex] instanceof Warrior){
-            ((Warrior)playersSelectedCard[playerIndex]).setHasMoved(true);
-        }
+        if(playersSelectedCard[playerIndex] instanceof Warrior)
+            ((Warrior)playersSelectedCard[playerIndex]).setMovedThisTurn(true);
         battleGround.getGround().get(y).set(x,playersSelectedCard[playerIndex]);
     }
 
 
-    public void attack(Account player, Warrior attacker, int opponentWarriorID) throws RuntimeException {
+    public void attack(Account player, Warrior attacker, Warrior opponentWarrior) throws RuntimeException {
         if (attacker.isStun() || attacker.isAttackedThisTurn())
             throw new InvalidAttackException("Card with" + attacker.getID() + "can't attack");
         int distance, playerIndex;
@@ -171,12 +154,13 @@ public abstract class Battle {
             playerIndex = 0;
         else
             playerIndex = 1;
-        Warrior opponentWarrior;
-        try {
-            opponentWarrior = searchWarriorInBattleGround(opponentWarriorID);
-        } catch (AssetNotFoundException e) {
-            throw new AssetNotFoundException("Invalid card id");
-        }
+        //TODO method must be reconsidered.
+//        Warrior opponentWarrior;
+//        try {
+//            opponentWarrior = searchWarriorInBattleGround(opponentWarriorID);
+//        } catch (AssetNotFoundException e) {
+//            throw new AssetNotFoundException("Invalid card id");
+//        }
         // AshkbosAction
         if (opponentWarrior.getName().equals("ashkbos") && attacker.getAP() < opponentWarrior.getAP())
             return;
@@ -227,27 +211,26 @@ public abstract class Battle {
                 warrior.getCollectedFlag().setOwner(null);
             }
             playersGraveYard[playerIndex].getDeadCards().add(warrior);
-            System.out.println(playersGraveYard[playerIndex].getDeadCards().get(0));
         }
     }
 
     public void meleeAttackOrCounterAttack (Warrior attacker, Warrior opponentWarrior, int distance, Status status) {
         if (distance == 1 || (distance == 2 && Math.abs(attacker.getXInGround() - opponentWarrior.getXInGround()) == 1)) {
-            if (!attacker.getAction().equals("NoAction"))
+            if (status == ATTACK)
                 applySpecialPower(attacker, opponentWarrior, ON_ATTACK);
             opponentWarrior.changeHP(-1 * attacker.getAP());
         }
-        else if (status == ATTACK)
+        else
             throw new InvalidAttackException("Opponent warrior is unavailable for attack");
     }
 
     public void rangedAttackOrCounterAttack(Warrior attacker, Warrior opponentWarrior, int distance, Status status) {
         if (distance <= attacker.getRange() && !(distance == 1 || (distance == 2 && Math.abs(attacker.getXInGround() - opponentWarrior.getXInGround()) == 1))) {
-            if (!attacker.getAction().equals("NoAction"))
+            if (status == ATTACK)
                 applySpecialPower(attacker, opponentWarrior, ON_ATTACK);
             opponentWarrior.changeHP(-1 * attacker.getAP());
         }
-        else if (status == ATTACK)
+        else
             throw new InvalidAttackException("Opponent warrior is unavailable for attack");
     }
 
@@ -264,12 +247,12 @@ public abstract class Battle {
     }
 
     public void applySpecialPower(Warrior attacker, Warrior opponentWarrior, ActivateTimeOfSpecialPower activateTimeOfSpecialPower){
+        if (attacker.getAction().equals("NoAction"))
+            return;
         Buffer buffer = new Buffer();
         Class bufferClass = buffer.getClass();
         Class[] methodArgs;
-        int playerIndex = 0;
-        if (attacker.getOwner() == players[1])
-            playerIndex = 1;
+        int playerIndex = getPlayerIndex(attacker.getOwner());
         switch (activateTimeOfSpecialPower){
             case PASSIVE:
                 methodArgs = new Class[]{Account.class, Minion.class, BattleGround.class};
@@ -296,21 +279,20 @@ public abstract class Battle {
                 }
                 break;
             case ON_ATTACK:
-                methodArgs = new Class[]{Warrior.class, Warrior.class};
+                methodArgs = new Class[]{Minion.class, Warrior.class};
                 try {
                     bufferClass.getMethod(attacker.getAction(), methodArgs).invoke(buffer, attacker, opponentWarrior);
                 } catch (Exception e) {
                     throw new NoAvailableBufferForCardException();
                 }
-                break;
         }
     }
 
-    public void attackCombo(Account player, ArrayList<Minion> playerMinions, int opponentCardId) {
+    public void attackCombo(Account player, ArrayList<Minion> playerMinions, Warrior opponentWarrior) {
         for (int i = 0; i < playerMinions.size(); i++) {
             if (playerMinions.get(i).getOwner() == player) {
                 if ((playerMinions.get(i)).getActivateTimeOfSpecialPower() == COMBO)
-                    attack(player, playerMinions.get(i), opponentCardId);
+                    attack(player, playerMinions.get(i), opponentWarrior);
                 else {
                     throw new NotComboException();
                 }
@@ -321,21 +303,10 @@ public abstract class Battle {
     public void insertIn(Account player, String cardName, int x, int y, BattleGround battleGround) {
         x--;
         y--;
-        int playerIndex = 0;
-        boolean isThereAnyAdjacentOwnWarrior = false;
-        if (player == players[1])
-            playerIndex = 1;
-        outer: for (int i = -1; i <= 1; i++) {
-            for (int j = -1; j <= 1; j++) {
-                if (i == 0 && j == 0)
-                    continue;
-                if (y+j >= 0 && x+i >= 0 && y+j<BattleGround.getRows() && x+i<BattleGround.getColumns() && battleGround.getGround().get(y + j).get(x + i) != null && battleGround.getGround().get(y + j).get(x + i).getOwner() == player) {
-                    isThereAnyAdjacentOwnWarrior = true;
-                    break outer;
-                }
-            }
-        }
-        if (isThereAnyAdjacentOwnWarrior)
+        int playerIndex = getPlayerIndex(player);
+        if (battleGround.getGround().get(y).get(x) != null)
+            throw new InvalidInsertInBattleGroundException();
+        if (!isThereAnyAdjacentOwnWarrior(player, x, y, battleGround))
             throw new InvalidInsertInBattleGroundException("Invalid target");
         for (int i = 0; i < NUMBER_OF_CARDS_IN_HAND; i++) {
             Card card = playersHand[playerIndex][i];
@@ -344,7 +315,7 @@ public abstract class Battle {
                     playersMana[playerIndex] -= card.getMP();
                     playersHand[playerIndex][i] = null;
                     if (card instanceof Spell)
-                        applySpellBuffers(player, players[1 - playerIndex], (Spell) card, x, y);
+                        applySpellBuffers(player, players[1 - playerIndex], card, x, y);
                     else {
                         if (battleGround.getGround().get(y).get(x) != null)
                             throw new ThisCellFilledException();
@@ -361,51 +332,73 @@ public abstract class Battle {
         throw new AssetNotFoundException("Invalid card name");
     }
 
+    private boolean isThereAnyAdjacentOwnWarrior(Account player, int x, int y, BattleGround battleGround) {
+        boolean isThereAnyAdjacentOwnWarrior = false;
+        outer: for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                if (i == 0 && j == 0)
+                    continue;
+                if (y+j >= 0 && x+i >= 0 && y+j<BattleGround.getRows() && x+i<BattleGround.getColumns() && battleGround.getGround().get(y + j).get(x + i) != null && battleGround.getGround().get(y + j).get(x + i).getOwner() == player) {
+                    isThereAnyAdjacentOwnWarrior = true;
+                    break outer;
+                }
+            }
+        }
+        return isThereAnyAdjacentOwnWarrior;
+    }
+
     public void endTurn(Account player) {
-        applyAndHandleManaBuffers();
-        applyEffectedBuffersOfAllWarriorsAtEndOfTurn();
+        Account opponent = getOpponent(player);
+        applyAndHandleManaBuffers(opponent);
+        applyEffectedBuffersOfWarriors(opponent);
         fillEmptyPlacesOfHandFromDeck(player);
         endGame();
         turn++;
+        battleGround.applyCellsEffect(opponent);
         resetIsAttackedThisTurn();
+        resetIsMovedThisTurn(player);
         setPlayersManaByDefault();
-        for (ArrayList<Asset> assets : battleGround.getGround()) {
-            for (Asset asset : assets) {
-                if(asset instanceof Warrior && asset.getOwner()==player){
-                    ((Warrior) asset).setHasMoved(false);
-                }
-            }
-        }
     }
 
-    public void applyAndHandleManaBuffers() {
-        for (int playerIndex = 0; playerIndex <= 1; playerIndex++) {
-            Iterator<BufferOfSpells> iterator = playersManaBuffEffected[playerIndex].iterator();
-            while (iterator.hasNext()) {
-                BufferOfSpells bufferOfSpells = iterator.next();
-                if (bufferOfSpells.getTurnCountdownUntilActivation() > 0)
+    private Account getOpponent(Account player) {
+        Account opponent;
+        if (player == players[0])
+            opponent = players[1];
+        else
+            opponent = players[0];
+        return opponent;
+    }
+
+    public void applyAndHandleManaBuffers(Account opponent) {
+//        for (int opponentIndex = 0; opponentIndex <= 1; opponentIndex++) {
+        int opponentIndex = getPlayerIndex(opponent);
+        Iterator<BufferOfSpells> iterator = playersManaBuffEffected[opponentIndex].iterator();
+        while (iterator.hasNext()) {
+            BufferOfSpells bufferOfSpells = iterator.next();
+            if (bufferOfSpells.getTurnCountdownUntilActivation() > 0)
+                bufferOfSpells.changeTurnCountdownUntilActivation(-1);
+            else if (bufferOfSpells.getTurnCountdownUntilActivation() == 0) {
+                changePlayerMana(opponentIndex, bufferOfSpells.getValue());
+                if (!bufferOfSpells.isLifeEndless())
                     bufferOfSpells.changeTurnCountdownUntilActivation(-1);
-                else if (bufferOfSpells.getTurnCountdownUntilActivation() == 0) {
-                    changePlayerMana(playerIndex, bufferOfSpells.getValue());
-                    if (!bufferOfSpells.isLifeEndless())
-                        bufferOfSpells.changeTurnCountdownUntilActivation(-1);
-                } else {
-                    bufferOfSpells.changeLifeTime(-1);
-                    if (bufferOfSpells.getLifeTime() == 0) {
-                        changePlayerMana(playerIndex, -1 * bufferOfSpells.getValue());
-                        iterator.remove();
-                    }
+            } else {
+                bufferOfSpells.changeLifeTime(-1);
+                if (bufferOfSpells.getLifeTime() == 0) {
+                    changePlayerMana(opponentIndex, -1 * bufferOfSpells.getValue());
+                    iterator.remove();
                 }
             }
         }
+//        }
     }
 
-    public void applyEffectedBuffersOfAllWarriorsAtEndOfTurn() {
-        Warrior warrior = null;
+    public void applyEffectedBuffersOfWarriors(Account opponent) {
+        Account player = getOpponent(opponent);
+        Warrior warrior;
         for (int i = 0; i < BattleGround.getRows(); i++) {
             for (int j = 0; j < BattleGround.getColumns(); j++) {
                 if (battleGround.getGround().get(i).get(j) == null || battleGround.getGround().get(i).get(j) instanceof Item
-                || battleGround.getGround().get(i).get(j) instanceof Flag)
+                || battleGround.getGround().get(i).get(j) instanceof Flag || battleGround.getGround().get(i).get(j).getOwner() == player)
                     continue;
                 warrior = (Warrior) battleGround.getGround().get(i).get(j);
                 applyEffectedBuffersOfWarrior(warrior, END_TURN);
@@ -436,9 +429,7 @@ public abstract class Battle {
     }
 
     public void fillEmptyPlacesOfHandFromDeck(Account player) {
-        int playerIndex = 0;
-        if (player == players[1])
-            playerIndex = 1;
+        int playerIndex = getPlayerIndex(player);
         for (int j = 0; j < NUMBER_OF_CARDS_IN_HAND; j++) {
             int nextCardFromDeckIndex = playersDeck[playerIndex].getNextCardFromDeckIndex();
             if (playersHand[playerIndex][j] == null && nextCardFromDeckIndex < Deck.STANDARD_NUMBER_OF_MINIONS_AND_SPELLS) {
@@ -449,22 +440,37 @@ public abstract class Battle {
         }
     }
 
+    private int getPlayerIndex(Account player) {
+        int playerIndex = 0;
+        if (player == players[1])
+            playerIndex = 1;
+        return playerIndex;
+    }
+
     private void resetIsAttackedThisTurn() {
-        for (int i = 0 ; i < BattleGround.getRows(); i++)
+        for (int i = 0 ; i < BattleGround.getRows(); i++) {
             for (int j = 0; j < BattleGround.getColumns(); j++) {
                 Asset asset = battleGround.getGround().get(i).get(j);
-                if (asset != null && asset instanceof Warrior)
+                if (asset instanceof Warrior)
                     ((Warrior) asset).setAttackedThisTurn(false);
             }
+        }
+    }
+
+    private void resetIsMovedThisTurn(Account player) {
+        for (ArrayList<Asset> assets : battleGround.getGround()) {
+            for (Asset asset : assets) {
+                if(asset instanceof Warrior && asset.getOwner()==player)
+                    ((Warrior) asset).setMovedThisTurn(false);
+            }
+        }
     }
 
     public void setPlayersManaByDefault() {
-        eachPlayerManaAtFirstOfTurn++;
         if (turn < FIRST_LATE_TURN)
-            //todo 2 change 1
-            playersMana[1 - (turn % 2)] = eachPlayerManaAtFirstOfTurn;
+            playersMana[turn % 2] ++;
         else
-            playersMana[1 - (turn % 2)] = MAX_MANA_IN_LATE_TURNS;
+            playersMana[turn % 2] = MAX_MANA_IN_LATE_TURNS;
     }
 
     public void selectItem(Account player, int collectibleItemID) {
@@ -482,14 +488,9 @@ public abstract class Battle {
     }
 
     public void applySpellBuffers(Account player, Account enemy, Card playerSelectedSpell, int x, int y) {
-        int playerIndex = 0;
-        if (player == players[1])
-            playerIndex = 1;
         Buffer buffer = new Buffer();
         Class bufferClass = buffer.getClass();
-        Class[] methodArgs;
-
-        methodArgs = new Class[]{Account.class, Account.class, BattleGround.class, Integer.class, Integer.class};
+        Class[] methodArgs = new Class[]{Account.class, Account.class, BattleGround.class, Integer.class, Integer.class};
         try {
             bufferClass.getMethod(playerSelectedSpell.getAction(), methodArgs).invoke(buffer, player, enemy, battleGround, x, y);
         } catch (Exception e) {
@@ -498,9 +499,7 @@ public abstract class Battle {
     }
 
     public void useItem(Account player, Account enemy, Card enemyWarrior, Card myCard, Item playerItemSelected) {
-        int playerIndex = 0;
-        if (player == players[1])
-            playerIndex = 1;
+        int playerIndex = getPlayerIndex(player);
         switch (playerItemSelected.getID()) {
             case 1000:
                 playerItemSelected.getBuffer().knowledgeCrownAction(player);
@@ -698,7 +697,7 @@ public abstract class Battle {
             for (int j = 0; j < BattleGround.getColumns(); j++) {
                 Asset asset = battleGround.getGround().get(i).get(j);
                 if (asset instanceof Warrior && warriorID == asset.getID())
-                return (Warrior) asset;
+                    return (Warrior) asset;
             }
         }
         throw new AssetNotFoundException("Asset not found in the battleground.");
@@ -729,9 +728,7 @@ public abstract class Battle {
     }
 
     public Card searchCardInHand(Account player, int cardID) {
-        int playerIndex = 0;
-        if (player == players[1])
-            playerIndex = 1;
+        int playerIndex = getPlayerIndex(player);
         for (Card card : playersHand[playerIndex])
             if (cardID == card.getID())
                 return card;
