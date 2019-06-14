@@ -161,7 +161,7 @@ public class AI extends Account {
     }
 
     public void AIUseSpecialPower(Battle battle) {
-        // battle.applySpecialPower(this, makeRandomNumber(BattleGround.getRows()), makeRandomNumber(BattleGround.getColumns()));
+        // battle.applySpecialPower(this, makeRandomNumber(Controller.BattleGroundController.getRows()), makeRandomNumber(Controller.BattleGroundController.getColumns()));
     }
 
     public void AIComboAttack(Account player, Battle battle) {

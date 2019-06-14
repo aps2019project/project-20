@@ -8,13 +8,13 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="438.0" prefWidth="597.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="BattleGround">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="438.0" prefWidth="597.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.BattleGroundController">
     <children>
         <StackPane fx:id="mainStackPane" prefHeight="438.0" prefWidth="601.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="72.0" AnchorPane.topAnchor="0.0">
             <children>
                 <ImageView fx:id="battleGroundImage" fitHeight="336.0" fitWidth="618.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true" StackPane.alignment="TOP_LEFT">
                     <image>
-                        <Image url="@../../../../Desktop/resources/maps/battlemap6_middleground.png" />
+                        <Image url="@../../../../../../Desktop/resources/maps/battlemap6_middleground.png" />
                     </image>
                 </ImageView>
                 <GridPane fx:id="battleGround" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="338.0" prefWidth="601.0" StackPane.alignment="TOP_LEFT">
@@ -56,27 +56,27 @@
                     <children>
                         <ImageView fx:id="card4" fitHeight="73.0" fitWidth="76.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4">
                             <image>
-                                <Image url="@../../../../Desktop/resources/dialogue/speech_portrait_andromeda@2x.png" />
+                                <Image url="@../../../../../../Desktop/resources/dialogue/speech_portrait_andromeda@2x.png" />
                             </image>
                         </ImageView>
                         <ImageView fx:id="card3" fitHeight="76.0" fitWidth="103.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3">
                             <image>
-                                <Image url="@../../../../Desktop/resources/dialogue/speech_portrait_antiswarm.png" />
+                                <Image url="@../../../../../../Desktop/resources/dialogue/speech_portrait_antiswarm.png" />
                             </image>
                         </ImageView>
                         <ImageView fx:id="card2" fitHeight="75.0" fitWidth="103.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
                             <image>
-                                <Image url="@../../../../Desktop/resources/dialogue/speech_portrait_cindera@2x.png" />
+                                <Image url="@../../../../../../Desktop/resources/dialogue/speech_portrait_cindera@2x.png" />
                             </image>
                         </ImageView>
                         <ImageView fx:id="card1" fitHeight="74.0" fitWidth="101.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
                             <image>
-                                <Image url="@../../../../Desktop/resources/dialogue/speech_portrait_crystal@2x.png" />
+                                <Image url="@../../../../../../Desktop/resources/dialogue/speech_portrait_crystal@2x.png" />
                             </image>
                         </ImageView>
                         <ImageView fx:id="card5" fitHeight="74.0" fitWidth="58.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5">
                             <image>
-                                <Image url="@../../../../Desktop/resources/dialogue/speech_portrait_malyk@2x.png" />
+                                <Image url="@../../../../../../Desktop/resources/dialogue/speech_portrait_malyk@2x.png" />
                             </image>
                         </ImageView>
                         <ImageView fx:id="nextCard" fitHeight="74.0" fitWidth="86.0" pickOnBounds="true" preserveRatio="true" />
