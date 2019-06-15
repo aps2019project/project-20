@@ -1,37 +1,52 @@
 package Controller;
 
-import View.Main;
+import Exceptions.UserNotFoundException;
+import Exceptions.WrongPasswordException;
+import Presenter.AccountManageable;
+import Presenter.DialogThrowable;
+import Presenter.ScreenManager;
+import Presenter.TextFieldValidator;
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import javafx.fxml.Initializable;
-import javafx.scene.layout.StackPane;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class SignInController implements Initializable {
+public class SignInController implements Initializable, AccountManageable, ScreenManager, DialogThrowable, TextFieldValidator {
 
 
     public JFXTextField LoginUserName;
-    public JFXTextField loginPassword;
+    public JFXPasswordField loginPassword;
     public JFXButton signIn;
     public JFXButton back;
 
-    public void setSignIn(){
-       if(LoginUserName.getText().equals("") || loginPassword.getText().equals("")){
-           Main.showOneButtonDialog((StackPane)back.getParent().getParent(),"SignInError","some of fields are empty.","file:images/error.png");
-       }
-       //todo
+    public void setSignIn() throws IOException {
+        if (LoginUserName.getText().equals("") || loginPassword.getText().equals("")) {
+            showOneButtonErrorDialog("SignIn Error", "some of fields are empty.");
+            return;
+        }
+        try {
+            loginPresenter(LoginUserName.getText(), loginPassword.getText());
+        } catch (UserNotFoundException e){
+            showOneButtonErrorDialog("Login Error","User Not Found!!!");
+            return;
+        }catch (WrongPasswordException e){
+            showOneButtonErrorDialog("Login Error","Password Is Not Correct!!!");
+            return;
+        }
+        loadPageInNewStage(signIn.getScene(),"FXML/MainMenu.fxml",true);
     }
 
     public void setBack() throws IOException {
-        Main.loadPageOnStackPane(back.getScene(),"FXML/FirstPage.fxml","ltr");
+        loadPageOnStackPane(back.getParent(), "FXML/FirstPage.fxml", "ltr");
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-       Main.setTextFieldRequiredFieldValidator(LoginUserName,"\\s+","");
-       Main.setTextFieldRequiredFieldValidator(loginPassword,"\\s+","");
+        setTextFieldRequiredFieldValidator(LoginUserName, "\\s+", "");
+        setPasswordFieldRequiredFieldValidator(loginPassword, "\\s+", "");
     }
 }

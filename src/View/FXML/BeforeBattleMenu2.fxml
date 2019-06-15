@@ -1,14 +1,107 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import com.jfoenix.controls.JFXTextArea?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="Controller.BeforeBattleMenu2Controller"
-            prefHeight="400.0" prefWidth="600.0">
-
+<AnchorPane fx:id="anchorPane" layoutX="0" prefHeight="1091.0" prefWidth="1858.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.BeforeBattleMenu2Controller">
+    <children>
+        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#8b8d8f" height="908.0" layoutX="162.0" layoutY="94.0" opacity="0.69" stroke="BLACK" strokeType="INSIDE" style="-fx-stroke-width: 3;" width="1634.0" AnchorPane.bottomAnchor="89.0" AnchorPane.leftAnchor="162.0" AnchorPane.rightAnchor="62.0" AnchorPane.topAnchor="94.0" />
+        <ImageView fx:id="back" fitHeight="152.0" fitWidth="162.0" layoutX="162.0" layoutY="94.0" onMouseEntered="#setBackButtonOnMouseEntered" onMouseExited="#setBackButtonOnMouseExited" onMousePressed="#setBackButtonOnMousePressed" onMouseReleased="#setBackButtonOnMouseReleased" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="file:images/button_back_corner.png" />
+            </image>
+        </ImageView>
+        <ImageView fx:id="customButton" fitHeight="536.0" fitWidth="340.0" layoutX="519.0" layoutY="259.0" pickOnBounds="true">
+            <image>
+                <Image url="file:images/challenges/gate_000.jpg" />
+            </image>
+        </ImageView>
+        <ImageView fx:id="storyButton" fitHeight="529.0" fitWidth="357.0" layoutX="1158.0" layoutY="258.0" pickOnBounds="true">
+            <image>
+                <Image url="file:images/challenges/gate_001.jpg" />
+            </image>
+        </ImageView>
+        <Pane fx:id="customPaneDetail" focusTraversable="true" layoutX="519.0" layoutY="272.0" onMouseEntered="#setCustomButtonOnMouseEntered" onMouseExited="#setCustomButtonOnMouseExited" onMouseReleased="#setCustomButtonOnMouseReleased" prefHeight="529.0" prefWidth="340.0" AnchorPane.bottomAnchor="324.0" AnchorPane.leftAnchor="519.0" AnchorPane.rightAnchor="999.0" AnchorPane.topAnchor="272.0">
+            <Rectangle fill="#8b8d8f" height="529.0" layoutY="-9.0" opacity="0.69" strokeType="INSIDE" style="-fx-stroke-width: 3;" width="340.0">
+                <stroke>
+                    <LinearGradient cycleMethod="REPEAT" endX="1.0" endY="1.0">
+                        <stops>
+                            <Stop color="BLACK" />
+                            <Stop color="WHITE" offset="1.0" />
+                        </stops>
+                    </LinearGradient>
+                </stroke>
+            </Rectangle>
+            <Label accessibleRole="PARENT" alignment="CENTER" graphicTextGap="3.0" layoutX="29.0" layoutY="155.0" prefHeight="74.0" prefWidth="283.0" text="CUSTOM" textFill="WHITE">
+                <font>
+                    <Font name="Urdu Typesetting" size="35.0" />
+                </font>
+            </Label>
+            <JFXTextArea accessibleRole="PARENT" editable="false" focusColor="WHITE" layoutX="23.0" layoutY="305.0" prefHeight="75.0" prefWidth="295.0" style="-fx-text-fill: #ffffff;" text="Choose your opponent hero and start the battle. " unFocusColor="WHITE">
+                <font>
+                    <Font name="Segoe UI Semilight" size="20.0" />
+                </font>
+            </JFXTextArea>
+            <ImageView accessibleRole="PARENT" fitHeight="361.0" fitWidth="71.0" layoutX="135.0" layoutY="67.0" pickOnBounds="true" rotate="90.0">
+                <image>
+                    <Image url="file:images/upward_line_ray.png" />
+                </image>
+            </ImageView>
+        </Pane>
+        <Pane fx:id="storyPaneDetail" layoutX="1158.0" layoutY="272.0" onMouseEntered="#setStoryButtonOnMouseEntered" onMouseExited="#setStoryButtonOnMouseExited" onMouseReleased="#setStoryButtonOnMouseReleased" prefHeight="529.0" prefWidth="357.0">
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#8b8d8f" height="529.0" layoutY="-11.0" opacity="0.69" strokeType="INSIDE" style="-fx-stroke-width: 3;" width="357.0">
+                <stroke>
+                    <LinearGradient cycleMethod="REPEAT" endX="1.0" endY="1.0">
+                        <stops>
+                            <Stop color="BLACK" />
+                            <Stop color="WHITE" offset="1.0" />
+                        </stops>
+                    </LinearGradient>
+                </stroke>
+            </Rectangle>
+            <JFXTextArea editable="false" focusColor="WHITE" layoutX="31.0" layoutY="307.0" prefHeight="75.0" prefWidth="295.0" style="-fx-text-fill: #ffffff" text="There are 3 Levels with special rewards waiting for you." unFocusColor="WHITE">
+                <font>
+                    <Font name="Segoe UI Semilight" size="20.0" />
+                </font>
+            </JFXTextArea>
+            <Label alignment="CENTER" graphicTextGap="3.0" layoutX="37.0" layoutY="163.0" prefHeight="58.0" prefWidth="283.0" text="STORY" textFill="WHITE">
+                <font>
+                    <Font name="Urdu Typesetting" size="35.0" />
+                </font>
+            </Label>
+            <ImageView accessibleRole="PARENT" fitHeight="384.0" fitWidth="72.0" layoutX="143.0" layoutY="63.0" pickOnBounds="true" rotate="90.0">
+                <image>
+                    <Image url="file:images/upward_line_ray.png" />
+                </image>
+            </ImageView>
+        </Pane>
+        <ImageView fitHeight="84.0" fitWidth="340.0" layoutX="519.0" layoutY="205.0" pickOnBounds="true" rotate="180.0" AnchorPane.bottomAnchor="802.0" AnchorPane.leftAnchor="519.0" AnchorPane.rightAnchor="999.0" AnchorPane.topAnchor="205.0">
+            <image>
+                <Image url="file:images/panel_trim_plate.png" />
+            </image>
+        </ImageView>
+        <ImageView fitHeight="84.0" fitWidth="340.0" layoutX="519.0" layoutY="761.0" pickOnBounds="true">
+            <image>
+                <Image url="file:images/panel_trim_plate.png" />
+            </image>
+        </ImageView>
+        <ImageView fitHeight="84.0" fitWidth="357.0" layoutX="1158.0" layoutY="761.0" pickOnBounds="true">
+            <image>
+                <Image url="file:images/panel_trim_plate.png" />
+            </image>
+        </ImageView>
+        <ImageView fitHeight="84.0" fitWidth="357.0" layoutX="1158.0" layoutY="202.0" pickOnBounds="true" rotate="180.0">
+            <image>
+                <Image url="file:images/panel_trim_plate.png" />
+            </image>
+        </ImageView>
+    </children>
 </AnchorPane>

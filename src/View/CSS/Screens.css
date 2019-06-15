@@ -1,4 +1,4 @@
-*{
+* {
     stageColor: #233f7a;
 }
 
@@ -13,4 +13,23 @@
 .jfx-decorator .resize-border {
     -fx-border-color: -fx-decorator-color;
     -fx-border-width: 0 4 4 4;
+}
+
+
+.tab{
+
+    -fx-pref-width: 180;
+    -fx-pref-height: 50;
+    -fx-background-color: -fx-primary;
+}
+.jfx-tab-pane .tab-selected-line{
+    -fx-background-color: -fx-primary;
+}
+.jfx-tab-pane .tab-header-area .jfx-rippler{
+    -jfx-rippler-radius:false;
+}
+.tab-header-background{
+    -fx-stroke-width: 5;
+    -fx-base : -fx-primary;
+    -fx-background-color: -fx-primary;
 }

@@ -2,7 +2,7 @@ package Model;
 
 import java.util.ArrayList;
 
-public abstract class Warrior extends Card {
+public class Warrior extends Card {
     private int range;
     private int HP;
     private int AP;
@@ -13,7 +13,6 @@ public abstract class Warrior extends Card {
     private int lifeTimeChangedAP = 0;
     private int amountOfChangedAP = 0;
     private AttackType attackType;
-    private ArrayList<BufferOfSpells> bufferEffected = new ArrayList<>();
     private Flag collectedFlag = null;
     private boolean hasMoved = false;
 
@@ -26,14 +25,6 @@ public abstract class Warrior extends Card {
         this.HP = HP;
         this.range = range;
         this.attackType = attackType;
-    }
-
-    public ArrayList<BufferOfSpells> getBufferEffected() {
-        return bufferEffected;
-    }
-
-    public void setBufferEffected(ArrayList<BufferOfSpells> bufferEffected) {
-        this.bufferEffected = bufferEffected;
     }
 
     public Flag getCollectedFlag() {

@@ -4,9 +4,11 @@ import Exceptions.UserNotFoundException;
 import Exceptions.WrongPasswordException;
 import Model.Account;
 
-public class AccountPresenter {
+import java.io.IOException;
 
-    public void loginPresenter(String userName, String password){
+public interface AccountManageable {
+
+    default void loginPresenter(String userName, String password){
         Account account;
         try {
             account = Account.login(userName,password);
@@ -16,28 +18,40 @@ public class AccountPresenter {
         CurrentAccount.setCurrentAccount(account);
     }
 
-    public void createAccountPresenter(String userName,String password){
-        Account account;
+    default void createAccountPresenter(String userName,String password){
+        Account account = null;
         try {
             account = Account.createAccount(userName, password);
         }catch (RepeatedUserNameException e){
          throw e;
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         CurrentAccount.setCurrentAccount(account);
     }
 
-    public void changePassWord(String passWord){
+    default void changePassWord(String passWord){
         CurrentAccount.getCurrentAccount().setPassword(passWord);
     }
 
-    public void changeUserName(String userName){
+    default void changeUserName(String userName){
         CurrentAccount.getCurrentAccount().setName(userName);
     }
 
-    public void deleteAccount(){
+    default void deleteAccount(){
         Account.deleteAccount(CurrentAccount.getCurrentAccount());
     }
 
+    default void saveAccount(){
+        try {
+            CurrentAccount.getCurrentAccount().saveInToFile("Data/AccountsData.json");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
+    default void logout(){
+        CurrentAccount.setCurrentAccount(null);
+    }
 
 }

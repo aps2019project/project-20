@@ -10,8 +10,6 @@ import java.util.ArrayList;
 
 public class AccountMenuPresenter {
 
-    public void save() {}
-    public void logout() {}
 
     public void showLeaderBoardPresenter() {
          Account.sortAccounts(AccountDatas.getAccounts());

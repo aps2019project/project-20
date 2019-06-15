@@ -4,14 +4,14 @@ import Exceptions.AssetNotFoundException;
 
 import java.util.ArrayList;
 
-public abstract class Asset implements Cloneable {
+public class Asset implements Cloneable {
     private String name;
     private String desc;
     private int price;
     private int ID;
     protected int xInGround;
     protected int yInGround;
-    protected Account owner;
+    protected transient Account owner;
     private String action;
     private Buffer buffer;
 
