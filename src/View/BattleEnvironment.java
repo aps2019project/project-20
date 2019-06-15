@@ -259,6 +259,7 @@ public class BattleEnvironment {
     public void attack(Scanner scanner) {
         System.out.println("Enter Opponent Card ID : ");
         String OpponentID = scanner.next();
+        //TODO proper format of input must be checked like other sections.
         try {
             battleEnvironmentPresenter.attackPresenter(OpponentID);
         } catch (AssetNotFoundException e) {
@@ -496,9 +497,9 @@ public class BattleEnvironment {
     public static void printInGameHeroFormat(Hero hero) {
         System.out.printf("Hero:\n" +
                 "Name: %s\n" +
+                "HP: %s\n" +
                 "Cost: %d\n" +
-                "Desc: %s\n\n", hero.getName(), hero.getPrice(), hero.getDesc());
-
+                "Desc: %s\n\n", hero.getName(), hero.getHP(), hero.getPrice(), hero.getDesc());
     }
 
     public static void printInGameItemFormat(Item item) {
@@ -580,7 +581,7 @@ public class BattleEnvironment {
                 System.out.println("You Have No Item With This ID!!!");
                 break;
             case 4:
-                System.out.println("Your Destination Is Out Of Ground!!!");
+                System.out.println("Your Destination Is Unavailable!!!");
                 break;
             case 5:
                 System.out.println("Your Destination Is filled!!!");

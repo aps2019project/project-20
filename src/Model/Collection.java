@@ -8,8 +8,6 @@ import Presenter.CurrentAccount;
 
 import java.util.ArrayList;
 
-//import static Model.Asset.searchCardAndItem;
-//import static Model.Deck.searchDeckInDecks;
 
 public class Collection {
     private final static int MAX_NUMBER_OF_CARDS_IN_DECK = 20;
@@ -19,20 +17,24 @@ public class Collection {
         return assets;
     }
 
-    public int searchAssetInMyCollection (String assetName) {
-        Asset asset ;
+    public int searchAssetInMyCollection(String assetName) {
+        Asset asset;
         try {
-           asset = Asset.searchAsset(this.getAssets(), assetName);
+            asset = Asset.searchAsset(this.getAssets(), assetName);
         } catch (AssetNotFoundException e) {
             throw e;
         }
         return asset.getID();
     }
 
+    public void setAssets(ArrayList<Asset> assets) {
+        this.assets = assets;
+    }
+
     public static void save() {
     }
 
-    public void setAssetsOfCollectionFromADeck(Deck deck){
+    public void setAssetsOfCollectionFromADeck(Deck deck) {
         assets.add(deck.getHero());
         assets.addAll(deck.getCards());
         assets.addAll(deck.getItems());

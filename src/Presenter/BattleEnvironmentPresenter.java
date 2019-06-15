@@ -40,14 +40,14 @@ public class BattleEnvironmentPresenter {
     }
 
     public void attackPresenter(String opponentCardID) {
-        battle.attack(battle.getPlayers()[0], (Warrior) battle.getPlayersSelectedCard()[0], battle.getBattleGround().searchAssetInBattleGround(battle.getPlayers()[1], opponentCardID.split("_")[1]).getID());
+        battle.attack(battle.getPlayers()[0], (Warrior) battle.getPlayersSelectedCard()[0], (Warrior) battle.getBattleGround().searchAssetInBattleGround(battle.getPlayers()[1], opponentCardID.split("_")[1]));
     }
 
     public void attackComboPresenter(String opponentCardID, String[] cardsID) {
         if (!IsValidInGameCardID(opponentCardID)) {
             throw new InvalidInGameAssetIDFormatException("");
         }
-        Card opponent = (Card) battle.getBattleGround().searchAssetInBattleGround(battle.getPlayers()[1], opponentCardID);
+        Warrior opponent = (Warrior) battle.getBattleGround().searchAssetInBattleGround(battle.getPlayers()[1], opponentCardID);
         ArrayList<Minion> minions = new ArrayList<>();
         for (String cardID : cardsID) {
             if (!IsValidInGameCardID(cardID)) {
@@ -63,7 +63,7 @@ public class BattleEnvironmentPresenter {
                 minions.add((Minion) asset);
             }
         }
-        battle.attackCombo(battle.getPlayers()[0], minions, opponent.getID());
+        battle.attackCombo(battle.getPlayers()[0], minions, opponent);
     }
 
     public void useSpecialPowerPresenter(int x, int y) {

@@ -17,7 +17,7 @@ public class AssetDatas {
     private static Spell areaDispel = new Spell("areaDispel","Destroy Positive Buffs of Enemy Cards And Negative Buffs Of your Cards",1500,4001,2, CELLS,2);
     private static Spell empower = new Spell("empower","Improve َAp Of One Of Your Cards",250,4002,1, PLAYER);
     private static Spell fireball = new Spell("fireball","Do damage to Card Of An Enemy",400,4003,1, ENEMY);
-    private static Spell godStrength = new Spell("fireball","Increase AP Of Your Hero",450,4004,2, PLAYER);
+    private static Spell godStrength = new Spell("godStrength","Increase AP Of Your Hero",450,4004,2, PLAYER);
     private static Spell hellFire = new Spell("hellFire","For two turns Creates a Fiery House In Targeted Cells",600,4005,3, CELLS, 2);
     private static Spell lightingBolt = new Spell("lightingBolt","Do damage to Hero Of An Enemy",1250,4006,2, ENEMY);
     private static Spell poisonLake = new Spell("poisonLake","For one turn Creates a Poisonous House In Targeted Cells",900,4007,5, CELLS, 3);
@@ -86,7 +86,7 @@ public class AssetDatas {
     private static Hero arash = new Hero("arash", 10000, 2006, 6, 2, 30, 2, 2, RANGED);
     private static Hero legend = new Hero("legend", 11000, 2007, 3, 3, 40, 1, 2, RANGED);
     private static Hero esfandiar = new Hero("esfandiar", 12000, 2008, 3, 3, 35, 0, 1, HYBRID);
-    private static Hero rostam = new Hero("rostam", 8000, 2009, 4, 7, 1, HYBRID); //todo HP::55
+    private static Hero rostam = new Hero("rostam", 8000, 2009, 4, 7, 55, HYBRID);
 
     //Items
     private static Item knowledgeCrown = new Item("KnowledgeCrown", "Increases Mana by 1 unit in the first three turns.", 300, 1000);

@@ -14,7 +14,7 @@ public class Warrior extends Card {
     private int amountOfChangedAP = 0;
     private AttackType attackType;
     private Flag collectedFlag = null;
-    private boolean hasMoved = false;
+    private boolean isMovedThisTurn = false;
 
     public Warrior() {
     }
@@ -107,11 +107,11 @@ public class Warrior extends Card {
         this.lifeTimeChangedAP = lifeTimeChangedAP;
     }
 
-    public boolean isHasMoved() {
-        return hasMoved;
+    public boolean isMovedThisTurn() {
+        return isMovedThisTurn;
     }
 
-    public void setHasMoved(boolean hasMoved) {
-        this.hasMoved = hasMoved;
+    public void setMovedThisTurn(boolean movedThisTurn) {
+        this.isMovedThisTurn = movedThisTurn;
     }
 }
