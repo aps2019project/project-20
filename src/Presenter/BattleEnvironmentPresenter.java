@@ -2,7 +2,6 @@ package Presenter;
 
 import Exceptions.AssetNotFoundException;
 import Exceptions.InvalidInGameAssetIDFormatException;
-import Exceptions.InvalidTargetException;
 import Exceptions.SpecialPowerMisMatchException;
 import Model.*;
 import View.BattleEnvironment;
@@ -36,7 +35,6 @@ public class BattleEnvironmentPresenter {
             throw e;
         }
         battle.selectWarrior(battle.getPlayers()[0], asset.getID());
-
     }
 
     public void attackPresenter(String opponentCardID) {
@@ -76,7 +74,7 @@ public class BattleEnvironmentPresenter {
     }
 
     public void insertCardPresenter(String cardName, int x, int y) {
-        battle.insertIn(battle.getPlayers()[0], cardName, x, y, battle.getBattleGround());
+        battle.insertCard(battle.getPlayers()[0], cardName, x, y);
     }
 
     public void endTurnPresenter() {

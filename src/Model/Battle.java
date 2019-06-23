@@ -20,8 +20,8 @@ public abstract class Battle {
     protected final int SECOND_PLAYER_WIN = 2;
     protected int endGameStatus = UNFINISHED_GAME;
     protected final int FIRST_LATE_TURN = 15;
-    protected final int MAX_MANA_IN_LATE_TURNS = 9;
-    protected final int NUMBER_OF_CARDS_IN_HAND = 5;
+    public static final int MAX_MANA_IN_LATE_TURNS = 9;
+    public static final int NUMBER_OF_CARDS_IN_HAND = 5;
     protected int turn;
     protected Account[] players = new Account[2];
     protected Deck[] playersDeck = new Deck[2];
@@ -97,10 +97,8 @@ public abstract class Battle {
 
 
     public void selectWarrior(Account player, int cardID) {
-        int playerIndex = 0;
+        int playerIndex = getPlayerIndex(player);
         Warrior warrior;
-        if (player == players[1])
-            playerIndex = 1;
         try {
             warrior = searchWarriorInBattleGround(cardID);
         } catch (AssetNotFoundException e) {
@@ -120,21 +118,17 @@ public abstract class Battle {
         if (pathLength > 2)
             throw new InvalidTargetException("Invalid target");
         else if (pathLength == 2) {
-            try{
+            try {
                 isValidCoordinates(x, y, warrior, playerIndex);
             }
             catch (InvalidTargetException e) {
                 throw e;
             }
         }
-        else if (battleGround.getGround().get(y).get(x) instanceof Flag) {
-            warrior.setCollectedFlag(((Flag) battleGround.getGround().get(y).get(x)));
-            battleGround.getGround().get(y).remove(x);
-        }
-        else if (battleGround.getGround().get(y).get(x) instanceof Item) {
-            playersDeck[playerIndex].getItems().add((Item) battleGround.getGround().get(y).get(x));
-            battleGround.getGround().get(y).remove(x);
-        }
+        else if (battleGround.getGround().get(y).get(x) instanceof Flag)
+            collectFlag(warrior, x, y);
+        else if (battleGround.getGround().get(y).get(x) instanceof Item)
+            collectItem(playersDeck[playerIndex], y, x);
         else if (battleGround.getGround().get(y).get(x) instanceof Card)
             throw new ThisCellFilledException();
         battleGround.getGround().get(playersSelectedCard[playerIndex].getYInGround()).set(playersSelectedCard[playerIndex].getXInGround(),null);
@@ -143,6 +137,16 @@ public abstract class Battle {
         if(playersSelectedCard[playerIndex] instanceof Warrior)
             ((Warrior)playersSelectedCard[playerIndex]).setMovedThisTurn(true);
         battleGround.getGround().get(y).set(x,playersSelectedCard[playerIndex]);
+    }
+
+    public void collectItem(Deck deck, int y, int x) {
+        deck.getItems().add((Item) battleGround.getGround().get(y).get(x));
+        battleGround.getGround().get(y).remove(x);
+    }
+
+    public void collectFlag(Warrior warrior, int flagX, int flagY) {
+        warrior.setCollectedFlag(((Flag) battleGround.getGround().get(flagY).get(flagX)));
+        battleGround.getGround().get(flagY).remove(flagX);
     }
 
 
@@ -300,7 +304,7 @@ public abstract class Battle {
         }
     }
 
-    public void insertIn(Account player, String cardName, int x, int y, BattleGround battleGround) {
+    public void insertCard(Account player, String cardName, int x, int y) {
         x--;
         y--;
         int playerIndex = getPlayerIndex(player);
@@ -732,7 +736,7 @@ public abstract class Battle {
         for (Card card : playersHand[playerIndex])
             if (cardID == card.getID())
                 return card;
-        throw new AssetNotFoundException("Card not found in the hand");
+        throw new AssetNotFoundException("Card not found in the handAndNextCard");
     }
 
     public boolean isValidCoordinates(int x, int y, Warrior warrior, int playerIndex) {

@@ -1,6 +1,8 @@
 package Model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import static Model.Warrior.State.*;
 
 public abstract class Warrior extends Card {
     private int range;
@@ -13,9 +15,13 @@ public abstract class Warrior extends Card {
     private int lifeTimeChangedAP = 0;
     private int amountOfChangedAP = 0;
     private AttackType attackType;
-    private ArrayList<BufferOfSpells> bufferEffected = new ArrayList<>();
     private Flag collectedFlag = null;
     private boolean isMovedThisTurn = false;
+    private HashMap<State, String> imageAddresses = new HashMap<>();
+
+    public enum State {
+        in_deck, attack, breathing, death, idle, run
+    }
 
     public Warrior() {
     }
@@ -26,14 +32,7 @@ public abstract class Warrior extends Card {
         this.HP = HP;
         this.range = range;
         this.attackType = attackType;
-    }
-
-    public ArrayList<BufferOfSpells> getBufferEffected() {
-        return bufferEffected;
-    }
-
-    public void setBufferEffected(ArrayList<BufferOfSpells> bufferEffected) {
-        this.bufferEffected = bufferEffected;
+        setImageAddresses(name);
     }
 
     public Flag getCollectedFlag() {
@@ -122,5 +121,23 @@ public abstract class Warrior extends Card {
 
     public void setMovedThisTurn(boolean movedThisTurn) {
         this.isMovedThisTurn = movedThisTurn;
+    }
+
+    public HashMap<State, String> getImageAddresses() {
+        return imageAddresses;
+    }
+
+    @Override
+    protected void setImageAddresses(String name) {
+        String subClass;
+        if (this instanceof Hero)
+            subClass = "hero";
+        else
+            subClass = "minion";
+        this.imageAddresses.put(in_deck, "file:images/cards/" + subClass + "/" + name + "/" + name + ".png");
+        for (State state : State.values()) {
+            if (state != in_deck)
+                this.imageAddresses.put(state, "file:images/cards/" + subClass + "/" + name + "/" + name + "_" + state.toString() + ".gif");
+        }
     }
 }

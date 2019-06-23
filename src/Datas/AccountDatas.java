@@ -1,5 +1,6 @@
 package Datas;
 
+import Exceptions.UserNotFoundException;
 import Model.Account;
 
 import java.util.ArrayList;
@@ -16,14 +17,13 @@ public class AccountDatas {
         return accounts;
     }
 
-    public Account SearchAccount(String username) {
+    public static Account searchAccount(String username) {
         for (Account account : accounts) {
             if (account.getName().compareTo(username) == 0) {
                 return account;
             }
         }
-
-        return null;
+        throw new UserNotFoundException("User not found.");
     }
 
     public void SetAccount() {

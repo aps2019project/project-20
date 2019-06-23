@@ -3,6 +3,9 @@ package Model;
 import Exceptions.AssetNotFoundException;
 
 import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Observable;
 
 public abstract class Asset implements Cloneable {
     private String name;
@@ -198,4 +201,6 @@ public abstract class Asset implements Cloneable {
     public void setYInGround(int yInGround) {
         this.yInGround = yInGround;
     }
+
+    protected abstract void setImageAddresses(String name);
 }

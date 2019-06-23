@@ -22,7 +22,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Random;
 import java.util.stream.IntStream;
@@ -53,7 +52,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         //loadPageInNewStage(null, "FXML/FirstPage.fxml");
-        loadPageInNewStage(null, "FXML/MainMenu.fxml");
+        loadPageInNewStage(null, "FXML/BattleGround.fxml");
     }
 
     public static void loadPageInNewStage(Scene prevScene, String FXMLAddress) throws IOException {
@@ -66,7 +65,7 @@ public class Main extends Application {
         Stage stage = new Stage();
         AnchorPane root = FXMLLoader.load(Main.class.getResource(FXMLAddress));
         ImageView imageView = new ImageView();
-        imageView.setImage(new Image("file:images/codex/chapter" + (new Random().nextInt(24) + 1) + "_background@2x.jpg"));
+        imageView.setImage(new Image("file:images/maps/battlemap6_middleground.png"));
         imageView.setLayoutX(0);imageView.setLayoutY(0);imageView.setFitHeight(1080);imageView.setFitWidth(1930);
         stackPane.getChildren().addAll(imageView,root);
 
@@ -79,7 +78,7 @@ public class Main extends Application {
         stage.setFullScreen(true);
         stage.show();
 
-        new SlideShowController().start();
+//        new SlideShowController().start();
     }
 
     public static void loadPageOnStackPane(Scene prevScene, String FXMLAddress, String type) throws IOException {

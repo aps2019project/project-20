@@ -7,7 +7,6 @@ public class Hero extends Warrior{
 
     public Hero(String name, int price, int ID, int range, int AP, int HP, boolean doesHaveAction, AttackType attackType) {
         super(name, name, price, ID, AP, HP,0, range,  doesHaveAction,attackType);
-
     }
 
     public Hero(String name, int price, int ID, int range, int AP, int HP, int MP, int coolDown, AttackType attackType) {

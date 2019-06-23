@@ -61,4 +61,9 @@ public class Flag extends Asset {
     public void setKeptDuration(int keptDuration) {
         this.keptDuration = keptDuration;
     }
+
+    @Override
+    protected void setImageAddresses(String name) {
+        //TODO must be implemented.
+    }
 }

@@ -1,10 +1,5 @@
 package Model;
 
-import Exceptions.AssetNotFoundException;
-import Exceptions.DontHaveEnoughManaException;
-import Exceptions.InvalidInsertInBattleGroundException;
-import Exceptions.ThisCellFilledException;
-
 import java.util.*;
 
 import static Model.Minion.ActivateTimeOfSpecialPower.*;
@@ -161,7 +156,7 @@ public class AI extends Account {
     }
 
     public void AIUseSpecialPower(Battle battle) {
-        // battle.applySpecialPower(this, makeRandomNumber(BattleGround.getRows()), makeRandomNumber(BattleGround.getColumns()));
+        // battle.applySpecialPower(this, makeRandomNumber(Controller.BattleGroundController.getRows()), makeRandomNumber(Controller.BattleGroundController.getColumns()));
     }
 
     public void AIComboAttack(Account player, Battle battle) {
@@ -241,8 +236,8 @@ public class AI extends Account {
         Card[] AIHand = battle.getPlayersHand()[1];
 
         Card insertedCard = AIHand[makeRandomNumber(battle.getNUMBER_OF_CARDS_IN_HAND()) - 1];
-        battle.insertIn(this, insertedCard.getName(), makeRandomNumber(BattleGround.getColumns())
-                , makeRandomNumber(BattleGround.getRows()), battle.getBattleGround());
+        battle.insertCard(this, insertedCard.getName(), makeRandomNumber(BattleGround.getColumns())
+                , makeRandomNumber(BattleGround.getRows()));
         battle.selectWarrior(this, insertedCard.getID());
 
     }

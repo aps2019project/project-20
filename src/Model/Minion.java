@@ -12,7 +12,7 @@ public class Minion extends Warrior{
     }
 
     public Minion(String name, String desc, int price, int ID, int range, int AP, int HP, int MP, AttackType attackType, ActivateTimeOfSpecialPower activateTimeOfSpecialPower) {
-        super(name, desc, price, ID, AP, HP, MP, range, true,attackType);
+        super(name, desc, price, ID, AP, HP, MP, range, true, attackType);
         this.activateTimeOfSpecialPower=activateTimeOfSpecialPower;
     }
 
