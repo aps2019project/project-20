@@ -179,7 +179,7 @@ public class AIController implements Initializable {
             battle.endTurn(ai);
         }
     }
-    
+
     public void AIUseSpecialPower(Battle battle) {
         battle.applySpecialPower(ai.getMainDeck().getHero(),(Warrior) ai.findPlayerMinion(battle.getPlayers()[1],battle), Minion.ActivateTimeOfSpecialPower.ON_ATTACK);
         showSpecialPowerAnimation();
