@@ -10,6 +10,7 @@ public class Flag extends Asset {
     public Flag(){
     }
 
+
     public Flag(int xInGround,int yInGround){
         this.xInGround = xInGround;
         this.yInGround = yInGround;

@@ -780,7 +780,7 @@ public abstract class Battle {
         int reward;
         switch (levelNumber) {
             case 1:
-                AIDeck = new Deck(ai, DeckDatas.getEnemyDeckInStoryGameLevel1().getName(), DeckDatas.getEnemyDeckInStoryGameLevel1().getHero(), DeckDatas.getEnemyDeckInStoryGameLevel1().getItems(), DeckDatas.getEnemyDeckInStoryGameLevel1().getCards());
+                AIDeck = new Deck(ai, "enemyDeckInStoryGameLevel1");
                 battleMode = Battle.Mode.NORMAL;
                 reward = STORY_REWARD_L1;
                 return new KillHeroBattle
@@ -791,7 +791,7 @@ public abstract class Battle {
                                 AIDeck,
                                 new BattleGround(), reward);
             case 2:
-                AIDeck = new Deck(ai, DeckDatas.getEnemyDeckInStoryGameLevel2().getName(), DeckDatas.getEnemyDeckInStoryGameLevel2().getHero(), DeckDatas.getEnemyDeckInStoryGameLevel2().getItems(), DeckDatas.getEnemyDeckInStoryGameLevel2().getCards());
+                AIDeck = new Deck(ai, "enemyDeckInStoryGameLevel2");
                 battleMode = Battle.Mode.FLAG_KEEPING;
                 reward = STORY_REWARD_L2;
                 return new KeepFlagBattle
@@ -802,7 +802,7 @@ public abstract class Battle {
                                 AIDeck,
                                 new BattleGround(), reward);
             case 3:
-                AIDeck = new Deck(ai, DeckDatas.getEnemyDeckInStoryGameLevel3().getName(), DeckDatas.getEnemyDeckInStoryGameLevel3().getHero(), DeckDatas.getEnemyDeckInStoryGameLevel3().getItems(), DeckDatas.getEnemyDeckInStoryGameLevel3().getCards());
+                AIDeck = new Deck(ai, "enemyDeckInStoryGameLevel3");
                 battleMode = Battle.Mode.FLAG_COLLECTING;
                 reward = STORY_REWARD_L3;
                 return new CollectFlagBattle
@@ -819,7 +819,7 @@ public abstract class Battle {
     public static Battle soloCustomKillHeroModeConstructor(String heroName) {
         Hero customHero = Hero.searchHeroForCustomGame(heroName);
         AI ai = new AI("AI", "1234");
-        Deck AIDeck = new Deck(ai, DeckDatas.getDefaultDeck().getName(), customHero, DeckDatas.getDefaultDeck().getItems(), DeckDatas.getDefaultDeck().getCards());
+        Deck AIDeck = new Deck(ai, "defaultDeck");
         Battle.Mode battleMode = Battle.Mode.NORMAL;
         int reward = CUSTOM_REWARD;
         return new KillHeroBattle
@@ -833,7 +833,7 @@ public abstract class Battle {
 
     public static Battle soloCustomFlagModeConstructor(int numberOfFlags) {
         AI ai = new AI("AI", "1234");
-        Deck AIDeck = new Deck(ai, DeckDatas.getDefaultDeck().getName(), DeckDatas.getDefaultDeck().getHero(), DeckDatas.getDefaultDeck().getItems(), DeckDatas.getDefaultDeck().getCards());
+        Deck AIDeck = new Deck(ai, "defaultDeck");
         Battle.Mode battleMode;
         int reward = CUSTOM_REWARD;
         if (numberOfFlags == 0) {

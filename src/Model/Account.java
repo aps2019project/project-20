@@ -5,7 +5,6 @@
 //do the changes affect the card in the shop and other places or not.
 package Model;
 
-import Datas.AccountDatas;
 import Datas.DeckDatas;
 import Exceptions.RepeatedUserNameException;
 import Exceptions.UserNotFoundException;
@@ -60,8 +59,7 @@ public class Account implements Comparable<Account> {
     public Account(String userName, String password) {
         this.Name = userName;
         this.password = password;
-        AccountDatas.getAccounts().add(this);
-        this.setMainDeck(new Deck(this, "defaultDeck", DeckDatas.getDefaultDeck().getHero(), DeckDatas.getDefaultDeck().getItems(), DeckDatas.getDefaultDeck().getCards()));
+        this.setMainDeck(new Deck(this, "defaultDeck"));
         this.collection.setAssetsOfCollectionFromADeck(mainDeck);
         decks.add(mainDeck);
     }
@@ -104,7 +102,14 @@ public class Account implements Comparable<Account> {
 
     @Override
     public int compareTo(Account account) {
-        return this.numberOfWins - account.numberOfWins;
+        if(this.numberOfWins - account.numberOfWins!=0) {
+            return this.numberOfWins - account.numberOfWins;
+        }else
+            if(this.numberOfLoses - account.numberOfLoses!=0) {
+            return -(this.numberOfLoses - account.numberOfLoses);
+        }else {
+            return this.getName().compareTo(account.getName());
+        }
     }
 
     public static Account createAccount(String userName, String password) throws IOException {
@@ -121,7 +126,7 @@ public class Account implements Comparable<Account> {
     }
 
     public static void deleteAccount(Account account) {
-        AccountDatas.getAccounts().remove(account);
+        //AccountDatas.getAccounts().remove(account);
     }
 
     public static Account login(String userName, String password) {

@@ -1,5 +1,6 @@
 package Controller;
 
+import Presenter.Animationable;
 import View.Main;
 import javafx.animation.FadeTransition;
 import javafx.scene.image.Image;
@@ -8,7 +9,7 @@ import javafx.util.Duration;
 
 import java.util.Random;
 
-public class SlideShowThread extends Thread {
+public class SlideShowThread extends Thread implements Animationable {
     private ImageView imageView = Main.getStackPaneBackGroundImage();
 
 
@@ -23,17 +24,9 @@ public class SlideShowThread extends Thread {
 
     @Override
     public void run() {
-        FadeTransition fadeInTransition = new FadeTransition();
-        fadeInTransition.setDuration(new Duration(1000));
-        FadeTransition fadeOutTransition = new FadeTransition();
-        fadeOutTransition.setDuration(new Duration(1000));
-        fadeInTransition.setNode(Main.getStackPaneBackGroundImage());
-        fadeOutTransition.setNode(Main.getStackPaneBackGroundImage());
-        fadeInTransition.setFromValue(1);
-        fadeInTransition.setToValue(0);
-        fadeOutTransition.setFromValue(0);
-        fadeOutTransition.setToValue(1);
-
+        this.setDaemon(true);
+        FadeTransition fadeInTransition = nodeFadeAnimation(Main.getStackPaneBackGroundImage(),1000,1,0);
+        FadeTransition fadeOutTransition = nodeFadeAnimation(Main.getStackPaneBackGroundImage(),1000,0,1);
 
         try {
             Thread.sleep(5000);

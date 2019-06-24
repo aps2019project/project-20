@@ -55,6 +55,31 @@ public interface DialogThrowable extends ScreenManager {
         dialogLayout.setActions(button);
         dialog.show();
     }
+
+    default JFXButton confirmationDialog(String title , String body){
+        JFXDialogLayout dialogLayout = new JFXDialogLayout();
+        dialogLayout.setPrefHeight(60);
+        Text header = new Text(title);
+        header.setStyle("-fx-text-fill: #ff0000;  -fx-font-family: 'Microsoft Tai Le'; -fx-font-weight:bold ;");
+        dialogLayout.setHeading(header);
+        Text footer = new Text(body);
+        footer.setStyle("-fx-text-fill: #000000;  -fx-font-family: 'Microsoft Tai Le'; -fx-font-weight:bold ;");
+        dialogLayout.setBody(footer);
+        dialogLayout.setStyle("-fx-background-color: #acf5ff; -fx-text-fill: #ffffff");
+        JFXDialog dialog = new JFXDialog(Main.getStackPane(), dialogLayout, JFXDialog.DialogTransition.CENTER, true);
+        JFXButton yesButton = new JFXButton("yes");
+        yesButton.setButtonType(JFXButton.ButtonType.RAISED);
+        yesButton.setStyle("-fx-background-color: #37b400; -fx-text-fill: #ffffff; -fx-font-family: 'Microsoft Tai Le'; -fx-font-weight:bold ;");
+        yesButton.setOnMouseReleased(event -> dialog.close());
+        JFXButton noButton = new JFXButton("no");
+        noButton.setButtonType(JFXButton.ButtonType.RAISED);
+        noButton.setStyle("-fx-background-color: #ff0000; -fx-text-fill: #ffffff; -fx-font-family: 'Microsoft Tai Le'; -fx-font-weight:bold ;");
+        noButton.setOnAction(event -> dialog.close());
+        dialog.setOnDialogClosed(event -> Main.getStackPane().getChildren().remove(dialog));
+        dialogLayout.setActions(yesButton,noButton);
+        dialog.show();
+        return yesButton;
+    }
 }
 
 

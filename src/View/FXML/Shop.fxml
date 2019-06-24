@@ -11,10 +11,8 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
@@ -22,7 +20,7 @@
     <children>
         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#8b8d8f" height="956.0" layoutX="162.0" layoutY="94.0" opacity="0.69" stroke="BLACK" strokeType="INSIDE" style="-fx-stroke-width: 3;" width="1634.0" AnchorPane.bottomAnchor="41.0" AnchorPane.leftAnchor="162.0" AnchorPane.rightAnchor="62.0" AnchorPane.topAnchor="94.0" />
         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#797e83" height="791.0" layoutX="324.0" layoutY="209.0" stroke="#17f1f5" strokeType="INSIDE" strokeWidth="3.0" width="804.0" />
-        <ImageView fx:id="back" fitHeight="97.0" fitWidth="101.0" layoutX="162.0" layoutY="94.0" onMouseEntered="#setBackButtonOnMouseEntered" onMouseExited="#setBackButtonOnMouseExited" onMousePressed="#setBackButtonOnMousePressed" onMouseReleased="#setBackButtonOnMouseReleased" pickOnBounds="true" preserveRatio="true">
+        <ImageView fx:id="back" fitHeight="97.0" fitWidth="101.0" layoutX="165.0" layoutY="97.0" onMouseEntered="#setBackButtonOnMouseEntered" onMouseExited="#setBackButtonOnMouseExited" onMousePressed="#setBackButtonOnMousePressed" onMouseReleased="#setBackButtonOnMouseReleased" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="file:images/button_back_corner.png" />
             </image>
@@ -52,7 +50,7 @@
                         <Image url="file:images/frame_quest_challenge@2x.png" />
                     </image>
                 </ImageView>
-                <ImageView fx:id="cardImage" fitHeight="428.0" fitWidth="293.0" layoutX="64.0" layoutY="159.0" pickOnBounds="true" rotate="180.0">
+                <ImageView fx:id="cardImage" fitHeight="490.0" fitWidth="345.0" layoutX="50.0" layoutY="120.0" pickOnBounds="true" rotate="180.0">
                     <image>
                         <Image url="file:images/card_glow_line.png" />
                     </image>
@@ -62,7 +60,7 @@
                         <Image url="file:images/diamond_main_menu_container@2x.png" />
                     </image>
                 </ImageView>
-                <ImageView fx:id="actionButton" fitHeight="82.0" fitWidth="271.0" layoutX="61.0" layoutY="69.0" onMouseMoved="#setActionButtonOnMouseMoved" onMouseExited="#setActionButtonOnMouseExited" onMousePressed="#setActionButtonOnMousePressed"  onMouseReleased="#setActionButtonOnMouseMoved" pickOnBounds="true" rotate="180.0">
+                <ImageView fx:id="actionButton" fitHeight="82.0" fitWidth="271.0" layoutX="61.0" layoutY="69.0" onMouseClicked="#setActionButtonOnMouseReleased" onMouseExited="#setActionButtonOnMouseExited" onMouseMoved="#setActionButtonOnMouseMoved" onMousePressed="#setActionButtonOnMousePressed" onMouseReleased="#setActionButtonOnMouseMoved" pickOnBounds="true" rotate="180.0">
                     <image>
                         <Image url="file:images/default_action_button.png" />
                     </image>
@@ -88,23 +86,13 @@
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="710.0" prefWidth="1307.0">
                             <children>
-                                <ScrollPane hbarPolicy="NEVER" layoutY="52.0" prefHeight="708.0" prefWidth="790.0" style="-fx-background-color: -fx-primary; -fx-stroke-width: 5;">
+                                <ScrollPane fx:id="buyScrollPane" fitToHeight="true" hbarPolicy="NEVER" layoutY="52.0" prefHeight="708.0" prefWidth="790.0" style="-fx-background-color: #797E83; -fx-stroke-width: 5;">
                                     <content>
-                                        <GridPane fx:id="shopCollection" prefHeight="685.0" prefWidth="789.0" style="-fx-background-color: -fx-primary;">
-                                            <columnConstraints>
-                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                            </columnConstraints>
-                                            <rowConstraints>
-                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                            </rowConstraints>
-                                        </GridPane>
+                                        <FlowPane fx:id="buyFlowPane" alignment="CENTER" prefHeight="708.0" prefWidth="780.0"  style="-fx-background-color: #797E83;">
+                                        </FlowPane>
                                     </content>
                                 </ScrollPane>
-                                <JFXTextField fx:id="buySearchField" alignment="CENTER" focusColor="#67f0f5" labelFloat="true" layoutX="521.0" layoutY="14.0" prefHeight="26.0" prefWidth="244.0" promptText="Search" style="-fx-text-fill: #ffffff; -fx-prompt-text-fill: #ffffff;" unFocusColor="WHITE">
+                                <JFXTextField fx:id="buySearchField" alignment="CENTER" focusColor="#67f0f5" labelFloat="true" layoutX="521.0" layoutY="11.0" prefHeight="26.0" prefWidth="244.0" promptText="Search" style="-fx-text-fill: #ffffff; -fx-prompt-text-fill: #ffffff;" unFocusColor="WHITE">
                                     <font>
                                         <Font name="Droid Serif" size="15.0" />
                                     </font>
@@ -117,20 +105,10 @@
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="710.0" prefWidth="1307.0">
                             <children>
-                                <ScrollPane hbarPolicy="NEVER" layoutY="52.0" prefHeight="708.0" prefWidth="790.0" style="-fx-background-color: -fx-primary; -fx-stroke-width: 5;">
+                                <ScrollPane fx:id="sellScrollPane" fitToHeight="true" hbarPolicy="NEVER" layoutY="52.0" prefHeight="708.0" prefWidth="790.0" style="-fx-background-color: #797E83; -fx-stroke-width: 5;">
                                     <content>
-                                        <GridPane fx:id="accountCollection" prefHeight="685.0" prefWidth="789.0" style="-fx-background-color: -fx-primary;">
-                                            <columnConstraints>
-                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                            </columnConstraints>
-                                            <rowConstraints>
-                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                            </rowConstraints>
-                                        </GridPane>
+                                        <FlowPane fx:id="sellFlowPane" prefHeight="708.0" prefWidth="780.0" style="-fx-background-color: #797E83;">
+                                        </FlowPane>
                                     </content>
                                 </ScrollPane>
                                 <JFXTextField fx:id="sellSearchField" alignment="CENTER" focusColor="#67f0f5" labelFloat="true" layoutX="521.0" layoutY="14.0" prefHeight="26.0" prefWidth="244.0" promptText="Search" style="-fx-text-fill: #ffffff; -fx-prompt-text-fill: #ffffff;" unFocusColor="WHITE">

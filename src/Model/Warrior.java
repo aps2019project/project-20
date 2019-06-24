@@ -16,8 +16,6 @@ public class Warrior extends Card {
     private Flag collectedFlag = null;
     private boolean isMovedThisTurn = false;
 
-    public Warrior() {
-    }
 
     public Warrior(String name, String desc, int price, int ID, int AP, int HP, int MP, int range, boolean doesHaveAction, AttackType attackType) {
         super(name, desc, price, ID, MP, doesHaveAction);
@@ -114,4 +112,5 @@ public class Warrior extends Card {
     public void setMovedThisTurn(boolean movedThisTurn) {
         this.isMovedThisTurn = movedThisTurn;
     }
+
 }

@@ -1,7 +1,6 @@
 package View;
 
-import Datas.AccountDatas;
-import Model.Shop;
+import Model.*;
 import Presenter.ScreenManager;
 import javafx.application.Application;
 import javafx.scene.Node;
@@ -10,24 +9,15 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
 public class Main extends Application implements ScreenManager {
 
-    private static AccountDatas accountDatas = new AccountDatas();
     private static Shop shop = new Shop();
     private static StackPane stackPane = new StackPane();
 
-    public static void main(String[] args) {
+    public static void main(String[] args){ launch(args); }
 
-        accountDatas.SetAccount();
-        shop.fillShopData();
-
-        launch(args);
-
-    }
-
-    public static AccountDatas getAccountDatas() {
-        return accountDatas;
-    }
 
     public static Shop getShop() {
         return shop;

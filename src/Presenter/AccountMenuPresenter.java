@@ -1,6 +1,5 @@
 package Presenter;
 
-import Datas.AccountDatas;
 import Exceptions.InvalidSelectMainDeckException;
 import Model.Account;
 import Model.Deck;
@@ -12,7 +11,7 @@ public class AccountMenuPresenter {
 
 
     public void showLeaderBoardPresenter() {
-         Account.sortAccounts(AccountDatas.getAccounts());
+         //Account.sortAccounts(AccountDatas.getAccounts());
     }
 
     public ArrayList<MatchHistory> showMatchHistoryPresenter(){

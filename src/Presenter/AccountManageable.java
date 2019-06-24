@@ -1,10 +1,11 @@
 package Presenter;
-import Exceptions.RepeatedUserNameException;
-import Exceptions.UserNotFoundException;
-import Exceptions.WrongPasswordException;
+import Exceptions.*;
 import Model.Account;
+import Model.Asset;
+import Model.Shop;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public interface AccountManageable {
 
@@ -53,5 +54,28 @@ public interface AccountManageable {
     default void logout(){
         CurrentAccount.setCurrentAccount(null);
     }
+
+    default void sell(Asset sellingAsset) {
+            Shop.sell(CurrentAccount.getCurrentAccount(),sellingAsset);
+    }
+
+    default void buy(Asset buyingAsset) throws InsufficientMoneyInBuyFromShopException, MaximumNumberOfItemsInBuyException {
+        Shop.buy(getCurrentAccount(),buyingAsset);
+    }
+
+    default Account getCurrentAccount(){
+        return CurrentAccount.getCurrentAccount();
+    }
+
+    default ArrayList<Asset> getAllAssets(){
+        try {
+            return Asset.getAssetsFromFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
 
 }

@@ -59,6 +59,10 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
         description.setText("\n                Welcome");
     }
 
+    public void setShopButtonReleased() throws IOException {
+        loadPageOnStackPane(anchorPane, "FXML/Shop.fxml", "rtl");
+    }
+
     public void setShopButtonPressed() {
         shop.setImage(new Image("file:images/pressed_shop_button.png"));
     }

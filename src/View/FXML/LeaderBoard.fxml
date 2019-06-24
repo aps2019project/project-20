@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXTreeTableView?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TreeTableView?>
 <?import javafx.scene.effect.ColorAdjust?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -27,9 +28,12 @@
                 <Font name="Javanese Text" size="43.0" />
             </font>
         </Label>
-        <JFXTreeTableView fx:id="leaderTable" editable="true" fixedCellSize="3.0" layoutX="402.0" layoutY="215.0" prefHeight="662.0" prefWidth="1217.0" style="-fx-background-color: #8b8d8f;">
+        <JFXTreeTableView fx:id="leaderTable" fixedCellSize="3.0" layoutX="402.0" layoutY="215.0" prefHeight="662.0" prefWidth="1217.0" showRoot="false" style="-fx-background-color: #8b8d8f;">
          <effect>
             <ColorAdjust contrast="1.0" />
-         </effect></JFXTreeTableView>
+         </effect>
+         <columnResizePolicy>
+            <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy></JFXTreeTableView>
     </children>
 </AnchorPane>

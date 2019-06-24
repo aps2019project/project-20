@@ -36,7 +36,7 @@ public interface ScreenManager extends Animationable {
             Main.getStackPane().getChildren().add(imageView);
             SlideShowThread slideShower = new SlideShowThread();
             stage.setOnCloseRequest(event -> slideShower.finalize());
-            slideShower.start();
+          //  slideShower.start();
         }
         Main.getStackPane().getChildren().add(root);
         JFXDecorator jfxDecorator = new JFXDecorator(stage, Main.getStackPane());
