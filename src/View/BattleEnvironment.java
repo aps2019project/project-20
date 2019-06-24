@@ -528,7 +528,7 @@ public class BattleEnvironment {
         System.out.println("1.Select An Card In Ground");
         System.out.println("2.Select An Item From Your Items");
         System.out.println("3.Attack Combo");
-        System.out.println("4.Show handAndNextCard");
+        System.out.println("4.Show handAndNextCardGrid");
         System.out.println("5.Show Next Card");
         System.out.println("6.Show My Minions");
         System.out.println("7.Show Opponent Minions");

@@ -51,37 +51,11 @@ public class AIController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-//todo how to enter ai to game?
-        CurrentAccount.setCurrentAccount(Account.createAccount("AI", "1234"));
-        GameMenuPresenter gameMenuPresenter = new GameMenuPresenter();
-        battle = gameMenuPresenter.prepareForSingleGame(1, null);
-
-//        System.out.println(battle.getPlayers()[1]);
-//        System.out.println(battle.getBattleGround().getGround().get(2).get(8).getOwner());
-//        selectedCardBackground = new ImageView(new Image("file:images/card_background_highlight.png"));
-//        selectedCardFromHandBackground = new ImageView(new Image("file:images/card_background_replaced.png"));
-//        errorImage = new Image("file:images/notification_quest_small.png");
-
-//        initializeCardBackground(selectedCardBackground);
-//        initializeCardBackground(selectedCardFromHandBackground);
-//        initializeProfilePics();
-//        initializeManaGemImages();
-//        initializeGround();
-//        initializeHandImages();
-//        Button button = new Button();
-//        mainStackPane.getChildren().add(button);
-//        TranslateTransition translateTransition = new TranslateTransition();
-//        translateTransition.setNode(button);
-//        translateTransition.setFromX(100);
-//        translateTransition.setFromY(100);
-//        translateTransition.setToX(300);
-//        translateTransition.setToY(300);
-//        translateTransition.setDuration(new Duration(1000));
-//        translateTransition.setCycleCount(5);
-//        translateTransition.play();
     }
 
-    public void handleAIEvent(Account player, Battle battle) {
+    public void handleAIEvent(Battle battle) {
+        this.battle = battle;
+        Account player = battle.getPlayers()[0];
         int i = makeRandomNumber(BattleGround.getColumns());
         int j = makeRandomNumber(BattleGround.getRows());
         try {
@@ -91,16 +65,14 @@ public class AIController implements Initializable {
 
                     int event1 = makeRandomNumber(3);
                     switch (event1) {
-                        case 1:  //insert card
+                        case 1:
                             insertAICard(battle, i, j);
                             break;
                         case 2:
-                            //select card
 
                             selectAICard(battle, i, j);
                             break;
                         case 3:
-                            //move card
 
                             moveAICard(battle, i, j);
                             break;
@@ -110,17 +82,14 @@ public class AIController implements Initializable {
                     event1 = makeRandomNumber(3);
                     switch (event1) {
                         case 1:
-                            //attack
 
                             AIAttackWarriors(player, battle);
                             break;
                         case 2:
-                            //combo attack
 
                             AIComboAttack(player, battle);
                             break;
                         case 3:
-                            //use special power
 
                             AIUseSpecialPower(battle);
                             break;
@@ -134,18 +103,15 @@ public class AIController implements Initializable {
 
                     switch (event2) {
                         case 1:
-                            //attack
 
                             AIAttackWarriors(player, battle);
                             break;
 
                         case 2:
-                            //insert card
 
                             insertAICard(battle, i, j);
                             break;
                         case 3:
-                            //select card
 
                             selectAICard(battle, i, j);
                             break;
@@ -154,19 +120,16 @@ public class AIController implements Initializable {
                     event2 = makeRandomNumber(3);
                     switch (event2) {
                         case 1:
-                            //use special power
 
                             AIUseSpecialPower(battle);
                             break;
 
                         case 2:
-                            //move card
 
                             moveAICard(battle, i, j);
                             break;
 
                         case 3:
-                            //combo attack
 
                             AIComboAttack(player, battle);
                             break;
@@ -180,17 +143,14 @@ public class AIController implements Initializable {
 
                     switch (event3) {
                         case 1:
-                            //insert card
 
                             insertAICard(battle, i, j);
                             break;
                         case 2:
-                            //attack
 
                             AIAttackPlayerHero(player, battle);
                             break;
                         case 3:
-                            //use special power
 
                             AIUseSpecialPower(battle);
                             break;
@@ -199,17 +159,14 @@ public class AIController implements Initializable {
                     event3 = makeRandomNumber(3);
                     switch (event3) {
                         case 1:
-                            //select card
 
                             selectAICard(battle, i, j);
                             break;
                         case 2:
-                            //combo attack
 
                             AIComboAttack(player, battle);
                             break;
                         case 3:
-                            //move card
 
                             moveAICard(battle, i, j);
                             break;
@@ -284,7 +241,6 @@ public class AIController implements Initializable {
         Asset attacker;
         attacker = findAttacker(battle);
         Asset playerCard = findPlayerMinion(player, battle);
-//        battle.attack(ai, (Warrior) attacker, (Warrior) playerCard);
         try {
             battle.attack(ai,(Warrior) attacker, (Warrior) playerCard);
             showAttackAnimation((Warrior) attacker, attacker.getXInGround(), attacker.getYInGround());

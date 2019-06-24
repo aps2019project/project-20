@@ -735,7 +735,7 @@ public abstract class Battle {
         for (Card card : playersHand[playerIndex])
             if (cardID == card.getID())
                 return card;
-        throw new AssetNotFoundException("Card not found in the handAndNextCard");
+        throw new AssetNotFoundException("Card not found in the handAndNextCardGrid");
     }
 
     public boolean isValidCoordinates(int x, int y, Warrior warrior, int playerIndex) {

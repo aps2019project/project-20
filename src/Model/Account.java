@@ -1,6 +1,6 @@
 //Vital Note:
 // For example when we add a card from shop to an account's collection via buy method, I don't know if the reference to
-//the card in the singleton designed shop and in account's collection and in its handAndNextCard and in its mainDeck is the same
+//the card in the singleton designed shop and in account's collection and in its handAndNextCardGrid and in its mainDeck is the same
 //or not. And also I don't know if they are the same and some changes are made to the card, for example in a battle,
 //do the changes affect the card in the shop and other places or not.
 package Model;
