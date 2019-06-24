@@ -191,29 +191,26 @@ public class BattleGroundController implements Initializable {
     }
 
     private void setGroundCellOnClickEvent(ImageView imageView, Asset asset, int i, int j) {
-        imageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                if (asset instanceof Warrior) {
-                    if (asset.getOwner() == battle.getPlayers()[0])
-                        selectCardInGround(asset, i, j);
-                    else if (asset.getOwner() == battle.getPlayers()[1] && selectedCardCoordinates[0] > -1)
-                        attack((Warrior) asset, i, j);
-                }
-                else {
-                    if (selectedCardCoordinates[0] == -1) {
-                        if (battle.getPlayersHand()[0][selectedCardCoordinates[1]] instanceof Warrior) {
-                            Warrior picker = (Warrior) battle.getPlayersHand()[0][selectedCardCoordinates[1]];
-                            if (asset instanceof Flag)
-                                battle.collectFlag(picker, j, i);
-                            else if (asset instanceof Item)
-                                battle.collectItem(battle.getPlayersDeck()[0], j, i);
-                        }
-                        insertCard(i, j);
+        imageView.setOnMouseClicked(event -> {
+            if (asset instanceof Warrior) {
+                if (asset.getOwner() == battle.getPlayers()[0])
+                    selectCardInGround(asset, i, j);
+                else if (asset.getOwner() == battle.getPlayers()[1] && selectedCardCoordinates[0] > -1)
+                    attack((Warrior) asset, i, j);
+            }
+            else {
+                if (selectedCardCoordinates[0] == -1) {
+                    if (battle.getPlayersHand()[0][selectedCardCoordinates[1]] instanceof Warrior) {
+                        Warrior picker = (Warrior) battle.getPlayersHand()[0][selectedCardCoordinates[1]];
+                        if (asset instanceof Flag)
+                            battle.collectFlag(picker, j, i);
+                        else if (asset instanceof Item)
+                            battle.collectItem(battle.getPlayersDeck()[0], j, i);
                     }
-                    else if (selectedCardCoordinates[0] > -1)
-                        moveCard(i, j);
+                    insertCard(i, j);
                 }
+                else if (selectedCardCoordinates[0] > -1)
+                    moveCard(i, j);
             }
         });
     }
@@ -312,19 +309,16 @@ public class BattleGroundController implements Initializable {
     }
 
     private void handleError(RuntimeException e) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                errorBar.setImage(errorImage);
-                errorMessage.setText(getErrorMessage(e));
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                errorBar.setImage(null);
-                errorMessage.setText(null);
+        new Thread(() -> {
+            errorBar.setImage(errorImage);
+            errorMessage.setText(getErrorMessage(e));
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
             }
+            errorBar.setImage(null);
+            errorMessage.setText(null);
         }).start();
     }
 
