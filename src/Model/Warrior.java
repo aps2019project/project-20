@@ -20,7 +20,7 @@ public abstract class Warrior extends Card {
     private HashMap<State, String> imageAddresses = new HashMap<>();
 
     public enum State {
-        in_deck, attack, breathing, death, idle, run
+        in_deck, attack, breathing, death, idle, run , castLoop
     }
 
     public Warrior() {
