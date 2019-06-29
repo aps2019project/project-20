@@ -1,14 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.effect.ColorAdjust?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="Controller.MatchHistoryController"
-            prefHeight="400.0" prefWidth="600.0">
-
+<AnchorPane fx:id="anchorPane" layoutX="0" prefHeight="1091.0" prefWidth="1858.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.MatchHistoryController">
+    <children>
+        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#8b8d8f" height="908.0" layoutX="162.0" layoutY="94.0" opacity="0.69" stroke="BLACK" strokeType="INSIDE" style="-fx-stroke-width: 3;" width="1634.0" AnchorPane.bottomAnchor="89.0" AnchorPane.leftAnchor="162.0" AnchorPane.rightAnchor="62.0" AnchorPane.topAnchor="94.0" />
+        <ImageView fx:id="back" fitHeight="152.0" fitWidth="162.0" layoutX="162.0" layoutY="94.0" onMouseEntered="#setBackButtonOnMouseEntered" onMouseExited="#setBackButtonOnMouseExited" onMousePressed="#setBackButtonOnMousePressed" onMouseReleased="#setBackButtonOnMouseReleased" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="file:images/button_back_corner.png" />
+            </image>
+        </ImageView>
+        <ImageView fitHeight="124.0" fitWidth="468.0" layoutX="789.0" layoutY="32.0" pickOnBounds="true">
+            <image>
+                <Image url="file:images/gauntlet_control_bar_bg.png" />
+            </image>
+        </ImageView>
+        <Label accessibleRole="PARENT" alignment="CENTER" graphicTextGap="3.0" layoutX="840.0" layoutY="34.0" prefHeight="119.0" prefWidth="366.0" text="MATCH  HISTORY" textFill="WHITE">
+            <font>
+                <Font name="Javanese Text" size="43.0" />
+            </font>
+        </Label>
+        <TableView fx:id="leaderTable" layoutX="402.0" stylesheets="../CSS/Screens.css" layoutY="215.0" prefHeight="662.0" prefWidth="1217.0" style="-fx-background-color: #8b8d8f;">
+            <effect>
+                <ColorAdjust contrast="1.0" />
+            </effect>
+            <columns>
+                <TableColumn fx:id="numberCol" editable="false" prefWidth="150.0" text="Number" />
+                <TableColumn fx:id="opponentNameCol" editable="false" prefWidth="670.0" text="Opponent Name" />
+                <TableColumn fx:id="timeCol" editable="false" prefWidth="200.0" text="Time" />
+                <TableColumn fx:id="resultCol" editable="false" prefWidth="200.0" text="Status" />
+            </columns>
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+            </columnResizePolicy>
+        </TableView>
+    </children>
 </AnchorPane>

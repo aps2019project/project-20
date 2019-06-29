@@ -3,20 +3,23 @@ package Model;
 import Datas.AssetDatas;
 import Exceptions.AssetNotFoundException;
 import Presenter.ImageComparable;
+import Presenter.JsonDeserializerWithInheritance;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonWriter;
 import javafx.scene.image.Image;
 
 import javax.swing.text.html.ImageView;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Reader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class Asset implements ImageComparable{
+public class Asset implements ImageComparable {
+    @SerializedName("type")
+    private String typeName = getClass().getName();
+
     private String name;
     private String desc;
     private int price;
@@ -135,24 +138,38 @@ public class Asset implements ImageComparable{
 
     public Asset searchAssetFromCardImage(ArrayList<Asset> assets, Image assetCardImage){
         for (Asset asset : assets) {
-            if(computeSnapshotSimilarity(new Image(asset.getCardImageAddress()),assetCardImage)==100){
+            if(assetCardImage.impl_getUrl().split("/")[assetCardImage.impl_getUrl().split("/").length-1].equals(asset.getCardImageAddress().split("/")[asset.getCardImageAddress().split("/").length-1])){
                 return asset;
             }
         }
         throw new AssetNotFoundException();
     }
 
-    //clone from main database //todo ...
-    public Asset clone(){
-        //todo better performance
-        Asset newAsset = null;
-        newAsset = this;
-//        try {
-//            newAsset = Asset.searchAsset(Asset.getAssetsFromFile(),this.getName());
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-        return newAsset;
+    //todo :: fix bug
+    public Asset clone() {
+        try {
+            if (this instanceof Hero) {
+                if (this.getAction().equals("NoAction")) {
+                    return new Hero(this.getName(), this.getPrice(), this.getID(), ((Hero) this).getRange(), ((Hero) this).getAP(), ((Hero) this).getHP(), false, ((Hero) this).getAttackType());
+                }
+                return new Hero(this.getName(), this.getPrice(), this.getID(), ((Hero) this).getRange(), ((Hero) this).getAP(), ((Hero) this).getHP(), ((Hero) this).getMP(), ((Hero) this).getCoolDown(), ((Hero) this).getAttackType());
+            }
+            if (this instanceof Minion) {
+                if (this.getAction().equals("NoAction")) {
+                    return new Minion(this.getName(), this.getDesc(), this.getPrice(), this.getID(), ((Minion) this).getRange(), ((Minion) this).getAP(), ((Minion) this).getHP(), ((Minion) this).getMP(), ((Minion) this).getAttackType());
+                }
+                return new Minion(this.getName(), this.getDesc(), this.getPrice(), this.getID(), ((Minion) this).getRange(), ((Minion) this).getAP(), ((Minion) this).getHP(), ((Minion) this).getMP(), ((Minion) this).getAttackType(), ((Minion) this).getActivateTimeOfSpecialPower());
+            }
+            if (this instanceof Spell) {
+                return new Spell(this.getName(), this.getDesc(), this.getPrice(), this.getID(), ((Spell) this).getMP(), ((Spell) this).getTargetType(), ((Spell) this).getSquareSideLength());
+            }
+            if (this instanceof Item) {
+                return new Item(this.getName(), this.getDesc(), this.getPrice(), this.getID());
+            }
+        }catch (ClassCastException e){
+            e.printStackTrace();
+        }
+       return this;
     }
 
     public static Card searchCard(ArrayList<Card> cards, String name) {
@@ -256,15 +273,16 @@ public class Asset implements ImageComparable{
         assets.add(AssetDatas.getSoulEater());
         assets.add(AssetDatas.getBaptism());
         assets.add(AssetDatas.getChineseSword());
+
         JsonWriter jsonWriter = new JsonWriter(new FileWriter("Data/CardsData.json"));
-        new Gson().toJson(assets, new TypeToken<Collection<Asset>>(){}.getType(), jsonWriter);
+        new GsonBuilder().registerTypeAdapter(Asset.class, new JsonDeserializerWithInheritance<Asset>()).create().toJson(assets, new TypeToken<Collection<Asset>>(){}.getType(), jsonWriter);
         jsonWriter.flush();
         jsonWriter.close();
     }
 
     public static ArrayList<Asset> getAssetsFromFile() throws IOException {
         Reader reader = new FileReader("Data/CardsData.json");
-        ArrayList<Asset> assets = new Gson().fromJson(reader, new TypeToken<java.util.Collection<Asset>>(){}.getType());
+        ArrayList<Asset> assets = new GsonBuilder().registerTypeAdapter(Asset.class, new JsonDeserializerWithInheritance<Asset>()).create().fromJson(reader, new TypeToken<java.util.Collection<Asset>>(){}.getType());
         reader.close();
         return assets;
     }
@@ -277,6 +295,25 @@ public class Asset implements ImageComparable{
         }
         throw new AssetNotFoundException("");
     }
+
+//    public boolean isInstanceOfItem(){
+//        return this.getID()>=1000 && this.getID()<2000;
+//    }
+//    public boolean isInstanceOfHero(){
+//        return this.getID()>=2000 && this.getID()<3000;
+//    }
+//    public boolean isInstanceOfSpell(){
+//        return this.getID()>=4000 && this.getID()<5000;
+//    }
+//    public boolean isInstanceOfMinion(){
+//        return this.getID()>=3000 && this.getID()<3000;
+//    }
+//    public boolean isInstanceOfWarrior(){
+//        return this.isInstanceOfMinion() && this.isInstanceOfHero();
+//    }
+//    public boolean isInstanceOfCard(){
+//        return !this.isInstanceOfItem();
+//    }
 
     public String getName() {
         return name;

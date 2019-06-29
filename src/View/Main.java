@@ -12,21 +12,23 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class Main extends Application implements ScreenManager {
-
-    private static Shop shop = new Shop();
     private static StackPane stackPane = new StackPane();
 
-    public static void main(String[] args){ launch(args); }
-
-
-    public static Shop getShop() {
-        return shop;
+    public static void main(String[] args){
+        //save default data
+//        try {
+//            Asset.saveCardsToJson();
+//            Deck.saveDefaultDecksToJson();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        launch(args);
     }
+
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         loadPageInNewStage(null, "FXML/FirstPage.fxml", false);
-      //  loadPageInNewStage(null, "FXML/BeforeBattleMenu4.fxml",true);
     }
 
 

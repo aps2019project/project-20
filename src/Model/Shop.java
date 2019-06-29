@@ -23,6 +23,9 @@ public class Shop {
     }
 
     public static void sell(Account account, Asset sellingAsset) {
+        for (Deck deck : account.getDecks()) {
+            deck.removeFromDeck(sellingAsset.getID());
+        }
         account.getCollection().getAssets().remove(sellingAsset);
         account.setBudget(account.getBudget() + sellingAsset.getPrice());
         sellingAsset.setOwner(null);

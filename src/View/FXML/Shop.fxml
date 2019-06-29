@@ -88,7 +88,7 @@
                             <children>
                                 <ScrollPane fx:id="buyScrollPane" fitToHeight="true" hbarPolicy="NEVER" layoutY="52.0" prefHeight="708.0" prefWidth="790.0" style="-fx-background-color: #797E83; -fx-stroke-width: 5;">
                                     <content>
-                                        <FlowPane fx:id="buyFlowPane" alignment="CENTER" prefHeight="708.0" prefWidth="780.0"  style="-fx-background-color: #797E83;">
+                                        <FlowPane fx:id="buyFlowPane" prefHeight="708.0" prefWidth="780.0" rowValignment="TOP" style="-fx-background-color: #797E83;">
                                         </FlowPane>
                                     </content>
                                 </ScrollPane>
@@ -107,7 +107,7 @@
                             <children>
                                 <ScrollPane fx:id="sellScrollPane" fitToHeight="true" hbarPolicy="NEVER" layoutY="52.0" prefHeight="708.0" prefWidth="790.0" style="-fx-background-color: #797E83; -fx-stroke-width: 5;">
                                     <content>
-                                        <FlowPane fx:id="sellFlowPane" prefHeight="708.0" prefWidth="780.0" style="-fx-background-color: #797E83;">
+                                        <FlowPane fx:id="sellFlowPane" prefHeight="708.0" prefWidth="780.0" rowValignment="TOP" style="-fx-background-color: #797E83;">
                                         </FlowPane>
                                     </content>
                                 </ScrollPane>

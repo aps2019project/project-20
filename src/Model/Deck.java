@@ -3,14 +3,12 @@ package Model;
 import Datas.DeckDatas;
 import Exceptions.*;
 import Presenter.CurrentAccount;
-import com.google.gson.Gson;
+import Presenter.JsonDeserializerWithInheritance;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonWriter;
 
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Reader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -66,17 +64,11 @@ public class Deck {
     public Deck(Account account, String deckNameInFile) {
         Deck deck = null;
         try {
-            deck = getDefaultDeckFromFile(deckNameInFile);
+            deck = getDefaultDecksFromFile(deckNameInFile);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        for (Card card : deck.getCards()) {
-            card.setOwner(account);
-        }
-        for (Item item : deck.getItems()) {
-            item.setOwner(account);
-        }
-        deck.getHero().setOwner(account);
+        deck.setOwner(account);
 
         this.setName(deck.getName());
         this.setHero(deck.getHero());
@@ -90,6 +82,19 @@ public class Deck {
         this.setHero(customHero);
     }
 
+    public ArrayList<Asset> getAllAssets(){
+       ArrayList<Asset> collection = new ArrayList<>();
+       if(this.getHero() != null) {
+           collection.add(this.getHero());
+       }
+       if(this.getCards() != null) {
+           collection.addAll(this.getCards());
+       }
+       if(this.getItems()!=null) {
+           collection.addAll(this.getItems());
+       }
+       return collection;
+    }
 
     public String getName() {
         return name;
@@ -97,10 +102,6 @@ public class Deck {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Hero getHero() {
-        return hero;
     }
 
     public static int getStandardNumberOfHeroes() {
@@ -111,31 +112,17 @@ public class Deck {
         return STANDARD_NUMBER_OF_MINIONS_AND_SPELLS;
     }
 
-    public ArrayList<Item> getItems() {
-        return items;
-    }
-
-    public ArrayList<Card> getCards() {
-        return cards;
-    }
-
     public void setNextCardFromDeckIndex(int nextCardFromDeckIndex) {
         this.nextCardFromDeckIndex = nextCardFromDeckIndex;
     }
 
-    public void addToDeck(Account account, int ID) {
-        Asset asset;
-        try {
-            asset = Asset.searchAsset(account.getCollection().getAssets(), ID);
-        } catch (AssetNotFoundException e) {
-            throw e;
-        }
+    public void addToDeck(Asset asset) {
         if (asset instanceof Hero) {
             if (hero == null)
                 hero = (Hero) asset;
             else
                 throw new IllegalHeroAddToDeckException("The deck's hero is already selected.");
-        } else if (!(asset instanceof Item)) {
+        } else if (asset instanceof Card) {
             if (cards.size() < 20)
                 cards.add((Card) asset);
             else
@@ -151,17 +138,16 @@ public class Deck {
         if (hero != null && assetID == hero.getID())
             hero = null;
         else {
-            for (Item item : items)
+            for (Asset item : items)
                 if (assetID == item.getID()) {
                     items.remove(item);
                     return;
                 }
-            for (Card card : cards)
+            for (Asset card : cards)
                 if (assetID == card.getID()) {
                     cards.remove(card);
                     return;
                 }
-            throw new AssetNotFoundException("Asset not found in the deck.");
         }
     }
 
@@ -169,16 +155,49 @@ public class Deck {
         if (assetID == hero.getID())
             return hero;
         else {
-            for (Item item : items) {
+            for (Asset item : items) {
                 if (assetID == item.getID())
                     return item;
             }
-            for (Card card : cards) {
+            for (Asset card : cards) {
                 if (assetID == card.getID())
                     return card;
             }
         }
         throw new AssetNotFoundException("Asset not found in the deck");
+    }
+
+    public static void importDeck(Account owner ,String filePath){
+      Deck deck = getDeckFromFile(filePath);
+      try {
+          Deck.findDeck(owner.getDecks(), deck.getName());
+      }catch (DeckNotFoundException e) {
+          deck.setOwner(owner);
+          owner.getDecks().add(deck);
+          return;
+      }
+      throw new RepeatedDeckException("");
+    }
+
+    public static void exportDeck(Deck deck ,String filePath){
+        Deck copyDeck = new Deck(null,deck.getName(),deck.getHero(),deck.getItems(),deck.getCards());
+        writeDeckToJsonFile(copyDeck,filePath);
+    }
+
+    public void setOwner(Account account){
+        if(this.getCards()!=null) {
+            for (Asset card : this.getCards()) {
+                card.setOwner(account);
+            }
+        }
+        if(this.getItems()!=null) {
+            for (Asset item : this.getItems()) {
+                item.setOwner(account);
+            }
+        }
+        if(this.getHero()!=null) {
+            this.getHero().setOwner(account);
+        }
     }
 
     public static Deck findDeck(ArrayList<Deck> decks, String deckName) {
@@ -188,20 +207,15 @@ public class Deck {
         throw new DeckNotFoundException("The deck not found.");
     }
 
-    public static void selectMainDeck(Account account, String deckName) {
-        Deck deck;
-        try {
-            deck = Deck.findDeck(account.getDecks(), deckName);
-        } catch (DeckNotFoundException e) {
-            throw e;
-        }
-        if (account.getMainDeck() != null && account.getMainDeck().getName().equals(deckName)) {
-            throw new RepeatedDeckException("");
-        }
+    public static void selectMainDeck(Account account, Deck deck) {
         if (deck.isValidOfMainDeck())
             account.setMainDeck(deck);
         else
             throw new InvalidSelectMainDeckException("The selected deck is invalid to be the main deck.");
+    }
+
+    public static void unSelectMainDeck(Account account) {
+        account.setMainDeck(null);
     }
 
     public static void createDeck(String deckName) {
@@ -214,6 +228,16 @@ public class Deck {
         throw new RepeatedDeckException("");
     }
 
+    public void renameDeck(String deckName) {
+        try {
+            Deck.findDeck(CurrentAccount.getCurrentAccount().getDecks(), deckName);
+        } catch (DeckNotFoundException e) {
+            this.setName(deckName);
+            return;
+        }
+        throw new RepeatedDeckException("");
+    }
+
     public static void deleteDeck(Account account, String deckName) {
         Deck deck;
         try {
@@ -221,7 +245,17 @@ public class Deck {
         } catch (DeckNotFoundException e) {
             throw e;
         }
+        if(deck.isThisMainDeck(account)){
+            account.setMainDeck(null);
+        }
         account.getDecks().remove(deck);
+    }
+
+    public boolean isThisMainDeck(Account owner){
+        if (owner.getMainDeck()==null){
+            return false;
+        }
+       return owner.getMainDeck().getName().equals(this.getName());
     }
 
     public boolean isValidOfMainDeck() {
@@ -235,14 +269,38 @@ public class Deck {
         decks.add(DeckDatas.getEnemyDeckInStoryGameLevel3());
         decks.add(DeckDatas.getDefaultDeck());
         JsonWriter jsonWriter = new JsonWriter(new FileWriter("Data/DefaultDecksData.json"));
-        new Gson().toJson(decks, new TypeToken<Collection<Deck>>(){}.getType(), jsonWriter);
+        new GsonBuilder().registerTypeAdapter(Asset.class, new JsonDeserializerWithInheritance<Asset>()).create().toJson(decks, new TypeToken<Collection<Deck>>(){}.getType(), jsonWriter);
         jsonWriter.flush();
         jsonWriter.close();
     }
 
-    public static Deck getDefaultDeckFromFile(String deckName) throws IOException {
+    public static void writeDeckToJsonFile(Deck deck,String path){
+        try {
+            JsonWriter jsonWriter = new JsonWriter(new FileWriter(path));
+            new GsonBuilder().registerTypeAdapter(Asset.class, new JsonDeserializerWithInheritance<Asset>()).create().toJson(deck, Deck.class, jsonWriter);
+            jsonWriter.flush();
+            jsonWriter.close();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    public static ArrayList<Deck> searchAndGetDecksFromCollection(ArrayList<Deck> decks,String deckName){
+        if(deckName.equals("") || decks == null){
+            return decks;
+        }
+        ArrayList<Deck> result = new ArrayList<>();
+        for (Deck deck : decks) {
+            if(deck != null && deck.getName().matches(".*"+deckName+".*")){
+                result.add(deck);
+            }
+        }
+        return result;
+    }
+
+    public static Deck getDefaultDecksFromFile(String deckName) throws IOException {
         Reader reader = new FileReader("Data/DefaultDecksData.json");
-        ArrayList<Deck> decks = new Gson().fromJson(reader, new TypeToken<java.util.Collection<Deck>>(){}.getType());
+        ArrayList<Deck> decks = new GsonBuilder().registerTypeAdapter(Asset.class, new JsonDeserializerWithInheritance<Asset>()).create().fromJson(reader, new TypeToken<java.util.Collection<Deck>>(){}.getType());
         try{
             return findDeck(decks,deckName);
         }catch (DeckNotFoundException e){
@@ -250,6 +308,24 @@ public class Deck {
         }
         finally{
             reader.close();
+        }
+    }
+
+    public static Deck getDeckFromFile(String path){
+        Reader reader = null;
+        try {
+            reader = new FileReader(path);
+            return new GsonBuilder().registerTypeAdapter(Asset.class, new JsonDeserializerWithInheritance<Asset>()).create().fromJson(reader, Deck.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+        finally{
+            try {
+                reader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -263,5 +339,17 @@ public class Deck {
 
     public void setItems(ArrayList<Item> items) {
         this.items = items;
+    }
+
+    public Hero getHero() {
+        return hero;
+    }
+
+    public ArrayList<Item> getItems() {
+        return items;
+    }
+
+    public ArrayList<Card> getCards() {
+        return cards;
     }
 }

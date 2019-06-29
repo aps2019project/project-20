@@ -164,21 +164,18 @@ public class ShopController implements Initializable, ScreenManager, AccountMana
             Pane pane = new Pane();
             pane.setOnMouseEntered(event -> pane.setStyle("-fx-background-color: #949494;"));
             pane.setOnMouseExited(event -> pane.setStyle("-fx-background-color: -fx-primary;"));
+            pane.setOnMousePressed(event -> pane.setStyle("-fx-background-color: #2c2c2c;"));
             pane.setOnMouseReleased(event -> {
                 //todo rippler
-//                System.out.println(pane.getLayoutX() + "  " + pane.getLayoutY()+"      "+ripple.getLayoutX() + "  " + ripple.getLayoutY());
                 selectedElement = new Asset().searchAssetFromCardImage(assets,((ImageView) pane.getChildren().get(0)).getImage());
                 assetPrice.setText(selectedElement.getPrice() + " DR");
                 assetPrice.setVisible(true);
                 cardImage.setImage(new Image(selectedElement.getCardImageAddress()));
                 actionButton.setImage(new Image("file:images/button_primary_glow.png"));
+                pane.setStyle("-fx-background-color: -fx-primary;");
             });
             pane.getChildren().add(imageView);
             flowPane.getChildren().add(pane);
-//            JFXRippler ripple = new JFXRippler(pane);
-//            ripple.setRipplerFill(Color.BLACK);
-//            ripple.setLayoutX(pane.getLayoutX());ripple.setLayoutY(pane.getLayoutY());
-//            pane.getChildren().add(ripple);
         }
     }
 

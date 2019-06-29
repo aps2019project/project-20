@@ -1,5 +1,6 @@
 package Controller;
 
+import Exceptions.InvalidSelectMainDeckException;
 import Presenter.AccountManageable;
 import Presenter.DialogThrowable;
 import Presenter.ImageComparable;
@@ -28,6 +29,17 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
     public AnchorPane anchorPane;
 
     public void setBattleButtonReleased() throws IOException {
+        if (getCurrentAccount().getMainDeck()==null){
+            showOneButtonErrorDialog("Starting Battle Error","There Is No Main Deck!!!");
+            return;
+        }else{
+            try {
+                isValidDeck(getCurrentAccount().getMainDeck());
+            }catch (InvalidSelectMainDeckException e){
+                showOneButtonErrorDialog("Starting Battle Error","Your Selected Main Deck Is Not Valid!!!");
+                return;
+            }
+        }
         loadPageOnStackPane(anchorPane, "FXML/BeforeBattleMenu1.fxml", "rtl");
     }
 
@@ -43,6 +55,10 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
     public void setBattleMouseUnOver() {
         battle.setImage(new Image("file:images/unhover_battle_button.png"));
         description.setText("\n                Welcome");
+    }
+
+    public void setCollectionButtonReleased() throws IOException {
+        loadPageOnStackPane(anchorPane, "FXML/Collection.fxml", "rtl");
     }
 
     public void setCollectionButtonPressed() {
@@ -93,6 +109,10 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
     public void setLeaderMouseUnOver() {
         leaderBoard.setImage(new Image("file:images/unhover_leaderboard_button.png"));
         description.setText("\n                Welcome");
+    }
+
+    public void setMatchHistoryButtonReleased() throws IOException {
+        loadPageOnStackPane(anchorPane, "FXML/MatchHistory.fxml", "rtl");
     }
 
     public void setMatchHistoryButtonPressed() {
