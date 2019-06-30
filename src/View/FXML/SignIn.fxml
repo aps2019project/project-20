@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Text?>
 
 <?import com.jfoenix.controls.JFXPasswordField?>
-<AnchorPane prefHeight="700.0" prefWidth="1132.0" style="-fx-background-image: &quot;;" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.SignInController">
+<AnchorPane prefHeight="700.0" prefWidth="1132.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.SignInController">
     <children>
         <ImageView fitHeight="700.0" fitWidth="1132.0" pickOnBounds="true" smooth="false">
             <image>
@@ -18,11 +18,7 @@
             </image>
         </ImageView>
         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="499.0" layoutX="467.0" layoutY="104.0" opacity="0.85" stroke="BLACK" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="3.0" width="542.0">
-
-
         </Rectangle>
-
-
         <Text fontSmoothingType="LCD" layoutX="676.0" layoutY="170.0" strokeType="OUTSIDE" strokeWidth="0.0" text="LOGIN" underline="true">
             <font>
                 <Font name="Consolas" size="46.0" />

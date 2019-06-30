@@ -33,4 +33,5 @@ public class Item extends Asset {
                 this.imageAddresses.put(state, "file:images/cards/item/" + name + "/" + name + "_" + state.toString() + ".gif");
         }
     }
+
 }

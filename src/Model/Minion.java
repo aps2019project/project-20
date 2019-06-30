@@ -1,5 +1,7 @@
 package Model;
 
+import Presenter.ImageComparable;
+
 import java.util.ArrayList;
 
 public class Minion extends Warrior {
@@ -23,6 +25,7 @@ public class Minion extends Warrior {
     public ArrayList<Card> getAttackedCards() {
         return attackedCards;
     }
+
 
     public void setAttackedCards(ArrayList<Card> attackedCards) {
         this.attackedCards = attackedCards;

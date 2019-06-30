@@ -1,23 +1,25 @@
 package Controller;
 
+import Exceptions.InvalidSelectMainDeckException;
+import Presenter.AccountManageable;
+import Presenter.DialogThrowable;
+import Presenter.ImageComparable;
+import Presenter.ScreenManager;
 import View.Main;
-import com.jfoenix.controls.JFXNodesList;
-import com.jfoenix.controls.JFXTextArea;
-import javafx.event.EventHandler;
+import com.jfoenix.controls.*;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
+import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
-import javafx.scene.text.TextFlow;
+import javafx.scene.text.Text;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class MainMenuController implements Initializable {
+public class MainMenuController implements Initializable, ScreenManager, ImageComparable, AccountManageable,DialogThrowable {
     public ImageView battle;
     public ImageView collection;
     public ImageView shop;
@@ -25,6 +27,21 @@ public class MainMenuController implements Initializable {
     public ImageView leaderBoard;
     public JFXTextArea description;
     public AnchorPane anchorPane;
+
+    public void setBattleButtonReleased() throws IOException {
+        if (getCurrentAccount().getMainDeck()==null){
+            showOneButtonErrorDialog("Starting Battle Error","There Is No Main Deck!!!");
+            return;
+        }else{
+            try {
+                isValidDeck(getCurrentAccount().getMainDeck());
+            }catch (InvalidSelectMainDeckException e){
+                showOneButtonErrorDialog("Starting Battle Error","Your Selected Main Deck Is Not Valid!!!");
+                return;
+            }
+        }
+        loadPageOnStackPane(anchorPane, "FXML/BeforeBattleMenu1.fxml", "rtl");
+    }
 
     public void setBattleButtonPressed() {
         battle.setImage(new Image("file:images/pressed_battle_button.png"));
@@ -38,6 +55,10 @@ public class MainMenuController implements Initializable {
     public void setBattleMouseUnOver() {
         battle.setImage(new Image("file:images/unhover_battle_button.png"));
         description.setText("\n                Welcome");
+    }
+
+    public void setCollectionButtonReleased() throws IOException {
+        loadPageOnStackPane(anchorPane, "FXML/Collection.fxml", "rtl");
     }
 
     public void setCollectionButtonPressed() {
@@ -54,6 +75,10 @@ public class MainMenuController implements Initializable {
         description.setText("\n                Welcome");
     }
 
+    public void setShopButtonReleased() throws IOException {
+        loadPageOnStackPane(anchorPane, "FXML/Shop.fxml", "rtl");
+    }
+
     public void setShopButtonPressed() {
         shop.setImage(new Image("file:images/pressed_shop_button.png"));
     }
@@ -68,6 +93,10 @@ public class MainMenuController implements Initializable {
         description.setText("\n                Welcome");
     }
 
+    public void setLeaderBoardButtonReleased() throws IOException {
+        loadPageOnStackPane(anchorPane, "FXML/LeaderBoard.fxml", "rtl");
+    }
+
     public void setLeaderBoardButtonPressed() {
         leaderBoard.setImage(new Image("file:images/pressed_leaderboard_button.png"));
     }
@@ -80,6 +109,10 @@ public class MainMenuController implements Initializable {
     public void setLeaderMouseUnOver() {
         leaderBoard.setImage(new Image("file:images/unhover_leaderboard_button.png"));
         description.setText("\n                Welcome");
+    }
+
+    public void setMatchHistoryButtonReleased() throws IOException {
+        loadPageOnStackPane(anchorPane, "FXML/MatchHistory.fxml", "rtl");
     }
 
     public void setMatchHistoryButtonPressed() {
@@ -117,7 +150,8 @@ public class MainMenuController implements Initializable {
         JFXNodesList nodesList = new JFXNodesList();
         nodesList.setSpacing(20);
         nodesList.setRotate(90);
-        nodesList.setLayoutX(1750.0);nodesList.setLayoutY(940.0);
+        nodesList.setLayoutX(1750.0);
+        nodesList.setLayoutY(940.0);
         nodesList.addAnimatedNode(pane1);
         nodesList.addAnimatedNode(pane2);
         nodesList.addAnimatedNode(pane3);
@@ -126,12 +160,9 @@ public class MainMenuController implements Initializable {
 
         //todo better graphic
 
-        myProfile.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                myProfile.setImage(new Image("file:images/hover_profile_button.png"));
-                description.setText("\n         Edit Your Profile");
-            }
+        myProfile.setOnMouseEntered(event -> {
+            myProfile.setImage(new Image("file:images/hover_profile_button.png"));
+            description.setText("\n         Edit Your Profile");
         });
         myProfile.setOnMouseExited(event -> {
             myProfile.setImage(new Image("file:images/profile.png"));
@@ -145,6 +176,9 @@ public class MainMenuController implements Initializable {
             logout.setImage(new Image("file:images/logoff.png"));
             description.setText("\n                Welcome");
         });
+        logout.setOnMousePressed(event -> {
+           showTwoButtonMainMenuExitDialog(anchorPane.getScene(),"../View/FXML/FirstPage.fxml");
+        });
         save.setOnMouseEntered(event -> {
             save.setImage(new Image("file:images/hover_save_button.png"));
             description.setText("\n                  Save");
@@ -152,6 +186,10 @@ public class MainMenuController implements Initializable {
         save.setOnMouseExited(event -> {
             save.setImage(new Image("file:images/save.png"));
             description.setText("\n                Welcome");
+        });
+        save.setOnMousePressed(event -> {
+            saveAccount();
+            showOneButtonInformationDialog("Seve Message","Changes Saved Successfully.",false);
         });
         exit.setOnMouseEntered(event -> {
             exit.setImage(new Image("file:images/hover_exit_button.png"));
@@ -161,20 +199,23 @@ public class MainMenuController implements Initializable {
             exit.setImage(new Image("file:images/exit.png"));
             description.setText("\n                Welcome");
         });
+        exit.setOnMousePressed(event -> {
+            showTwoButtonMainMenuExitDialog(anchorPane.getScene(),"");
+        });
         main.setOnMouseEntered(event -> {
-            if(Main.computeSnapshotSimilarity(main.getImage(),new Image("file:images/onClicked_toolbar.png"))!=100.0) {
+            if (computeSnapshotSimilarity(main.getImage(), new Image("file:images/onClicked_toolbar.png")) != 100.0) {
                 main.setImage(new Image("file:images/ranked_chevron_full.png"));
             }
         });
         main.setOnMouseExited(event -> {
-            if(Main.computeSnapshotSimilarity(main.getImage(),new Image("file:images/onClicked_toolbar.png"))!=100.0) {
+            if (computeSnapshotSimilarity(main.getImage(), new Image("file:images/onClicked_toolbar.png")) != 100.0) {
                 main.setImage(new Image("file:images/ranked_chevron_empty.png"));
             }
         });
         main.setOnMouseClicked(event -> {
-            if(Main.computeSnapshotSimilarity(main.getImage(),new Image("file:images/ranked_chevron_full.png"))==100.0){
+            if (computeSnapshotSimilarity(main.getImage(), new Image("file:images/ranked_chevron_full.png")) == 100.0) {
                 main.setImage(new Image("file:images/onClicked_toolbar.png"));
-            }else {
+            } else {
                 main.setImage(new Image("file:images/ranked_chevron_full.png"));
             }
         });
@@ -182,4 +223,38 @@ public class MainMenuController implements Initializable {
         anchorPane.getChildren().add(nodesList);
 
     }
+
+    private void showTwoButtonMainMenuExitDialog(Scene prevScene, String nextPageAddress) {
+        JFXDialogLayout dialogLayout = new JFXDialogLayout();
+        Text header = new Text("Confirm Exit");
+        Text footer = new Text("your data may lost if you didn't save changes");
+        header.setStyle("-fx-text-fill: #122aff;  -fx-font-family: 'Microsoft Tai Le'; -fx-font-weight:bold;");
+        footer.setStyle("-fx-text-fill: #000000;  -fx-font-family: 'Microsoft Tai Le'; -fx-font-weight:bold;");
+        dialogLayout.setHeading(header);
+        dialogLayout.setBody(footer);
+        dialogLayout.setStyle("-fx-background-color: #fdfbff; -fx-text-fill: #ffffff");
+        JFXDialog dialog = new JFXDialog(Main.getStackPane(), dialogLayout, JFXDialog.DialogTransition.CENTER, true);
+        dialog.setStyle("-fx-background-image: url('file:images/information.png')");
+        JFXButton yesButton = new JFXButton("YES");
+        yesButton.setButtonType(JFXButton.ButtonType.RAISED);
+        yesButton.setStyle("-fx-background-color: #37b400; -fx-text-fill: #ffffff; -fx-font-family: 'Microsoft Tai Le'; -fx-font-weight:bold;");
+        yesButton.setOnAction(event -> {
+            if (nextPageAddress.equals("")) {
+                System.exit(0);
+            } else{
+                try {
+                    loadPageInNewStage(prevScene, nextPageAddress, false);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }});
+        JFXButton noButton = new JFXButton("NO");
+        noButton.setButtonType(JFXButton.ButtonType.RAISED);
+        noButton.setStyle("-fx-background-color: #ff0000; -fx-text-fill: #ffffff; -fx-font-family: 'Microsoft Tai Le'; -fx-font-weight:bold;");
+        noButton.setOnAction(event -> dialog.close());
+        dialog.setOnDialogClosed(event -> Main.getStackPane().getChildren().remove(dialog));
+        dialogLayout.setActions(yesButton, noButton);
+        dialog.show();
+    }
+
 }

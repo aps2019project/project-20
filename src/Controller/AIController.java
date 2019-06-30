@@ -4,7 +4,6 @@ import Exceptions.*;
 import Model.*;
 import Controller.BattleGroundController;
 import Presenter.CurrentAccount;
-import Presenter.GameMenuPresenter;
 import com.jfoenix.controls.JFXTextArea;
 import javafx.animation.TranslateTransition;
 import javafx.event.EventHandler;
@@ -19,6 +18,7 @@ import javafx.util.Duration;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
@@ -47,36 +47,37 @@ public class AIController implements Initializable {
     private ImageView selectedCardBackground;
     private int[] selectedCardCoordinates = new int[]{-2, -2};
     private Battle battle;
+    private ArrayList<Card> inGroundCards = new ArrayList<>();
     private AI ai = new AI("AI", "1234");
+
+    public AIController(Battle battle) {
+        this.battle = battle;
+        inGroundCards.add(battle.getPlayersDeck()[1].getHero());
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-//todo how to enter ai to game?
-        CurrentAccount.setCurrentAccount(Account.createAccount("AI", "1234"));
-        GameMenuPresenter gameMenuPresenter = new GameMenuPresenter();
-        battle = gameMenuPresenter.prepareForSingleGame(1, null);
     }
 
-    public void handleAIEvent(Account player, Battle battle) {
-        int i = makeRandomNumber(BattleGround.getColumns());
-        int j = makeRandomNumber(BattleGround.getRows());
+    public void handleAIEvent(Battle battle) {
+        Account player = battle.getPlayers()[0];
+        int i = makeRandomNumber(BattleGround.getRows());
+        int j = makeRandomNumber(BattleGround.getColumns());
         try {
             int key = makeRandomNumber(3);
             switch (key) {
-                case 1:
+                case 0:
 
                     int event1 = makeRandomNumber(3);
                     switch (event1) {
-                        case 1:  //insert card
+                        case 0:
                             insertAICard(battle, i, j);
                             break;
-                        case 2:
-                            //select card
+                        case 1:
 
                             selectAICard(battle, i, j);
                             break;
-                        case 3:
-                            //move card
+                        case 2:
 
                             moveAICard(battle, i, j);
                             break;
@@ -85,18 +86,15 @@ public class AIController implements Initializable {
 
                     event1 = makeRandomNumber(3);
                     switch (event1) {
-                        case 1:
-                            //attack
+                        case 0:
 
                             AIAttackWarriors(player, battle);
                             break;
-                        case 2:
-                            //combo attack
+                        case 1:
 
                             AIComboAttack(player, battle);
                             break;
-                        case 3:
-                            //use special power
+                        case 2:
 
                             AIUseSpecialPower(battle);
                             break;
@@ -104,24 +102,21 @@ public class AIController implements Initializable {
                     battle.endTurn(ai);
                     break;
 
-                case 2:
+                case 1:
 
                     int event2 = makeRandomNumber(3);
 
                     switch (event2) {
-                        case 1:
-                            //attack
+                        case 0:
 
                             AIAttackWarriors(player, battle);
                             break;
 
-                        case 2:
-                            //insert card
+                        case 1:
 
                             insertAICard(battle, i, j);
                             break;
-                        case 3:
-                            //select card
+                        case 2:
 
                             selectAICard(battle, i, j);
                             break;
@@ -129,20 +124,17 @@ public class AIController implements Initializable {
                     battle.endTurn(ai);
                     event2 = makeRandomNumber(3);
                     switch (event2) {
-                        case 1:
-                            //use special power
+                        case 0:
 
                             AIUseSpecialPower(battle);
                             break;
 
-                        case 2:
-                            //move card
+                        case 1:
 
                             moveAICard(battle, i, j);
                             break;
 
-                        case 3:
-                            //combo attack
+                        case 2:
 
                             AIComboAttack(player, battle);
                             break;
@@ -151,22 +143,19 @@ public class AIController implements Initializable {
                     battle.endTurn(ai);
                     break;
 
-                case 3:
+                case 2:
                     int event3 = makeRandomNumber(3);
 
                     switch (event3) {
-                        case 1:
-                            //insert card
+                        case 0:
 
                             insertAICard(battle, i, j);
                             break;
-                        case 2:
-                            //attack
+                        case 1:
 
                             AIAttackPlayerHero(player, battle);
                             break;
-                        case 3:
-                            //use special power
+                        case 2:
 
                             AIUseSpecialPower(battle);
                             break;
@@ -174,18 +163,15 @@ public class AIController implements Initializable {
 
                     event3 = makeRandomNumber(3);
                     switch (event3) {
-                        case 1:
-                            //select card
+                        case 0:
 
                             selectAICard(battle, i, j);
                             break;
-                        case 2:
-                            //combo attack
+                        case 1:
 
                             AIComboAttack(player, battle);
                             break;
-                        case 3:
-                            //move card
+                        case 2:
 
                             moveAICard(battle, i, j);
                             break;
@@ -229,7 +215,7 @@ public class AIController implements Initializable {
         Asset playerAsset;
         ArrayList<Minion> minions = new ArrayList<>();
         while (true) {
-            playerAsset = battle.getBattleGround().getGround().get(makeRandomNumber(BattleGround.getColumns())).get(makeRandomNumber(BattleGround.getRows()));
+            playerAsset = battle.getBattleGround().getGround().get(makeRandomNumber(BattleGround.getRows())).get(makeRandomNumber(BattleGround.getColumns()));
             if (playerAsset.getOwner() == player)
                 break;
         }
@@ -260,7 +246,6 @@ public class AIController implements Initializable {
         Asset attacker;
         attacker = findAttacker(battle);
         Asset playerCard = findPlayerMinion(player, battle);
-//        battle.attack(ai, (Warrior) attacker, (Warrior) playerCard);
         try {
             battle.attack(ai,(Warrior) attacker, (Warrior) playerCard);
             showAttackAnimation((Warrior) attacker, attacker.getXInGround(), attacker.getYInGround());
@@ -274,7 +259,7 @@ public class AIController implements Initializable {
     public Asset findPlayerMinion(Account player, Battle battle) {
         Asset playerCard;
         while (true) {
-            playerCard = battle.getBattleGround().getGround().get(BattleGround.getColumns()).get(BattleGround.getRows());
+            playerCard = battle.getBattleGround().getGround().get(makeRandomNumber(BattleGround.getRows())).get(makeRandomNumber(BattleGround.getColumns()));
             if (playerCard instanceof Warrior && playerCard.getOwner() == player)
                 break;
         }
@@ -320,7 +305,7 @@ public class AIController implements Initializable {
     public void selectAICard(Battle battle, int i, int j) {
         Asset asset;
         while (true) {
-            asset = battle.getBattleGround().getGround().get(makeRandomNumber(BattleGround.getColumns())).get(BattleGround.getRows());
+            asset = battle.getBattleGround().getGround().get(makeRandomNumber(BattleGround.getRows())).get(BattleGround.getColumns());
             if (asset.getOwner() == ai)
                 break;
         }
@@ -340,8 +325,8 @@ public class AIController implements Initializable {
 
             Card[] AIHand = battle.getPlayersHand()[1];
 
-            Card insertedCard = AIHand[makeRandomNumber(battle.getNUMBER_OF_CARDS_IN_HAND()) - 1];
-            battle.insertCard(ai, battle.getPlayersHand()[0][selectedCardCoordinates[1]].getName(), j + 1, i + 1);
+            Card insertedCard = AIHand[makeRandomNumber(battle.getNUMBER_OF_CARDS_IN_HAND())];
+            battle.insertCard(ai, battle.getPlayersHand()[0][selectedCardCoordinates[1] - 1].getName(), j + 1, i + 1);
             showInsertAnimation(i, j);
             battle.selectWarrior(ai, insertedCard.getID());
         } catch (AssetNotFoundException | InvalidInsertInBattleGroundException | ThisCellFilledException | DontHaveEnoughManaException e) {
@@ -375,7 +360,7 @@ public class AIController implements Initializable {
 
     public int makeRandomNumber(int value) {
         Random rand = new Random();
-        return rand.nextInt(value) + 1;
+        return rand.nextInt(value);
     }
 
     public Asset findPlayerHero(Account player, Battle battle) {
@@ -391,11 +376,16 @@ public class AIController implements Initializable {
 
     public Asset findAttacker(Battle battle) {
         Asset attacker;
-        while (true) {
-            attacker = battle.getBattleGround().getGround().get(BattleGround.getColumns()).get(BattleGround.getRows());
-            if (attacker instanceof Warrior && attacker.getOwner() == ai)
-                break;
+        for (int i = 0; i < BattleGround.getRows(); i++) {
+            for (int j = 0; j < BattleGround.getColumns(); j++) {
+
+            }
         }
+//        while (true) {
+            attacker = battle.getBattleGround().getGround().get(makeRandomNumber(BattleGround.getRows())).get(makeRandomNumber(BattleGround.getColumns()));
+//            if (attacker instanceof Warrior && attacker.getOwner() == ai)
+//                break;
+//        }
         return attacker;
     }
 

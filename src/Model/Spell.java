@@ -23,10 +23,8 @@ public class Spell extends Card {
         setImageAddresses(name);
     }
 
-    public Spell(String name,String desc, int price, int ID,int MP, TargetType targetType,int squareSideLength) {
+    public Spell(String name, String desc, int price, int ID, int MP, TargetType targetType, int squareSideLength) {
         super(name, desc, price, ID, MP, true);
-        this.setXInGround(0);
-        this.setYInGround(0);
         this.targetType = targetType;
         this.squareSideLength = squareSideLength;
         setImageAddresses(name);

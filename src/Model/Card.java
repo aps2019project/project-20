@@ -2,9 +2,9 @@ package Model;
 
 import java.util.ArrayList;
 
-public abstract class Card extends Asset {
+public class Card extends Asset {
     private int MP;
-    private ArrayList<BufferOfSpells> bufferEffected = new ArrayList<>();
+    protected ArrayList<BufferOfSpells> bufferEffected = new ArrayList<>();
 
     public Card(){}
 

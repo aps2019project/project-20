@@ -2,6 +2,8 @@ package Model;
 
 import Exceptions.HeroNotFoundException;
 
+import java.io.IOException;
+
 public class Hero extends Warrior{
     private int coolDown;
 
@@ -18,6 +20,7 @@ public class Hero extends Warrior{
     public Hero(String name, int price, int ID, int range, int AP, int HP, AttackType attackType) {
         this(name, price, ID, range, AP, HP, false, attackType);
     }
+
     public int getCoolDown() {
         return coolDown;
     }
@@ -27,10 +30,14 @@ public class Hero extends Warrior{
     }
 
     public static Hero searchHeroForCustomGame(String heroName){
-        for (Asset asset : Shop.getAssets()) {
-            if(asset instanceof Hero && asset.getName().compareTo(heroName)==0){
-                return (Hero)asset.clone();
+        try {
+            for (Asset asset : Asset.getAssetsFromFile()) {
+                if(asset instanceof Hero && asset.getName().compareTo(heroName)==0){
+                    return (Hero) asset.clone();
+                }
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         throw new HeroNotFoundException();
     }

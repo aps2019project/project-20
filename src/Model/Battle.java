@@ -1,12 +1,14 @@
 package Model;
 
 import Datas.AssetDatas;
+import Datas.DeckDatas;
 import Exceptions.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
 import Model.Minion.*;
+import Presenter.CurrentAccount;
 
 import static Model.Minion.ActivateTimeOfSpecialPower.*;
 import static Model.Status.*;
@@ -18,19 +20,24 @@ public abstract class Battle {
     }
 
     protected Mode mode;
-    protected final int UNFINISHED_GAME = -1;
-    protected final int DRAW = 0;
-    protected final int FIRST_PLAYER_WIN = 1;
-    protected final int SECOND_PLAYER_WIN = 2;
-    protected int endGameStatus = UNFINISHED_GAME;
-    protected final int FIRST_LATE_TURN = 15;
+    public final static int STORY_REWARD_L1 = 500;
+    public final static int STORY_REWARD_L2 = 1000;
+    public final static int STORY_REWARD_L3 = 1500;
+    public final static int CUSTOM_REWARD = 1000;
+    public final static int UNFINISHED_GAME = -1;
+    public final static int DRAW = 0;
+    public final static int FIRST_PLAYER_WIN = 1;
+    public final static int SECOND_PLAYER_WIN = 2;
+    public int endGameStatus = UNFINISHED_GAME;
+    public static final int FIRST_LATE_TURN = 15;
     public static final int MAX_MANA_IN_LATE_TURNS = 9;
-    public static final int NUMBER_OF_CARDS_IN_HAND = 5;
+    public int eachPlayerManaAtFirstOfTurn = 2;
+    public static  final int NUMBER_OF_CARDS_IN_HAND = 5;
     protected int turn;
-    protected Account[] players = new Account[2];
+    protected transient Account[] players = new Account[2];
     protected Deck[] playersDeck = new Deck[2];
-    protected BattleGround battleGround;
-    protected int[] playersMana = {2, 2};
+    protected BattleGround battleGround = new BattleGround();
+    protected int[] playersMana = {eachPlayerManaAtFirstOfTurn, eachPlayerManaAtFirstOfTurn};
     protected ArrayList<BufferOfSpells>[] playersManaBuffEffected = new ArrayList[2];
     protected Card[] playersSelectedCard = new Card[2];
     protected Item[] playersSelectedItem = new Item[2];
@@ -41,7 +48,6 @@ public abstract class Battle {
     private ArrayList<Integer> itemsCoordinates;
     protected int battleID;
     protected int reward;
-
 
     public Deck[] getPlayersDeck() {
         return playersDeck;
@@ -154,12 +160,8 @@ public abstract class Battle {
 
     public void attack(Account player, Warrior attacker, Warrior opponentWarrior) throws RuntimeException {
         if (attacker.isStun() || attacker.isAttackedThisTurn())
-            throw new InvalidAttackException("Card with" + attacker.getID() + "can't attack");
-        int distance, playerIndex;
-        if (player == players[0])
-            playerIndex = 0;
-        else
-            playerIndex = 1;
+            throw new InvalidAttackException("The card can't attack twice!");
+        int distance, playerIndex = getPlayerIndex(player);
         //TODO method must be reconsidered.
 //        Warrior opponentWarrior;
 //        try {
@@ -175,14 +177,17 @@ public abstract class Battle {
         switch (attacker.getAttackType()) {
             case MELEE:
                 meleeAttackOrCounterAttack(attacker, opponentWarrior, distance, ATTACK);
+                attacker.setAttackedThisTurn(true);
                 counterAttack(opponentWarrior, attacker);
                 break;
             case RANGED:
                 rangedAttackOrCounterAttack(attacker, opponentWarrior, distance, ATTACK);
+                attacker.setAttackedThisTurn(true);
                 counterAttack(opponentWarrior, attacker);
                 break;
             case HYBRID:
                 hybridAttackOrCounterAttack(attacker, opponentWarrior, distance, ATTACK);
+                attacker.setAttackedThisTurn(true);
                 counterAttack(opponentWarrior, attacker);
         }
         determineDeadWarriors(attacker, playerIndex);
@@ -225,7 +230,7 @@ public abstract class Battle {
             if (status == ATTACK)
                 applySpecialPower(attacker, opponentWarrior, ON_ATTACK);
             opponentWarrior.changeHP(-1 * attacker.getAP());
-        } else
+        } else if (status == ATTACK)
             throw new InvalidAttackException("Opponent warrior is unavailable for attack");
     }
 
@@ -234,7 +239,7 @@ public abstract class Battle {
             if (status == ATTACK)
                 applySpecialPower(attacker, opponentWarrior, ON_ATTACK);
             opponentWarrior.changeHP(-1 * attacker.getAP());
-        } else
+        } else if (status == ATTACK)
             throw new InvalidAttackException("Opponent warrior is unavailable for attack");
     }
 
@@ -242,11 +247,7 @@ public abstract class Battle {
         try {
             meleeAttackOrCounterAttack(attacker, opponentWarrior, distance, status);
         } catch (InvalidAttackException e) {
-            try {
-                rangedAttackOrCounterAttack(attacker, opponentWarrior, distance, status);
-            } catch (InvalidAttackException e1) {
-                throw e1;
-            }
+            rangedAttackOrCounterAttack(attacker, opponentWarrior, distance, status);
         }
     }
 
@@ -326,6 +327,8 @@ public abstract class Battle {
                         battleGround.getGround().get(y).set(x, card);
                         card.setXInGround(x);
                         card.setYInGround(y);
+                        ((Warrior) card).setMovedThisTurn(true);
+                        playersSelectedCard[playerIndex] = card;
                     }
                     return;
                 } else
@@ -472,9 +475,9 @@ public abstract class Battle {
 
     public void setPlayersManaByDefault() {
         if (turn < FIRST_LATE_TURN)
-            playersMana[turn % 2]++;
+            playersMana[1 - turn % 2]++;
         else
-            playersMana[turn % 2] = MAX_MANA_IN_LATE_TURNS;
+            playersMana[1 - turn % 2] = MAX_MANA_IN_LATE_TURNS;
     }
 
     public void selectItem(Account player, int collectibleItemID) {
@@ -735,7 +738,7 @@ public abstract class Battle {
         for (Card card : playersHand[playerIndex])
             if (cardID == card.getID())
                 return card;
-        throw new AssetNotFoundException("Card not found in the handAndNextCard");
+        throw new AssetNotFoundException("Card not found in the handAndNextCardGrid");
     }
 
     public boolean isValidCoordinates(int x, int y, Warrior warrior, int playerIndex) {
@@ -765,5 +768,92 @@ public abstract class Battle {
         String cardName = cardId.split("_")[1];
         return (Card) Asset.searchAsset(cards, cardName);
     }
+
+    public static Battle soloStoryModeConstructor(int levelNumber) {
+        Deck AIDeck;
+        Battle.Mode battleMode;
+        AI ai = new AI("AI", "1234");
+        int reward;
+        switch (levelNumber) {
+            case 1:
+                AIDeck = new Deck(ai, "enemyDeckInStoryGameLevel1");
+                battleMode = Battle.Mode.NORMAL;
+                reward = STORY_REWARD_L1;
+                return new KillHeroBattle
+                        (battleMode,
+                                CurrentAccount.getCurrentAccount(),
+                                ai,
+                                new Deck(CurrentAccount.getCurrentAccount(), CurrentAccount.getCurrentAccount().getMainDeck().getName(), CurrentAccount.getCurrentAccount().getMainDeck().getHero(), CurrentAccount.getCurrentAccount().getMainDeck().getItems(), CurrentAccount.getCurrentAccount().getMainDeck().getCards()),
+                                AIDeck,
+                                new BattleGround(), reward);
+            case 2:
+                AIDeck = new Deck(ai, "enemyDeckInStoryGameLevel2");
+                battleMode = Battle.Mode.FLAG_KEEPING;
+                reward = STORY_REWARD_L2;
+                return new KeepFlagBattle
+                        (battleMode,
+                                CurrentAccount.getCurrentAccount(),
+                                ai,
+                                new Deck(CurrentAccount.getCurrentAccount(), CurrentAccount.getCurrentAccount().getMainDeck().getName(), CurrentAccount.getCurrentAccount().getMainDeck().getHero(), CurrentAccount.getCurrentAccount().getMainDeck().getItems(), CurrentAccount.getCurrentAccount().getMainDeck().getCards()),
+                                AIDeck,
+                                new BattleGround(), reward);
+            case 3:
+                AIDeck = new Deck(ai, "enemyDeckInStoryGameLevel3");
+                battleMode = Battle.Mode.FLAG_COLLECTING;
+                reward = STORY_REWARD_L3;
+                return new CollectFlagBattle
+                        (battleMode,
+                                CurrentAccount.getCurrentAccount(),
+                                ai,
+                                new Deck(CurrentAccount.getCurrentAccount(), CurrentAccount.getCurrentAccount().getMainDeck().getName(), CurrentAccount.getCurrentAccount().getMainDeck().getHero(), CurrentAccount.getCurrentAccount().getMainDeck().getItems(), CurrentAccount.getCurrentAccount().getMainDeck().getCards()),
+                                AIDeck,
+                                new BattleGround(), reward);
+        }
+        return null;
+    }
+
+    public static Battle soloCustomKillHeroModeConstructor(String heroName) {
+        Hero customHero = Hero.searchHeroForCustomGame(heroName);
+        AI ai = new AI("AI", "1234");
+        Deck AIDeck = new Deck(ai, "defaultDeck");
+        Battle.Mode battleMode = Battle.Mode.NORMAL;
+        int reward = CUSTOM_REWARD;
+        return new KillHeroBattle
+                (battleMode,
+                        CurrentAccount.getCurrentAccount(),
+                        ai,
+                        new Deck(CurrentAccount.getCurrentAccount(), CurrentAccount.getCurrentAccount().getMainDeck().getName(), CurrentAccount.getCurrentAccount().getMainDeck().getHero(), CurrentAccount.getCurrentAccount().getMainDeck().getItems(), CurrentAccount.getCurrentAccount().getMainDeck().getCards()),
+                        AIDeck,
+                        new BattleGround(), reward);
+    }
+
+    public static Battle soloCustomFlagModeConstructor(int numberOfFlags) {
+        AI ai = new AI("AI", "1234");
+        Deck AIDeck = new Deck(ai, "defaultDeck");
+        Battle.Mode battleMode;
+        int reward = CUSTOM_REWARD;
+        if (numberOfFlags == 0) {
+            battleMode = Battle.Mode.FLAG_KEEPING;
+            return new KeepFlagBattle
+                    (battleMode,
+                            CurrentAccount.getCurrentAccount(),
+                            ai,
+                            new Deck(CurrentAccount.getCurrentAccount(), CurrentAccount.getCurrentAccount().getMainDeck().getName(), CurrentAccount.getCurrentAccount().getMainDeck().getHero(), CurrentAccount.getCurrentAccount().getMainDeck().getItems(), CurrentAccount.getCurrentAccount().getMainDeck().getCards()),
+                            AIDeck,
+                            new BattleGround(), reward);
+        } else {
+            battleMode = Battle.Mode.FLAG_COLLECTING;
+            return new CollectFlagBattle
+                    (battleMode,
+                            CurrentAccount.getCurrentAccount(),
+                            ai,
+                            new Deck(CurrentAccount.getCurrentAccount(), CurrentAccount.getCurrentAccount().getMainDeck().getName(), CurrentAccount.getCurrentAccount().getMainDeck().getHero(), CurrentAccount.getCurrentAccount().getMainDeck().getItems(), CurrentAccount.getCurrentAccount().getMainDeck().getCards()),
+                            AIDeck,
+                            new BattleGround(),
+                            reward,
+                            numberOfFlags);
+        }
+    }
+
 
 }

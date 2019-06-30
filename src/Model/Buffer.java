@@ -10,6 +10,7 @@ import static Model.BattleGround.CellEffect.*;
 import static Model.BufferOfSpells.Type.*;
 
 public class Buffer {
+
     public static int randomNumberGenerator(int supremeValueOfRange) {
         Random rand = new Random();
         return rand.nextInt(supremeValueOfRange);
