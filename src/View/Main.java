@@ -78,7 +78,6 @@ public class Main extends Application {
         stage.setFullScreen(true);
         stage.show();
 
-//        new SlideShowController().start();
     }
 
     public static void loadPageOnStackPane(Scene prevScene, String FXMLAddress, String type) throws IOException {

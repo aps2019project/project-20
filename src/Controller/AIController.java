@@ -55,30 +55,6 @@ public class AIController implements Initializable {
         CurrentAccount.setCurrentAccount(Account.createAccount("AI", "1234"));
         GameMenuPresenter gameMenuPresenter = new GameMenuPresenter();
         battle = gameMenuPresenter.prepareForSingleGame(1, null);
-
-//        System.out.println(battle.getPlayers()[1]);
-//        System.out.println(battle.getBattleGround().getGround().get(2).get(8).getOwner());
-//        selectedCardBackground = new ImageView(new Image("file:images/card_background_highlight.png"));
-//        selectedCardFromHandBackground = new ImageView(new Image("file:images/card_background_replaced.png"));
-//        errorImage = new Image("file:images/notification_quest_small.png");
-
-//        initializeCardBackground(selectedCardBackground);
-//        initializeCardBackground(selectedCardFromHandBackground);
-//        initializeProfilePics();
-//        initializeManaGemImages();
-//        initializeGround();
-//        initializeHandImages();
-//        Button button = new Button();
-//        mainStackPane.getChildren().add(button);
-//        TranslateTransition translateTransition = new TranslateTransition();
-//        translateTransition.setNode(button);
-//        translateTransition.setFromX(100);
-//        translateTransition.setFromY(100);
-//        translateTransition.setToX(300);
-//        translateTransition.setToY(300);
-//        translateTransition.setDuration(new Duration(1000));
-//        translateTransition.setCycleCount(5);
-//        translateTransition.play();
     }
 
     public void handleAIEvent(Account player, Battle battle) {
