@@ -4,20 +4,15 @@ import Datas.AssetDatas;
 import Exceptions.AssetNotFoundException;
 import Presenter.ImageComparable;
 import Presenter.JsonDeserializerWithInheritance;
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonWriter;
 import javafx.scene.image.Image;
 
-import javax.swing.text.html.ImageView;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Observable;
 
 public class Asset implements ImageComparable {
     @SerializedName("type")
@@ -32,7 +27,8 @@ public class Asset implements ImageComparable {
     protected transient Account owner;
     private String action;
     private Buffer buffer;
-    private String cardImageAddress;
+    private String assetImageAddress;
+    //TODO convert all hashMaps into separated String fields for each State address
 
     public Asset() {
 
@@ -50,7 +46,7 @@ public class Asset implements ImageComparable {
             this.action = name + "Action";
         else
             this.action = "NoAction";
-        cardImageAddress = "file:images/cards/"+name+"/"+name+".png";
+        assetImageAddress = "file:images/cards/"+name+"/"+name+".png";
     }
 
     public String getDesc() {
@@ -141,7 +137,7 @@ public class Asset implements ImageComparable {
 
     public Asset searchAssetFromCardImage(ArrayList<Asset> assets, Image assetCardImage){
         for (Asset asset : assets) {
-            if(assetCardImage.impl_getUrl().split("/")[assetCardImage.impl_getUrl().split("/").length-1].equals(asset.getCardImageAddress().split("/")[asset.getCardImageAddress().split("/").length-1])){
+            if(assetCardImage.impl_getUrl().split("/")[assetCardImage.impl_getUrl().split("/").length-1].equals(asset.getAssetImageAddress().split("/")[asset.getAssetImageAddress().split("/").length-1])){
                 return asset;
             }
         }
@@ -355,12 +351,12 @@ public class Asset implements ImageComparable {
         this.yInGround = yInGround;
     }
 
-    public String getCardImageAddress() {
-        return cardImageAddress;
+    public String getAssetImageAddress() {
+        return assetImageAddress;
     }
 
-    public void setCardImageAddress(String cardImageAddress) {
-        this.cardImageAddress = cardImageAddress;
+    public void setAssetImageAddress(String assetImageAddress) {
+        this.assetImageAddress = assetImageAddress;
     }
 
     protected void setImageAddresses(String name){}
