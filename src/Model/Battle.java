@@ -49,6 +49,9 @@ public abstract class Battle {
     protected int battleID;
     protected int reward;
 
+
+    private ArrayList<Card> inGroundCards = new ArrayList<>();
+
     public Deck[] getPlayersDeck() {
         return playersDeck;
     }
@@ -105,7 +108,6 @@ public abstract class Battle {
             battleGround.getGround().get(itemsCoordinates.get(i) / BattleGround.getColumns()).set(itemsCoordinates.get(i) % BattleGround.getColumns(), collectibleItems.get(i));
     }
 
-
     public void selectWarrior(Account player, int cardID) {
         int playerIndex = getPlayerIndex(player);
         Warrior warrior;
@@ -157,7 +159,6 @@ public abstract class Battle {
         battleGround.getGround().get(flagY).remove(flagX);
     }
 
-
     public void attack(Account player, Warrior attacker, Warrior opponentWarrior) throws RuntimeException {
         if (attacker.isStun() || attacker.isAttackedThisTurn())
             throw new InvalidAttackException("The card can't attack twice!");
@@ -193,7 +194,6 @@ public abstract class Battle {
         determineDeadWarriors(attacker, playerIndex);
         determineDeadWarriors(opponentWarrior, playerIndex);
     }
-
 
     public void counterAttack(Warrior counterAttacker, Warrior opponentWarrior) {
         applyEffectedBuffersOfWarrior(counterAttacker, COUNTER_ATTACK);
@@ -329,6 +329,7 @@ public abstract class Battle {
                         card.setYInGround(y);
                         ((Warrior) card).setMovedThisTurn(true);
                         playersSelectedCard[playerIndex] = card;
+                        inGroundCards.add(card);
                     }
                     return;
                 } else
@@ -855,5 +856,11 @@ public abstract class Battle {
         }
     }
 
+    public ArrayList<Card> getInGroundCards() {
+        return inGroundCards;
+    }
 
+    public void setInGroundCards(ArrayList<Card> inGroundCards) {
+        this.inGroundCards = inGroundCards;
+    }
 }
