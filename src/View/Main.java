@@ -15,7 +15,7 @@ public class Main extends Application implements ScreenManager {
     private static StackPane stackPane = new StackPane();
 
     public static void main(String[] args){
-        //save default data
+//        save default data
 //        try {
 //            Asset.saveCardsToJson();
 //            Deck.saveDefaultDecksToJson();

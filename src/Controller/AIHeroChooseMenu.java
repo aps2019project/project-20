@@ -57,9 +57,7 @@ public class AIHeroChooseMenu implements Initializable , ScreenManager , Animati
     }
 
     public void setRostamButtonOnMouseReleased() throws IOException {
-        //todo
-        Battle.soloCustomKillHeroModeConstructor("rostam");
-        loadPageOnStackPane(anchorPane,"","rtl");
+        startNewGame(anchorPane,Battle.soloCustomKillHeroModeConstructor("rostam"));
     }
 
     public void setRakhshButtonOnMouseEntered() {
@@ -71,9 +69,7 @@ public class AIHeroChooseMenu implements Initializable , ScreenManager , Animati
     }
 
     public void setRakhshButtonOnMouseReleased() throws IOException {
-        //todo
-        Battle.soloCustomKillHeroModeConstructor("rakhsh");
-        loadPageOnStackPane(anchorPane,"","rtl");
+        startNewGame(anchorPane,Battle.soloCustomKillHeroModeConstructor("rakhsh"));
     }
 
     public void setSimorghButtonOnMouseEntered() {
@@ -85,9 +81,7 @@ public class AIHeroChooseMenu implements Initializable , ScreenManager , Animati
     }
 
     public void setSimorghButtonOnMouseReleased() throws IOException {
-        //todo
-        Battle.soloCustomKillHeroModeConstructor("simorgh");
-        loadPageOnStackPane(anchorPane,"","rtl");
+        startNewGame(anchorPane,Battle.soloCustomKillHeroModeConstructor("simorgh"));
     }
 
     public void setArashButtonOnMouseEntered() {
@@ -99,9 +93,7 @@ public class AIHeroChooseMenu implements Initializable , ScreenManager , Animati
     }
 
     public void setArashButtonOnMouseReleased() throws IOException {
-        //todo
-        Battle.soloCustomKillHeroModeConstructor("arash");
-        loadPageOnStackPane(anchorPane,"","rtl");
+        startNewGame(anchorPane,Battle.soloCustomKillHeroModeConstructor("arash"));
     }
 
     public void setKavehButtonOnMouseEntered() {
@@ -113,9 +105,7 @@ public class AIHeroChooseMenu implements Initializable , ScreenManager , Animati
     }
 
     public void setKavehButtonOnMouseReleased() throws IOException {
-        //todo
-        Battle.soloCustomKillHeroModeConstructor("kaveh");
-        loadPageOnStackPane(anchorPane,"","rtl");
+        startNewGame(anchorPane,Battle.soloCustomKillHeroModeConstructor("kaveh"));
     }
 
     public void setZahhakButtonOnMouseEntered() {
@@ -127,9 +117,7 @@ public class AIHeroChooseMenu implements Initializable , ScreenManager , Animati
     }
 
     public void setZahhakButtonOnMouseReleased() throws IOException {
-        //todo
-        Battle.soloCustomKillHeroModeConstructor("zahhak");
-        loadPageOnStackPane(anchorPane,"","rtl");
+        startNewGame(anchorPane,Battle.soloCustomKillHeroModeConstructor("zahhak"));
     }
 
     public void setEsfandiarButtonOnMouseEntered() {
@@ -141,9 +129,7 @@ public class AIHeroChooseMenu implements Initializable , ScreenManager , Animati
     }
 
     public void setEsfandiarButtonOnMouseReleased() throws IOException {
-        //todo
-        Battle.soloCustomKillHeroModeConstructor("esfandiar");
-        loadPageOnStackPane(anchorPane,"","rtl");
+        startNewGame(anchorPane,Battle.soloCustomKillHeroModeConstructor("esfandiar"));
     }
 
     public void setDragonButtonOnMouseEntered() {
@@ -155,9 +141,7 @@ public class AIHeroChooseMenu implements Initializable , ScreenManager , Animati
     }
 
     public void setDragonButtonOnMouseReleased() throws IOException {
-        //todo
-        Battle.soloCustomKillHeroModeConstructor("sevenHeadDragon");
-        loadPageOnStackPane(anchorPane,"","rtl");
+        startNewGame(anchorPane,Battle.soloCustomKillHeroModeConstructor("sevenHeadDragon"));
     }
 
     public void setLegendButtonOnMouseEntered() {
@@ -169,9 +153,7 @@ public class AIHeroChooseMenu implements Initializable , ScreenManager , Animati
     }
 
     public void setLegendButtonOnMouseReleased() throws IOException {
-        //todo
-        Battle.soloCustomKillHeroModeConstructor("legend");
-        loadPageOnStackPane(anchorPane,"","rtl");
+        startNewGame(anchorPane,Battle.soloCustomKillHeroModeConstructor("legend"));
     }
 
     public void setWhiteGhoulButtonOnMouseEntered() {
@@ -183,9 +165,7 @@ public class AIHeroChooseMenu implements Initializable , ScreenManager , Animati
     }
 
     public void setWhiteGhoulButtonOnMouseReleased() throws IOException {
-        //todo
-        Battle.soloCustomKillHeroModeConstructor("whiteDamn");
-        loadPageOnStackPane(anchorPane,"","rtl");
+        startNewGame(anchorPane,Battle.soloCustomKillHeroModeConstructor("whiteDamn"));
     }
 
 

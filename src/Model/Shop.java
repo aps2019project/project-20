@@ -16,12 +16,6 @@ public class Shop {
 
     private final static int MAX_NUMBER_OF_ITEMS_IN_COLLECTION = 3;
 
-    private static ArrayList<Asset> assets = new ArrayList<>();
-
-    public static ArrayList<Asset> getAssets() {
-        return assets;
-    }
-
     public static void sell(Account account, Asset sellingAsset) {
         for (Deck deck : account.getDecks()) {
             deck.removeFromDeck(sellingAsset.getID());

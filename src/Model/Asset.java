@@ -15,6 +15,9 @@ import javax.swing.text.html.ImageView;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Observable;
 
 public class Asset implements ImageComparable {
     @SerializedName("type")
@@ -181,7 +184,7 @@ public class Asset implements ImageComparable {
         throw new AssetNotFoundException("");
     }
 
-    public static void saveCardsToJson() throws IOException {
+    public static void saveCardsToJsonDatabase(Asset newAsset){
         ArrayList<Asset> assets = new ArrayList<>();
         assets.add(AssetDatas.getTotalDisarm());
         assets.add(AssetDatas.getAreaDispel());
@@ -273,11 +276,19 @@ public class Asset implements ImageComparable {
         assets.add(AssetDatas.getSoulEater());
         assets.add(AssetDatas.getBaptism());
         assets.add(AssetDatas.getChineseSword());
+        if(newAsset!=null){
+            assets.add(newAsset);
+        }
 
-        JsonWriter jsonWriter = new JsonWriter(new FileWriter("Data/CardsData.json"));
+        JsonWriter jsonWriter = null;
+        try {
+            jsonWriter = new JsonWriter(new FileWriter("Data/CardsData.json"));
         new GsonBuilder().registerTypeAdapter(Asset.class, new JsonDeserializerWithInheritance<Asset>()).create().toJson(assets, new TypeToken<Collection<Asset>>(){}.getType(), jsonWriter);
         jsonWriter.flush();
         jsonWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static ArrayList<Asset> getAssetsFromFile() throws IOException {
@@ -295,25 +306,6 @@ public class Asset implements ImageComparable {
         }
         throw new AssetNotFoundException("");
     }
-
-//    public boolean isInstanceOfItem(){
-//        return this.getID()>=1000 && this.getID()<2000;
-//    }
-//    public boolean isInstanceOfHero(){
-//        return this.getID()>=2000 && this.getID()<3000;
-//    }
-//    public boolean isInstanceOfSpell(){
-//        return this.getID()>=4000 && this.getID()<5000;
-//    }
-//    public boolean isInstanceOfMinion(){
-//        return this.getID()>=3000 && this.getID()<3000;
-//    }
-//    public boolean isInstanceOfWarrior(){
-//        return this.isInstanceOfMinion() && this.isInstanceOfHero();
-//    }
-//    public boolean isInstanceOfCard(){
-//        return !this.isInstanceOfItem();
-//    }
 
     public String getName() {
         return name;
@@ -370,4 +362,6 @@ public class Asset implements ImageComparable {
     public void setCardImageAddress(String cardImageAddress) {
         this.cardImageAddress = cardImageAddress;
     }
+
+    protected void setImageAddresses(String name){}
 }

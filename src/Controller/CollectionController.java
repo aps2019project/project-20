@@ -1,8 +1,7 @@
 package Controller;
 
 import Exceptions.*;
-import Model.Asset;
-import Model.Deck;
+import Model.*;
 import Presenter.*;
 import View.Main;
 import com.jfoenix.controls.*;
@@ -15,6 +14,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -61,6 +61,20 @@ public class CollectionController implements Initializable, ScreenManager, Accou
     public Tab userCollectionTab;
     public Tab deckCollectionTab;
     public ImageView deckRenameButton;
+    public ImageView backgroundImage;
+    public TextArea nameText;
+    public TextArea typeText;
+    public TextArea APText;
+    public TextArea targetText;
+    public TextArea buffsText;
+    public TextArea HPText;
+    public TextArea attackTypeText;
+    public TextArea specialPowerText;
+    public TextArea rangeText;
+    public TextArea specialPowerActivationText;
+    public TextArea specialPowerCoolDownText;
+    public TextArea costText;
+    public ImageView createCardButton;
     private Asset selectedAssetElement = null;
     private Deck selectedDeckElement = null;
 
@@ -611,6 +625,63 @@ public class CollectionController implements Initializable, ScreenManager, Accou
         if (selectedFile!=null){
             Deck.exportDeck(deck,selectedFile.getPath()+"//"+deck.getName()+".json");
             showOneButtonInformationDialog("Export Message","The Deck Exported Successfully To "+selectedFile.getPath()+" .",false);
+        }
+    }
+
+    public void CreateCard() {
+        final int DEFAULT_MANA = 3;
+        int minionID = 3040;
+        int heroID = 2010;
+        int spellID = 4020;
+
+        int price = Integer.valueOf(costText.getText());
+        int range = Integer.valueOf(rangeText.getText());
+        int AP = Integer.valueOf(APText.getText());
+        int HP = Integer.valueOf(HPText.getText());
+        int coolDown = Integer.valueOf(specialPowerCoolDownText.getText());
+
+        AttackType attackType = null;
+        if (attackTypeText.getText().equals("melee")) {
+            attackType = AttackType.MELEE;
+        } else if (attackTypeText.getText().equals("ranged")) {
+            attackType = AttackType.RANGED;
+        } else if (attackTypeText.getText().equals("hybrid")) {
+            attackType = AttackType.HYBRID;
+        }
+
+        Spell.TargetType targetType = null;
+        if (targetText.getText().equals("enemy")) {
+            targetType = Spell.TargetType.ENEMY;
+        } else if (targetText.getText().equals("player")) {
+            targetType = Spell.TargetType.PLAYER;
+        } else if (targetText.getText().equals("cells")) {
+            targetType = Spell.TargetType.CELLS;
+        }
+        //else if (targetText.getText().equals("whole of ground"))
+        else {
+            targetType = Spell.TargetType.WHOLE_OF_GROUND;
+        }
+
+
+        if (typeText.getText().equals("minion")) {
+
+            Minion minion = new Minion(nameText.getText(), nameText.getText(), price, minionID, range, AP, HP, DEFAULT_MANA, attackType);
+            minionID++;
+            Asset.saveCardsToJsonDatabase(minion);
+            getCurrentAccount().getCollection().getAssets().add(minion);
+        }
+        if (typeText.getText().equals("hero")) {
+            Hero hero = new Hero(nameText.getText(), price, heroID, range, AP, HP, DEFAULT_MANA, coolDown, attackType);
+            heroID++;
+            Asset.saveCardsToJsonDatabase(hero);
+            getCurrentAccount().getCollection().getAssets().add(hero);
+
+        }
+        if (typeText.getText().equals("spell")) {
+            Spell spell = new Spell(nameText.getText(), nameText.getText(), price, spellID, DEFAULT_MANA, targetType);
+            spellID++;
+            Asset.saveCardsToJsonDatabase(spell);
+            getCurrentAccount().getCollection().getAssets().add(spell);
         }
     }
 

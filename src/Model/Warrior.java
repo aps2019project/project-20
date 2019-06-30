@@ -1,6 +1,8 @@
 package Model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import static Model.Warrior.State.*;
 
 public class Warrior extends Card {
     private int range;
@@ -15,7 +17,14 @@ public class Warrior extends Card {
     private AttackType attackType;
     private Flag collectedFlag = null;
     private boolean isMovedThisTurn = false;
+    private HashMap<State, String> imageAddresses = new HashMap<>();
 
+    public enum State {
+        in_deck, attack, breathing, death, idle, run , castLoop
+    }
+
+    public Warrior() {
+    }
 
     public Warrior(String name, String desc, int price, int ID, int AP, int HP, int MP, int range, boolean doesHaveAction, AttackType attackType) {
         super(name, desc, price, ID, MP, doesHaveAction);
@@ -23,6 +32,7 @@ public class Warrior extends Card {
         this.HP = HP;
         this.range = range;
         this.attackType = attackType;
+        setImageAddresses(name);
     }
 
     public Flag getCollectedFlag() {
@@ -113,4 +123,21 @@ public class Warrior extends Card {
         this.isMovedThisTurn = movedThisTurn;
     }
 
+    public HashMap<State, String> getImageAddresses() {
+        return imageAddresses;
+    }
+
+    @Override
+    public void setImageAddresses(String name) {
+        String subClass;
+        if (this instanceof Hero)
+            subClass = "hero";
+        else
+            subClass = "minion";
+        this.imageAddresses.put(in_deck, "file:images/cards/" + subClass + "/" + name + "/" + name + ".png");
+        for (State state : State.values()) {
+            if (state != in_deck)
+                this.imageAddresses.put(state, "file:images/cards/" + subClass + "/" + name + "/" + name + "_" + state.toString() + ".gif");
+        }
+    }
 }

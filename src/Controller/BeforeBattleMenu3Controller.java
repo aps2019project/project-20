@@ -51,9 +51,7 @@ public class BeforeBattleMenu3Controller implements Initializable, ScreenManager
     }
 
     public void setLevel1ButtonOnMouseReleased() throws IOException {
-        //todo
-        Battle.soloStoryModeConstructor(1);
-        loadPageOnStackPane(anchorPane,"","rtl");
+        startNewGame(anchorPane,Battle.soloStoryModeConstructor(1));
     }
 
     public void setLevel2ButtonOnMouseEntered(){
@@ -65,9 +63,7 @@ public class BeforeBattleMenu3Controller implements Initializable, ScreenManager
     }
 
     public void setLevel2ButtonOnMouseReleased() throws IOException {
-        //todo
-        Battle.soloStoryModeConstructor(2);
-        loadPageOnStackPane(anchorPane,"","rtl");
+        startNewGame(anchorPane,Battle.soloStoryModeConstructor(2));
     }
 
     public void setLevel3ButtonOnMouseEntered(){
@@ -79,9 +75,7 @@ public class BeforeBattleMenu3Controller implements Initializable, ScreenManager
     }
 
     public void setLevel3ButtonOnMouseReleased() throws IOException {
-        //todo
-        Battle.soloStoryModeConstructor(3);
-        loadPageOnStackPane(anchorPane,"","rtl");
+        startNewGame(anchorPane,Battle.soloStoryModeConstructor(3));
     }
 
     @Override

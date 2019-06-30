@@ -147,7 +147,6 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
         pane4.getChildren().add(save);
         pane5.getChildren().add(exit);
 
-
         JFXNodesList nodesList = new JFXNodesList();
         nodesList.setSpacing(20);
         nodesList.setRotate(90);

@@ -1,8 +1,11 @@
 package Presenter;
 
+import Controller.BattleGroundController;
 import Controller.SlideShowThread;
+import Model.Battle;
 import View.Main;
 import com.jfoenix.controls.JFXDecorator;
+import javafx.animation.Animation;
 import javafx.animation.ParallelTransition;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -53,7 +56,7 @@ public interface ScreenManager extends Animationable {
 
     }
 
-    default void loadPageOnStackPane(Parent prevPane, String FXMLAddress, String type) throws IOException {
+    default void  loadPageOnStackPane(Parent prevPane, String FXMLAddress, String type) throws IOException {
         Pane lastPane = Main.getPaneOfMainStackPane();
         AnchorPane root = FXMLLoader.load(Main.class.getResource(FXMLAddress));
         Main.getStackPane().getChildren().add(root);
@@ -61,6 +64,20 @@ public interface ScreenManager extends Animationable {
         parallelTransition.getChildren().addAll(slideAnimation(prevPane.getScene(), 200, root, type), nodeFadeAnimation(prevPane, 200, 1, 0));
         parallelTransition.setOnFinished(t -> Main.getStackPane().getChildren().remove(lastPane));
         parallelTransition.play();
+    }
+
+    default void startNewGame(Parent prevPane,Battle battle){
+        Main.getStackPane().getChildren().remove(prevPane);
+        FXMLLoader loader = new FXMLLoader();
+        AnchorPane root = null;
+        try {
+            root = loader.load(getClass().getResource("../View/FXML/BattleGround.fxml").openStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        BattleGroundController battleGroundController = new BattleGroundController(battle);
+        loader.setController(battleGroundController);
+        Main.getStackPane().getChildren().add(root);
     }
 
 }
