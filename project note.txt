@@ -1,0 +1,37 @@
+//Weaknes_BUFF_POWER to WEAKNESS_BUFF_ATTACK
+//We don't have 0 lifetime
+//elfAction is continuous
+
+farsChampion
+farsSwordsMan
+tooraniSpy
+poisonSnake
+drainLion
+whiteWolf
+tiger
+wolf
+twoHeadGiant
+
+goraz
+piran
+giv
+ashkboos
+
+oneEyeGiant
+siavash
+
+giantsnake	minion, battleground
+Bahman		enemy, battleground
+coldMother	enemy, minion, battleground
+
+eagle		playerMinion
+wizard		player, playerMinion, battleGround
+greatWizard	player, playerMinion, battleGround
+elf		player, playerMinion, battleGround
+steelArmor	playerMinion
+
+done: selectcard
+done: swap x, y
+reflection
+flag battle
+done: giv and piran and ...

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import static Model.Warrior.State.*;
 
-public abstract class Warrior extends Card {
+public class Warrior extends Card {
     private int range;
     private int HP;
     private int AP;
@@ -128,7 +128,7 @@ public abstract class Warrior extends Card {
     }
 
     @Override
-    protected void setImageAddresses(String name) {
+    public void setImageAddresses(String name) {
         String subClass;
         if (this instanceof Hero)
             subClass = "hero";

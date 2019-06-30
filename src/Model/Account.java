@@ -4,28 +4,39 @@
 //or not. And also I don't know if they are the same and some changes are made to the card, for example in a battle,
 //do the changes affect the card in the shop and other places or not.
 package Model;
-import Datas.AccountDatas;
-import Datas.DeckDatas;
+
 import Exceptions.RepeatedUserNameException;
 import Exceptions.UserNotFoundException;
 import Exceptions.WrongPasswordException;
+import Presenter.JsonDeserializerWithInheritance;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonWriter;
 
+import java.awt.List;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Reader;
 import java.util.*;
 import java.lang.*;
 import java.util.ArrayList;
-public class Account implements Comparable<Account>{
+
+public class Account implements Comparable<Account> {
     final static int PRIMARY_BUDGET = 15000;
-    private String Name;
+    private String name;
     private String password;
     private Collection collection = new Collection();
     private ArrayList<Deck> decks = new ArrayList<>();
     private int budget = PRIMARY_BUDGET;
     private int numberOfWins = 0;
-    private int numberOfLoses = 0;
+    private int numberOfLooses = 0;
+    private int rank;
     private Deck mainDeck;
 
     public void setName(String name) {
-        this.Name = name;
+        this.name = name;
     }
 
     public void setPassword(String password) {
@@ -41,22 +52,21 @@ public class Account implements Comparable<Account>{
     public ArrayList<Deck> getDecks() {
         return decks;
     }
+
     public Account() {
 
     }
 
-
     public Account(String userName, String password) {
-        this.Name = userName;
+        this.name = userName;
         this.password = password;
-        AccountDatas.getAccounts().add(this);
-        this.setMainDeck( new Deck(this,"defaultDeck", DeckDatas.getDefaultDeck().getHero(),DeckDatas.getDefaultDeck().getItems(),DeckDatas.getDefaultDeck().getCards()));
+        this.setMainDeck(new Deck(this, "defaultDeck"));
         this.collection.setAssetsOfCollectionFromADeck(mainDeck);
         decks.add(mainDeck);
     }
 
     public String getName() {
-        return Name;
+        return name;
     }
 
     public String getPassword() {
@@ -75,8 +85,8 @@ public class Account implements Comparable<Account>{
         return numberOfWins;
     }
 
-    public int getNumberOfLoses() {
-        return numberOfLoses;
+    public int getNumberOfLooses() {
+        return numberOfLooses;
     }
 
     public Deck getMainDeck() {
@@ -91,60 +101,140 @@ public class Account implements Comparable<Account>{
         this.budget = budget;
     }
 
-    public static Account createAccount(String userName, String password) {
+    @Override
+    public int compareTo(Account account) {
+        if(this.numberOfWins - account.numberOfWins!=0) {
+            return this.numberOfWins - account.numberOfWins;
+        }else
+            if(this.numberOfLooses - account.numberOfLooses !=0) {
+            return -(this.numberOfLooses - account.numberOfLooses);
+        }else {
+            return this.getName().compareTo(account.getName());
+        }
+    }
+
+    public static Account createAccount(String userName, String password) throws IOException {
         try {
-            searchAccount(AccountDatas.getAccounts(), userName);
+            searchAccountInFile(userName, "Data/AccountsData.json");
         } catch (UserNotFoundException e) {
-            return new Account(userName, password);
+            ArrayList<Account> accounts = getAccountsFromFile("Data/AccountsData.json");
+            Account account = new Account(userName, password);
+            accounts.add(account);
+            writeAccountArrayInFile(accounts,"Data/AccountsData.json");
+            return account;
         }
         throw new RepeatedUserNameException("The username is already taken.");
     }
 
     public static void deleteAccount(Account account) {
-        AccountDatas.getAccounts().remove(account);
+        //AccountDatas.getAccounts().remove(account);
     }
 
     public static Account login(String userName, String password) {
+        Account account = new Account();
         try {
-            searchAccount(AccountDatas.getAccounts(), userName, password);
+            account = searchAccountInFile(userName, password, "Data/AccountsData.json");
         } catch (UserNotFoundException | WrongPasswordException e) {
             throw e;
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return searchAccount(AccountDatas.getAccounts(), userName, password);
-    }
-
-    @Override
-    public int compareTo(Account account) {
-//        if (this.numberOfWins > account.numberOfWins)
-//            return 1;
-//        else if (this.numberOfWins < account.numberOfWins)
-//            return -1;
-//        return 0;
-        return this.numberOfWins -account.numberOfWins;
+        return account;
     }
 
     public static void sortAccounts(ArrayList<Account> accounts) {
         Collections.sort(accounts);
+        int i=1;
+        for (Account account : accounts) {
+            account.setRank(i);
+            i++;
+        }
     }
 
-    public static Account searchAccount(ArrayList<Account> accounts ,String userName, String password) {
-            for (Account account : accounts) {
-                if (userName.equals(account.getName())) {
-                    if (password.equals(account.getPassword()))
-                        return account;
-                    else
-                        throw new WrongPasswordException("The password is incorrect.");
-                }
-            }
-        throw new UserNotFoundException("User not found.");
-    }
-
-    public static Account searchAccount(ArrayList<Account> accounts ,String userName) {
-            for (Account account : accounts) {
-                if (userName.equals(account.getName())) {
+    public static Account searchAccount(ArrayList<Account> accounts, String userName, String password) {
+        for (Account account : accounts) {
+            if (userName.equals(account.getName())) {
+                if (password.equals(account.getPassword()))
                     return account;
-                }
+                else
+                    throw new WrongPasswordException("The password is incorrect.");
             }
+        }
         throw new UserNotFoundException("User not found.");
+    }
+
+    public static Account searchAccount(ArrayList<Account> accounts, String userName) {
+        for (Account account : accounts) {
+            if (userName.equals(account.getName())) {
+                return account;
+            }
+        }
+        throw new UserNotFoundException("User not found.");
+    }
+
+    public static ArrayList<Account> getAccountsFromFile(String filePath) throws IOException {
+        Reader reader = new FileReader(filePath);
+        ArrayList<Account> currentAccounts = new GsonBuilder().registerTypeAdapter(Asset.class, new JsonDeserializerWithInheritance<Asset>()).create().fromJson(reader, new TypeToken<java.util.Collection<Account>>() {
+        }.getType());
+        reader.close();
+        return currentAccounts;
+    }
+
+    public static Account searchAccountInFile(String userName, String password, String filePath) throws IOException {
+        Reader reader = new FileReader(filePath);
+        Account account;
+        try {
+            Account[] currentAccounts = new GsonBuilder().registerTypeAdapter(Asset.class, new JsonDeserializerWithInheritance<Asset>()).create().fromJson(reader, Account[].class);
+            account = searchAccount(new ArrayList<>(Arrays.asList(currentAccounts)), userName, password);
+        } catch (UserNotFoundException e) {
+            throw e;
+        } finally {
+            reader.close();
+        }
+        return account;
+    }
+
+    public static Account searchAccountInFile(String userName, String filePath) throws IOException {
+        Reader reader = new FileReader(filePath);
+        Account account;
+        try {
+            Account[] currentAccounts = new GsonBuilder().registerTypeAdapter(Asset.class, new JsonDeserializerWithInheritance<Asset>()).create().fromJson(reader, Account[].class);
+            account = searchAccount(new ArrayList<>(Arrays.asList(currentAccounts)), userName);
+        } catch (UserNotFoundException e) {
+            throw e;
+        } finally {
+            reader.close();
+        }
+        return account;
+    }
+
+    public static void writeAccountArrayInFile(ArrayList<Account> accounts, String filePath) throws IOException {
+        JsonWriter jsonWriter = new JsonWriter(new FileWriter(filePath));
+        new GsonBuilder().registerTypeAdapter(Asset.class, new JsonDeserializerWithInheritance<Asset>()).create().toJson(accounts, new TypeToken<java.util.Collection<Account>>(){}.getType(), jsonWriter);
+        jsonWriter.flush();
+        jsonWriter.close();
+    }
+
+    public void saveInToFile(String filePath) throws IOException {
+        ArrayList<Account> accounts = getAccountsFromFile(filePath);
+        accounts.remove(searchAccount(accounts,this.getName()));
+        accounts.add(this);
+        writeAccountArrayInFile(accounts,filePath);
+    }
+
+    public int getRank() {
+        return rank;
+    }
+
+    public void setRank(int rank) {
+        this.rank = rank;
+    }
+
+    public void updateNumberOfWins() {
+        this.numberOfWins++;
+    }
+
+    public void updateNumberOfLooses() {
+        this.numberOfLooses++;
     }
 }

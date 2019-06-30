@@ -1,5 +1,6 @@
 package Controller;
 
+import Presenter.ScreenManager;
 import View.Main;
 import com.jfoenix.controls.*;
 import javafx.fxml.Initializable;
@@ -8,6 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Popup;
@@ -22,17 +24,18 @@ import java.util.ResourceBundle;
 
 import static com.jfoenix.controls.JFXPopup.*;
 
-public class FirstPageController implements Initializable {
+public class FirstPageController implements Initializable, ScreenManager {
 
     public JFXButton login;
     public JFXButton signup;
+    public AnchorPane anchorPane;
 
     public void setLogin() throws IOException {
-        Main.loadPageOnStackPane(login.getScene(),"FXML/SignIn.fxml","rtl");
+        loadPageOnStackPane(anchorPane,"FXML/SignIn.fxml","rtl");
     }
 
     public void setSignup() throws IOException {
-        Main.loadPageOnStackPane(login.getScene(),"FXML/SignUp.fxml","ltr");
+        loadPageOnStackPane(anchorPane,"FXML/SignUp.fxml","ltr");
     }
     @Override
     public void initialize(URL location, ResourceBundle resources) {

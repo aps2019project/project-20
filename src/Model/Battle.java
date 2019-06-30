@@ -1,12 +1,14 @@
 package Model;
 
 import Datas.AssetDatas;
+import Datas.DeckDatas;
 import Exceptions.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
 import Model.Minion.*;
+import Presenter.CurrentAccount;
 
 import static Model.Minion.ActivateTimeOfSpecialPower.*;
 import static Model.Status.*;
@@ -18,19 +20,24 @@ public abstract class Battle {
     }
 
     protected Mode mode;
-    protected final int UNFINISHED_GAME = -1;
-    protected final int DRAW = 0;
-    protected final int FIRST_PLAYER_WIN = 1;
-    protected final int SECOND_PLAYER_WIN = 2;
-    protected int endGameStatus = UNFINISHED_GAME;
-    protected final int FIRST_LATE_TURN = 15;
+    public final static int STORY_REWARD_L1 = 500;
+    public final static int STORY_REWARD_L2 = 1000;
+    public final static int STORY_REWARD_L3 = 1500;
+    public final static int CUSTOM_REWARD = 1000;
+    public final static int UNFINISHED_GAME = -1;
+    public final static int DRAW = 0;
+    public final static int FIRST_PLAYER_WIN = 1;
+    public final static int SECOND_PLAYER_WIN = 2;
+    public int endGameStatus = UNFINISHED_GAME;
+    public static final int FIRST_LATE_TURN = 15;
     public static final int MAX_MANA_IN_LATE_TURNS = 9;
-    public static final int NUMBER_OF_CARDS_IN_HAND = 5;
+    public int eachPlayerManaAtFirstOfTurn = 2;
+    public static  final int NUMBER_OF_CARDS_IN_HAND = 5;
     protected int turn;
-    protected Account[] players = new Account[2];
+    protected transient Account[] players = new Account[2];
     protected Deck[] playersDeck = new Deck[2];
-    protected BattleGround battleGround;
-    protected int[] playersMana = {2, 2};
+    protected BattleGround battleGround = new BattleGround();
+    protected int[] playersMana = {eachPlayerManaAtFirstOfTurn, eachPlayerManaAtFirstOfTurn};
     protected ArrayList<BufferOfSpells>[] playersManaBuffEffected = new ArrayList[2];
     protected Card[] playersSelectedCard = new Card[2];
     protected Item[] playersSelectedItem = new Item[2];
@@ -761,5 +768,92 @@ public abstract class Battle {
         String cardName = cardId.split("_")[1];
         return (Card) Asset.searchAsset(cards, cardName);
     }
+
+    public static Battle soloStoryModeConstructor(int levelNumber) {
+        Deck AIDeck;
+        Battle.Mode battleMode;
+        AI ai = new AI("AI", "1234");
+        int reward;
+        switch (levelNumber) {
+            case 1:
+                AIDeck = new Deck(ai, "enemyDeckInStoryGameLevel1");
+                battleMode = Battle.Mode.NORMAL;
+                reward = STORY_REWARD_L1;
+                return new KillHeroBattle
+                        (battleMode,
+                                CurrentAccount.getCurrentAccount(),
+                                ai,
+                                new Deck(CurrentAccount.getCurrentAccount(), CurrentAccount.getCurrentAccount().getMainDeck().getName(), CurrentAccount.getCurrentAccount().getMainDeck().getHero(), CurrentAccount.getCurrentAccount().getMainDeck().getItems(), CurrentAccount.getCurrentAccount().getMainDeck().getCards()),
+                                AIDeck,
+                                new BattleGround(), reward);
+            case 2:
+                AIDeck = new Deck(ai, "enemyDeckInStoryGameLevel2");
+                battleMode = Battle.Mode.FLAG_KEEPING;
+                reward = STORY_REWARD_L2;
+                return new KeepFlagBattle
+                        (battleMode,
+                                CurrentAccount.getCurrentAccount(),
+                                ai,
+                                new Deck(CurrentAccount.getCurrentAccount(), CurrentAccount.getCurrentAccount().getMainDeck().getName(), CurrentAccount.getCurrentAccount().getMainDeck().getHero(), CurrentAccount.getCurrentAccount().getMainDeck().getItems(), CurrentAccount.getCurrentAccount().getMainDeck().getCards()),
+                                AIDeck,
+                                new BattleGround(), reward);
+            case 3:
+                AIDeck = new Deck(ai, "enemyDeckInStoryGameLevel3");
+                battleMode = Battle.Mode.FLAG_COLLECTING;
+                reward = STORY_REWARD_L3;
+                return new CollectFlagBattle
+                        (battleMode,
+                                CurrentAccount.getCurrentAccount(),
+                                ai,
+                                new Deck(CurrentAccount.getCurrentAccount(), CurrentAccount.getCurrentAccount().getMainDeck().getName(), CurrentAccount.getCurrentAccount().getMainDeck().getHero(), CurrentAccount.getCurrentAccount().getMainDeck().getItems(), CurrentAccount.getCurrentAccount().getMainDeck().getCards()),
+                                AIDeck,
+                                new BattleGround(), reward);
+        }
+        return null;
+    }
+
+    public static Battle soloCustomKillHeroModeConstructor(String heroName) {
+        Hero customHero = Hero.searchHeroForCustomGame(heroName);
+        AI ai = new AI("AI", "1234");
+        Deck AIDeck = new Deck(ai, "defaultDeck");
+        Battle.Mode battleMode = Battle.Mode.NORMAL;
+        int reward = CUSTOM_REWARD;
+        return new KillHeroBattle
+                (battleMode,
+                        CurrentAccount.getCurrentAccount(),
+                        ai,
+                        new Deck(CurrentAccount.getCurrentAccount(), CurrentAccount.getCurrentAccount().getMainDeck().getName(), CurrentAccount.getCurrentAccount().getMainDeck().getHero(), CurrentAccount.getCurrentAccount().getMainDeck().getItems(), CurrentAccount.getCurrentAccount().getMainDeck().getCards()),
+                        AIDeck,
+                        new BattleGround(), reward);
+    }
+
+    public static Battle soloCustomFlagModeConstructor(int numberOfFlags) {
+        AI ai = new AI("AI", "1234");
+        Deck AIDeck = new Deck(ai, "defaultDeck");
+        Battle.Mode battleMode;
+        int reward = CUSTOM_REWARD;
+        if (numberOfFlags == 0) {
+            battleMode = Battle.Mode.FLAG_KEEPING;
+            return new KeepFlagBattle
+                    (battleMode,
+                            CurrentAccount.getCurrentAccount(),
+                            ai,
+                            new Deck(CurrentAccount.getCurrentAccount(), CurrentAccount.getCurrentAccount().getMainDeck().getName(), CurrentAccount.getCurrentAccount().getMainDeck().getHero(), CurrentAccount.getCurrentAccount().getMainDeck().getItems(), CurrentAccount.getCurrentAccount().getMainDeck().getCards()),
+                            AIDeck,
+                            new BattleGround(), reward);
+        } else {
+            battleMode = Battle.Mode.FLAG_COLLECTING;
+            return new CollectFlagBattle
+                    (battleMode,
+                            CurrentAccount.getCurrentAccount(),
+                            ai,
+                            new Deck(CurrentAccount.getCurrentAccount(), CurrentAccount.getCurrentAccount().getMainDeck().getName(), CurrentAccount.getCurrentAccount().getMainDeck().getHero(), CurrentAccount.getCurrentAccount().getMainDeck().getItems(), CurrentAccount.getCurrentAccount().getMainDeck().getCards()),
+                            AIDeck,
+                            new BattleGround(),
+                            reward,
+                            numberOfFlags);
+        }
+    }
+
 
 }

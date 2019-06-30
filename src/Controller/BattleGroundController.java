@@ -53,12 +53,16 @@ public class BattleGroundController implements Initializable {
     private Battle battle;
     private AIController aiController;
 
+    public BattleGroundController(Battle battle){
+        this.battle = battle;
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         //TODO Next three lines are Just for test and must be replaced properly.
-        CurrentAccount.setCurrentAccount(Account.createAccount("a", "1234"));
-        GameMenuPresenter gameMenuPresenter = new GameMenuPresenter();
-        battle = gameMenuPresenter.prepareForSingleGame(0, AssetDatas.getWhiteDamn());
+//        CurrentAccount.setCurrentAccount(Account.createAccount("a", "1234"));
+//        GameMenuPresenter gameMenuPresenter = new GameMenuPresenter();
+//        battle = gameMenuPresenter.prepareForSingleGame(1, null);
 
         aiController = new AIController(battle);
         selectedCardBackground = new ImageView(new Image("file:images/card_background_highlight.png"));

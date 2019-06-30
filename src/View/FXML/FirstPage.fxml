@@ -5,7 +5,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="700.0" prefWidth="1132.0" stylesheets="@../CSS/Screens.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.FirstPageController">
+<AnchorPane fx:id="anchorPane" prefHeight="700.0" prefWidth="1132.0" stylesheets="@../CSS/Screens.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.FirstPageController">
    <children>
       <ImageView fitHeight="700.0" fitWidth="1132.0" pickOnBounds="true" smooth="false">
          <Image url="file:images/firstPage.jpg" />

@@ -1,14 +1,161 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import com.jfoenix.controls.JFXTextArea?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="Controller.BeforeBattleMenu4Controller"
-            prefHeight="400.0" prefWidth="600.0">
-
+<AnchorPane fx:id="anchorPane" layoutX="0" prefHeight="1091.0" prefWidth="1858.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.BeforeBattleMenu4Controller">
+    <children>
+        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#8b8d8f" height="908.0" layoutX="162.0" layoutY="94.0" opacity="0.69" stroke="BLACK" strokeType="INSIDE" style="-fx-stroke-width: 3;" width="1634.0" AnchorPane.bottomAnchor="89.0" AnchorPane.leftAnchor="162.0" AnchorPane.rightAnchor="62.0" AnchorPane.topAnchor="94.0" />
+        <ImageView fx:id="back" fitHeight="152.0" fitWidth="162.0" layoutX="162.0" layoutY="94.0" onMouseEntered="#setBackButtonOnMouseEntered" onMouseExited="#setBackButtonOnMouseExited" onMousePressed="#setBackButtonOnMousePressed" onMouseReleased="#setBackButtonOnMouseReleased" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="file:images/button_back_corner.png" />
+            </image>
+        </ImageView>
+        <ImageView fx:id="mode1Button" fitHeight="536.0" fitWidth="340.0" layoutX="359.0" layoutY="259.0" pickOnBounds="true">
+            <image>
+                <Image url="file:images/play/mode1_button.jpg" />
+            </image>
+        </ImageView>
+        <ImageView fx:id="mode2Button" fitHeight="529.0" fitWidth="357.0" layoutX="832.0" layoutY="258.0" pickOnBounds="true">
+            <image>
+                <Image url="file:images/play/mode2_button.jpg" />
+            </image>
+        </ImageView>
+        <ImageView fx:id="mode3Button" fitHeight="529.0" fitWidth="357.0" layoutX="1314.0" layoutY="256.0" pickOnBounds="true">
+            <image>
+                <Image url="file:images/play/mode3_button.jpg" />
+            </image>
+        </ImageView>
+        <Pane fx:id="mode1PaneDetail" focusTraversable="true" layoutX="359.0" layoutY="259.0" onMouseEntered="#setMode1ButtonOnMouseEntered" onMouseExited="#setMode1ButtonOnMouseExited" onMouseReleased="#setMode1ButtonOnMouseReleased" prefHeight="529.0" prefWidth="340.0" AnchorPane.bottomAnchor="337.0" AnchorPane.leftAnchor="359.0" AnchorPane.rightAnchor="1159.0" AnchorPane.topAnchor="259.0">
+            <Rectangle fill="#8b8d8f" height="529.0" layoutY="3.0" opacity="0.69" strokeType="INSIDE" style="-fx-stroke-width: 3;" width="340.0">
+                <stroke>
+                    <LinearGradient cycleMethod="REPEAT" endX="1.0" endY="1.0">
+                        <stops>
+                            <Stop color="BLACK" />
+                            <Stop color="WHITE" offset="1.0" />
+                        </stops>
+                    </LinearGradient>
+                </stroke>
+            </Rectangle>
+            <Label accessibleRole="PARENT" alignment="CENTER" graphicTextGap="3.0" layoutX="29.0" layoutY="122.0" prefHeight="74.0" prefWidth="283.0" text="KILL  TO  END" textFill="WHITE">
+                <font>
+                    <Font name="Urdu Typesetting" size="35.0" />
+                </font>
+            </Label>
+            <ImageView accessibleRole="PARENT" fitHeight="361.0" fitWidth="71.0" layoutX="135.0" layoutY="22.0" pickOnBounds="true" rotate="90.0">
+                <image>
+                    <Image url="file:images/upward_line_ray.png" />
+                </image>
+            </ImageView>
+            <JFXTextArea accessibleRole="PARENT" editable="false" layoutX="29.0" layoutY="268.0" prefHeight="108.0" prefWidth="283.0" style="-fx-text-fill: #ffffff;" text="battle continues until death of a hero." unFocusColor="WHITE">
+                <font>
+                    <Font name="Arabic Typesetting" size="32.0" />
+                </font>
+            </JFXTextArea>
+        </Pane>
+        <Pane fx:id="mode2PaneDetail" layoutX="831.0" layoutY="263.0" onMouseEntered="#setMode2ButtonOnMouseEntered" onMouseExited="#setMode2ButtonOnMouseExited" onMouseReleased="#setMode2ButtonOnMouseReleased" prefHeight="529.0" prefWidth="357.0">
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#8b8d8f" height="529.0" layoutY="-2.0" opacity="0.69" strokeType="INSIDE" style="-fx-stroke-width: 3;" width="357.0">
+                <stroke>
+                    <LinearGradient cycleMethod="REPEAT" endX="1.0" endY="1.0">
+                        <stops>
+                            <Stop color="BLACK" />
+                            <Stop color="WHITE" offset="1.0" />
+                        </stops>
+                    </LinearGradient>
+                </stroke>
+            </Rectangle>
+            <ImageView accessibleRole="PARENT" fitHeight="384.0" fitWidth="72.0" layoutX="143.0" layoutY="8.0" pickOnBounds="true" rotate="90.0">
+                <image>
+                    <Image url="file:images/upward_line_ray.png" />
+                </image>
+            </ImageView>
+         <Label accessibleRole="PARENT" alignment="CENTER" graphicTextGap="3.0" layoutX="28.0" layoutY="117.0" prefHeight="74.0" prefWidth="302.0" text="COLLECT   FLAGE" textFill="WHITE">
+            <font>
+               <Font name="Urdu Typesetting" size="35.0" />
+            </font>
+         </Label>
+         <JFXTextArea accessibleRole="PARENT" editable="false" layoutX="32.0" layoutY="265.0" prefHeight="108.0" prefWidth="295.0" style="-fx-text-fill: #ffffff;" text="The player who collectes more flags , wins the battle." unFocusColor="WHITE">
+            <font>
+               <Font name="Arabic Typesetting" size="32.0" />
+            </font>
+         </JFXTextArea>
+        </Pane>
+        <Pane fx:id="mode3PaneDetail" layoutX="1313.0" layoutY="265.0" onMouseEntered="#setMode3ButtonOnMouseEntered" onMouseExited="#setMode3ButtonOnMouseExited" onMouseReleased="#setMode3ButtonOnMouseReleased" prefHeight="529.0" prefWidth="357.0">
+            <children>
+                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#8b8d8f" height="529.0" layoutY="-4.0" opacity="0.69" strokeType="INSIDE" style="-fx-stroke-width: 3;" width="357.0">
+                    <stroke>
+                        <LinearGradient cycleMethod="REPEAT" endX="1.0" endY="1.0">
+                            <stops>
+                                <Stop color="BLACK" />
+                                <Stop color="WHITE" offset="1.0" />
+                            </stops>
+                        </LinearGradient>
+                    </stroke>
+                </Rectangle>
+                <ImageView accessibleRole="PARENT" fitHeight="384.0" fitWidth="72.0" layoutX="143.0" layoutY="8.0" pickOnBounds="true" rotate="90.0">
+                    <image>
+                        <Image url="file:images/upward_line_ray.png" />
+                    </image>
+                </ImageView>
+            <Label accessibleRole="PARENT" alignment="CENTER" graphicTextGap="3.0" layoutX="28.0" layoutY="118.0" prefHeight="74.0" prefWidth="302.0" text="KEEP FLAG" textFill="WHITE">
+               <font>
+                  <Font name="Urdu Typesetting" size="35.0" />
+               </font>
+            </Label>
+            <JFXTextArea accessibleRole="PARENT" editable="false" layoutX="16.0" layoutY="265.0" prefHeight="108.0" prefWidth="331.0" style="-fx-text-fill: #ffffff;" text="The player who keeps the flag more than 6 turns , wins the battle." unFocusColor="WHITE">
+               <font>
+                  <Font name="Arabic Typesetting" size="32.0" />
+               </font>
+            </JFXTextArea>
+            </children>
+        </Pane>
+        <ImageView fitHeight="84.0" fitWidth="340.0" layoutX="359.0" layoutY="204.0" pickOnBounds="true" rotate="180.0" AnchorPane.bottomAnchor="803.0" AnchorPane.leftAnchor="359.0" AnchorPane.rightAnchor="1159.0" AnchorPane.topAnchor="204.0">
+            <image>
+                <Image url="file:images/panel_trim_plate.png" />
+            </image>
+        </ImageView>
+        <ImageView fitHeight="84.0" fitWidth="340.0" layoutX="359.0" layoutY="761.0" pickOnBounds="true">
+            <image>
+                <Image url="file:images/panel_trim_plate.png" />
+            </image>
+        </ImageView>
+        <ImageView fitHeight="84.0" fitWidth="357.0" layoutX="832.0" layoutY="761.0" pickOnBounds="true">
+            <image>
+                <Image url="file:images/panel_trim_plate.png" />
+            </image>
+        </ImageView>
+        <ImageView fitHeight="84.0" fitWidth="357.0" layoutX="831.0" layoutY="202.0" pickOnBounds="true" rotate="180.0">
+            <image>
+                <Image url="file:images/panel_trim_plate.png" />
+            </image>
+        </ImageView>
+        <ImageView fitHeight="84.0" fitWidth="357.0" layoutX="1313.0" layoutY="202.0" pickOnBounds="true" rotate="180.0">
+            <image>
+                <Image url="file:images/panel_trim_plate.png" />
+            </image>
+        </ImageView>
+        <ImageView fitHeight="84.0" fitWidth="357.0" layoutX="1314.0" layoutY="761.0" pickOnBounds="true">
+            <image>
+                <Image url="file:images/panel_trim_plate.png" />
+            </image>
+        </ImageView>
+        <ImageView fitHeight="124.0" fitWidth="444.0" layoutX="789.0" layoutY="32.0" pickOnBounds="true">
+            <image>
+                <Image url="file:images/gauntlet_control_bar_bg.png" />
+            </image>
+        </ImageView>
+        <Label accessibleRole="PARENT" alignment="CENTER" graphicTextGap="3.0" layoutX="862.0" layoutY="34.0" prefHeight="108.0" prefWidth="295.0" text="MODE" textFill="WHITE">
+            <font>
+                <Font name="Javanese Text" size="43.0" />
+            </font>
+        </Label>
+    </children>
 </AnchorPane>
