@@ -42,7 +42,6 @@ public abstract class Battle {
     protected int battleID;
     protected int reward;
 
-
     public Deck[] getPlayersDeck() {
         return playersDeck;
     }
@@ -154,12 +153,8 @@ public abstract class Battle {
 
     public void attack(Account player, Warrior attacker, Warrior opponentWarrior) throws RuntimeException {
         if (attacker.isStun() || attacker.isAttackedThisTurn())
-            throw new InvalidAttackException("Card with" + attacker.getID() + "can't attack");
-        int distance, playerIndex;
-        if (player == players[0])
-            playerIndex = 0;
-        else
-            playerIndex = 1;
+            throw new InvalidAttackException("The card can't attack twice!");
+        int distance, playerIndex = getPlayerIndex(player);
         //TODO method must be reconsidered.
 //        Warrior opponentWarrior;
 //        try {
@@ -175,14 +170,17 @@ public abstract class Battle {
         switch (attacker.getAttackType()) {
             case MELEE:
                 meleeAttackOrCounterAttack(attacker, opponentWarrior, distance, ATTACK);
+                attacker.setAttackedThisTurn(true);
                 counterAttack(opponentWarrior, attacker);
                 break;
             case RANGED:
                 rangedAttackOrCounterAttack(attacker, opponentWarrior, distance, ATTACK);
+                attacker.setAttackedThisTurn(true);
                 counterAttack(opponentWarrior, attacker);
                 break;
             case HYBRID:
                 hybridAttackOrCounterAttack(attacker, opponentWarrior, distance, ATTACK);
+                attacker.setAttackedThisTurn(true);
                 counterAttack(opponentWarrior, attacker);
         }
         determineDeadWarriors(attacker, playerIndex);
@@ -225,7 +223,7 @@ public abstract class Battle {
             if (status == ATTACK)
                 applySpecialPower(attacker, opponentWarrior, ON_ATTACK);
             opponentWarrior.changeHP(-1 * attacker.getAP());
-        } else
+        } else if (status == ATTACK)
             throw new InvalidAttackException("Opponent warrior is unavailable for attack");
     }
 
@@ -234,7 +232,7 @@ public abstract class Battle {
             if (status == ATTACK)
                 applySpecialPower(attacker, opponentWarrior, ON_ATTACK);
             opponentWarrior.changeHP(-1 * attacker.getAP());
-        } else
+        } else if (status == ATTACK)
             throw new InvalidAttackException("Opponent warrior is unavailable for attack");
     }
 
@@ -242,11 +240,7 @@ public abstract class Battle {
         try {
             meleeAttackOrCounterAttack(attacker, opponentWarrior, distance, status);
         } catch (InvalidAttackException e) {
-            try {
-                rangedAttackOrCounterAttack(attacker, opponentWarrior, distance, status);
-            } catch (InvalidAttackException e1) {
-                throw e1;
-            }
+            rangedAttackOrCounterAttack(attacker, opponentWarrior, distance, status);
         }
     }
 
@@ -326,6 +320,8 @@ public abstract class Battle {
                         battleGround.getGround().get(y).set(x, card);
                         card.setXInGround(x);
                         card.setYInGround(y);
+                        ((Warrior) card).setMovedThisTurn(true);
+                        playersSelectedCard[playerIndex] = card;
                     }
                     return;
                 } else
@@ -472,9 +468,9 @@ public abstract class Battle {
 
     public void setPlayersManaByDefault() {
         if (turn < FIRST_LATE_TURN)
-            playersMana[turn % 2]++;
+            playersMana[1 - turn % 2]++;
         else
-            playersMana[turn % 2] = MAX_MANA_IN_LATE_TURNS;
+            playersMana[1 - turn % 2] = MAX_MANA_IN_LATE_TURNS;
     }
 
     public void selectItem(Account player, int collectibleItemID) {

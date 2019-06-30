@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXTextArea?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -9,7 +10,6 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 
-<?import javafx.scene.image.Image?>
 <AnchorPane fx:id="battleGroundAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="678.0" prefWidth="845.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.BattleGroundController">
     <children>
         <StackPane fx:id="mainStackPane" layoutX="70.0" layoutY="119.0" prefHeight="361.0" prefWidth="561.0" AnchorPane.bottomAnchor="122.0" AnchorPane.leftAnchor="70.0" AnchorPane.rightAnchor="56.0" AnchorPane.topAnchor="119.0">
@@ -75,10 +75,10 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             </rowConstraints>
         </GridPane>
-        <Pane layoutX="261.0" layoutY="-47.0" prefHeight="200.0" prefWidth="231.0">
+        <Pane layoutX="280.0" layoutY="-116.0" prefHeight="200.0" prefWidth="231.0">
             <children>
                 <ImageView fx:id="errorBar" fitHeight="103.0" fitWidth="200.0" layoutX="12.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true" />
-                <JFXTextArea fx:id="errorMessage" layoutX="26.0" layoutY="57.0" prefHeight="84.0" prefWidth="185.0" />
+                <JFXTextArea fx:id="errorMessage" layoutX="38.0" layoutY="69.0" prefHeight="63.0" prefWidth="185.0" visible="false" />
             </children>
         </Pane>
       <Pane layoutX="675.0" layoutY="578.0" prefHeight="78.0" prefWidth="132.0">
