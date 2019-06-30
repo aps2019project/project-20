@@ -193,14 +193,14 @@ public class AI extends Account {
         battle.attack(this, (Warrior) attacker, (Warrior) playerCard);
     }
 
-    public Asset findPlayerMinion(Account player, Battle battle) {
+    public Warrior findPlayerMinion(Account player, Battle battle) {
         Asset playerCard;
         while (true) {
             playerCard = battle.getBattleGround().getGround().get(BattleGround.getColumns()).get(BattleGround.getRows());
             if (playerCard instanceof Warrior && playerCard.getOwner() == player)
                 break;
         }
-        return playerCard;
+        return (Warrior)playerCard;
     }
 
     public void AIAttackPlayerHero(Account player, Battle battle) {

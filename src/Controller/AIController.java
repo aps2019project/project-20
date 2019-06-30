@@ -47,9 +47,9 @@ public class AIController implements Initializable {
     private ImageView selectedCardBackground;
     private int[] selectedCardCoordinates = new int[]{-2, -2};
     private Battle battle;
-    private ArrayList<Card> inGroundCards = new ArrayList<>();
-    private AI ai = new AI("AI", "1234");
+    private ArrayList<Card> inGroundCards = battle.getInGroundCards();
 
+//    player[1] is ai
     public AIController(Battle battle) {
         this.battle = battle;
         inGroundCards.add(battle.getPlayersDeck()[1].getHero());
@@ -82,7 +82,7 @@ public class AIController implements Initializable {
                             moveAICard(battle, i, j);
                             break;
                     }
-                    battle.endTurn(ai);
+                    battle.endTurn(battle.getPlayers()[1]);
 
                     event1 = makeRandomNumber(3);
                     switch (event1) {
@@ -99,7 +99,7 @@ public class AIController implements Initializable {
                             AIUseSpecialPower(battle);
                             break;
                     }
-                    battle.endTurn(ai);
+                    battle.endTurn(battle.getPlayers()[1]);
                     break;
 
                 case 1:
@@ -121,7 +121,7 @@ public class AIController implements Initializable {
                             selectAICard(battle, i, j);
                             break;
                     }
-                    battle.endTurn(ai);
+                    battle.endTurn(battle.getPlayers()[1]);
                     event2 = makeRandomNumber(3);
                     switch (event2) {
                         case 0:
@@ -140,7 +140,7 @@ public class AIController implements Initializable {
                             break;
 
                     }
-                    battle.endTurn(ai);
+                    battle.endTurn(battle.getPlayers()[1]);
                     break;
 
                 case 2:
@@ -176,17 +176,17 @@ public class AIController implements Initializable {
                             moveAICard(battle, i, j);
                             break;
                     }
-                    battle.endTurn(ai);
+                    battle.endTurn(battle.getPlayers()[1]);
                     break;
 
             }
         } catch (Exception e) {
-            battle.endTurn(ai);
+            battle.endTurn(battle.getPlayers()[1]);
         }
     }
 
     public void AIUseSpecialPower(Battle battle) {
-        battle.applySpecialPower(ai.getMainDeck().getHero(),(Warrior) ai.findPlayerMinion(battle.getPlayers()[1],battle), Minion.ActivateTimeOfSpecialPower.ON_ATTACK);
+        battle.applySpecialPower(battle.getPlayers()[1].getMainDeck().getHero(), findPlayerMinion(battle.getPlayers()[1],battle), Minion.ActivateTimeOfSpecialPower.ON_ATTACK);
         showSpecialPowerAnimation();
     }
 
@@ -222,7 +222,7 @@ public class AIController implements Initializable {
         for (int i = 0; i < BattleGround.getRows(); i++) {
             for (int j = 0; j < BattleGround.getColumns(); j++) {
                 Minion minion = (Minion) battle.getBattleGround().getGround().get(i).get(j);
-                if (minion.getOwner() == ai && minion.getActivateTimeOfSpecialPower() == COMBO) {
+                if (minion.getOwner() == battle.getPlayers()[1] && minion.getActivateTimeOfSpecialPower() == COMBO) {
                     minions.add(minion);
                 }
             }
@@ -232,7 +232,7 @@ public class AIController implements Initializable {
 
         for (int i = 0  ; i< minions.size() ; i++){
             try {
-                battle.attack(ai, minions.get(i), (Warrior) playerCard);
+                battle.attack(battle.getPlayers()[1], minions.get(i), (Warrior) playerCard);
                 showAttackAnimation(minions.get(i), minions.get(i).getXInGround(), minions.get(i).getYInGround());
 
             } catch (AssetNotFoundException | InvalidAttackException e) {
@@ -247,7 +247,7 @@ public class AIController implements Initializable {
         attacker = findAttacker(battle);
         Asset playerCard = findPlayerMinion(player, battle);
         try {
-            battle.attack(ai,(Warrior) attacker, (Warrior) playerCard);
+            battle.attack(battle.getPlayers()[1],(Warrior) attacker, (Warrior) playerCard);
             showAttackAnimation((Warrior) attacker, attacker.getXInGround(), attacker.getYInGround());
 
         } catch (AssetNotFoundException | InvalidAttackException e) {
@@ -256,24 +256,24 @@ public class AIController implements Initializable {
 
     }
 
-    public Asset findPlayerMinion(Account player, Battle battle) {
+    public Warrior findPlayerMinion(Account player, Battle battle) {
         Asset playerCard;
         while (true) {
-            playerCard = battle.getBattleGround().getGround().get(makeRandomNumber(BattleGround.getRows())).get(makeRandomNumber(BattleGround.getColumns()));
+            playerCard = inGroundCards.get(makeRandomNumber(inGroundCards.size()));
             if (playerCard instanceof Warrior && playerCard.getOwner() == player)
                 break;
         }
-        return playerCard;
+        return (Warrior)playerCard;
     }
 
     public void AIAttackPlayerHero(Account player, Battle battle) {
         Asset attacker = findAttacker(battle);
-        battle.attack(ai, (Warrior) attacker, (Warrior) findPlayerHero(player, battle));
+        battle.attack(battle.getPlayers()[1], (Warrior) attacker, (Warrior) findPlayerHero(player, battle));
     }
 
     public void moveAICard(Battle battle, int i, int j) {
 
-        Asset moveWarrior = findPlayerMinion(ai, battle);
+        Asset moveWarrior = findPlayerMinion(battle.getPlayers()[1], battle);
         try {
             battle.cardMoveTo(battle.getPlayers()[0], (Warrior) moveWarrior, j + 1, i + 1);
             showMoveAnimation(i, j);
@@ -306,10 +306,10 @@ public class AIController implements Initializable {
         Asset asset;
         while (true) {
             asset = battle.getBattleGround().getGround().get(makeRandomNumber(BattleGround.getRows())).get(BattleGround.getColumns());
-            if (asset.getOwner() == ai)
+            if (asset.getOwner() == battle.getPlayers()[1])
                 break;
         }
-        battle.selectWarrior(ai, asset.getID());
+        battle.selectWarrior(battle.getPlayers()[1], asset.getID());
         if (selectedCardCoordinates[0] == -1) //Card is already in hand.
             handAndNextCard.getChildren().remove(selectedCardBackground);
         else if (selectedCardCoordinates[0] > -1) {
@@ -322,13 +322,11 @@ public class AIController implements Initializable {
 
     public void insertAICard(Battle battle, int i, int j) {
         try {
-
             Card[] AIHand = battle.getPlayersHand()[1];
-
             Card insertedCard = AIHand[makeRandomNumber(battle.getNUMBER_OF_CARDS_IN_HAND())];
-            battle.insertCard(ai, battle.getPlayersHand()[0][selectedCardCoordinates[1] - 1].getName(), j + 1, i + 1);
+            battle.insertCard(battle.getPlayers()[1], battle.getPlayersHand()[0][selectedCardCoordinates[1] - 1].getName(), j + 1, i + 1);
             showInsertAnimation(i, j);
-            battle.selectWarrior(ai, insertedCard.getID());
+            battle.selectWarrior(battle.getPlayers()[1], insertedCard.getID());
         } catch (AssetNotFoundException | InvalidInsertInBattleGroundException | ThisCellFilledException | DontHaveEnoughManaException e) {
             handleError();
         }
@@ -376,16 +374,12 @@ public class AIController implements Initializable {
 
     public Asset findAttacker(Battle battle) {
         Asset attacker;
-        for (int i = 0; i < BattleGround.getRows(); i++) {
-            for (int j = 0; j < BattleGround.getColumns(); j++) {
-
-            }
+        
+        while (true) {
+            attacker = inGroundCards.get(makeRandomNumber(inGroundCards.size()));
+            if (attacker instanceof Warrior && attacker.getOwner() == battle.getPlayers()[1])
+                break;
         }
-//        while (true) {
-            attacker = battle.getBattleGround().getGround().get(makeRandomNumber(BattleGround.getRows())).get(makeRandomNumber(BattleGround.getColumns()));
-//            if (attacker instanceof Warrior && attacker.getOwner() == ai)
-//                break;
-//        }
         return attacker;
     }
 
@@ -393,7 +387,7 @@ public class AIController implements Initializable {
         ArrayList<Asset> assets = new ArrayList<>();
         for (int i = 0; i < BattleGround.getRows(); i++) {
             for (int j = 0; j < BattleGround.getColumns(); j++) {
-                if (battle.getBattleGround().getGround().get(i).get(j).getOwner() == ai)
+                if (battle.getBattleGround().getGround().get(i).get(j).getOwner() == battle.getPlayers()[1])
                     assets.add(battle.getBattleGround().getGround().get(i).get(j));
             }
         }
@@ -430,6 +424,6 @@ public class AIController implements Initializable {
     }
 
     private void handleError() {
-        battle.endTurn(ai);
+        battle.endTurn(battle.getPlayers()[1]);
     }
 }
