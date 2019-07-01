@@ -16,19 +16,20 @@ public class Main extends Application implements ScreenManager {
 
     public static void main(String[] args){
 //        save default data
-        try {
-            Asset.saveCardsToJsonDatabase(null);
-            Deck.saveDefaultDecksToJson();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        //launch(args);
+//        try {
+//            Asset.saveCardsToJsonDatabase(null);
+//            Deck.saveDefaultDecksToJson();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        launch(args);
     }
 
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        loadPageInNewStage(null, "FXML/FirstPage.fxml", false);
+        loadPageInNewStage(null, "FXML/BattleGround.fxml", true);
+//        loadPageOnStackPane(null, "FXML/BattleGround.fxml", "ltr");
     }
 
 

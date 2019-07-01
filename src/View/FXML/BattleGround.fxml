@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXTextArea?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -10,12 +11,11 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 
-<?import javafx.scene.image.Image?>
-<AnchorPane fx:id="battleGroundAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="678.0" prefWidth="845.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="battleGroundAnchorPane" fx:controller="Controller.BattleGroundController" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="678.0" prefWidth="845.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <StackPane fx:id="mainStackPane" layoutX="70.0" layoutY="119.0" prefHeight="361.0" prefWidth="561.0" AnchorPane.bottomAnchor="122.0" AnchorPane.leftAnchor="70.0" AnchorPane.rightAnchor="56.0" AnchorPane.topAnchor="119.0">
             <children>
-                <GridPane fx:id="battleGroundGrid" alignment="CENTER" gridLinesVisible="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="437.0" prefWidth="717.0" StackPane.alignment="TOP_LEFT">
+                <GridPane fx:id="groundGrid" alignment="CENTER" gridLinesVisible="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="437.0" prefWidth="717.0" StackPane.alignment="TOP_LEFT">
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -76,6 +76,8 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             </rowConstraints>
         </GridPane>
+      <Label fx:id="playerName" layoutX="120.0" layoutY="4.0" prefHeight="21.0" prefWidth="66.0" />
+      <Label fx:id="opponentName" layoutX="708.0" layoutY="25.0" prefHeight="21.0" prefWidth="66.0" />
         <Pane layoutX="280.0" layoutY="-116.0" prefHeight="200.0" prefWidth="231.0">
             <children>
                 <ImageView fx:id="errorBar" fitHeight="103.0" fitWidth="200.0" layoutX="12.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true" />

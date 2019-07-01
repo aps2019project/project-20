@@ -48,8 +48,6 @@ public abstract class Battle {
     private ArrayList<Integer> itemsCoordinates;
     protected int battleID;
     protected int reward;
-
-
     private ArrayList<Card> inGroundCards = new ArrayList<>();
 
     public Deck[] getPlayersDeck() {
@@ -75,6 +73,8 @@ public abstract class Battle {
         this.playersGraveYard[0] = new GraveYard();
         this.playersGraveYard[1] = new GraveYard();
         this.reward = reward;
+        this.inGroundCards.add(playersDeck[0].getHero());
+        this.inGroundCards.add(playersDeck[1].getHero());
         //Filling Players' hands
         for (int i = 0; i <= 1; i++) {
             int nextCardFromDeckIndex = 0;
