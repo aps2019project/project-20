@@ -10,7 +10,6 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 
-<?import javafx.scene.image.Image?>
 <AnchorPane fx:id="battleGroundAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="678.0" prefWidth="845.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <StackPane fx:id="mainStackPane" layoutX="70.0" layoutY="119.0" prefHeight="361.0" prefWidth="561.0" AnchorPane.bottomAnchor="122.0" AnchorPane.leftAnchor="70.0" AnchorPane.rightAnchor="56.0" AnchorPane.topAnchor="119.0">
@@ -86,6 +85,15 @@
          <children>
             <ImageView fx:id="endTurn" fitHeight="63.0" fitWidth="112.0" layoutX="10.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true">
                 <Image url="file:images/ENDTURN_button.png" />
+            </ImageView>
+         </children>
+      </Pane>
+      <Pane layoutX="9.0" layoutY="578.0" prefHeight="78.0" prefWidth="113.0">
+         <children>
+            <ImageView fx:id="cheatButton" fitHeight="78.0" fitWidth="113.0" layoutY="20.0" onMouseClicked="#cheatMode" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="file:images/cheat_button.png" />
+               </image>
             </ImageView>
          </children>
       </Pane>

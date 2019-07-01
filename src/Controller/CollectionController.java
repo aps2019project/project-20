@@ -402,12 +402,12 @@ public class CollectionController implements Initializable, ScreenManager, Accou
         for (int i = 0; i < assets.size(); i++) {
             ImageView imageView = null;
             try {
-                imageView = new ImageView(new File(assets.get(i).getCardImageAddress().substring(5)).toURL().toString());
-            } catch (MalformedURLException e) {
+                imageView = new ImageView(new File(assets.get(i).getAssetImageAddress().substring(5)).toURI().toString());
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             imageView.setFitWidth(250);
-            imageView.setFitHeight(320);
+            imageView.setFitHeight (320);
             Pane pane = new Pane();
             pane.setOnMouseEntered(event -> pane.setStyle("-fx-background-color: #949494;"));
             pane.setOnMouseExited(event -> pane.setStyle("-fx-background-color: -fx-primary;"));
@@ -415,14 +415,14 @@ public class CollectionController implements Initializable, ScreenManager, Accou
             pane.setOnMouseReleased(event -> {
                 selectedAssetElement = new Asset().searchAssetFromCardImage(assets, ((ImageView) pane.getChildren().get(0)).getImage());
                 if (collectionTab.isSelected()) {
-                    selectedCardImageInCollectionTab.setImage(new Image(selectedAssetElement.getCardImageAddress()));
+                    selectedCardImageInCollectionTab.setImage(new Image(selectedAssetElement.getAssetImageAddress()));
                 } else if (editDeckTab.isSelected()) {
                     if (userCollectionTab.isSelected()) {
                         cardActionButton.setImage(new Image("file:images/available_add_button.png"));
                     } else if (deckCollectionTab.isSelected()) {
                         cardActionButton.setImage(new Image("file:images/available_remove_button.png"));
                     }
-                    selectedCardImageInEditDeckTab.setImage(new Image(selectedAssetElement.getCardImageAddress()));
+                    selectedCardImageInEditDeckTab.setImage(new Image(selectedAssetElement.getAssetImageAddress()));
                 }
                 pane.setStyle("-fx-background-color: -fx-primary;");
             });
