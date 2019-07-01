@@ -16,13 +16,13 @@ public class Main extends Application implements ScreenManager {
 
     public static void main(String[] args){
 //        save default data
-//        try {
-//            Asset.saveCardsToJson();
-//            Deck.saveDefaultDecksToJson();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-        launch(args);
+        try {
+            Asset.saveCardsToJsonDatabase(null);
+            Deck.saveDefaultDecksToJson();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //launch(args);
     }
 
 

@@ -1,19 +1,14 @@
 package Model;
 
-import java.util.HashMap;
-import static Model.Spell.State.*;
-
 public class Spell extends Card {
     private int squareSideLength;
     private TargetType targetType;
-    private HashMap<State, String> imageAddresses = new HashMap<>();
+    private String actionBarImageAddress;
+    private String activeImageAddress;
+    private String effectImageAddress;
 
     public enum TargetType {
         ENEMY, PLAYER, CELLS, WHOLE_OF_GROUND
-    }
-
-    public enum State {
-        in_deck, actionbar, active, effect
     }
 
     public Spell(String name,String desc, int price, int ID,int MP, TargetType targetType) {
@@ -38,16 +33,22 @@ public class Spell extends Card {
         return targetType;
     }
 
-    public HashMap<State, String> getImageAddresses() {
-        return imageAddresses;
+    public String getActionBarImageAddress() {
+        return actionBarImageAddress;
+    }
+
+    public String getActiveImageAddress() {
+        return activeImageAddress;
+    }
+
+    public String getEffectImageAddress() {
+        return effectImageAddress;
     }
 
     @Override
     protected void setImageAddresses(String name) {
-        this.imageAddresses.put(in_deck, "file:images/cards/spell/" + name + "/" + name + ".png");
-        for (State state : State.values()) {
-            if (state != in_deck)
-                this.imageAddresses.put(state, "file:images/cards/spell/" + name + "/" + name + "_" + state.toString() + ".gif");
-        }
+        actionBarImageAddress = "file:images/cards/spell/" + name + "/" + name + "_actionbar.gif";
+        activeImageAddress = "file:images/cards/spell/" + name + "/" + name + "_active.gif";
+        effectImageAddress = "file:images/cards/spell/" + name + "/" + name + "_effect.gif";
     }
 }

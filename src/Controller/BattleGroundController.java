@@ -116,12 +116,12 @@ public class BattleGroundController implements Initializable {
                 card = battle.getPlayersHand()[0][i - 1];
 
             if (card instanceof Warrior) {
-                handAndNextCardImageViews[i] = new ImageView(new Image(((Warrior) card).getImageAddresses().get(Warrior.State.idle)));
+                handAndNextCardImageViews[i] = new ImageView(new Image(((Warrior) card).getIdleImageAddress()));
                 if (i != 0)
                     setSelectedCardFromHandClick(handAndNextCardImageViews[i], i);
             }
             else if (card instanceof Spell) {
-                handAndNextCardImageViews[i] = new ImageView(new Image(((Spell) card).getImageAddresses().get(Spell.State.actionbar)));
+                handAndNextCardImageViews[i] = new ImageView(new Image(((Spell) card).getActionBarImageAddress()));
                 if (i != 0)
                     setSelectedCardFromHandClick(handAndNextCardImageViews[i], i);
             }
@@ -161,13 +161,13 @@ public class BattleGroundController implements Initializable {
             for (int j = 0; j < BattleGround.getColumns(); j++) {
                 Asset asset = battle.getBattleGround().getGround().get(i).get(j);
                 if (asset instanceof Warrior) {
-                    groundImageViews[i][j] = new ImageView(new Image(((Warrior) asset).getImageAddresses().get(Warrior.State.breathing)));
+                    groundImageViews[i][j] = new ImageView(new Image(((Warrior) asset).getBreathingImageAddress()));
                     healthBars.put((Warrior) asset, new TextArea(String.valueOf(((Warrior) asset).getHP())));
                     healthBars.get(asset).setLayoutX(groundImageViews[i][j].getLayoutX());
                     healthBars.get(asset).setLayoutY(groundImageViews[i][j].getLayoutY());
                 }
                 else if (asset instanceof Item)
-                    groundImageViews[i][j] = new ImageView(new Image(((Item) asset).getImageAddresses().get(Item.State.actionbar)));
+                    groundImageViews[i][j] = new ImageView(new Image(((Item) asset).getActionbarImageAddress()));
                 else if (asset instanceof Flag)
                     groundImageViews[i][j] = new ImageView(new Image("file:images/flag_icon.png"));
                 else
@@ -243,7 +243,7 @@ public class BattleGroundController implements Initializable {
         handAndNextCardImageViews[selectedCardCoordinates[1]].setImage(null);
         handAndNextCardPanes[selectedCardCoordinates[1]].getChildren().remove(selectedCardBackground);
         if (handCard instanceof Warrior) {
-            groundImageViews[i][j].setImage(new Image(((Warrior) handCard).getImageAddresses().get(Warrior.State.breathing)));
+            groundImageViews[i][j].setImage(new Image(((Warrior) handCard).getBreathingImageAddress()));
             battleGroundPanes[i][j].getChildren().add(selectedCardBackground);
             selectedCardCoordinates[0] = i;
             selectedCardCoordinates[1] = j;
@@ -252,7 +252,7 @@ public class BattleGroundController implements Initializable {
             Thread t1 = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    groundImageViews[i][j].setImage(new Image(((Spell) handCard).getImageAddresses().get(Spell.State.active)));
+                    groundImageViews[i][j].setImage(new Image(((Spell) handCard).getActiveImageAddress()));
                     try {
                         Thread.sleep(2000);
                     } catch (InterruptedException e) {
@@ -300,7 +300,7 @@ public class BattleGroundController implements Initializable {
                         battleGroundPanes[i][j].getChildren().add(selectedCardBackground);
                     }
                 });
-                groundImageViews[i][j].setImage(new Image(warrior.getImageAddresses().get(Warrior.State.breathing)));
+                groundImageViews[i][j].setImage(new Image(warrior.getBreathingImageAddress()));
                 groundImageViews[i][j].setOpacity(1);
                 selectedCardCoordinates[0] = i;
                 selectedCardCoordinates[1] = j;
@@ -311,7 +311,7 @@ public class BattleGroundController implements Initializable {
 
     private void animateMove (Warrior warrior, int finalRow, int finalColumn) {
         TranslateTransition translateTransition = new TranslateTransition();
-        groundImageViews[selectedCardCoordinates[0]][selectedCardCoordinates[1]].setImage(new Image(warrior.getImageAddresses().get(Warrior.State.run)));
+        groundImageViews[selectedCardCoordinates[0]][selectedCardCoordinates[1]].setImage(new Image(warrior.getRunImageAddress()));
         translateTransition.setNode(groundImageViews[selectedCardCoordinates[0]][selectedCardCoordinates[1]]);
         double initX = battleGroundPanes[selectedCardCoordinates[0]][selectedCardCoordinates[1]].getLayoutX();
         double initY = battleGroundPanes[selectedCardCoordinates[0]][selectedCardCoordinates[1]].getLayoutY() - 2 * battleGroundPanes[selectedCardCoordinates[0]][selectedCardCoordinates[1]].getHeight();
@@ -358,13 +358,13 @@ public class BattleGroundController implements Initializable {
                 Warrior attacker = (Warrior) battle.getPlayersSelectedCard()[0];
                 int attackerRow = selectedCardCoordinates[0];
                 int attackerColumn = selectedCardCoordinates[1];
-                groundImageViews[attackerRow][attackerColumn].setImage(new Image(attacker.getImageAddresses().get(Warrior.State.attack)));
+                groundImageViews[attackerRow][attackerColumn].setImage(new Image(attacker.getAttackImageAddress()));
                 try {
                     Thread.sleep(1500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                groundImageViews[attackerRow][attackerColumn].setImage(new Image(attacker.getImageAddresses().get(Warrior.State.breathing)));
+                groundImageViews[attackerRow][attackerColumn].setImage(new Image(attacker.getBreathingImageAddress()));
             }
         }).start();
         //TODO: Is it needed to show a bubble indicating value of damage applied?

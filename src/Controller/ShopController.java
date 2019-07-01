@@ -158,7 +158,7 @@ public class ShopController implements Initializable, ScreenManager, AccountMana
     public void fillFlowPaneCollection(FlowPane flowPane, ArrayList<Asset> assets) {
         flowPane.getChildren().clear();
         for (int i = 0; i < assets.size(); i++) {
-            ImageView imageView = new ImageView(new Image(assets.get(i).getCardImageAddress()));
+            ImageView imageView = new ImageView(new Image(assets.get(i).getAssetImageAddress()));
             imageView.setFitWidth(250);
             imageView.setFitHeight(320);
             Pane pane = new Pane();
@@ -170,7 +170,7 @@ public class ShopController implements Initializable, ScreenManager, AccountMana
                 selectedElement = new Asset().searchAssetFromCardImage(assets,((ImageView) pane.getChildren().get(0)).getImage());
                 assetPrice.setText(selectedElement.getPrice() + " DR");
                 assetPrice.setVisible(true);
-                cardImage.setImage(new Image(selectedElement.getCardImageAddress()));
+                cardImage.setImage(new Image(selectedElement.getAssetImageAddress()));
                 actionButton.setImage(new Image("file:images/button_primary_glow.png"));
                 pane.setStyle("-fx-background-color: -fx-primary;");
             });

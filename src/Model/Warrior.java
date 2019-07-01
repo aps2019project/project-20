@@ -1,9 +1,5 @@
 package Model;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import static Model.Warrior.State.*;
-
 public class Warrior extends Card {
     private int range;
     private int HP;
@@ -17,14 +13,12 @@ public class Warrior extends Card {
     private AttackType attackType;
     private Flag collectedFlag = null;
     private boolean isMovedThisTurn = false;
-    private HashMap<State, String> imageAddresses = new HashMap<>();
-
-    public enum State {
-        in_deck, attack, breathing, death, idle, run , castLoop
-    }
-
-    public Warrior() {
-    }
+    private String attackImageAddress;
+    private String breathingImageAddress;
+    private String deathImageAddress;
+    private String idleImageAddress;
+    private String runImageAddress;
+    private String castLoopImageAddress;
 
     public Warrior(String name, String desc, int price, int ID, int AP, int HP, int MP, int range, boolean doesHaveAction, AttackType attackType) {
         super(name, desc, price, ID, MP, doesHaveAction);
@@ -123,8 +117,28 @@ public class Warrior extends Card {
         this.isMovedThisTurn = movedThisTurn;
     }
 
-    public HashMap<State, String> getImageAddresses() {
-        return imageAddresses;
+    public String getAttackImageAddress() {
+        return attackImageAddress;
+    }
+
+    public String getBreathingImageAddress() {
+        return breathingImageAddress;
+    }
+
+    public String getDeathImageAddress() {
+        return deathImageAddress;
+    }
+
+    public String getIdleImageAddress() {
+        return idleImageAddress;
+    }
+
+    public String getRunImageAddress() {
+        return runImageAddress;
+    }
+
+    public String getCastLoopImageAddress() {
+        return castLoopImageAddress;
     }
 
     @Override
@@ -134,10 +148,11 @@ public class Warrior extends Card {
             subClass = "hero";
         else
             subClass = "minion";
-        this.imageAddresses.put(in_deck, "file:images/cards/" + subClass + "/" + name + "/" + name + ".png");
-        for (State state : State.values()) {
-            if (state != in_deck)
-                this.imageAddresses.put(state, "file:images/cards/" + subClass + "/" + name + "/" + name + "_" + state.toString() + ".gif");
-        }
+        attackImageAddress = "file:images/cards/" + subClass + "/" + name + "/" + name + "_attack.gif";
+        breathingImageAddress = "file:images/cards/" + subClass + "/" + name + "/" + name + "_breathing.gif";
+        castLoopImageAddress = "file:images/cards/" + subClass + "/" + name + "/" + name + "_castloop.gif";
+        deathImageAddress = "file:images/cards/" + subClass + "/" + name + "/" + name + "_death.gif";
+        idleImageAddress = "file:images/cards/" + subClass + "/" + name + "/" + name + "_idle.gif";
+        runImageAddress = "file:images/cards/" + subClass + "/" + name + "/" + name + "_run.gif";
     }
 }

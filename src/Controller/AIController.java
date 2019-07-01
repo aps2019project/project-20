@@ -195,7 +195,7 @@ public class AIController implements Initializable {
 
         new Thread(()->{
             TranslateTransition translateTransition = new TranslateTransition();
-            groundImageViews[selectedCardCoordinates[0]][selectedCardCoordinates[1]].setImage(new Image(hero.getImageAddresses().get(Warrior.State.castLoop)));
+            groundImageViews[selectedCardCoordinates[0]][selectedCardCoordinates[1]].setImage(new Image(hero.getCastLoopImageAddress()));
             translateTransition.setNode(battleGroundPanes[selectedCardCoordinates[0]][selectedCardCoordinates[1]]);
             translateTransition.setToX(battleGroundPanes[hero.getXInGround()][hero.getYInGround()].getLayoutX());
             translateTransition.setToY(battleGroundPanes[hero.getXInGround()][hero.getYInGround()].getLayoutY());
@@ -207,7 +207,7 @@ public class AIController implements Initializable {
             } catch (Exception e) {
                 handleError();
             }
-            groundImageViews[hero.getXInGround()][hero.getYInGround()].setImage(new Image(hero.getImageAddresses().get(Warrior.State.breathing)));
+            groundImageViews[hero.getXInGround()][hero.getYInGround()].setImage(new Image(hero.getBreathingImageAddress()));
         }).start();
     }
 
@@ -287,7 +287,7 @@ public class AIController implements Initializable {
         Warrior warrior = (Warrior) battle.getPlayersSelectedCard()[0];
         new Thread(() -> {
             TranslateTransition translateTransition = new TranslateTransition();
-            groundImageViews[selectedCardCoordinates[0]][selectedCardCoordinates[1]].setImage(new Image(warrior.getImageAddresses().get(Warrior.State.run)));
+            groundImageViews[selectedCardCoordinates[0]][selectedCardCoordinates[1]].setImage(new Image(warrior.getRunImageAddress()));
             translateTransition.setNode(battleGroundPanes[selectedCardCoordinates[0]][selectedCardCoordinates[1]]);
             translateTransition.setToX(battleGroundPanes[i][j].getLayoutX());
             translateTransition.setToY(battleGroundPanes[i][j].getLayoutY());
@@ -298,7 +298,7 @@ public class AIController implements Initializable {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            groundImageViews[i][j].setImage(new Image(warrior.getImageAddresses().get(Warrior.State.breathing)));
+            groundImageViews[i][j].setImage(new Image(warrior.getBreathingImageAddress()));
         }).start();
     }
 
@@ -335,9 +335,9 @@ public class AIController implements Initializable {
     public void showInsertAnimation(int i, int j) {
         Card handCard = battle.getPlayersHand()[0][selectedCardCoordinates[1]];
         if (handCard instanceof Warrior)
-            groundImageViews[i][j].setImage(new Image(((Warrior) handCard).getImageAddresses().get(Warrior.State.breathing)));
+            groundImageViews[i][j].setImage(new Image(((Warrior) handCard).getBreathingImageAddress()));
         else if (handCard instanceof Spell) {
-            groundImageViews[i][j].setImage(new Image(((Spell) handCard).getImageAddresses().get(Spell.State.active)));
+            groundImageViews[i][j].setImage(new Image(((Spell) handCard).getActiveImageAddress()));
 
             try {
                 TimeUnit.SECONDS.sleep(2);
@@ -353,7 +353,7 @@ public class AIController implements Initializable {
         Warrior attacker = (Warrior) battle.getPlayersSelectedCard()[0];
         int attackerRow = selectedCardCoordinates[0];
         int attackerColumn = selectedCardCoordinates[1];
-        groundImageViews[attackerRow][attackerColumn].setImage(new Image(attacker.getImageAddresses().get(Warrior.State.attack)));
+        groundImageViews[attackerRow][attackerColumn].setImage(new Image(attacker.getAttackImageAddress()));
     }
 
     public int makeRandomNumber(int value) {
