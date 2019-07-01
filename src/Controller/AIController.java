@@ -47,12 +47,12 @@ public class AIController implements Initializable {
     private ImageView selectedCardBackground;
     private int[] selectedCardCoordinates = new int[]{-2, -2};
     private Battle battle;
-    private ArrayList<Card> inGroundCards = battle.getInGroundCards();
+    private ArrayList<Card> inGroundCards;
 
 //    player[1] is ai
     public AIController(Battle battle) {
         this.battle = battle;
-        inGroundCards.add(battle.getPlayersDeck()[1].getHero());
+        inGroundCards = battle.getInGroundCards();
     }
 
     @Override
@@ -305,7 +305,7 @@ public class AIController implements Initializable {
     public void selectAICard(Battle battle, int i, int j) {
         Asset asset;
         while (true) {
-            asset = battle.getBattleGround().getGround().get(makeRandomNumber(BattleGround.getRows())).get(BattleGround.getColumns());
+            asset = battle.getBattleGround().getGround().get(makeRandomNumber(BattleGround.getRows())).get(makeRandomNumber(BattleGround.getColumns()));
             if (asset.getOwner() == battle.getPlayers()[1])
                 break;
         }

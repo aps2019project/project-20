@@ -1,51 +1,54 @@
 package Controller;
 
-import Datas.AssetDatas;
+import Datas.DeckDatas;
 import Exceptions.*;
 import Model.*;
 import Presenter.CurrentAccount;
+import Presenter.ScreenManager;
 import com.jfoenix.controls.JFXTextArea;
-import javafx.animation.TranslateTransition;
+import javafx.animation.*;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
 import javafx.util.Duration;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
-
 import static Model.BattleGround.CellEffect;
 
-public class BattleGroundController implements Initializable {
+public class BattleGroundController implements Initializable, ScreenManager {
     private static final int CELL_HEIGHT = 80;
     private static final int CELL_WIDTH = 80;
     public StackPane mainStackPane;
     public ImageView battleGroundImage;
     public ImageView playerProfilePic;
     public ImageView opponentProfilePic;
-    public GridPane battleGroundGrid;
+    public Label playerName;
+    public Label opponentName;
+    public GridPane groundGrid;
     public GridPane handAndNextCardGrid;
     public GridPane manaGemsRibbon;
-    public Pane[][] battleGroundPanes;
+    public Pane[][] groundPanes;
     public Pane[] handAndNextCardPanes;
     public ImageView errorBar;
     public Image errorImage;
     public Image freeCellImage;
     public JFXTextArea errorMessage;
     public ImageView endTurn;
-    private HashMap<Warrior, TextArea> healthBars = new HashMap<>();
-    //    public Button menuButton;
+    private HashMap<Warrior, Label> healthBars = new HashMap<>();
+//    public Button menuButton;
 //    public Button friendButton;
     public AnchorPane battleGroundAnchorPane;
     private ImageView[][] groundImageViews;
@@ -56,25 +59,26 @@ public class BattleGroundController implements Initializable {
     private Battle battle;
     private AIController aiController;
 
-    public BattleGroundController(Battle battle) {
+    public BattleGroundController(){}
+
+    public BattleGroundController(Battle battle){
         this.battle = battle;
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         //TODO Next three lines are Just for test and must be replaced properly.
-        CurrentAccount.setCurrentAccount(new Account("reza", "1234"));
+        Account temp = new Account("reza", "1234");
+        temp.setMainDeck(DeckDatas.getDefaultDeck());
+        CurrentAccount.setCurrentAccount(temp);
         battle = Battle.soloCustomKillHeroModeConstructor("rostam");
-//        GameMenuPresenter gameMenuPresenter = new GameMenuPresenter();
-//        battle = gameMenuPresenter.prepareForSingleGame(1, null);
 
         aiController = new AIController(battle);
         selectedCardBackground = new ImageView(new Image("file:images/card_background_highlight.png"));
         errorImage = new Image("file:images/notification_quest_small.png");
         freeCellImage = new Image("file:images/card_background.png");
-
         initializeSize(selectedCardBackground);
-        initializeProfilePics();
+        initializeProfilesInfo();
         updateManaGemImages();
         initializeGround();
         initializeHandImages();
@@ -90,11 +94,13 @@ public class BattleGroundController implements Initializable {
         imageView.setFitWidth(CELL_WIDTH);
     }
 
-    private void initializeProfilePics() {
+    private void initializeProfilesInfo() {
         String firstHeroName = battle.getPlayers()[0].getMainDeck().getHero().getName();
         String secondHeroName = battle.getPlayers()[1].getMainDeck().getHero().getName();
         playerProfilePic.setImage(new Image("file:images/cards/hero/" + firstHeroName + "/" + firstHeroName + "_profile.png"));
         opponentProfilePic.setImage(new Image("file:images/cards/hero/" + secondHeroName + "/" + secondHeroName + "_profile.png"));
+        playerName.setText(battle.getPlayers()[0].getName());
+        opponentName.setText(battle.getPlayers()[1].getName());
     }
 
     private void updateManaGemImages() {
@@ -124,11 +130,13 @@ public class BattleGroundController implements Initializable {
                 handAndNextCardImageViews[i] = new ImageView(new Image(((Warrior) card).getIdleImageAddress()));
                 if (i != 0)
                     setSelectedCardFromHandClick(handAndNextCardImageViews[i], i);
-            } else if (card instanceof Spell) {
+            }
+            else if (card instanceof Spell) {
                 handAndNextCardImageViews[i] = new ImageView(new Image(((Spell) card).getActionBarImageAddress()));
                 if (i != 0)
                     setSelectedCardFromHandClick(handAndNextCardImageViews[i], i);
-            } else
+            }
+            else
                 handAndNextCardImageViews[i] = new ImageView();
             initializeSize(handAndNextCardImageViews[i]);
             handAndNextCardPanes[i] = new Pane(handAndNextCardImageViews[i]);
@@ -143,7 +151,7 @@ public class BattleGroundController implements Initializable {
                 if (selectedCardCoordinates[0] == -1) //Card is already in hand.
                     handAndNextCardPanes[selectedCardCoordinates[1]].getChildren().remove(selectedCardBackground);
                 else if (selectedCardCoordinates[0] > -1)
-                    battleGroundPanes[selectedCardCoordinates[0]][selectedCardCoordinates[1]].getChildren().remove(selectedCardBackground);
+                    groundPanes[selectedCardCoordinates[0]][selectedCardCoordinates[1]].getChildren().remove(selectedCardBackground);
                 selectedCardCoordinates[0] = -1;
                 selectedCardCoordinates[1] = i;
                 handAndNextCardPanes[i].getChildren().add(selectedCardBackground);
@@ -154,43 +162,47 @@ public class BattleGroundController implements Initializable {
     private void setNextCardRing() {
         ImageView nextCardRing = new ImageView(new Image("file:images/replace_outer_ring_smoke.png"));
         initializeSize(nextCardRing);
-        handAndNextCardGrid.add(nextCardRing, 0, 0);
+        handAndNextCardPanes[0] = new Pane(nextCardRing);
+        handAndNextCardGrid.add(handAndNextCardPanes[0], 0, 0);
     }
 
     private void initializeGround() {
-        battleGroundPanes = new Pane[BattleGround.getRows()][BattleGround.getColumns()];
+        groundPanes = new Pane[BattleGround.getRows()][BattleGround.getColumns()];
         groundImageViews = new ImageView[BattleGround.getRows()][BattleGround.getColumns()];
         for (int i = 0; i < BattleGround.getRows(); i++) {
             for (int j = 0; j < BattleGround.getColumns(); j++) {
                 Asset asset = battle.getBattleGround().getGround().get(i).get(j);
                 if (asset instanceof Warrior) {
                     groundImageViews[i][j] = new ImageView(new Image(((Warrior) asset).getBreathingImageAddress()));
-                    healthBars.put((Warrior) asset, new TextArea(String.valueOf(((Warrior) asset).getHP())));
+                    healthBars.put((Warrior) asset, new Label(String.valueOf(((Warrior) asset).getHP())));
                     healthBars.get(asset).setLayoutX(groundImageViews[i][j].getLayoutX());
                     healthBars.get(asset).setLayoutY(groundImageViews[i][j].getLayoutY());
-                } else if (asset instanceof Item)
+                }
+                else if (asset instanceof Item)
                     groundImageViews[i][j] = new ImageView(new Image(((Item) asset).getActionbarImageAddress()));
                 else if (asset instanceof Flag)
                     groundImageViews[i][j] = new ImageView(new Image("file:images/flag_icon.png"));
                 else
                     groundImageViews[i][j] = new ImageView(new Image("file:images/card_background.png"));
                 initializeSize(groundImageViews[i][j]);
-                prepareCoordinates(asset, i, j);
+                preparePaneAndCoordinates(asset, i, j);
                 setGroundCellOnClickEvent(groundImageViews[i][j], asset, i, j);
             }
         }
     }
 
-    private void prepareCoordinates(Asset asset, int i, int j) {
-        battleGroundPanes[i][j] = new Pane(groundImageViews[i][j]);
-//        battleGroundPanes[i][j].getChildren().add(healthBars.get(asset));
-        battleGroundPanes[i][j].setLayoutX(battleGroundGrid.getChildren().get(i * BattleGround.getRows() + j).getLayoutX());
-        battleGroundPanes[i][j].setLayoutY(battleGroundGrid.getChildren().get(i * BattleGround.getRows() + j).getLayoutY());
-        groundImageViews[i][j].setLayoutX(battleGroundPanes[i][j].getLayoutX());
-        groundImageViews[i][j].setLayoutY(battleGroundPanes[i][j].getLayoutY());
-        battleGroundPanes[i][j].setPrefHeight(CELL_HEIGHT);
-        battleGroundPanes[i][j].setPrefWidth(CELL_WIDTH);
-        battleGroundGrid.add(battleGroundPanes[i][j], j, i);
+    private void preparePaneAndCoordinates(Asset asset, int i, int j) {
+        groundPanes[i][j] = new Pane(groundImageViews[i][j]);
+        if (asset instanceof Warrior)
+            groundPanes[i][j].getChildren().add(healthBars.get(asset));
+//        groundPanes[i][j].getChildren().add(healthBars.get(asset));
+        groundPanes[i][j].setLayoutX(groundGrid.getChildren().get(i * BattleGround.getRows() + j).getLayoutX());
+        groundPanes[i][j].setLayoutY(groundGrid.getChildren().get(i * BattleGround.getRows() + j).getLayoutY());
+        groundImageViews[i][j].setLayoutX(groundPanes[i][j].getLayoutX());
+        groundImageViews[i][j].setLayoutY(groundPanes[i][j].getLayoutY());
+        groundPanes[i][j].setPrefHeight(CELL_HEIGHT);
+        groundPanes[i][j].setPrefWidth(CELL_WIDTH);
+        groundGrid.add(groundPanes[i][j], j, i);
     }
 
     private void setGroundCellOnClickEvent(ImageView imageView, Asset asset, int i, int j) {
@@ -200,7 +212,8 @@ public class BattleGroundController implements Initializable {
                     selectCardInGround(asset, i, j);
                 else if (asset.getOwner() == battle.getPlayers()[1] && selectedCardCoordinates[0] > -1)
                     attack((Warrior) asset, i, j);
-            } else {
+            }
+            else {
                 if (selectedCardCoordinates[0] == -1) {
                     if (battle.getPlayersHand()[0][selectedCardCoordinates[1]] instanceof Warrior) {
                         Warrior picker = (Warrior) battle.getPlayersHand()[0][selectedCardCoordinates[1]];
@@ -210,7 +223,8 @@ public class BattleGroundController implements Initializable {
                             battle.collectItem(battle.getPlayersDeck()[0], j, i);
                     }
                     insertCard(i, j);
-                } else if (selectedCardCoordinates[0] > -1)
+                }
+                else if (selectedCardCoordinates[0] > -1)
                     moveCard(i, j);
             }
         });
@@ -221,10 +235,10 @@ public class BattleGroundController implements Initializable {
         if (selectedCardCoordinates[0] == -1) //Card is already in hand.
             handAndNextCardPanes[selectedCardCoordinates[1]].getChildren().remove(selectedCardBackground);
         else if (selectedCardCoordinates[0] > -1)
-            battleGroundPanes[selectedCardCoordinates[0]][selectedCardCoordinates[1]].getChildren().remove(selectedCardBackground);
+            groundPanes[selectedCardCoordinates[0]][selectedCardCoordinates[1]].getChildren().remove(selectedCardBackground);
         selectedCardCoordinates[0] = i;
         selectedCardCoordinates[1] = j;
-        battleGroundPanes[i][j].getChildren().add(selectedCardBackground);
+        groundPanes[i][j].getChildren().add(selectedCardBackground);
     }
 
     private void insertCard(int i, int j) {
@@ -244,24 +258,28 @@ public class BattleGroundController implements Initializable {
         handAndNextCardPanes[selectedCardCoordinates[1]].getChildren().remove(selectedCardBackground);
         if (handCard instanceof Warrior) {
             groundImageViews[i][j].setImage(new Image(((Warrior) handCard).getBreathingImageAddress()));
-            battleGroundPanes[i][j].getChildren().add(selectedCardBackground);
+            groundPanes[i][j].getChildren().add(selectedCardBackground);
             selectedCardCoordinates[0] = i;
             selectedCardCoordinates[1] = j;
-        } else if (handCard instanceof Spell) {
-            Thread t1 = new Thread(() -> {
-                groundImageViews[i][j].setImage(new Image(((Spell) handCard).getActiveImageAddress()));
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                groundImageViews[i][j].setImage(null);
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        updateCellEffects();
+        }
+        else if (handCard instanceof Spell) {
+            Thread t1 = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    groundImageViews[i][j].setImage(new Image(((Spell) handCard).getActiveImageAddress()));
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
-                });
+                    groundImageViews[i][j].setImage(null);
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            updateCellEffects();
+                        }
+                    });
+                }
             });
             t1.start();
         }
@@ -287,13 +305,17 @@ public class BattleGroundController implements Initializable {
             @Override
             public void run() {
                 animateMove(warrior, i, j);
+                //System.out.println(groundImageViews[selectedCardCoordinates[0]][selectedCardCoordinates[1]].getImage().impl_getUrl());
                 groundImageViews[selectedCardCoordinates[0]][selectedCardCoordinates[1]].setImage(freeCellImage);
+                //System.out.println(groundImageViews[selectedCardCoordinates[0]][selectedCardCoordinates[1]].getImage().impl_getUrl());
+                //System.out.println(groundImageViews[selectedCardCoordinates[0]][selectedCardCoordinates[1]].getLayoutX());
+                //System.out.println(groundImageViews[selectedCardCoordinates[0]][selectedCardCoordinates[1]].getLayoutY());
                 initializeSize(groundImageViews[selectedCardCoordinates[0]][selectedCardCoordinates[1]]);
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        battleGroundPanes[selectedCardCoordinates[0]][selectedCardCoordinates[1]].getChildren().remove(selectedCardBackground);
-                        battleGroundPanes[i][j].getChildren().add(selectedCardBackground);
+                        groundPanes[selectedCardCoordinates[0]][selectedCardCoordinates[1]].getChildren().remove(selectedCardBackground);
+                        groundPanes[i][j].getChildren().add(selectedCardBackground);
                     }
                 });
                 groundImageViews[i][j].setImage(new Image(warrior.getBreathingImageAddress()));
@@ -305,18 +327,34 @@ public class BattleGroundController implements Initializable {
         moveAnimation.start();
     }
 
-    private void animateMove(Warrior warrior, int finalRow, int finalColumn) {
+    private void animateMove (Warrior warrior, int finalRow, int finalColumn) {
+        ImageView startPoint = groundImageViews[selectedCardCoordinates[0]][selectedCardCoordinates[1]];
+        ImageView endPoint = groundImageViews[finalRow][finalColumn];
+//        Path path = new Path(new MoveTo(startPoint.getLayoutX(), startPoint.getLayoutY()), new LineTo(endPoint.getLayoutX(), endPoint.getLayoutY()));
+//        path.setVisible(false);
+//        PathTransition pathTransition = new PathTransition(Duration.millis(2000), path, startPoint);
+//        try {
+//            Thread.sleep(2000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        root.getChildren().add(path);
+//        pathTransition.setCycleCount(1);
+//        pathTransition.setAutoReverse(false);
+//        root.getChildren().addAll(button, rectangle, label, polygon);
+//        pathTransition.play();
+        healthBars.get(warrior).setLayoutX(groundImageViews[finalRow][finalColumn].getLayoutX());
+        healthBars.get(warrior).setLayoutY(groundImageViews[finalRow][finalColumn].getLayoutY());
+
         TranslateTransition translateTransition = new TranslateTransition();
-        groundImageViews[selectedCardCoordinates[0]][selectedCardCoordinates[1]].setImage(new Image(warrior.getRunImageAddress()));
-        translateTransition.setNode(groundImageViews[selectedCardCoordinates[0]][selectedCardCoordinates[1]]);
-        double initX = battleGroundPanes[selectedCardCoordinates[0]][selectedCardCoordinates[1]].getLayoutX();
-        double initY = battleGroundPanes[selectedCardCoordinates[0]][selectedCardCoordinates[1]].getLayoutY() - 2 * battleGroundPanes[selectedCardCoordinates[0]][selectedCardCoordinates[1]].getHeight();
-//        double initX = groundImageViews[selectedCardCoordinates[0]][selectedCardCoordinates[1]].getX();
-//        double initY = groundImageViews[selectedCardCoordinates[0]][selectedCardCoordinates[1]].getY();
+        startPoint.setImage(new Image(warrior.getRunImageAddress()));
+        translateTransition.setNode(startPoint);
+        double initX = startPoint.getLayoutX();
+        double initY = startPoint.getLayoutY();
         translateTransition.setFromX(initX);
         translateTransition.setFromY(initY);
-        translateTransition.setToX(battleGroundPanes[finalRow][finalColumn].getLayoutY());
-        translateTransition.setToY(battleGroundPanes[finalRow][finalColumn].getLayoutY() - 2 * battleGroundPanes[finalRow][finalColumn].getHeight());
+        translateTransition.setToX(endPoint.getLayoutY());
+        translateTransition.setToY(endPoint.getLayoutY());
         translateTransition.setDuration(new Duration(1000));
         translateTransition.play();
         try {
@@ -325,6 +363,8 @@ public class BattleGroundController implements Initializable {
             e.printStackTrace();
         }
         translateTransition.stop();
+        translateTransition = null;
+//        translateTransition.stop();
 //        translateTransition.setOnFinished(new EventHandler<ActionEvent>() {
 //            @Override
 //            public void handle(ActionEvent event) {
@@ -387,7 +427,7 @@ public class BattleGroundController implements Initializable {
                 updateManaGemImages();
                 updateCellEffects();
                 initializeHandImages();
-//                aiController.handleAIEvent(battle);
+                aiController.handleAIEvent(battle);
                 try {
                     Thread.sleep(2000);
                 } catch (InterruptedException e) {
@@ -400,13 +440,13 @@ public class BattleGroundController implements Initializable {
     private void updateCellEffects() {
         for (int i = 0; i < BattleGround.getRows(); i++) {
             for (int j = 0; j < BattleGround.getColumns(); j++) {
-                for (CellEffect cellEffect : battle.getBattleGround().getEffectsPosition().get(i).get(j)) {
+                for (CellEffect cellEffect: battle.getBattleGround().getEffectsPosition().get(i).get(j)) {
                     ImageView temp = new ImageView(new Image("file:images/cellEffect_" + cellEffect.name() + ".png"));
                     initializeSize(temp);
                     temp.setOpacity(0.4);
                     cellEffectImageViews[i][j] = new ArrayList<>();
                     cellEffectImageViews[i][j].add(temp);
-                    battleGroundPanes[i][j].getChildren().add(temp);
+                    groundPanes[i][j].getChildren().add(temp);
                 }
             }
         }
@@ -452,67 +492,11 @@ public class BattleGroundController implements Initializable {
     }
 
     private Node getNodeFromGridPane(GridPane gridPane, int col, int row) {
-        for (Node node : gridPane.getChildren()) {
+        for (Node node: gridPane.getChildren()) {
             if (GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row) {
                 return node;
             }
         }
         return null;
-    }
-
-    private void cheatMode() {
-        new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                switch (event.getCode()){
-                    case DIGIT1:
-                        //Mode1
-                        battle.getPlayers()[0].setBudget(battle.getPlayers()[0].getBudget() + 10000000);
-                        battle.getPlayers()[0].setBudget(battle.getPlayers()[0].getBudget() + 10000000);
-                        break;
-
-                    case DIGIT2:
-                        //Mode2
-                        battle.getPlayers()[0].getMainDeck().getHero().setAmountOfChangedAP(100);
-                        battle.getPlayers()[0].getMainDeck().getHero().changeHP(100);
-                        break;
-
-                    case DIGIT3:
-                        //Mode3
-                        battle.getPlayers()[1].getMainDeck().getHero().setAmountOfChangedAP(-10);
-                        battle.getPlayers()[1].getMainDeck().getHero().changeHP(-10);
-                        break;
-
-                    case DIGIT4:
-                        //Mode4
-                        for (Card inGroundCard : battle.getInGroundCards()) {
-                            if (inGroundCard.getOwner() == battle.getPlayers()[0] && inGroundCard instanceof Warrior) {
-                                ((Warrior) inGroundCard).changeHP(20);
-                            }
-                        }
-                        break;
-
-                    case DIGIT5:
-                        //Mode5
-                        for (Card inGroundCard : battle.getInGroundCards()) {
-                            if (inGroundCard.getOwner() == battle.getPlayers()[1] && inGroundCard instanceof Warrior) {
-                                ((Warrior) inGroundCard).changeHP(-10);
-                            }
-                        }
-                        break;
-                    case DIGIT6:
-                        //Mode6
-//                        int id = 9000;
-//                        Minion minion = new Minion("hahahahah", "hahahahah", 0, id++, 10, 100, 100, 0, AttackType.HYBRID);
-//                        battle.getPlayers()[0].getMainDeck().getCards().add(minion);
-//                        battle.getPlayersSelectedCard()[0] = minion;
-//                        battle.getPlayers()[0].se
-//
-//                        insertCard(0, 0);
-                        break;
-                }
-            }
-        };
-
     }
 }
