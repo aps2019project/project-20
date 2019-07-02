@@ -215,8 +215,8 @@ public class AIController implements Initializable {
         Asset playerAsset;
         ArrayList<Minion> minions = new ArrayList<>();
         while (true) {
-            playerAsset = battle.getBattleGround().getGround().get(makeRandomNumber(BattleGround.getRows())).get(makeRandomNumber(BattleGround.getColumns()));
-            if (playerAsset.getOwner() == player)
+            playerAsset = inGroundCards.get(makeRandomNumber(inGroundCards.size()));
+            if (playerAsset != null && playerAsset.getOwner() == player)
                 break;
         }
         for (int i = 0; i < BattleGround.getRows(); i++) {
@@ -305,8 +305,8 @@ public class AIController implements Initializable {
     public void selectAICard(Battle battle, int i, int j) {
         Asset asset;
         while (true) {
-            asset = battle.getBattleGround().getGround().get(makeRandomNumber(BattleGround.getRows())).get(makeRandomNumber(BattleGround.getColumns()));
-            if (asset.getOwner() == battle.getPlayers()[1])
+            asset = inGroundCards.get(makeRandomNumber(inGroundCards.size()));
+            if (asset != null && asset.getOwner() == battle.getPlayers()[1])
                 break;
         }
         battle.selectWarrior(battle.getPlayers()[1], asset.getID());
@@ -324,7 +324,7 @@ public class AIController implements Initializable {
         try {
             Card[] AIHand = battle.getPlayersHand()[1];
             Card insertedCard = AIHand[makeRandomNumber(battle.getNUMBER_OF_CARDS_IN_HAND())];
-            battle.insertCard(battle.getPlayers()[1], battle.getPlayersHand()[0][selectedCardCoordinates[1] - 1].getName(), j + 1, i + 1);
+            battle.insertCard(battle.getPlayers()[1], battle.getPlayersHand()[1][selectedCardCoordinates[1] - 1].getName(), j + 1, i + 1);
             showInsertAnimation(i, j);
             battle.selectWarrior(battle.getPlayers()[1], insertedCard.getID());
         } catch (AssetNotFoundException | InvalidInsertInBattleGroundException | ThisCellFilledException | DontHaveEnoughManaException e) {

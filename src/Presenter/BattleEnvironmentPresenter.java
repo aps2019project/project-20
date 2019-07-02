@@ -96,7 +96,7 @@ public class BattleEnvironmentPresenter {
 //        if (!(battle.getBattleGround().getGround().get(y).get(x) instanceof Warrior)) {
 //            throw new InvalidTargetException();
 //        }
-        battle.useItem(battle.getPlayers()[0], battle.getPlayers()[1], (Warrior) battle.getBattleGround().getGround().get(y).get(x), battle.getPlayersSelectedCard()[0], battle.getPlayersSelectedItem()[0]);
+        battle.useItem(battle.getPlayers()[0], battle.getPlayers()[1], battle.getPlayersSelectedItem()[0]);
     }
 
     public Card showInfoOfCard(String cardID) {
