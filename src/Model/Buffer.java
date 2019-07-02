@@ -16,12 +16,12 @@ public class Buffer {
         return rand.nextInt(supremeValueOfRange);
     }
 
-    public static ArrayList<Warrior> getWarriorsOfBattleGround(@NotNull BattleGround battleGround) {
+    public static ArrayList<Warrior> getWarriorsOfPlayer(@NotNull BattleGround battleGround, Account player) {
         ArrayList<ArrayList<Asset>> ground = battleGround.getGround();
-        ArrayList<Warrior> groundWarriors = null;
+        ArrayList<Warrior> groundWarriors = new ArrayList<>();
         for (int i = 0; i < BattleGround.getRows(); i++) {
             for (int j = 0; j < BattleGround.getColumns(); j++) {
-                if (ground.get(i).get(j) instanceof Card)
+                if (ground.get(i).get(j) instanceof Card && ground.get(i).get(j).getOwner() == player)
                     groundWarriors.add((Warrior) ground.get(i).get(j));
             }
         }
@@ -455,12 +455,9 @@ public class Buffer {
     }
 
     public void simorghAction(Account enemy, BattleGround battleGround) {
-        ArrayList<Warrior> groundWarriors = getWarriorsOfBattleGround(battleGround);
-        for (Warrior warrior : groundWarriors) {
-            if (warrior.getOwner() == enemy) {
-                warrior.getBufferEffected().add(new BufferOfSpells(1, STUN_BUFF, 1));
-            }
-        }
+        ArrayList<Warrior> enemyWarriors = getWarriorsOfPlayer(battleGround, enemy);
+        for (Warrior warrior : enemyWarriors)
+            warrior.getBufferEffected().add(new BufferOfSpells(1, STUN_BUFF, 1));
     }
 
     public void sevenHeadDragonAction(Card enemyWarrior) {
@@ -480,10 +477,10 @@ public class Buffer {
 //        battleGround.getEffectsLifeTimePosition().get(y).set(x, 3);
     }
 
-    public void arashAction(Account player, BattleGround battleGround) {
+    public void arashAction(Account player, Account opponent, BattleGround battleGround) {
         Hero theOwnHero = player.getMainDeck().getHero();
-        ArrayList<Warrior> groundWarriors = getWarriorsOfBattleGround(battleGround);
-        for (Warrior warrior : groundWarriors) {
+        ArrayList<Warrior> enemyWarriors = getWarriorsOfPlayer(battleGround, opponent);
+        for (Warrior warrior : enemyWarriors) {
             if (warrior.getYInGround() == theOwnHero.getYInGround())
                 warrior.changeHP(-4);
         }
@@ -514,9 +511,7 @@ public class Buffer {
     Battle battle;
     BattleGround battleGround;
     public void knowledgeCrownAction(Account player) {
-        int playerIndex = 0;
-        if (player == battle.getPlayers()[1])
-            playerIndex = 1;
+        int playerIndex = battle.getPlayerIndex(player);
         battle.getPlayersManaBuffEffected()[playerIndex].add(new BufferOfSpells(3, MANA_BUFF, 1));
     }
 
@@ -525,22 +520,21 @@ public class Buffer {
     }
 
     public void damoolArchAction(Hero theOwnHero, Card enemyWarrior) {
-        if (theOwnHero.getAttackType() == RANGED || theOwnHero.getAttackType() == HYBRID) {
+        if (theOwnHero.getAttackType() == RANGED || theOwnHero.getAttackType() == HYBRID)
             enemyWarrior.getBufferEffected().add(new BufferOfSpells(1, DISARM_BUFF, 1));
-        }
     }
 
-    public void nooshdaroo() {
-        ArrayList<Warrior> groundWarriors = getWarriorsOfBattleGround(battleGround);
+    public void nooshdarooAction(Account player) {
+        ArrayList<Warrior> groundWarriors = getWarriorsOfPlayer(battleGround, player);
         if (groundWarriors.size() > 0) {
             int randomWarriorIndex = randomNumberGenerator(groundWarriors.size());
             groundWarriors.get(randomWarriorIndex).changeHP(6);
         }
     }
 
-    public void twoHornArrowAction() {
-        ArrayList<Warrior> groundWarriors = getWarriorsOfBattleGround(battleGround);
-        ArrayList<Warrior> rangedOrHybrids = null;
+    public void twoHornArrowAction(Account player) {
+        ArrayList<Warrior> groundWarriors = getWarriorsOfPlayer(battleGround, player);
+        ArrayList<Warrior> rangedOrHybrids = new ArrayList<>();
         for (Warrior warrior : groundWarriors) {
             if (warrior.getAttackType() == RANGED || warrior.getAttackType() == HYBRID)
                 rangedOrHybrids.add(warrior);
@@ -557,11 +551,10 @@ public class Buffer {
             enemyHero.changeAP(-2);
     }
 
-    public void elixirAction( Warrior collector) {
+    public void elixirAction(Warrior collector) {
         collector.changeHP(3);
-
-        ArrayList<Warrior> groundWarriors = getWarriorsOfBattleGround(battleGround);
-        ArrayList<Minion> minions = null;
+        ArrayList<Warrior> groundWarriors = getWarriorsOfPlayer(battleGround, collector.getOwner());
+        ArrayList<Minion> minions = new ArrayList<>();
         for (Warrior warrior : groundWarriors) {
             if (warrior instanceof Minion)
                 minions.add((Minion) warrior);
@@ -573,14 +566,12 @@ public class Buffer {
     }
 
     public void manaMixtureAction( Warrior collector) {
-        int playerIndex = 0;
-        if (collector.getOwner() == battle.getPlayers()[1])
-            playerIndex = 1;
+        int playerIndex = battle.getPlayerIndex(collector.getOwner());
         battle.getPlayersManaBuffEffected()[playerIndex].add(new BufferOfSpells(1, MANA_BUFF, 3, 1));
     }
 
-    public void invulnerableMixtureAction() {
-        ArrayList<Warrior> groundWarriors = getWarriorsOfBattleGround(battleGround);
+    public void invulnerableMixtureAction(Account player) {
+        ArrayList<Warrior> groundWarriors = getWarriorsOfPlayer(battleGround, player);
         if (groundWarriors.size() > 0) {
             int randomWarriorIndex = randomNumberGenerator(groundWarriors.size());
             for (int i = 1; i <= 10; i++)
@@ -588,9 +579,9 @@ public class Buffer {
         }
     }
 
-    public void deathCurseAction() {
-        ArrayList<Warrior> groundWarriors = getWarriorsOfBattleGround(battleGround);
-        ArrayList<Minion> minions = null;
+    public void deathCurseAction(Account player) {
+        ArrayList<Warrior> groundWarriors = getWarriorsOfPlayer(battleGround, player);
+        ArrayList<Minion> minions = new ArrayList<>();
         for (Warrior warrior : groundWarriors) {
             if (warrior instanceof Minion)
                 minions.add((Minion) warrior);
@@ -601,8 +592,8 @@ public class Buffer {
         }
     }
 
-    public void randomDamageAction() {
-        ArrayList<Warrior> groundWarriors = getWarriorsOfBattleGround(battleGround);
+    public void randomDamageAction(Account player) {
+        ArrayList<Warrior> groundWarriors = getWarriorsOfPlayer(battleGround, player);
         if (groundWarriors.size() > 0) {
             int randomWarriorIndex = randomNumberGenerator(groundWarriors.size());
             groundWarriors.get(randomWarriorIndex).changeAP(2);
@@ -611,20 +602,15 @@ public class Buffer {
 
     public void terrorHoodAction(Account enemy) {
         // This function must be called when one of the own Warriors strike.
-        ArrayList<Warrior> groundWarriors = getWarriorsOfBattleGround(battleGround);
-        ArrayList<Warrior> enemyWarriors = null;
-        for (Warrior warrior : groundWarriors) {
-            if (warrior.getOwner() == enemy)
-                enemyWarriors.add(warrior);
-        }
+        ArrayList<Warrior> enemyWarriors = getWarriorsOfPlayer(battleGround, enemy);
         if (enemyWarriors.size() > 0) {
-            int randomWarriorIndex = randomNumberGenerator(groundWarriors.size());
+            int randomWarriorIndex = randomNumberGenerator(enemyWarriors.size());
             enemyWarriors.get(randomWarriorIndex).getBufferEffected().add(new BufferOfSpells(1, WEAKNESS_BUFF_ATTACK, 2));
         }
     }
 
-    public void bladesOfAgilityAction() {
-        ArrayList<Warrior> groundWarriors = getWarriorsOfBattleGround(battleGround);
+    public void bladesOfAgilityAction(Account player) {
+        ArrayList<Warrior> groundWarriors = getWarriorsOfPlayer(battleGround, player);
         if (groundWarriors.size() > 0) {
             int randomWarriorIndex = randomNumberGenerator(groundWarriors.size());
             groundWarriors.get(randomWarriorIndex).changeAP(6);
@@ -632,9 +618,7 @@ public class Buffer {
     }
 
     public void kingWisdomAction(Account player) {
-        int playerIndex = 0;
-        if (player == battle.getPlayers()[1])
-            playerIndex = 1;
+        int playerIndex = battle.getPlayerIndex(player);
         battle.getPlayersManaBuffEffected()[playerIndex].add(new BufferOfSpells(MANA_BUFF, 1, false));
     }
 
@@ -642,15 +626,10 @@ public class Buffer {
         enemy.getMainDeck().getHero().changeHP(-1);
     }
 
-    public void poisonousDaggerAction(Account enemy) {
-        ArrayList<Warrior> groundWarriors = getWarriorsOfBattleGround(battleGround);
-        ArrayList<Warrior> enemyWarriors = null;
-        for (Warrior warrior : groundWarriors) {
-            if (warrior.getOwner() == enemy)
-                enemyWarriors.add(warrior);
-        }
+    public void poisonousDaggerAction(Warrior collector, Account enemy) {
+        ArrayList<Warrior> enemyWarriors = getWarriorsOfPlayer(battleGround, enemy);
         if (enemyWarriors.size() > 0) {
-            int randomWarriorIndex = randomNumberGenerator(groundWarriors.size());
+            int randomWarriorIndex = randomNumberGenerator(enemyWarriors.size());
             enemyWarriors.get(randomWarriorIndex).getBufferEffected().add(new BufferOfSpells(1, POISON_BUFF));
         }
     }

@@ -39,25 +39,27 @@ public class BattleGround {
         }
     }
     
-    public void applyCellsEffect(Account opponent) {
+    public void applyCellEffects(Battle battle, Account opponent) {
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < COLUMNS; j++) {
                 ArrayList<CellEffect> cellEffectsOfCell = effectsPosition.get(i).get(j);
                 for (CellEffect cellEffect: cellEffectsOfCell) {
-//                    if (cellEffect == NOTHING)
-//                        continue;
                     if (ground.get(i).get(j) instanceof Warrior && ground.get(i).get(j).getOwner() == opponent && cellEffect.getEffectLifeTime() > 0) {
                         Warrior targetWarrior = (Warrior) ground.get(i).get(j);
                         cellEffect.setEffectLifeTime(cellEffect.getEffectLifeTime() - 1);
                         switch (cellEffect) {
                             case FIRE:
                                 targetWarrior.changeHP(-2);
+                                battle.determineDeadWarriors(targetWarrior, 0);
+                                battle.determineDeadWarriors(targetWarrior, 1);
                                 break;
                             case HOLY:
                                 targetWarrior.getBufferEffected().add(new BufferOfSpells(1, HOLY_BUFF));
                                 break;
                             case POISON:
                                 targetWarrior.getBufferEffected().add(new BufferOfSpells(3, POISON_BUFF));
+                                battle.determineDeadWarriors(targetWarrior, 0);
+                                battle.determineDeadWarriors(targetWarrior, 1);
                         }
                     }
                 }

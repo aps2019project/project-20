@@ -102,7 +102,7 @@ public class AssetDatas {
     private static Item knowledgeCrown = new Item("KnowledgeCrown", "Increases Mana by 1 unit in the first three turns.", 300, 1000);
     private static Item namoos_e_separ = new Item("namoos_e_separ", "Activates 12 holy buffs to the own hero.", 4000, 1001);
     private static Item damoolArch = new Item("damoolArch", "While striking, the own hero disarms enemy warrior for 1 turn(Only for ranged and hybrid).", 30000, 1002);
-    private static Item nooshdaroo = new Item("nooshdaroo", "Increases a random warrior's HP by 6 units.", 1003);
+    private static Item nooshdaroo = new Item("nooshdarooAction", "Increases a random warrior's HP by 6 units.", 1003);
     private static Item twoHornArrow = new Item("twoHornArrow", "Increases random ranged or hybrid warrior's AP by 2 units.", 1004);
     private static Item simorghWing = new Item("simorghWing", "Decreases enemy hero's AP by 2 units(Only for ranged and hybrid enemy hero).", 3500, 1005);
     private static Item elixir = new Item("elixir", "Increases HP by 3 units and activates a power buff increasing a random minion's AP by 3 units.", 1006);
