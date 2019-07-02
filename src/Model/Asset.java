@@ -43,7 +43,7 @@ public class Asset implements ImageComparable {
             this.action = name + "Action";
         else
             this.action = "NoAction";
-        assetImageAddress = "file:images/cards/"+name+"/"+name+".png";
+        assetImageAddress = "file:images/cards/" + name + "/" + name + ".png";
     }
 
     public String getDesc() {
@@ -119,22 +119,22 @@ public class Asset implements ImageComparable {
         throw new AssetNotFoundException("");
     }
 
-    public static ArrayList<Asset> searchAndGetAssetCollectionFromCollection(ArrayList<Asset> assets ,String assetName){
-        if(assetName.equals("") || assets == null){
+    public static ArrayList<Asset> searchAndGetAssetCollectionFromCollection(ArrayList<Asset> assets, String assetName) {
+        if (assetName.equals("") || assets == null) {
             return assets;
         }
         ArrayList<Asset> result = new ArrayList<>();
         for (Asset asset : assets) {
-            if(asset != null && asset.getName().matches(".*"+assetName+".*")){
+            if (asset != null && asset.getName().matches(".*" + assetName + ".*")) {
                 result.add(asset);
             }
         }
         return result;
     }
 
-    public Asset searchAssetFromCardImage(ArrayList<Asset> assets, Image assetCardImage){
+    public Asset searchAssetFromCardImage(ArrayList<Asset> assets, Image assetCardImage) {
         for (Asset asset : assets) {
-            if(assetCardImage.impl_getUrl().split("/")[assetCardImage.impl_getUrl().split("/").length-1].equals(asset.getAssetImageAddress().split("/")[asset.getAssetImageAddress().split("/").length-1])){
+            if (assetCardImage.impl_getUrl().split("/")[assetCardImage.impl_getUrl().split("/").length - 1].equals(asset.getAssetImageAddress().split("/")[asset.getAssetImageAddress().split("/").length - 1])) {
                 return asset;
             }
         }
@@ -162,10 +162,10 @@ public class Asset implements ImageComparable {
             if (this instanceof Item) {
                 return new Item(this.getName(), this.getDesc(), this.getPrice(), this.getID());
             }
-        }catch (ClassCastException e){
+        } catch (ClassCastException e) {
             e.printStackTrace();
         }
-       return this;
+        return this;
     }
 
     public static Card searchCard(ArrayList<Card> cards, String name) {
@@ -177,7 +177,7 @@ public class Asset implements ImageComparable {
         throw new AssetNotFoundException("");
     }
 
-    public static void saveCardsToJsonDatabase(Asset newAsset){
+    public static void saveCardsToJsonDatabase(Asset newAsset) {
         ArrayList<Asset> assets = new ArrayList<>();
         assets.add(AssetDatas.getTotalDisarm());
         assets.add(AssetDatas.getAreaDispel());
@@ -269,16 +269,17 @@ public class Asset implements ImageComparable {
         assets.add(AssetDatas.getSoulEater());
         assets.add(AssetDatas.getBaptism());
         assets.add(AssetDatas.getChineseSword());
-        if(newAsset!=null){
+        if (newAsset != null) {
             assets.add(newAsset);
         }
 
         JsonWriter jsonWriter = null;
         try {
             jsonWriter = new JsonWriter(new FileWriter("Data/CardsData.json"));
-        new GsonBuilder().registerTypeAdapter(Asset.class, new JsonDeserializerWithInheritance<Asset>()).create().toJson(assets, new TypeToken<Collection<Asset>>(){}.getType(), jsonWriter);
-        jsonWriter.flush();
-        jsonWriter.close();
+            new GsonBuilder().registerTypeAdapter(Asset.class, new JsonDeserializerWithInheritance<Asset>()).create().toJson(assets, new TypeToken<Collection<Asset>>() {
+            }.getType(), jsonWriter);
+            jsonWriter.flush();
+            jsonWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -286,7 +287,8 @@ public class Asset implements ImageComparable {
 
     public static ArrayList<Asset> getAssetsFromFile() throws IOException {
         Reader reader = new FileReader("Data/CardsData.json");
-        ArrayList<Asset> assets = new GsonBuilder().registerTypeAdapter(Asset.class, new JsonDeserializerWithInheritance<Asset>()).create().fromJson(reader, new TypeToken<java.util.Collection<Asset>>(){}.getType());
+        ArrayList<Asset> assets = new GsonBuilder().registerTypeAdapter(Asset.class, new JsonDeserializerWithInheritance<Asset>()).create().fromJson(reader, new TypeToken<java.util.Collection<Asset>>() {
+        }.getType());
         reader.close();
         return assets;
     }
@@ -356,5 +358,6 @@ public class Asset implements ImageComparable {
         this.assetImageAddress = assetImageAddress;
     }
 
-    protected void setImageAddresses(String name){}
+    protected void setImageAddresses(String name) {
+    }
 }

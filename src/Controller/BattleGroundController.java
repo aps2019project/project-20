@@ -9,15 +9,21 @@ import com.jfoenix.controls.JFXTextArea;
 import javafx.animation.*;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
 import javafx.util.Duration;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,6 +54,8 @@ public class BattleGroundController implements Initializable, ScreenManager {
     private String freeCellImageAddress = "file:images/card_background.png";
     public JFXTextArea errorMessage;
     public ImageView endTurn;
+    public ImageView cheatButton;
+    public ProgressBar progressbar;
     private HashMap<Warrior, Label> healthBars = new HashMap<>();
 //    public Button menuButton;
 //    public Button friendButton;
@@ -65,7 +73,7 @@ public class BattleGroundController implements Initializable, ScreenManager {
 
     public BattleGroundController(){}
 
-    public BattleGroundController(Battle battle){
+    public BattleGroundController(Battle battle) {
         this.battle = battle;
     }
 
@@ -86,6 +94,18 @@ public class BattleGroundController implements Initializable, ScreenManager {
         initializeGround();
         initializeHandImages();
         setEndTurnEvent();
+
+        TimeLine t0 = new TimeLine(progressbar);
+        TimeLine t1 = new TimeLine(progressbar);
+
+
+        t0.start();
+        battle.endTurn(battle.getPlayers()[0]);
+
+        t1.start();
+        battle.endTurn(battle.getPlayers()[1]);
+
+
     }
 
     private void initializeSize(ImageView imageView) {
@@ -675,5 +695,62 @@ public class BattleGroundController implements Initializable, ScreenManager {
             }
         }
         return null;
+    }
+
+    @FXML
+    private void cheatMode() {
+        new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                switch (event.getCode()) {
+                    case DIGIT1:
+                        //Mode1
+                        battle.getPlayers()[0].setBudget(battle.getPlayers()[0].getBudget() + 10000000);
+                        battle.getPlayers()[0].setBudget(battle.getPlayers()[0].getBudget() + 10000000);
+                        break;
+
+                    case DIGIT2:
+                        //Mode2
+                        battle.getPlayers()[0].getMainDeck().getHero().setAmountOfChangedAP(100);
+                        battle.getPlayers()[0].getMainDeck().getHero().changeHP(100);
+                        break;
+
+                    case DIGIT3:
+                        //Mode3
+                        battle.getPlayers()[1].getMainDeck().getHero().setAmountOfChangedAP(-10);
+                        battle.getPlayers()[1].getMainDeck().getHero().changeHP(-10);
+                        break;
+
+                    case DIGIT4:
+                        //Mode4
+                        for (Card inGroundCard : battle.getInGroundCards()) {
+                            if (inGroundCard.getOwner() == battle.getPlayers()[0] && inGroundCard instanceof Warrior) {
+                                ((Warrior) inGroundCard).changeHP(20);
+                            }
+                        }
+                        break;
+
+                    case DIGIT5:
+                        //Mode5
+                        for (Card inGroundCard : battle.getInGroundCards()) {
+                            if (inGroundCard.getOwner() == battle.getPlayers()[1] && inGroundCard instanceof Warrior) {
+                                ((Warrior) inGroundCard).changeHP(-10);
+                            }
+                        }
+                        break;
+                    case DIGIT6:
+                        //Mode6
+//                        int id = 9000;
+//                        Minion minion = new Minion("hahahahah", "hahahahah", 0, id++, 10, 100, 100, 0, AttackType.HYBRID);
+//                        battle.getPlayers()[0].getMainDeck().getCards().add(minion);
+//                        battle.getPlayersSelectedCard()[0] = minion;
+//                        battle.getPlayers()[0].se
+//
+//                        insertCard(0, 0);
+                        break;
+                }
+            }
+        };
+
     }
 }
