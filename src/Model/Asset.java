@@ -19,7 +19,6 @@ import java.util.Collection;
 public class Asset implements ImageComparable {
     @SerializedName("type")
     private String typeName = getClass().getName();
-
     private String name;
     private String desc;
     private int price;
@@ -32,7 +31,6 @@ public class Asset implements ImageComparable {
     protected String assetImageAddress;
 
     public Asset() {
-
     }
 
     public Asset(String name, String desc, int price, int ID, boolean doesHaveAction) {

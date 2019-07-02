@@ -11,6 +11,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -58,19 +59,29 @@ public class CollectionController implements Initializable, ScreenManager, Accou
     public Tab deckCollectionTab;
     public ImageView deckRenameButton;
     public ImageView backgroundImage;
-    public TextArea nameText;
-    public TextArea typeText;
-    public TextArea APText;
-    public TextArea targetText;
-    public TextArea buffsText;
-    public TextArea HPText;
-    public TextArea attackTypeText;
-    public TextArea specialPowerText;
-    public TextArea rangeText;
-    public TextArea specialPowerActivationText;
-    public TextArea specialPowerCoolDownText;
-    public TextArea costText;
+    public JFXTextArea nameText;
+    public JFXTextArea typeText;
+    public JFXTextArea APText;
+    public JFXTextArea targetText;
+    public JFXTextArea buffsText;
+    public JFXTextArea HPText;
+    public JFXTextArea attackTypeText;
+    public JFXTextArea specialPowerText;
+    public JFXTextArea rangeText;
+    public JFXTextArea specialPowerActivationText;
+    public JFXTextArea specialPowerCoolDownText;
+    public JFXTextArea priceText;
     public ImageView createCardButton;
+    public JFXTextArea specialPowerCooldown;
+    public JFXRadioButton cells;
+    public JFXRadioButton player;
+    public JFXRadioButton enemy;
+    public JFXRadioButton spell;
+    public JFXRadioButton minion;
+    public JFXRadioButton hero;
+    public JFXRadioButton melee;
+    public JFXRadioButton ranged;
+    public JFXRadioButton hybrid;
     private Asset selectedAssetElement = null;
     private Deck selectedDeckElement = null;
 
@@ -363,12 +374,12 @@ public class CollectionController implements Initializable, ScreenManager, Accou
         for (int i = 0; i < assets.size(); i++) {
             ImageView imageView = null;
             try {
-                imageView = new ImageView(new File(assets.get(i).getAssetImageAddress().substring(5)).toURL().toString());
-            } catch (MalformedURLException e) {
+                imageView = new ImageView(new File(assets.get(i).getAssetImageAddress().substring(5)).toURI().toString());
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             imageView.setFitWidth(250);
-            imageView.setFitHeight(320);
+            imageView.setFitHeight (320);
             Pane pane = new Pane();
             pane.setOnMouseEntered(event -> pane.setStyle("-fx-background-color: #949494;"));
             pane.setOnMouseExited(event -> pane.setStyle("-fx-background-color: -fx-primary;"));
@@ -632,50 +643,64 @@ public class CollectionController implements Initializable, ScreenManager, Accou
         int heroID = 2010;
         int spellID = 4020;
 
-        int price = Integer.valueOf(costText.getText());
+        int price = Integer.valueOf(priceText.getText());
         int range = Integer.valueOf(rangeText.getText());
         int AP = Integer.valueOf(APText.getText());
         int HP = Integer.valueOf(HPText.getText());
         int coolDown = Integer.valueOf(specialPowerCoolDownText.getText());
 
+        ToggleGroup typeGroup = new ToggleGroup();
+        hero.setToggleGroup(typeGroup);
+        minion.setToggleGroup(typeGroup);
+        spell.setToggleGroup(typeGroup);
+
+        ToggleGroup targetGroup=new ToggleGroup();
+        enemy.setToggleGroup(targetGroup);
+        player.setToggleGroup(targetGroup);
+        cells.setToggleGroup(targetGroup);
+
+        ToggleGroup attackTypeGroup = new ToggleGroup();
+        melee.setToggleGroup(attackTypeGroup);
+        ranged.setToggleGroup(attackTypeGroup);
+        hybrid.setToggleGroup(attackTypeGroup);
+
         AttackType attackType = null;
-        if (attackTypeText.getText().equals("melee")) {
+        if (melee.isSelected()) {
             attackType = AttackType.MELEE;
-        } else if (attackTypeText.getText().equals("ranged")) {
+        } else if (ranged.isSelected()) {
             attackType = AttackType.RANGED;
-        } else if (attackTypeText.getText().equals("hybrid")) {
+        } else if (hybrid.isSelected()) {
             attackType = AttackType.HYBRID;
         }
 
         Spell.TargetType targetType = null;
-        if (targetText.getText().equals("enemy")) {
+        if (enemy.isSelected()) {
             targetType = Spell.TargetType.ENEMY;
-        } else if (targetText.getText().equals("player")) {
+        } else if (player.isSelected()) {
             targetType = Spell.TargetType.PLAYER;
-        } else if (targetText.getText().equals("cells")) {
+        } else if (cells.isSelected()) {
             targetType = Spell.TargetType.CELLS;
         }
-        //else if (targetText.getText().equals("whole of ground"))
         else {
             targetType = Spell.TargetType.WHOLE_OF_GROUND;
         }
 
 
-        if (typeText.getText().equals("minion")) {
+        if (minion.isSelected()) {
 
             Minion minion = new Minion(nameText.getText(), nameText.getText(), price, minionID, range, AP, HP, DEFAULT_MANA, attackType);
             minionID++;
 //            Asset.saveCardsToJsonDatabase(minion); todo add to main cards dataBase
             getCurrentAccount().getCollection().getAssets().add(minion);
         }
-        if (typeText.getText().equals("hero")) {
+        if (hero.isSelected()) {
             Hero hero = new Hero(nameText.getText(), price, heroID, range, AP, HP, DEFAULT_MANA, coolDown, attackType);
             heroID++;
 //            Asset.saveCardsToJsonDatabase(hero); todo add to main cards dataBase
             getCurrentAccount().getCollection().getAssets().add(hero);
 
         }
-        if (typeText.getText().equals("spell")) {
+        if (spell.isSelected()) {
             Spell spell = new Spell(nameText.getText(), nameText.getText(), price, spellID, DEFAULT_MANA, targetType);
             spellID++;
 //            Asset.saveCardsToJsonDatabase(spell); todo add to main cards dataBase

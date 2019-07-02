@@ -1,7 +1,6 @@
 package Model;
 
 import Datas.AssetDatas;
-import Datas.DeckDatas;
 import Exceptions.*;
 
 import java.util.ArrayList;
@@ -48,8 +47,6 @@ public abstract class Battle {
     private ArrayList<Integer> itemsCoordinates;
     protected int battleID;
     protected int reward;
-
-
     private ArrayList<Card> inGroundCards = new ArrayList<>();
 
     public Deck[] getPlayersDeck() {
@@ -75,6 +72,8 @@ public abstract class Battle {
         this.playersGraveYard[0] = new GraveYard();
         this.playersGraveYard[1] = new GraveYard();
         this.reward = reward;
+        this.inGroundCards.add(playersDeck[0].getHero());
+        this.inGroundCards.add(playersDeck[1].getHero());
         //Filling Players' hands
         for (int i = 0; i <= 1; i++) {
             int nextCardFromDeckIndex = 0;
@@ -135,10 +134,11 @@ public abstract class Battle {
             } catch (InvalidTargetException e) {
                 throw e;
             }
-        } else if (battleGround.getGround().get(y).get(x) instanceof Flag)
+        }
+        if (battleGround.getGround().get(y).get(x) instanceof Flag)
             collectFlag(warrior, x, y);
         else if (battleGround.getGround().get(y).get(x) instanceof Item)
-            collectItem(playersDeck[playerIndex], y, x);
+            collectItem((Item) battleGround.getGround().get(y).get(x), warrior, playersDeck[playerIndex], y, x);
         else if (battleGround.getGround().get(y).get(x) instanceof Card)
             throw new ThisCellFilledException();
         battleGround.getGround().get(playersSelectedCard[playerIndex].getYInGround()).set(playersSelectedCard[playerIndex].getXInGround(), null);
@@ -149,14 +149,15 @@ public abstract class Battle {
         battleGround.getGround().get(y).set(x, playersSelectedCard[playerIndex]);
     }
 
-    public void collectItem(Deck deck, int y, int x) {
+    private void collectItem(Item collected, Warrior collector, Deck deck, int y, int x) {
         deck.getItems().add((Item) battleGround.getGround().get(y).get(x));
-        battleGround.getGround().get(y).remove(x);
+        collected.setCollector(collector);
+        battleGround.getGround().get(y).set(x, null);
     }
 
-    public void collectFlag(Warrior warrior, int flagX, int flagY) {
+    private void collectFlag(Warrior warrior, int flagX, int flagY) {
         warrior.setCollectedFlag(((Flag) battleGround.getGround().get(flagY).get(flagX)));
-        battleGround.getGround().get(flagY).remove(flagX);
+        battleGround.getGround().get(flagY).set(flagX, null);
     }
 
     public void attack(Account player, Warrior attacker, Warrior opponentWarrior) throws RuntimeException {
@@ -192,7 +193,7 @@ public abstract class Battle {
                 counterAttack(opponentWarrior, attacker);
         }
         determineDeadWarriors(attacker, playerIndex);
-        determineDeadWarriors(opponentWarrior, playerIndex);
+        determineDeadWarriors(opponentWarrior, 1 - playerIndex);
     }
 
     public void counterAttack(Warrior counterAttacker, Warrior opponentWarrior) {
@@ -361,8 +362,8 @@ public abstract class Battle {
         applyEffectedBuffersOfWarriors(opponent);
         fillEmptyPlacesOfHandFromDeck(player);
         endGame();
+        battleGround.applyCellEffects(this, opponent);
         turn++;
-        battleGround.applyCellsEffect(opponent);
         resetIsAttackedThisTurn();
         resetIsMovedThisTurn(player);
         setPlayersManaByDefault();
@@ -448,7 +449,7 @@ public abstract class Battle {
         }
     }
 
-    private int getPlayerIndex(Account player) {
+    public int getPlayerIndex(Account player) {
         int playerIndex = 0;
         if (player == players[1])
             playerIndex = 1;
@@ -505,68 +506,69 @@ public abstract class Battle {
         }
     }
 
-    public void useItem(Account player, Account enemy, Card enemyWarrior, Card myCard, Item playerItemSelected) {
+    public void useItem(Account player, Account enemy, Item selectedItem) {
         int playerIndex = getPlayerIndex(player);
-        switch (playerItemSelected.getID()) {
+        Warrior collector = selectedItem.getCollector();
+        switch (selectedItem.getID()) {
             case 1000:
-                playerItemSelected.getBuffer().knowledgeCrownAction(player);
+                selectedItem.getBuffer().knowledgeCrownAction(player);
                 break;
             case 1001:
-                playerItemSelected.getBuffer().namoos_e_separAction(playersDeck[playerIndex].getHero());
+                selectedItem.getBuffer().namoos_e_separAction(playersDeck[playerIndex].getHero());
                 break;
-            case 1002:
-                playerItemSelected.getBuffer().damoolArchAction(playersDeck[playerIndex].getHero(), enemyWarrior);
-                break;
+// TODO: implementation is hard.            case 1002:
+//                selectedItem.getBuffer().damoolArchAction(playersDeck[playerIndex].getHero(), enemyWarrior);
+//                break;
             case 1003:
-                playerItemSelected.getBuffer().nooshdaroo();
+                selectedItem.getBuffer().nooshdarooAction(player);
                 break;
             case 1004:
-                playerItemSelected.getBuffer().twoHornArrowAction();
+                selectedItem.getBuffer().twoHornArrowAction(player);
                 break;
             case 1005:
-                playerItemSelected.getBuffer().simorghWingAction(enemy);
+                selectedItem.getBuffer().simorghWingAction(enemy);
                 break;
             case 1006:
-                playerItemSelected.getBuffer().elixirAction((Warrior) myCard);
+                selectedItem.getBuffer().elixirAction(collector);
                 break;
             case 1007:
-                playerItemSelected.getBuffer().manaMixtureAction((Warrior) myCard);
+                selectedItem.getBuffer().manaMixtureAction(collector);
                 break;
             case 1008:
-                playerItemSelected.getBuffer().invulnerableMixtureAction();
+                selectedItem.getBuffer().invulnerableMixtureAction(player);
                 break;
             case 1009:
-                playerItemSelected.getBuffer().deathCurseAction();
+                selectedItem.getBuffer().deathCurseAction(player);
                 break;
             case 1010:
-                playerItemSelected.getBuffer().randomDamageAction();
+                selectedItem.getBuffer().randomDamageAction(player);
                 break;
             case 1011:
-                playerItemSelected.getBuffer().terrorHoodAction(enemy);
+                selectedItem.getBuffer().terrorHoodAction(enemy);
                 break;
             case 1012:
-                playerItemSelected.getBuffer().bladesOfAgilityAction();
+                selectedItem.getBuffer().bladesOfAgilityAction(player);
                 break;
             case 1013:
-                playerItemSelected.getBuffer().kingWisdomAction(player);
+                selectedItem.getBuffer().kingWisdomAction(player);
                 break;
             case 1014:
-                playerItemSelected.getBuffer().assassinationDaggerAction(enemy);
+                selectedItem.getBuffer().assassinationDaggerAction(enemy);
                 break;
             case 1015:
-                playerItemSelected.getBuffer().poisonousDaggerAction(enemy);
+                selectedItem.getBuffer().poisonousDaggerAction(collector, enemy);
                 break;
-            case 1016:
-                playerItemSelected.getBuffer().shockHammerAction((Warrior) enemyWarrior);
-                break;
+// TODO: implementation is hard.            case 1016:
+//                selectedItem.getBuffer().shockHammerAction(enemyWarrior);
+//                break;
             case 1017:
-                playerItemSelected.getBuffer().soulEaterAction(enemy, (Warrior) myCard);
+                selectedItem.getBuffer().soulEaterAction(enemy, collector);
                 break;
             case 1018:
-                playerItemSelected.getBuffer().baptismAction((Minion) myCard);
+                selectedItem.getBuffer().baptismAction((Minion) collector);
                 break;
             case 1019:
-                playerItemSelected.getBuffer().chineseSwordAction((Warrior) myCard);
+                selectedItem.getBuffer().chineseSwordAction(collector);
                 break;
         }
 

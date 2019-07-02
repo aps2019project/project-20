@@ -3,6 +3,7 @@ package Model;
 public class Item extends Asset {
     private String actionbarImageAddress;
     private String activeImageAddress;
+    private Warrior collector;
 
     //price=0 ----> item is collectable
     public Item(String name, String desc, int price, int ID) {
@@ -21,6 +22,14 @@ public class Item extends Asset {
 
     public String getActiveImageAddress() {
         return activeImageAddress;
+    }
+
+    public Warrior getCollector() {
+        return collector;
+    }
+
+    public void setCollector(Warrior collector) {
+        this.collector = collector;
     }
 
     @Override

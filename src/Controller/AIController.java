@@ -47,12 +47,12 @@ public class AIController implements Initializable {
     private ImageView selectedCardBackground;
     private int[] selectedCardCoordinates = new int[]{-2, -2};
     private Battle battle;
-    private ArrayList<Card> inGroundCards = battle.getInGroundCards();
+    private ArrayList<Card> inGroundCards;
 
 //    player[1] is ai
     public AIController(Battle battle) {
         this.battle = battle;
-        inGroundCards.add(battle.getPlayersDeck()[1].getHero());
+        inGroundCards = battle.getInGroundCards();
     }
 
     @Override
@@ -71,14 +71,15 @@ public class AIController implements Initializable {
                     int event1 = makeRandomNumber(3);
                     switch (event1) {
                         case 0:
+                            selectAICard(battle, i, j);
                             insertAICard(battle, i, j);
                             break;
                         case 1:
-
                             selectAICard(battle, i, j);
+                            AIAttackPlayerHero(battle.getPlayers()[1],battle);
                             break;
                         case 2:
-
+                            selectAICard(battle, i, j);
                             moveAICard(battle, i, j);
                             break;
                     }
@@ -113,12 +114,13 @@ public class AIController implements Initializable {
                             break;
 
                         case 1:
-
+                            selectAICard(battle, i, j);
                             insertAICard(battle, i, j);
                             break;
                         case 2:
 
                             selectAICard(battle, i, j);
+                            moveAICard(battle,i,j);
                             break;
                     }
                     battle.endTurn(battle.getPlayers()[1]);
@@ -130,7 +132,7 @@ public class AIController implements Initializable {
                             break;
 
                         case 1:
-
+                            selectAICard(battle, i, j);
                             moveAICard(battle, i, j);
                             break;
 
@@ -166,13 +168,14 @@ public class AIController implements Initializable {
                         case 0:
 
                             selectAICard(battle, i, j);
+                            AIAttackPlayerHero(battle.getPlayers()[1],battle);
                             break;
                         case 1:
 
                             AIComboAttack(player, battle);
                             break;
                         case 2:
-
+                            selectAICard(battle, i, j);
                             moveAICard(battle, i, j);
                             break;
                     }
@@ -215,8 +218,8 @@ public class AIController implements Initializable {
         Asset playerAsset;
         ArrayList<Minion> minions = new ArrayList<>();
         while (true) {
-            playerAsset = battle.getBattleGround().getGround().get(makeRandomNumber(BattleGround.getRows())).get(makeRandomNumber(BattleGround.getColumns()));
-            if (playerAsset.getOwner() == player)
+            playerAsset = inGroundCards.get(makeRandomNumber(inGroundCards.size()));
+            if (playerAsset != null && playerAsset.getOwner() == player)
                 break;
         }
         for (int i = 0; i < BattleGround.getRows(); i++) {
@@ -305,8 +308,8 @@ public class AIController implements Initializable {
     public void selectAICard(Battle battle, int i, int j) {
         Asset asset;
         while (true) {
-            asset = battle.getBattleGround().getGround().get(makeRandomNumber(BattleGround.getRows())).get(BattleGround.getColumns());
-            if (asset.getOwner() == battle.getPlayers()[1])
+            asset = inGroundCards.get(makeRandomNumber(inGroundCards.size()));
+            if (asset != null && asset.getOwner() == battle.getPlayers()[1])
                 break;
         }
         battle.selectWarrior(battle.getPlayers()[1], asset.getID());
@@ -324,7 +327,7 @@ public class AIController implements Initializable {
         try {
             Card[] AIHand = battle.getPlayersHand()[1];
             Card insertedCard = AIHand[makeRandomNumber(battle.getNUMBER_OF_CARDS_IN_HAND())];
-            battle.insertCard(battle.getPlayers()[1], battle.getPlayersHand()[0][selectedCardCoordinates[1] - 1].getName(), j + 1, i + 1);
+            battle.insertCard(battle.getPlayers()[1], battle.getPlayersHand()[1][selectedCardCoordinates[1] - 1].getName(), j + 1, i + 1);
             showInsertAnimation(i, j);
             battle.selectWarrior(battle.getPlayers()[1], insertedCard.getID());
         } catch (AssetNotFoundException | InvalidInsertInBattleGroundException | ThisCellFilledException | DontHaveEnoughManaException e) {
