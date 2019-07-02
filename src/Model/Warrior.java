@@ -154,5 +154,6 @@ public class Warrior extends Card {
         deathImageAddress = "file:images/cards/" + subClass + "/" + name + "/" + name + "_death.gif";
         idleImageAddress = "file:images/cards/" + subClass + "/" + name + "/" + name + "_idle.gif";
         runImageAddress = "file:images/cards/" + subClass + "/" + name + "/" + name + "_run.gif";
+        assetImageAddress = "file:images/cards/" + subClass + "/" + name + "/" + name + ".png";
     }
 }

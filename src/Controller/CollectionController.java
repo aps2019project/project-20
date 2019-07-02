@@ -415,7 +415,7 @@ public class CollectionController implements Initializable, ScreenManager, Accou
             pane.setOnMousePressed(event -> pane.setStyle("-fx-background-color: #2c2c2c;"));
             pane.setOnMouseReleased(event -> {
                 selectedDeckElement = Deck.findDeck(decks, getLabelOfEachCell(pane).getText());
-                updateRightPanelInDecksTab(selectedDeckElement.isThisMainDeck(getCurrentAccount()));
+                updateRightPanelInDecksTab();
                 pane.setStyle("-fx-background-color: -fx-primary;");
             });
             pane.getChildren().addAll(imageView,label);
@@ -427,8 +427,8 @@ public class CollectionController implements Initializable, ScreenManager, Accou
         return (x > tabX && x < tabX + tabWidth && y > tabY && y < tabY + tabHeight);
     }
 
-    public void updateRightPanelInDecksTab(boolean isMainDeck) {
-        if (!isMainDeck) {
+    public void updateRightPanelInDecksTab() {
+        if (!selectedDeckElement.isThisMainDeck(getCurrentAccount())) {
             selectedDeckImage.setImage(new Image("file:images/deck_background.png"));
         } else {
             selectedDeckImage.setImage(new Image("file:images/mainDeck_background.png"));
@@ -579,7 +579,7 @@ public class CollectionController implements Initializable, ScreenManager, Accou
 
     public void selectingMainDeckEventHandler(){
         setMainDeckButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue){
+            if(newValue && !oldValue){
                 try {
                     chooseMainDeck(selectedDeckElement);
                 } catch (InvalidSelectMainDeckException e) {
@@ -588,10 +588,12 @@ public class CollectionController implements Initializable, ScreenManager, Accou
                     return;
                 }
                 showOneButtonInformationDialog("Message","Your Deck was Chosen Successfully!!!",false);
+                fillFlowPaneDeckCollection(decksFlowPane,getCurrentAccount().getDecks());
             }else
-            if(oldValue) {
+            if(oldValue && !newValue) {
                 removeMainDeck();
                 showOneButtonInformationDialog("Warning","You Can't Play Until Choosing Main Deck!!!",true);
+                fillFlowPaneDeckCollection(decksFlowPane,getCurrentAccount().getDecks());
             }
         });
     }
@@ -663,20 +665,20 @@ public class CollectionController implements Initializable, ScreenManager, Accou
 
             Minion minion = new Minion(nameText.getText(), nameText.getText(), price, minionID, range, AP, HP, DEFAULT_MANA, attackType);
             minionID++;
-            Asset.saveCardsToJsonDatabase(minion);
+//            Asset.saveCardsToJsonDatabase(minion); todo add to main cards dataBase
             getCurrentAccount().getCollection().getAssets().add(minion);
         }
         if (typeText.getText().equals("hero")) {
             Hero hero = new Hero(nameText.getText(), price, heroID, range, AP, HP, DEFAULT_MANA, coolDown, attackType);
             heroID++;
-            Asset.saveCardsToJsonDatabase(hero);
+//            Asset.saveCardsToJsonDatabase(hero); todo add to main cards dataBase
             getCurrentAccount().getCollection().getAssets().add(hero);
 
         }
         if (typeText.getText().equals("spell")) {
             Spell spell = new Spell(nameText.getText(), nameText.getText(), price, spellID, DEFAULT_MANA, targetType);
             spellID++;
-            Asset.saveCardsToJsonDatabase(spell);
+//            Asset.saveCardsToJsonDatabase(spell); todo add to main cards dataBase
             getCurrentAccount().getCollection().getAssets().add(spell);
         }
     }

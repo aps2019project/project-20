@@ -27,6 +27,7 @@ public class Item extends Asset {
     protected void setImageAddresses(String name) {
         actionbarImageAddress = "file:images/cards/item/" + name + "/" + name + "_actionbar.gif";
         activeImageAddress = "file:images/cards/item/" + name + "/" + name + "_active.gif";
+        assetImageAddress = "file:images/cards/item/"+name+"/"+name+".png";
     }
 
 }

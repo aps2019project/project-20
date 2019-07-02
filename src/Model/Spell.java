@@ -50,5 +50,6 @@ public class Spell extends Card {
         actionBarImageAddress = "file:images/cards/spell/" + name + "/" + name + "_actionbar.gif";
         activeImageAddress = "file:images/cards/spell/" + name + "/" + name + "_active.gif";
         effectImageAddress = "file:images/cards/spell/" + name + "/" + name + "_effect.gif";
+        assetImageAddress = "file:images/cards/spell/"+name+"/"+name+".png";
     }
 }

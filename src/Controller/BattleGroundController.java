@@ -1,6 +1,7 @@
 package Controller;
 
 import Datas.AssetDatas;
+import Datas.DeckDatas;
 import Exceptions.*;
 import Model.*;
 import Presenter.CurrentAccount;
@@ -59,9 +60,12 @@ public class BattleGroundController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         //TODO Next three lines are Just for test and must be replaced properly.
-//        CurrentAccount.setCurrentAccount(Account.createAccount("a", "1234"));
-//        GameMenuPresenter gameMenuPresenter = new GameMenuPresenter();
-//        battle = gameMenuPresenter.prepareForSingleGame(1, null);
+        Account account = new Account("a","a");
+        account.setMainDeck(DeckDatas.getDefaultDeck());
+        CurrentAccount.setCurrentAccount(account);
+        battle = Battle.soloCustomKillHeroModeConstructor("rostam");
+
+
 
         aiController = new AIController(battle);
         selectedCardBackground = new ImageView(new Image("file:images/card_background_highlight.png"));

@@ -18,7 +18,15 @@ public class Shop {
 
     public static void sell(Account account, Asset sellingAsset) {
         for (Deck deck : account.getDecks()) {
+            try {
+                deck.searchAssetInDeck(sellingAsset.getID());
+            }catch (AssetNotFoundException e){
+                continue;
+            }
             deck.removeFromDeck(sellingAsset.getID());
+            if(account.getMainDeck().getName().equals(deck.getName())){
+                account.setMainDeck(null);
+            }
         }
         account.getCollection().getAssets().remove(sellingAsset);
         account.setBudget(account.getBudget() + sellingAsset.getPrice());

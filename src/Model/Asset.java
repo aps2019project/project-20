@@ -2,8 +2,10 @@ package Model;
 
 import Datas.AssetDatas;
 import Exceptions.AssetNotFoundException;
+import Exceptions.RepeatedAddingAssetToDatabaseException;
 import Presenter.ImageComparable;
 import Presenter.JsonDeserializerWithInheritance;
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
@@ -27,8 +29,7 @@ public class Asset implements ImageComparable {
     protected transient Account owner;
     private String action;
     private Buffer buffer;
-    private String assetImageAddress;
-    //TODO convert all hashMaps into separated String fields for each State address
+    protected String assetImageAddress;
 
     public Asset() {
 
@@ -46,7 +47,6 @@ public class Asset implements ImageComparable {
             this.action = name + "Action";
         else
             this.action = "NoAction";
-        assetImageAddress = "file:images/cards/"+name+"/"+name+".png";
     }
 
     public String getDesc() {
@@ -168,7 +168,7 @@ public class Asset implements ImageComparable {
         }catch (ClassCastException e){
             e.printStackTrace();
         }
-       return this;
+       return null;
     }
 
     public static Card searchCard(ArrayList<Card> cards, String name) {
@@ -180,7 +180,7 @@ public class Asset implements ImageComparable {
         throw new AssetNotFoundException("");
     }
 
-    public static void saveCardsToJsonDatabase(Asset newAsset){
+    public static void saveDefaultCardsToJsonDatabase() throws IOException {
         ArrayList<Asset> assets = new ArrayList<>();
         assets.add(AssetDatas.getTotalDisarm());
         assets.add(AssetDatas.getAreaDispel());
@@ -272,19 +272,55 @@ public class Asset implements ImageComparable {
         assets.add(AssetDatas.getSoulEater());
         assets.add(AssetDatas.getBaptism());
         assets.add(AssetDatas.getChineseSword());
-        if(newAsset!=null){
-            assets.add(newAsset);
-        }
 
-        JsonWriter jsonWriter = null;
+        writeAssetArrayInFile(assets,"Data/CardsData.json");
+
+    }
+
+    public static void writeAssetArrayInFile(ArrayList<Asset> assets,String path) throws IOException {
+        FileWriter fileWriter = new FileWriter(path);
+        fileWriter.write('[');
+        Gson gson = new Gson();
+        for (int i = 0; i < assets.size(); i++) {
+            if(assets.get(i) instanceof Hero){
+                fileWriter.write(gson.toJson(assets.get(i),Hero.class));
+            }
+            if(assets.get(i) instanceof Minion){
+                fileWriter.write(gson.toJson(assets.get(i),Minion.class));
+            }
+            if(assets.get(i) instanceof Spell){
+                fileWriter.write(gson.toJson(assets.get(i),Spell.class));
+            }
+            if(assets.get(i) instanceof Item){
+                fileWriter.write(gson.toJson(assets.get(i),Item.class));
+            }
+            if (i!=assets.size()-1){
+                fileWriter.write(",");
+            }
+        }
+        fileWriter.write(']');
+        fileWriter.flush();
+        fileWriter.close();
+    }
+
+    public static void addNewAssetToDataBase(Asset asset){
+        ArrayList<Asset> assets = new ArrayList<>();
         try {
-            jsonWriter = new JsonWriter(new FileWriter("Data/CardsData.json"));
-        new GsonBuilder().registerTypeAdapter(Asset.class, new JsonDeserializerWithInheritance<Asset>()).create().toJson(assets, new TypeToken<Collection<Asset>>(){}.getType(), jsonWriter);
-        jsonWriter.flush();
-        jsonWriter.close();
+            assets=getAssetsFromFile();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        try {
+            Asset.searchAsset(assets, asset.getName());
+        }catch (AssetNotFoundException e){
+          assets.add(asset);
+            try {
+                writeAssetArrayInFile(assets,"Data/CardsData.json");
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+        throw new RepeatedAddingAssetToDatabaseException();
     }
 
     public static ArrayList<Asset> getAssetsFromFile() throws IOException {
