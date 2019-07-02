@@ -71,14 +71,15 @@ public class AIController implements Initializable {
                     int event1 = makeRandomNumber(3);
                     switch (event1) {
                         case 0:
+                            selectAICard(battle, i, j);
                             insertAICard(battle, i, j);
                             break;
                         case 1:
-
                             selectAICard(battle, i, j);
+                            AIAttackPlayerHero(battle.getPlayers()[1],battle);
                             break;
                         case 2:
-
+                            selectAICard(battle, i, j);
                             moveAICard(battle, i, j);
                             break;
                     }
@@ -113,12 +114,13 @@ public class AIController implements Initializable {
                             break;
 
                         case 1:
-
+                            selectAICard(battle, i, j);
                             insertAICard(battle, i, j);
                             break;
                         case 2:
 
                             selectAICard(battle, i, j);
+                            moveAICard(battle,i,j);
                             break;
                     }
                     battle.endTurn(battle.getPlayers()[1]);
@@ -130,7 +132,7 @@ public class AIController implements Initializable {
                             break;
 
                         case 1:
-
+                            selectAICard(battle, i, j);
                             moveAICard(battle, i, j);
                             break;
 
@@ -166,13 +168,14 @@ public class AIController implements Initializable {
                         case 0:
 
                             selectAICard(battle, i, j);
+                            AIAttackPlayerHero(battle.getPlayers()[1],battle);
                             break;
                         case 1:
 
                             AIComboAttack(player, battle);
                             break;
                         case 2:
-
+                            selectAICard(battle, i, j);
                             moveAICard(battle, i, j);
                             break;
                     }
