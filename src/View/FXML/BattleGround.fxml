@@ -118,6 +118,6 @@
                 </ImageView>
             </children>
         </Pane>
-        <ProgressBar fx:id="progressbar" cache="true" layoutX="296.0" layoutY="86.0" prefWidth="200.0" progress="0.0" />
+        <ProgressBar fx:id="progressbar" cache="true" layoutX="317.0" layoutY="86.0" prefHeight="18.0" prefWidth="395.0" progress="0.0" />
     </children>
 </AnchorPane>

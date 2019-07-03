@@ -49,7 +49,7 @@ public class AIController implements Initializable {
     private Battle battle;
     private ArrayList<Card> inGroundCards;
 
-//    player[1] is ai
+    //    player[1] is ai
     public AIController(Battle battle) {
         this.battle = battle;
         inGroundCards = battle.getInGroundCards();
@@ -64,139 +64,175 @@ public class AIController implements Initializable {
         int i = makeRandomNumber(BattleGround.getRows());
         int j = makeRandomNumber(BattleGround.getColumns());
         try {
-            int key = makeRandomNumber(3);
+//            int key = makeRandomNumber(3);
+//            switch (key) {
+//                case 0:
+//
+//                    int event1 = makeRandomNumber(3);
+//                    switch (event1) {
+//                        case 0:
+//                            selectAICard(battle, i, j);
+//                            insertAICard(battle, i, j);
+//                            break;
+//                        case 1:
+//                            selectAICard(battle, i, j);
+//                            AIAttackPlayerHero(battle.getPlayers()[1],battle);
+//                            break;
+//                        case 2:
+//                            selectAICard(battle, i, j);
+//                            moveAICard(battle, i, j);
+//                            break;
+//                    }
+//                    battle.endTurn(battle.getPlayers()[1]);
+//
+//                    event1 = makeRandomNumber(3);
+//                    switch (event1) {
+//                        case 0:
+//
+//                            AIAttackWarriors(player, battle);
+//                            break;
+//                        case 1:
+//
+//                            AIComboAttack(player, battle);
+//                            break;
+//                        case 2:
+//
+//                            AIUseSpecialPower(battle);
+//                            break;
+//                    }
+//                    battle.endTurn(battle.getPlayers()[1]);
+//                    break;
+//
+//                case 1:
+//
+//                    int event2 = makeRandomNumber(3);
+//
+//                    switch (event2) {
+//                        case 0:
+//
+//                            AIAttackWarriors(player, battle);
+//                            break;
+//
+//                        case 1:
+//                            selectAICard(battle, i, j);
+//                            insertAICard(battle, i, j);
+//                            break;
+//                        case 2:
+//
+//                            selectAICard(battle, i, j);
+//                            moveAICard(battle,i,j);
+//                            break;
+//                    }
+//                    battle.endTurn(battle.getPlayers()[1]);
+//                    event2 = makeRandomNumber(3);
+//                    switch (event2) {
+//                        case 0:
+//
+//                            AIUseSpecialPower(battle);
+//                            break;
+//
+//                        case 1:
+//                            selectAICard(battle, i, j);
+//                            moveAICard(battle, i, j);
+//                            break;
+//
+//                        case 2:
+//
+//                            AIComboAttack(player, battle);
+//                            break;
+//
+//                    }
+//                    battle.endTurn(battle.getPlayers()[1]);
+//                    break;
+//
+//                case 2:
+//                    int event3 = makeRandomNumber(3);
+//
+//                    switch (event3) {
+//                        case 0:
+//
+//                            insertAICard(battle, i, j);
+//                            break;
+//                        case 1:
+//
+//                            AIAttackPlayerHero(player, battle);
+//                            break;
+//                        case 2:
+//
+//                            AIUseSpecialPower(battle);
+//                            break;
+//                    }
+//
+//                    event3 = makeRandomNumber(3);
+//                    switch (event3) {
+//                        case 0:
+//
+//                            selectAICard(battle, i, j);
+//                            AIAttackPlayerHero(battle.getPlayers()[1],battle);
+//                            break;
+//                        case 1:
+//
+//                            AIComboAttack(player, battle);
+//                            break;
+//                        case 2:
+//                            selectAICard(battle, i, j);
+//                            moveAICard(battle, i, j);
+//                            break;
+//                    }
+//                    battle.endTurn(battle.getPlayers()[1]);
+//                    break;
+
+            int key = makeRandomNumber(6);
+            System.err.println(key);
+
             switch (key) {
                 case 0:
+                    selectAICard(battle, i, j);
+                    insertAICard(battle, i, j);
 
-                    int event1 = makeRandomNumber(3);
-                    switch (event1) {
-                        case 0:
-                            selectAICard(battle, i, j);
-                            insertAICard(battle, i, j);
-                            break;
-                        case 1:
-                            selectAICard(battle, i, j);
-                            AIAttackPlayerHero(battle.getPlayers()[1],battle);
-                            break;
-                        case 2:
-                            selectAICard(battle, i, j);
-                            moveAICard(battle, i, j);
-                            break;
-                    }
-                    battle.endTurn(battle.getPlayers()[1]);
-
-                    event1 = makeRandomNumber(3);
-                    switch (event1) {
-                        case 0:
-
-                            AIAttackWarriors(player, battle);
-                            break;
-                        case 1:
-
-                            AIComboAttack(player, battle);
-                            break;
-                        case 2:
-
-                            AIUseSpecialPower(battle);
-                            break;
-                    }
-                    battle.endTurn(battle.getPlayers()[1]);
                     break;
-
                 case 1:
+                    selectAICard(battle, i, j);
+                    AIAttackPlayerHero(battle.getPlayers()[1], battle);
 
-                    int event2 = makeRandomNumber(3);
-
-                    switch (event2) {
-                        case 0:
-
-                            AIAttackWarriors(player, battle);
-                            break;
-
-                        case 1:
-                            selectAICard(battle, i, j);
-                            insertAICard(battle, i, j);
-                            break;
-                        case 2:
-
-                            selectAICard(battle, i, j);
-                            moveAICard(battle,i,j);
-                            break;
-                    }
-                    battle.endTurn(battle.getPlayers()[1]);
-                    event2 = makeRandomNumber(3);
-                    switch (event2) {
-                        case 0:
-
-                            AIUseSpecialPower(battle);
-                            break;
-
-                        case 1:
-                            selectAICard(battle, i, j);
-                            moveAICard(battle, i, j);
-                            break;
-
-                        case 2:
-
-                            AIComboAttack(player, battle);
-                            break;
-
-                    }
-                    battle.endTurn(battle.getPlayers()[1]);
                     break;
-
                 case 2:
-                    int event3 = makeRandomNumber(3);
+                    selectAICard(battle, i, j);
+                    moveAICard(battle, i, j);
 
-                    switch (event3) {
-                        case 0:
+                    break;
+                case 3:
+                    AIAttackWarriors(player, battle);
 
-                            insertAICard(battle, i, j);
-                            break;
-                        case 1:
+                    break;
+                case 4:
+                    AIUseSpecialPower(battle);
 
-                            AIAttackPlayerHero(player, battle);
-                            break;
-                        case 2:
+                    break;
+                case 5:
+                    AIComboAttack(player, battle);
 
-                            AIUseSpecialPower(battle);
-                            break;
-                    }
-
-                    event3 = makeRandomNumber(3);
-                    switch (event3) {
-                        case 0:
-
-                            selectAICard(battle, i, j);
-                            AIAttackPlayerHero(battle.getPlayers()[1],battle);
-                            break;
-                        case 1:
-
-                            AIComboAttack(player, battle);
-                            break;
-                        case 2:
-                            selectAICard(battle, i, j);
-                            moveAICard(battle, i, j);
-                            break;
-                    }
-                    battle.endTurn(battle.getPlayers()[1]);
                     break;
 
             }
+            battle.endTurn(battle.getPlayers()[1]);
+
         } catch (Exception e) {
             battle.endTurn(battle.getPlayers()[1]);
         }
     }
 
+
+    //checked and fast forward
     public void AIUseSpecialPower(Battle battle) {
-        battle.applySpecialPower(battle.getPlayers()[1].getMainDeck().getHero(), findPlayerMinion(battle.getPlayers()[1],battle), Minion.ActivateTimeOfSpecialPower.ON_ATTACK);
+        battle.applySpecialPower(battle.getPlayers()[1].getMainDeck().getHero(), findPlayerMinion(battle.getPlayers()[1]), Minion.ActivateTimeOfSpecialPower.ON_ATTACK);
         showSpecialPowerAnimation();
     }
 
-    public void showSpecialPowerAnimation(){
+    public void showSpecialPowerAnimation() {
         Hero hero = battle.getPlayers()[0].getMainDeck().getHero();
 
-        new Thread(()->{
+        new Thread(() -> {
             TranslateTransition translateTransition = new TranslateTransition();
             groundImageViews[selectedCardCoordinates[0]][selectedCardCoordinates[1]].setImage(new Image(hero.getCastLoopImageAddress()));
             translateTransition.setNode(battleGroundPanes[selectedCardCoordinates[0]][selectedCardCoordinates[1]]);
@@ -206,7 +242,7 @@ public class AIController implements Initializable {
             translateTransition.play();
 
             try {
-                Thread.sleep(500);
+                Thread.sleep(100);
             } catch (Exception e) {
                 handleError();
             }
@@ -214,44 +250,38 @@ public class AIController implements Initializable {
         }).start();
     }
 
-    public void AIComboAttack(Account player, Battle battle) {
-        Asset playerAsset;
-        ArrayList<Minion> minions = new ArrayList<>();
+    public Asset findAttacker(Battle battle) {
+        Asset attacker;
+
+        if (battle.getPlayersSelectedCard()[1] instanceof Warrior)
+            return battle.getPlayersSelectedCard()[1];
+        else {
+            while (true) {
+                attacker = inGroundCards.get(makeRandomNumber(inGroundCards.size()));
+                if (attacker instanceof Warrior && attacker.getOwner() == battle.getPlayers()[1])
+                    break;
+            }
+            return attacker;
+        }
+    }
+
+    public Warrior findPlayerMinion(Account player) {
+        Asset playerCard;
         while (true) {
-            playerAsset = inGroundCards.get(makeRandomNumber(inGroundCards.size()));
-            if (playerAsset != null && playerAsset.getOwner() == player)
+            playerCard = inGroundCards.get(makeRandomNumber(inGroundCards.size()));
+            if (playerCard instanceof Warrior && playerCard.getOwner() == player)
                 break;
         }
-        for (int i = 0; i < BattleGround.getRows(); i++) {
-            for (int j = 0; j < BattleGround.getColumns(); j++) {
-                Minion minion = (Minion) battle.getBattleGround().getGround().get(i).get(j);
-                if (minion.getOwner() == battle.getPlayers()[1] && minion.getActivateTimeOfSpecialPower() == COMBO) {
-                    minions.add(minion);
-                }
-            }
-        }
-
-        Asset playerCard = findPlayerMinion(player, battle);
-
-        for (int i = 0  ; i< minions.size() ; i++){
-            try {
-                battle.attack(battle.getPlayers()[1], minions.get(i), (Warrior) playerCard);
-                showAttackAnimation(minions.get(i), minions.get(i).getXInGround(), minions.get(i).getYInGround());
-
-            } catch (AssetNotFoundException | InvalidAttackException e) {
-                handleError();
-            }
-
-        }
+        return (Warrior) playerCard;
     }
 
     public void AIAttackWarriors(Account player, Battle battle) {
         Asset attacker;
         attacker = findAttacker(battle);
-        Asset playerCard = findPlayerMinion(player, battle);
+        Asset playerCard = findPlayerMinion(player);
         try {
-            battle.attack(battle.getPlayers()[1],(Warrior) attacker, (Warrior) playerCard);
-            showAttackAnimation((Warrior) attacker, attacker.getXInGround(), attacker.getYInGround());
+            battle.attack(battle.getPlayers()[1], (Warrior) attacker, (Warrior) playerCard);
+            showAttackAnimation((Warrior) attacker);
 
         } catch (AssetNotFoundException | InvalidAttackException e) {
             handleError();
@@ -259,24 +289,31 @@ public class AIController implements Initializable {
 
     }
 
-    public Warrior findPlayerMinion(Account player, Battle battle) {
-        Asset playerCard;
-        while (true) {
-            playerCard = inGroundCards.get(makeRandomNumber(inGroundCards.size()));
-            if (playerCard instanceof Warrior && playerCard.getOwner() == player)
-                break;
-        }
-        return (Warrior)playerCard;
-    }
-
     public void AIAttackPlayerHero(Account player, Battle battle) {
         Asset attacker = findAttacker(battle);
-        battle.attack(battle.getPlayers()[1], (Warrior) attacker, (Warrior) findPlayerHero(player, battle));
+        battle.attack(battle.getPlayers()[1], (Warrior) attacker, (Warrior) findPlayerHero(player));
+    }
+
+    public void showAttackAnimation(Warrior attacker) {
+//        Warrior attacker = (Warrior) battle.getPlayersSelectedCard()[0];
+
+        int attackerRow = selectedCardCoordinates[0];
+        int attackerColumn = selectedCardCoordinates[1];
+        groundImageViews[attackerRow][attackerColumn].setImage(new Image(attacker.getAttackImageAddress()));
+    }
+
+    public Asset findPlayerHero(Account player) {
+        return player.getMainDeck().getHero();
+    }
+
+    public int makeRandomNumber(int value) {
+        Random rand = new Random();
+        return rand.nextInt(value);
     }
 
     public void moveAICard(Battle battle, int i, int j) {
 
-        Asset moveWarrior = findPlayerMinion(battle.getPlayers()[1], battle);
+        Asset moveWarrior = findPlayerMinion(battle.getPlayers()[1]);
         try {
             battle.cardMoveTo(battle.getPlayers()[0], (Warrior) moveWarrior, j + 1, i + 1);
             showMoveAnimation(i, j);
@@ -294,33 +331,15 @@ public class AIController implements Initializable {
             translateTransition.setNode(battleGroundPanes[selectedCardCoordinates[0]][selectedCardCoordinates[1]]);
             translateTransition.setToX(battleGroundPanes[i][j].getLayoutX());
             translateTransition.setToY(battleGroundPanes[i][j].getLayoutY());
-            translateTransition.setDuration(new Duration(500));
+            translateTransition.setDuration(new Duration(100));
             translateTransition.play();
             try {
-                Thread.sleep(500);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             groundImageViews[i][j].setImage(new Image(warrior.getBreathingImageAddress()));
         }).start();
-    }
-
-    public void selectAICard(Battle battle, int i, int j) {
-        Asset asset;
-        while (true) {
-            asset = inGroundCards.get(makeRandomNumber(inGroundCards.size()));
-            if (asset != null && asset.getOwner() == battle.getPlayers()[1])
-                break;
-        }
-        battle.selectWarrior(battle.getPlayers()[1], asset.getID());
-        if (selectedCardCoordinates[0] == -1) //Card is already in hand.
-            handAndNextCard.getChildren().remove(selectedCardBackground);
-        else if (selectedCardCoordinates[0] > -1) {
-            battleGroundGrid.getChildren().remove(selectedCardBackground);
-        }
-        selectedCardCoordinates[0] = i;
-        selectedCardCoordinates[1] = j;
-        battleGroundGrid.add(selectedCardBackground, j, i);
     }
 
     public void insertAICard(Battle battle, int i, int j) {
@@ -343,7 +362,7 @@ public class AIController implements Initializable {
             groundImageViews[i][j].setImage(new Image(((Spell) handCard).getActiveImageAddress()));
 
             try {
-                TimeUnit.SECONDS.sleep(2);
+                TimeUnit.MILLISECONDS.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -352,38 +371,62 @@ public class AIController implements Initializable {
         handAndNextCardImageViews[selectedCardCoordinates[1]].setImage(null);
     }
 
-    public void showAttackAnimation(Warrior opponentWarrior, int i, int j) {
-        Warrior attacker = (Warrior) battle.getPlayersSelectedCard()[0];
-        int attackerRow = selectedCardCoordinates[0];
-        int attackerColumn = selectedCardCoordinates[1];
-        groundImageViews[attackerRow][attackerColumn].setImage(new Image(attacker.getAttackImageAddress()));
-    }
-
-    public int makeRandomNumber(int value) {
-        Random rand = new Random();
-        return rand.nextInt(value);
-    }
-
-    public Asset findPlayerHero(Account player, Battle battle) {
-        for (int i = 0; i < BattleGround.getRows(); i++) {
-            for (int j = 0; j < BattleGround.getColumns(); j++) {
-                if (battle.getBattleGround().getGround().get(i).get(j).getOwner() == player
-                        && battle.getBattleGround().getGround().get(i).get(j) instanceof Hero)
-                    return battle.getBattleGround().getGround().get(i).get(j);
-            }
-        }
-        return null;
-    }
-
-    public Asset findAttacker(Battle battle) {
-        Asset attacker;
-        
+    public void selectAICard(Battle battle, int i, int j) {
+        Asset asset;
         while (true) {
-            attacker = inGroundCards.get(makeRandomNumber(inGroundCards.size()));
-            if (attacker instanceof Warrior && attacker.getOwner() == battle.getPlayers()[1])
+            asset = inGroundCards.get(makeRandomNumber(inGroundCards.size()));
+            if (asset != null && asset.getOwner() == battle.getPlayers()[1])
                 break;
         }
-        return attacker;
+        battle.selectWarrior(battle.getPlayers()[1], asset.getID());
+        if (selectedCardCoordinates[0] == -1) //Card is already in hand.
+            handAndNextCard.getChildren().remove(selectedCardBackground);
+        else if (selectedCardCoordinates[0] > -1) {
+            battleGroundGrid.getChildren().remove(selectedCardBackground);
+        }
+        selectedCardCoordinates[0] = i;
+        selectedCardCoordinates[1] = j;
+        battleGroundGrid.add(selectedCardBackground, j, i);
+    }
+
+
+    public void handleError() {
+        battle.endTurn(battle.getPlayers()[1]);
+    }
+
+
+    // unchecked
+
+
+    public void AIComboAttack(Account player, Battle battle) {
+        Asset playerAsset;
+        ArrayList<Minion> minions = new ArrayList<>();
+        while (true) {
+            playerAsset = inGroundCards.get(makeRandomNumber(inGroundCards.size()));
+            if (playerAsset != null && playerAsset.getOwner() == player)
+                break;
+        }
+        for (int i = 0; i < BattleGround.getRows(); i++) {
+            for (int j = 0; j < BattleGround.getColumns(); j++) {
+                Minion minion = (Minion) battle.getBattleGround().getGround().get(i).get(j);
+                if (minion.getOwner() == battle.getPlayers()[1] && minion.getActivateTimeOfSpecialPower() == COMBO) {
+                    minions.add(minion);
+                }
+            }
+        }
+
+        Asset playerCard = findPlayerMinion(player);
+
+        for (int i = 0; i < minions.size(); i++) {
+            try {
+                battle.attack(battle.getPlayers()[1], minions.get(i), (Warrior) playerCard);
+                showAttackAnimation(minions.get(i));
+
+            } catch (AssetNotFoundException | InvalidAttackException e) {
+                handleError();
+            }
+
+        }
     }
 
     public Asset findAIStrongAsset(Battle battle) {
@@ -426,7 +469,5 @@ public class AIController implements Initializable {
         }
     }
 
-    private void handleError() {
-        battle.endTurn(battle.getPlayers()[1]);
-    }
+
 }

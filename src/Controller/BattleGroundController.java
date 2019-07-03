@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.ResourceBundle;
+
 import static Model.BattleGround.CellEffect;
 
 public class BattleGroundController implements Initializable, ScreenManager {
@@ -55,9 +56,9 @@ public class BattleGroundController implements Initializable, ScreenManager {
     public JFXTextArea errorMessage;
     public ImageView endTurn;
     public ImageView cheatButton;
-    public ProgressBar progressbar;
+    public  ProgressBar progressbar;
     private HashMap<Warrior, Label> healthBars = new HashMap<>();
-//    public Button menuButton;
+    //    public Button menuButton;
 //    public Button friendButton;
     public AnchorPane battleGroundAnchorPane;
     private ImageView[][] groundImageViews;
@@ -71,10 +72,15 @@ public class BattleGroundController implements Initializable, ScreenManager {
     private ImageView[] manaGemImageViews;
     private String dragAndDropKey = "Card dragged from hand.";
 
-    public BattleGroundController(){}
+    public BattleGroundController() {
+    }
 
     public BattleGroundController(Battle battle) {
         this.battle = battle;
+    }
+
+    public  ProgressBar getProgressbar() {
+        return progressbar;
     }
 
     @Override
@@ -95,15 +101,11 @@ public class BattleGroundController implements Initializable, ScreenManager {
         initializeHandImages();
         setEndTurnEvent();
 
-        TimeLine t0 = new TimeLine(progressbar);
-        TimeLine t1 = new TimeLine(progressbar);
 
+        TimeLine t0 = new TimeLine(progressbar);
 
         t0.start();
         battle.endTurn(battle.getPlayers()[0]);
-
-        t1.start();
-        battle.endTurn(battle.getPlayers()[1]);
 
 
     }
@@ -160,13 +162,11 @@ public class BattleGroundController implements Initializable, ScreenManager {
                 handAndNextCardImageViews[i] = new ImageView(new Image(((Warrior) card).getIdleImageAddress()));
                 if (i != 0)
                     setSelectedCardFromHandEvent(handAndNextCardImageViews[i], i);
-            }
-            else if (card instanceof Spell) {
+            } else if (card instanceof Spell) {
                 handAndNextCardImageViews[i] = new ImageView(new Image(((Spell) card).getActionBarImageAddress()));
                 if (i != 0)
                     setSelectedCardFromHandEvent(handAndNextCardImageViews[i], i);
-            }
-            else
+            } else
                 handAndNextCardImageViews[i] = new ImageView();
             initializeSize(handAndNextCardImageViews[i]);
             handAndNextCardPanes[i] = new Pane(handAndNextCardImageViews[i]);
@@ -218,8 +218,7 @@ public class BattleGroundController implements Initializable, ScreenManager {
                 if (asset instanceof Warrior) {
                     groundImageViews[i][j] = new ImageView(new Image(((Warrior) asset).getBreathingImageAddress()));
                     healthBars.put((Warrior) asset, new Label(String.valueOf(((Warrior) asset).getHP())));
-                }
-                else if (asset instanceof Item)
+                } else if (asset instanceof Item)
                     groundImageViews[i][j] = new ImageView(new Image(((Item) asset).getActionbarImageAddress()));
                 else if (asset instanceof Flag)
                     groundImageViews[i][j] = new ImageView(new Image("file:images/flag_icon.png"));
@@ -257,7 +256,7 @@ public class BattleGroundController implements Initializable, ScreenManager {
                             }
                             for (int i = index; i < itemsCursor; i++)
                                 collectedItemsImageViews[i].setImage(collectedItemsImageViews[i + 1].getImage());
-                            itemsCursor --;
+                            itemsCursor--;
                         }
                     }).start();
                 }
@@ -289,8 +288,7 @@ public class BattleGroundController implements Initializable, ScreenManager {
                     selectCardInGround(asset, i, j);
                 else if (asset.getOwner() == battle.getPlayers()[1] && selectedCardCoordinates[0] > -1)
                     attack((Warrior) asset, i, j);
-            }
-            else if (selectedCardCoordinates[0] > -1)
+            } else if (selectedCardCoordinates[0] > -1)
                 moveCard(i, j);
         });
         imageView.setOnDragOver(new EventHandler<DragEvent>() {
@@ -371,7 +369,7 @@ public class BattleGroundController implements Initializable, ScreenManager {
     private void makeCellEffects() {
         for (int i = 0; i < BattleGround.getRows(); i++) {
             for (int j = 0; j < BattleGround.getColumns(); j++) {
-                for (CellEffect cellEffect: battle.getBattleGround().getEffectsPosition().get(i).get(j)) {
+                for (CellEffect cellEffect : battle.getBattleGround().getEffectsPosition().get(i).get(j)) {
                     ImageView temp = new ImageView(new Image("file:images/cellEffect_" + cellEffect.name() + ".png"));
                     initializeSize(temp, 0.5);
                     temp.setOpacity(0.4);
@@ -461,7 +459,7 @@ public class BattleGroundController implements Initializable, ScreenManager {
                 groundImageViews[i][j].setOpacity(1);
                 selectedCardCoordinates[0] = i;
                 selectedCardCoordinates[1] = j;
-                if (temp instanceof  Item)
+                if (temp instanceof Item)
                     addItemToInventory((Item) temp);
             }
         });
@@ -469,14 +467,14 @@ public class BattleGroundController implements Initializable, ScreenManager {
     }
 
     private void updateCollectedItems(Item collected) {
-        for (Item item: battle.getPlayersDeck()[0].getItems()) {
+        for (Item item : battle.getPlayersDeck()[0].getItems()) {
             if (item.getPrice() == 0) {
 
             }
         }
     }
 
-    private void animateMove (Warrior warrior, int finalRow, int finalColumn) {
+    private void animateMove(Warrior warrior, int finalRow, int finalColumn) {
         Pane startPane = groundPanes[selectedCardCoordinates[0]][selectedCardCoordinates[1]];
         Pane endPane = groundPanes[finalRow][finalColumn];
         ImageView startImageView = groundImageViews[selectedCardCoordinates[0]][selectedCardCoordinates[1]];
@@ -620,8 +618,7 @@ public class BattleGroundController implements Initializable, ScreenManager {
                 handAndNextCardImageViews[i].setImage(new Image(((Warrior) card).getIdleImageAddress()));
                 if (i != 0)
                     setSelectedCardFromHandEvent(handAndNextCardImageViews[i], i);
-            }
-            else if (card instanceof Spell) {
+            } else if (card instanceof Spell) {
                 handAndNextCardImageViews[i].setImage(new Image(((Spell) card).getActionBarImageAddress()));
                 if (i != 0)
                     setSelectedCardFromHandEvent(handAndNextCardImageViews[i], i);
@@ -633,10 +630,10 @@ public class BattleGroundController implements Initializable, ScreenManager {
     private void updateCellEffects() {
         for (int i = 0; i < BattleGround.getRows(); i++) {
             for (int j = 0; j < BattleGround.getColumns(); j++) {
-                for (CellEffect cellEffect: battle.getBattleGround().getEffectsPosition().get(i).get(j)) {
+                for (CellEffect cellEffect : battle.getBattleGround().getEffectsPosition().get(i).get(j)) {
                     if (cellEffect.getEffectLifeTime() == 0) {
                         Iterator<ImageView> iterator = cellEffectImageViews[i][j].iterator();
-                        while (iterator.hasNext()){
+                        while (iterator.hasNext()) {
                             ImageView imageView = iterator.next();
                             if (imageView.getImage().impl_getUrl().equals("file:images/cellEffect_" + cellEffect.name() + ".png")) {
                                 groundPanes[i][j].getChildren().remove(imageView);
@@ -689,7 +686,7 @@ public class BattleGroundController implements Initializable, ScreenManager {
     }
 
     private Node getNodeFromGridPane(GridPane gridPane, int col, int row) {
-        for (Node node: gridPane.getChildren()) {
+        for (Node node : gridPane.getChildren()) {
             if (GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row) {
                 return node;
             }
