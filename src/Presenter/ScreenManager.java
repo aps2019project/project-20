@@ -41,7 +41,7 @@ public interface ScreenManager extends Animationable {
             imageView.setImage(new Image("file:images/codex/chapter" + (new Random().nextInt(24) + 1) + "_background@2x.jpg"));
             imageView.setLayoutX(0);imageView.setLayoutY(0);imageView.setFitHeight(1080);imageView.setFitWidth(1930);
             Main.getStackPane().getChildren().add(imageView);
-            SlideShowThread slideShower = new SlideShowThread();
+            SlideShowThread slideShower = new SlideShowThread(Main.getStackPaneBackGroundImage());
             stage.setOnCloseRequest(event -> slideShower.finalize());
             slideShower.start();
         }
