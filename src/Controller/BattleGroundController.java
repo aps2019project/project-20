@@ -1,5 +1,7 @@
 package Controller;
 
+import Datas.AssetDatas;
+import Datas.DeckDatas;
 import Datas.DeckDatas;
 import Exceptions.*;
 import Model.*;
@@ -86,10 +88,10 @@ public class BattleGroundController implements Initializable, ScreenManager {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         //TODO Next three lines are Just for test and must be replaced properly.
-        Account temp = new Account("reza", "1234");
-        temp.setMainDeck(DeckDatas.getDefaultDeck());
-        CurrentAccount.setCurrentAccount(temp);
-        battle = Battle.soloCustomKillHeroModeConstructor("rostam");
+//        Account temp = new Account("reza", "1234");
+//        temp.setMainDeck(DeckDatas.getDefaultDeck());
+//        CurrentAccount.setCurrentAccount(temp);
+//        battle = Battle.soloCustomKillHeroModeConstructor("rostam");
 
         aiController = new AIController(battle);
         selectedCardBackground = new ImageView(new Image("file:images/card_background_highlight.png"));
@@ -103,9 +105,14 @@ public class BattleGroundController implements Initializable, ScreenManager {
 
 
         TimeLine t0 = new TimeLine(progressbar);
+        TimeLine t1 = new TimeLine(progressbar);
+
 
         t0.start();
         battle.endTurn(battle.getPlayers()[0]);
+
+        t1.start();
+        battle.endTurn(battle.getPlayers()[1]);
 
 
     }

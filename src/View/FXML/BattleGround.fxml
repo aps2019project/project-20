@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 
-<AnchorPane fx:id="battleGroundAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="678.0" prefWidth="1059.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.BattleGroundController">
+<AnchorPane fx:id="battleGroundAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="678.0" prefWidth="1059.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <StackPane fx:id="mainStackPane" layoutX="159.0" layoutY="121.0" prefHeight="437.0" prefWidth="748.0" AnchorPane.bottomAnchor="120.0" AnchorPane.leftAnchor="159.0" AnchorPane.rightAnchor="152.0" AnchorPane.topAnchor="121.0">
             <children>

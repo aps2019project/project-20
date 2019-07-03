@@ -10,14 +10,15 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Main extends Application implements ScreenManager {
     private static StackPane stackPane = new StackPane();
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws IOException {
 //        save default data
 //        try {
-//            Asset.saveCardsToJsonDatabase(null);
+//            Asset.saveCardsToJsonDatabase();
 //            Deck.saveDefaultDecksToJson();
 //        } catch (IOException e) {
 //            e.printStackTrace();
@@ -28,8 +29,8 @@ public class Main extends Application implements ScreenManager {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        loadPageInNewStage(null, "FXML/BattleGround.fxml", true);
-//        loadPageOnStackPane(null, "FXML/BattleGround.fxml", "ltr");
+        loadPageInNewStage(null, "FXML/FirstPage.fxml", false);
+//        loadPageInNewStage(null, "FXML/BattleGround.fxml", false);
     }
 
 
