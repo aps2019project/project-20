@@ -365,7 +365,6 @@ public class CollectionController implements Initializable, ScreenManager, Accou
         collectionSearchField.textProperty().addListener((observable, oldValue, newValue) -> fillFlowPaneAssetCollection(collectionFlowPane, Asset.searchAndGetAssetCollectionFromCollection(getCurrentAccount().getCollection().getAssets(), newValue)));
         decksSearchField.textProperty().addListener((observable, oldValue, newValue) -> fillFlowPaneDeckCollection(decksFlowPane, Deck.searchAndGetDecksFromCollection(getCurrentAccount().getDecks(), newValue)));
         editDeckTab.setDisable(true);
-
     }
 
 

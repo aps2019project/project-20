@@ -173,29 +173,30 @@ public class Account implements Comparable<Account> {
 
     public static ArrayList<Account> getAccountsFromFile(String filePath) throws IOException {
         Reader reader = new FileReader(filePath);
-        ArrayList<Account> currentAccounts = new GsonBuilder().registerTypeAdapter(Asset.class, new JsonDeserializerWithInheritance<Asset>()).create().fromJson(reader, new TypeToken<java.util.Collection<Account>>() {
-        }.getType());
+        Reader readerTemp = new FileReader(filePath);
+        ArrayList<Account> currentAccounts = new GsonBuilder().registerTypeAdapter(Asset.class, new JsonDeserializerWithInheritance<Asset>()).create().fromJson(reader, new TypeToken<java.util.Collection<Account>>() {}.getType());
+        ArrayList<Account> currentAccountsTemp = new GsonBuilder().registerTypeAdapter(Card.class, new JsonDeserializerWithInheritance<Card>()).create().fromJson(readerTemp, new TypeToken<java.util.Collection<Account>>() {}.getType());
+        for (int i = 0; i < currentAccounts.size(); i++) {
+            currentAccounts.get(i).setDecks(currentAccountsTemp.get(i).getDecks());
+            currentAccounts.get(i).setMainDeck(currentAccountsTemp.get(i).getMainDeck());
+        }
         reader.close();
+        readerTemp.close();
         return currentAccounts;
     }
 
     public static Account searchAccountInFile(String userName, String password, String filePath) throws IOException {
         Reader reader = new FileReader(filePath);
-        Reader readerTemp = new FileReader(filePath);
         Account account;
-        Account accountTemp;
         try {
-            Account[] currentAccounts = new GsonBuilder().registerTypeAdapter(Asset.class, new JsonDeserializerWithInheritance<Asset>()).create().fromJson(reader, Account[].class);
-            Account[] currentAccountsTemp = new GsonBuilder().registerTypeAdapter(Card.class, new JsonDeserializerWithInheritance<Card>()).create().fromJson(readerTemp, Account[].class);
+            ArrayList<Account> accounts = getAccountsFromFile(filePath);
+            Account[] currentAccounts = new Account[accounts.size()];
+            accounts.toArray(currentAccounts);
             account = searchAccount(new ArrayList<>(Arrays.asList(currentAccounts)), userName, password);
-            accountTemp = searchAccount(new ArrayList<>(Arrays.asList(currentAccountsTemp)), userName, password);
-            account.setDecks(accountTemp.getDecks());
-            account.setMainDeck(accountTemp.getMainDeck());
         } catch (UserNotFoundException e) {
             throw e;
         } finally {
             reader.close();
-            readerTemp.close();
         }
         return account;
     }

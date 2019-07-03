@@ -35,7 +35,7 @@ public class Deck {
         this(name);
         this.hero = (Hero) hero.clone();
         for (Asset card : cards) {
-            if (card instanceof Item) {
+            if (card instanceof Item || card.isInstanceOfItem()) {
                 items.add(((Item) card.clone()));
             } else {
                 this.cards.add((Card) card.clone());
@@ -119,12 +119,12 @@ public class Deck {
     }
 
     public void addToDeck(Asset asset) {
-        if (asset instanceof Hero) {
+        if (asset instanceof Hero || asset.isInstanceOfHero()) {
             if (hero == null)
                 hero = (Hero) asset;
             else
                 throw new IllegalHeroAddToDeckException("The deck's hero is already selected.");
-        } else if (asset instanceof Card) {
+        } else if (asset instanceof Card || asset.isInstanceOfCard()) {
             if (cards.size() < 20)
                 cards.add((Card) asset);
             else
@@ -305,17 +305,17 @@ public class Deck {
 
     public void writeDeckToJsonFileAppended(FileWriter fileWriter) {
         try {
-            Gson gson = new Gson();
+            Gson gson = new GsonBuilder().registerTypeAdapter(Asset.class, new JsonDeserializerWithInheritance<Asset>()).create();
             fileWriter.write("{\"name\":\"" + this.getName() + "\",");
             fileWriter.write("\"cards\":[");
             for (int i = 0; i < this.getCards().size(); i++) {
-                if (this.getCards().get(i) instanceof Hero) {
+                if (this.getCards().get(i) instanceof Hero || this.getCards().get(i).isInstanceOfHero()) {
                     fileWriter.write(gson.toJson(this.getCards().get(i), Hero.class));
                 }
-                if (this.getCards().get(i) instanceof Minion) {
+                if (this.getCards().get(i) instanceof Minion || this.getCards().get(i).isInstanceOfMinion()) {
                     fileWriter.write(gson.toJson(this.getCards().get(i), Minion.class));
                 }
-                if (this.getCards().get(i) instanceof Spell) {
+                if (this.getCards().get(i) instanceof Spell || this.getCards().get(i).isInstanceOfSpell()) {
                     fileWriter.write(gson.toJson(this.getCards().get(i), Spell.class));
                 }
                 if (i != this.getCards().size() - 1) {

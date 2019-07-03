@@ -29,8 +29,8 @@ public class Main extends Application implements ScreenManager {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-//        loadPageInNewStage(null, "FXML/FirstPage.fxml", false);
-        loadPageInNewStage(null, "FXML/BattleGround.fxml", false);
+        loadPageInNewStage(null, "FXML/FirstPage.fxml", false);
+//        loadPageInNewStage(null, "FXML/BattleGround.fxml", false);
     }
 
 

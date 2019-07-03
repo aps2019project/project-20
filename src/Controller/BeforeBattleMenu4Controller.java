@@ -84,13 +84,7 @@ public class BeforeBattleMenu4Controller implements Initializable, ScreenManager
         startButton.setStyle("-fx-background-color: #37b400; -fx-text-fill: #ffffff; -fx-font-family: 'Microsoft Tai Le'; -fx-font-weight:bold;");
         startButton.setOnAction(event -> {
             if(!textField.getText().equals("") && Integer.parseInt(textField.getText())<=20 && Integer.parseInt(textField.getText())>=1) {
-                //todo
-                Battle.soloCustomFlagModeConstructor(Integer.parseInt(textField.getText()));
-                try {
-                    loadPageOnStackPane(anchorPane,"","rtl");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                startNewGame(anchorPane,Battle.soloCustomFlagModeConstructor(Integer.parseInt(textField.getText())));
                 dialog.close();
             }
         });
@@ -113,9 +107,7 @@ public class BeforeBattleMenu4Controller implements Initializable, ScreenManager
     }
 
     public void setMode3ButtonOnMouseReleased() throws IOException {
-        //todo
-        Battle.soloCustomFlagModeConstructor(0);
-        loadPageOnStackPane(anchorPane,"","rtl");
+        startNewGame(anchorPane,Battle.soloCustomFlagModeConstructor(0));
     }
 
     @Override

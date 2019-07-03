@@ -74,7 +74,7 @@ public class Asset implements ImageComparable {
     public static ArrayList<Hero> getHeroesOfAssetCollection(ArrayList<Asset> cardAndItems) {
         ArrayList<Hero> heroes = new ArrayList<>();
         for (Asset asset : cardAndItems) {
-            if (asset instanceof Hero) {
+            if (asset instanceof Hero || asset.isInstanceOfHero()) {
                 heroes.add((Hero) asset);
             }
         }
@@ -84,7 +84,7 @@ public class Asset implements ImageComparable {
     public static ArrayList<Item> getItemsOfAssetCollection(ArrayList<Asset> cardAndItems) {
         ArrayList<Item> items = new ArrayList<>();
         for (Asset asset : cardAndItems) {
-            if (asset instanceof Item) {
+            if (asset instanceof Item || asset.isInstanceOfItem()) {
                 items.add((Item) asset);
             }
         }
@@ -94,7 +94,7 @@ public class Asset implements ImageComparable {
     public static ArrayList<Spell> getSpellsOfAssetCollection(ArrayList<Asset> cardAndItems) {
         ArrayList<Spell> spells = new ArrayList<>();
         for (Asset asset : cardAndItems) {
-            if (asset instanceof Spell) {
+            if (asset instanceof Spell || asset.isInstanceOfSpell()) {
                 spells.add((Spell) asset);
             }
         }
@@ -104,7 +104,7 @@ public class Asset implements ImageComparable {
     public static ArrayList<Minion> getMinionsOfAssetCollection(ArrayList<Asset> cardAndItems) {
         ArrayList<Minion> minions = new ArrayList<>();
         for (Asset asset : cardAndItems) {
-            if (asset instanceof Minion) {
+            if (asset instanceof Minion || asset.isInstanceOfMinion()) {
                 minions.add((Minion) asset);
             }
         }
@@ -145,22 +145,22 @@ public class Asset implements ImageComparable {
     //todo :: fix bug
     public Asset clone() {
         try {
-            if (this instanceof Hero) {
+            if (this instanceof Hero || isInstanceOfHero()) {
                 if (this.getAction().equals("NoAction")) {
                     return new Hero(this.getName(), this.getPrice(), this.getID(), ((Hero) this).getRange(), ((Hero) this).getAP(), ((Hero) this).getHP(), false, ((Hero) this).getAttackType());
                 }
                 return new Hero(this.getName(), this.getPrice(), this.getID(), ((Hero) this).getRange(), ((Hero) this).getAP(), ((Hero) this).getHP(), ((Hero) this).getMP(), ((Hero) this).getCoolDown(), ((Hero) this).getAttackType());
             }
-            if (this instanceof Minion) {
+            if (this instanceof Minion || isInstanceOfMinion()) {
                 if (this.getAction().equals("NoAction")) {
                     return new Minion(this.getName(), this.getDesc(), this.getPrice(), this.getID(), ((Minion) this).getRange(), ((Minion) this).getAP(), ((Minion) this).getHP(), ((Minion) this).getMP(), ((Minion) this).getAttackType());
                 }
                 return new Minion(this.getName(), this.getDesc(), this.getPrice(), this.getID(), ((Minion) this).getRange(), ((Minion) this).getAP(), ((Minion) this).getHP(), ((Minion) this).getMP(), ((Minion) this).getAttackType(), ((Minion) this).getActivateTimeOfSpecialPower());
             }
-            if (this instanceof Spell) {
+            if (this instanceof Spell || isInstanceOfSpell()) {
                 return new Spell(this.getName(), this.getDesc(), this.getPrice(), this.getID(), ((Spell) this).getMP(), ((Spell) this).getTargetType(), ((Spell) this).getSquareSideLength());
             }
-            if (this instanceof Item) {
+            if (this instanceof Item || isInstanceOfItem()) {
                 return new Item(this.getName(), this.getDesc(), this.getPrice(), this.getID());
             }
         }catch (ClassCastException e){
@@ -280,16 +280,16 @@ public class Asset implements ImageComparable {
         fileWriter.write('[');
         Gson gson = new Gson();
         for (int i = 0; i < assets.size(); i++) {
-            if(assets.get(i) instanceof Hero){
+            if(assets.get(i) instanceof Hero || assets.get(i).isInstanceOfHero()){
                 fileWriter.write(gson.toJson(assets.get(i),Hero.class));
             }
-            if(assets.get(i) instanceof Minion){
+            if(assets.get(i) instanceof Minion || assets.get(i).isInstanceOfMinion()){
                 fileWriter.write(gson.toJson(assets.get(i),Minion.class));
             }
-            if(assets.get(i) instanceof Spell){
+            if(assets.get(i) instanceof Spell || assets.get(i).isInstanceOfSpell()){
                 fileWriter.write(gson.toJson(assets.get(i),Spell.class));
             }
-            if(assets.get(i) instanceof Item){
+            if(assets.get(i) instanceof Item || assets.get(i).isInstanceOfItem()){
                 fileWriter.write(gson.toJson(assets.get(i),Item.class));
             }
             if (i!=assets.size()-1){
@@ -394,4 +394,24 @@ public class Asset implements ImageComparable {
     }
 
     protected void setImageAddresses(String name){}
+
+    public boolean isInstanceOfHero(){
+        return (this.getID()>=2000) && (this.getID()<3000);
+    }
+
+    public boolean isInstanceOfMinion(){
+        return (this.getID()>=3000) && (this.getID()<4000);
+    }
+
+    public boolean isInstanceOfItem(){
+        return (this.getID()>=1000) && (this.getID()<2000);
+    }
+
+    public boolean isInstanceOfSpell(){
+        return (this.getID()>=4000) && (this.getID()<4000);
+    }
+
+    public boolean isInstanceOfCard(){
+        return !isInstanceOfItem();
+    }
 }

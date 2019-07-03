@@ -73,8 +73,6 @@ public class BattleGroundController implements Initializable, ScreenManager {
     private ImageView[] manaGemImageViews;
     private String dragAndDropKey = "Card dragged from hand.";
 
-    public BattleGroundController(){}
-
     public BattleGroundController(Battle battle) {
         this.battle = battle;
     }
@@ -82,10 +80,10 @@ public class BattleGroundController implements Initializable, ScreenManager {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         //TODO Next three lines are Just for test and must be replaced properly.
-        Account temp = new Account("reza", "1234");
-        temp.setMainDeck(DeckDatas.getDefaultDeck());
-        CurrentAccount.setCurrentAccount(temp);
-        battle = Battle.soloCustomKillHeroModeConstructor("rostam");
+//        Account temp = new Account("reza", "1234");
+//        temp.setMainDeck(DeckDatas.getDefaultDeck());
+//        CurrentAccount.setCurrentAccount(temp);
+//        battle = Battle.soloCustomKillHeroModeConstructor("rostam");
 
         aiController = new AIController(battle);
         selectedCardBackground = new ImageView(new Image("file:images/card_background_highlight.png"));

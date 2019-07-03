@@ -5,10 +5,13 @@ import Controller.SlideShowThread;
 import Model.Battle;
 import View.Main;
 import com.jfoenix.controls.JFXDecorator;
+import com.sun.org.apache.xerces.internal.dom.ChildNode;
 import javafx.animation.Animation;
 import javafx.animation.ParallelTransition;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -20,6 +23,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Random;
 
 
@@ -39,7 +43,7 @@ public interface ScreenManager extends Animationable {
             Main.getStackPane().getChildren().add(imageView);
             SlideShowThread slideShower = new SlideShowThread();
             stage.setOnCloseRequest(event -> slideShower.finalize());
-          //  slideShower.start();
+            slideShower.start();
         }
         Main.getStackPane().getChildren().add(root);
         JFXDecorator jfxDecorator = new JFXDecorator(stage, Main.getStackPane());
@@ -69,14 +73,14 @@ public interface ScreenManager extends Animationable {
     default void startNewGame(Parent prevPane,Battle battle){
         Main.getStackPane().getChildren().remove(prevPane);
         FXMLLoader loader = new FXMLLoader();
-        AnchorPane root = null;
+        BattleGroundController battleGroundController = new BattleGroundController(battle);
+        loader.setController(battleGroundController);
+        AnchorPane root = new AnchorPane();
         try {
-            root = loader.load(getClass().getResource("../View/FXML/BattleGround.fxml").openStream());
+          root = loader.load(getClass().getResource("../View/FXML/BattleGround.fxml").openStream());
         } catch (IOException e) {
             e.printStackTrace();
         }
-        BattleGroundController battleGroundController = new BattleGroundController(battle);
-        loader.setController(battleGroundController);
         Main.getStackPane().getChildren().add(root);
     }
 
