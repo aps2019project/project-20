@@ -1,5 +1,6 @@
 package Model;
 
+import Controller.BattleGroundController;
 import Datas.AssetDatas;
 import Exceptions.*;
 
@@ -367,6 +368,11 @@ public abstract class Battle {
         resetIsAttackedThisTurn();
         resetIsMovedThisTurn(player);
         setPlayersManaByDefault();
+
+        //added progress bar
+//        TimeLine t0 = new TimeLine();
+//        t0.start();
+
     }
 
     private Account getOpponent(Account player) {
@@ -488,7 +494,7 @@ public abstract class Battle {
         if (player == players[1])
             playerIndex = 1;
         try {
-            candidateItem = searcjItemInPlayersDeck(playerIndex, collectibleItemID);
+            candidateItem = searchItemInPlayersDeck(playerIndex, collectibleItemID);
         } catch (AssetNotFoundException e) {
             throw e;
         }
@@ -760,7 +766,7 @@ public abstract class Battle {
         return true;
     }
 
-    public Item searcjItemInPlayersDeck(int playerIndex, int collectibleItemID) {
+    public Item searchItemInPlayersDeck(int playerIndex, int collectibleItemID) {
         for (Item item : playersDeck[playerIndex].getItems())
             if (collectibleItemID == item.getID())
                 return item;
@@ -782,10 +788,8 @@ public abstract class Battle {
                 AIDeck = new Deck(ai, "enemyDeckInStoryGameLevel1");
                 battleMode = Battle.Mode.NORMAL;
                 reward = STORY_REWARD_L1;
-                return new KillHeroBattle
-                        (battleMode,
-                                CurrentAccount.getCurrentAccount(),
-                                ai,
+                return new KillHeroBattle(battleMode,
+                                CurrentAccount.getCurrentAccount(), ai,
                                 new Deck(CurrentAccount.getCurrentAccount(), CurrentAccount.getCurrentAccount().getMainDeck().getName(), CurrentAccount.getCurrentAccount().getMainDeck().getHero(), CurrentAccount.getCurrentAccount().getMainDeck().getItems(), CurrentAccount.getCurrentAccount().getMainDeck().getCards()),
                                 AIDeck,
                                 new BattleGround(), reward);
