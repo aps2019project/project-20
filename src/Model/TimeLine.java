@@ -7,7 +7,6 @@ public class TimeLine extends Thread {
     private ProgressBar progressbar;
 
     public TimeLine(){
-
     }
 
     public TimeLine(ProgressBar progressbar) {

@@ -10,6 +10,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import javafx.fxml.Initializable;
+import javafx.scene.media.MediaView;
 
 import java.io.IOException;
 import java.net.URL;
@@ -22,6 +23,7 @@ public class SignInController implements Initializable, AccountManageable, Scree
     public JFXPasswordField loginPassword;
     public JFXButton signIn;
     public JFXButton back;
+    public MediaView mediaPlayer;
 
     public void setSignIn() throws IOException {
         if (LoginUserName.getText().equals("") || loginPassword.getText().equals("")) {
@@ -48,5 +50,8 @@ public class SignInController implements Initializable, AccountManageable, Scree
     public void initialize(URL location, ResourceBundle resources) {
         setTextFieldRequiredFieldValidator(LoginUserName, "\\s+", "");
         setPasswordFieldRequiredFieldValidator(loginPassword, "\\s+", "");
+        //add sound
+        SoundController soundController = new SoundController("music/music_tutorial.m4a", mediaPlayer);
+        soundController.initialize(location, resources);
     }
 }
