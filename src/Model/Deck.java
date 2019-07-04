@@ -1,18 +1,15 @@
 package Model;
 
+import Datas.AssetDatas;
 import Datas.DeckDatas;
 import Exceptions.*;
 import Presenter.CurrentAccount;
-import Presenter.JsonDeserializerWithInheritance;
-import com.google.gson.Gson;
+import com.gilecode.yagson.YaGson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
-import com.google.gson.stream.JsonWriter;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Collection;
 
 public class Deck {
     public static final int STANDARD_NUMBER_OF_HEROES = 1;
@@ -271,7 +268,7 @@ public class Deck {
         decks.add(DeckDatas.getEnemyDeckInStoryGameLevel3());
         decks.add(DeckDatas.getDefaultDeck());
         FileWriter fileWriter = new FileWriter("Data/DefaultDecksData.json");
-        writeDeckArrayToJsonFileAppended(decks,fileWriter);
+        fileWriter.write(new YaGson().toJson(decks,new TypeToken<java.util.Collection<Deck>>() {}.getType()));
         fileWriter.flush();
         fileWriter.close();
     }
@@ -279,53 +276,9 @@ public class Deck {
     public static void writeDeckToJsonFile(Deck deck, String path) {
         try {
             FileWriter fileWriter = new FileWriter(path);
-            deck.writeDeckToJsonFileAppended(fileWriter);
+            fileWriter.write(new YaGson().toJson(deck,Deck.class));
             fileWriter.flush();
             fileWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void writeDeckArrayToJsonFileAppended(ArrayList<Deck> decks,FileWriter fileWriter) {
-        try {
-            fileWriter.write('[');
-            for (int i = 0; i < decks.size(); i++) {
-                decks.get(i).writeDeckToJsonFileAppended(fileWriter);
-                if (i != decks.size() - 1) {
-                    fileWriter.write(",");
-                }
-            }
-            fileWriter.write(']');
-            fileWriter.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void writeDeckToJsonFileAppended(FileWriter fileWriter) {
-        try {
-            Gson gson = new GsonBuilder().registerTypeAdapter(Asset.class, new JsonDeserializerWithInheritance<Asset>()).create();
-            fileWriter.write("{\"name\":\"" + this.getName() + "\",");
-            fileWriter.write("\"cards\":[");
-            for (int i = 0; i < this.getCards().size(); i++) {
-                if (this.getCards().get(i) instanceof Hero || this.getCards().get(i).isInstanceOfHero()) {
-                    fileWriter.write(gson.toJson(this.getCards().get(i), Hero.class));
-                }
-                if (this.getCards().get(i) instanceof Minion || this.getCards().get(i).isInstanceOfMinion()) {
-                    fileWriter.write(gson.toJson(this.getCards().get(i), Minion.class));
-                }
-                if (this.getCards().get(i) instanceof Spell || this.getCards().get(i).isInstanceOfSpell()) {
-                    fileWriter.write(gson.toJson(this.getCards().get(i), Spell.class));
-                }
-                if (i != this.getCards().size() - 1) {
-                    fileWriter.write(",");
-                }
-            }
-            fileWriter.write("],\"hero\":" + gson.toJson(this.getHero(), Hero.class) + ",");
-            fileWriter.write("\"items\":" + gson.toJson(this.getItems(), new TypeToken<java.util.Collection<Item>>(){}.getType()) + ",");
-            fileWriter.write("\"nextCardFromDeckIndex\":" + this.getNextCardFromDeckIndex() + "}");
-            fileWriter.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -346,7 +299,7 @@ public class Deck {
 
     public static Deck getDefaultDecksFromFile(String deckName) throws IOException {
         Reader reader = new FileReader("Data/DefaultDecksData.json");
-        ArrayList<Deck> decks = new GsonBuilder().registerTypeAdapter(Card.class, new JsonDeserializerWithInheritance<Card>()).create().fromJson(reader, new TypeToken<java.util.Collection<Deck>>() {}.getType());
+        ArrayList<Deck> decks = new YaGson().fromJson(reader, new TypeToken<java.util.Collection<Deck>>() {}.getType());
         try {
             return findDeck(decks, deckName);
         } catch (DeckNotFoundException e) {
@@ -360,7 +313,7 @@ public class Deck {
         Reader reader = null;
         try {
             reader = new FileReader(path);
-            return new GsonBuilder().registerTypeAdapter(Card.class, new JsonDeserializerWithInheritance<Card>()).create().fromJson(reader, Deck.class);
+            return new YaGson().fromJson(reader, Deck.class);
         } catch (IOException e) {
             e.printStackTrace();
             return null;

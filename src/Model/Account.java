@@ -5,11 +5,11 @@
 //do the changes affect the card in the shop and other places or not.
 package Model;
 
+import Datas.AssetDatas;
 import Exceptions.RepeatedUserNameException;
 import Exceptions.UserNotFoundException;
 import Exceptions.WrongPasswordException;
-import Presenter.JsonDeserializerWithInheritance;
-import com.google.gson.*;
+import com.gilecode.yagson.YaGson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonWriter;
@@ -34,6 +34,7 @@ public class Account implements Comparable<Account> {
     private int rank;
     private Deck mainDeck;
     private ArrayList<MatchHistory> matchHistories = new ArrayList<>();
+    private ArrayList<SavedBattle> savedBattles = new ArrayList<>();
 
 
     public void setName(String name) {
@@ -173,15 +174,8 @@ public class Account implements Comparable<Account> {
 
     public static ArrayList<Account> getAccountsFromFile(String filePath) throws IOException {
         Reader reader = new FileReader(filePath);
-        Reader readerTemp = new FileReader(filePath);
-        ArrayList<Account> currentAccounts = new GsonBuilder().registerTypeAdapter(Asset.class, new JsonDeserializerWithInheritance<Asset>()).create().fromJson(reader, new TypeToken<java.util.Collection<Account>>() {}.getType());
-        ArrayList<Account> currentAccountsTemp = new GsonBuilder().registerTypeAdapter(Card.class, new JsonDeserializerWithInheritance<Card>()).create().fromJson(readerTemp, new TypeToken<java.util.Collection<Account>>() {}.getType());
-        for (int i = 0; i < currentAccounts.size(); i++) {
-            currentAccounts.get(i).setDecks(currentAccountsTemp.get(i).getDecks());
-            currentAccounts.get(i).setMainDeck(currentAccountsTemp.get(i).getMainDeck());
-        }
+        ArrayList<Account> currentAccounts = new YaGson().fromJson(reader,new TypeToken<java.util.Collection<Account>>(){}.getType());
         reader.close();
-        readerTemp.close();
         return currentAccounts;
     }
 
@@ -205,7 +199,9 @@ public class Account implements Comparable<Account> {
         Reader reader = new FileReader(filePath);
         Account account;
         try {
-            Account[] currentAccounts = new GsonBuilder().registerTypeAdapter(Asset.class, new JsonDeserializerWithInheritance<Asset>()).create().fromJson(reader, Account[].class);
+            ArrayList<Account> accounts = getAccountsFromFile(filePath);
+            Account[] currentAccounts = new Account[accounts.size()];
+            accounts.toArray(currentAccounts);
             account = searchAccount(new ArrayList<>(Arrays.asList(currentAccounts)), userName);
         } catch (UserNotFoundException e) {
             throw e;
@@ -217,27 +213,7 @@ public class Account implements Comparable<Account> {
 
     public static void writeAccountArrayInFile(ArrayList<Account> accounts, String filePath) throws IOException {
         FileWriter fileWriter = new FileWriter(filePath);
-        fileWriter.write('[');
-        Gson gson = new Gson();
-        for (int i = 0; i < accounts.size(); i++) {
-            fileWriter.write("{\"name\":\""+accounts.get(i).getName()+"\",");
-            fileWriter.write("\"password\":\""+accounts.get(i).getPassword()+"\",");
-            fileWriter.write("\"collection\":");
-            accounts.get(i).getCollection().writeCollectionOnJsonFileAppended(fileWriter);
-            fileWriter.write(",\"decks\":");
-            Deck.writeDeckArrayToJsonFileAppended(accounts.get(i).getDecks(),fileWriter);
-            fileWriter.write(",\"budget\":"+accounts.get(i).getBudget()+",");
-            fileWriter.write("\"numberOfWins\":"+accounts.get(i).getNumberOfWins()+",");
-            fileWriter.write("\"numberOfLooses\":"+accounts.get(i).getNumberOfLooses()+",");
-            fileWriter.write("\"rank\":"+accounts.get(i).getRank()+",");
-            fileWriter.write("\"mainDeck\":");
-            accounts.get(i).getMainDeck().writeDeckToJsonFileAppended(fileWriter);
-            fileWriter.write(",\"matchHistories\":"+gson.toJson(accounts.get(i).getMatchHistories(),new TypeToken<java.util.Collection<MatchHistory>>(){}.getType())+"}");
-            if (i!=accounts.size()-1){
-                fileWriter.write(",");
-            }
-        }
-        fileWriter.write(']');
+        fileWriter.write(new YaGson().toJson(accounts,new TypeToken<java.util.Collection<Account>>(){}.getType()));
         fileWriter.flush();
         fileWriter.close();
     }
@@ -271,5 +247,17 @@ public class Account implements Comparable<Account> {
 
     public void setDecks(ArrayList<Deck> decks) {
         this.decks = decks;
+    }
+
+    public void setMatchHistories(ArrayList<MatchHistory> matchHistories) {
+        this.matchHistories = matchHistories;
+    }
+
+    public ArrayList<SavedBattle> getSavedBattles() {
+        return savedBattles;
+    }
+
+    public void setSavedBattles(ArrayList<SavedBattle> savedBattles) {
+        this.savedBattles = savedBattles;
     }
 }

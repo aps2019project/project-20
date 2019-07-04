@@ -1,16 +1,7 @@
 package Datas;
 
 import Model.*;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.google.gson.stream.JsonWriter;
-
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Reader;
-import java.util.ArrayList;
-import java.util.Collection;
+import Presenter.RuntimeTypeAdapterFactory;
 
 import static Model.AttackType.*;
 import static Model.Minion.ActivateTimeOfSpecialPower.*;

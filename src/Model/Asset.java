@@ -4,21 +4,15 @@ import Datas.AssetDatas;
 import Exceptions.AssetNotFoundException;
 import Exceptions.RepeatedAddingAssetToDatabaseException;
 import Presenter.ImageComparable;
-import Presenter.JsonDeserializerWithInheritance;
-import com.google.gson.Gson;
+import com.gilecode.yagson.YaGson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
-import com.google.gson.stream.JsonWriter;
 import javafx.scene.image.Image;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Collection;
 
 public class Asset implements ImageComparable {
-    @SerializedName("type")
-    private String typeName = getClass().getName();
     private String name;
     private String desc;
     private int price;
@@ -277,26 +271,7 @@ public class Asset implements ImageComparable {
 
     public static void writeAssetArrayInFile(ArrayList<Asset> assets,String path) throws IOException {
         FileWriter fileWriter = new FileWriter(path);
-        fileWriter.write('[');
-        Gson gson = new Gson();
-        for (int i = 0; i < assets.size(); i++) {
-            if(assets.get(i) instanceof Hero || assets.get(i).isInstanceOfHero()){
-                fileWriter.write(gson.toJson(assets.get(i),Hero.class));
-            }
-            if(assets.get(i) instanceof Minion || assets.get(i).isInstanceOfMinion()){
-                fileWriter.write(gson.toJson(assets.get(i),Minion.class));
-            }
-            if(assets.get(i) instanceof Spell || assets.get(i).isInstanceOfSpell()){
-                fileWriter.write(gson.toJson(assets.get(i),Spell.class));
-            }
-            if(assets.get(i) instanceof Item || assets.get(i).isInstanceOfItem()){
-                fileWriter.write(gson.toJson(assets.get(i),Item.class));
-            }
-            if (i!=assets.size()-1){
-                fileWriter.write(",");
-            }
-        }
-        fileWriter.write(']');
+        fileWriter.write(new YaGson().toJson(assets,new TypeToken<java.util.Collection<Asset>>() {}.getType()));
         fileWriter.flush();
         fileWriter.close();
     }
@@ -323,7 +298,7 @@ public class Asset implements ImageComparable {
 
     public static ArrayList<Asset> getAssetsFromFile() throws IOException {
         Reader reader = new FileReader("Data/CardsData.json");
-        ArrayList<Asset> assets = new GsonBuilder().registerTypeAdapter(Asset.class, new JsonDeserializerWithInheritance<Asset>()).create().fromJson(reader, new TypeToken<java.util.Collection<Asset>>(){}.getType());
+        ArrayList<Asset> assets = new YaGson().fromJson(reader, new TypeToken<java.util.Collection<Asset>>(){}.getType());
         reader.close();
         return assets;
     }
