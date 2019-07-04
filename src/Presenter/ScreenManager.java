@@ -5,13 +5,8 @@ import Controller.SlideShowThread;
 import Model.Battle;
 import View.Main;
 import com.jfoenix.controls.JFXDecorator;
-import com.sun.org.apache.xerces.internal.dom.ChildNode;
-import javafx.animation.Animation;
 import javafx.animation.ParallelTransition;
-import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -20,10 +15,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Random;
 
 
@@ -35,23 +28,25 @@ public interface ScreenManager extends Animationable {
         }
         Main.setStackPane(new StackPane());
         Stage stage = new Stage();
+        JFXDecorator jfxDecorator = new JFXDecorator(stage, Main.getStackPane());
+        jfxDecorator.getStylesheets().add(Main.class.getResource("CSS/Screens.Css").toExternalForm());
+        Scene scene = new Scene(jfxDecorator);
         AnchorPane root = FXMLLoader.load(Main.class.getResource(FXMLAddress));
+        stage.setScene(scene);
         if (isInFullScreen) {
             ImageView imageView = new ImageView();
             imageView.setImage(new Image("file:images/codex/chapter" + (new Random().nextInt(24) + 1) + "_background@2x.jpg"));
             imageView.setLayoutX(0);imageView.setLayoutY(0);imageView.setFitHeight(1080);imageView.setFitWidth(1930);
             Main.getStackPane().getChildren().add(imageView);
             SlideShowThread slideShower = new SlideShowThread(Main.getStackPaneBackGroundImage());
-            stage.setOnCloseRequest(event -> slideShower.finalize());
+            stage.getScene().getWindow().setOnHidden(event -> {
+                slideShower.finalize();
+            });
             slideShower.start();
         }
         Main.getStackPane().getChildren().add(root);
-        JFXDecorator jfxDecorator = new JFXDecorator(stage, Main.getStackPane());
-        jfxDecorator.getStylesheets().add(Main.class.getResource("CSS/Screens.Css").toExternalForm());
-        Scene scene = new Scene(jfxDecorator);
         stage.setTitle("Duelyst");
         stage.getIcons().add(new Image("file:images/icon.png"));
-        stage.setScene(scene);
         if (isInFullScreen) {
             stage.setFullScreen(true);
         }

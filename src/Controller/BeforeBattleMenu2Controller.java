@@ -1,8 +1,8 @@
 package Controller;
 
+import Datas.SoundDatas;
 import Presenter.Animationable;
 import Presenter.ScreenManager;
-import View.Main;
 import com.jfoenix.controls.JFXRippler;
 import javafx.fxml.Initializable;
 import javafx.scene.image.Image;
@@ -29,6 +29,7 @@ public class BeforeBattleMenu2Controller implements Initializable, ScreenManager
     }
 
     public void setBackButtonOnMousePressed(){
+        SoundDatas.playSFX(SoundDatas.PAGE_CHANGING);
         back.setImage(new Image("file:images/pressed_back_button_corner.png"));
     }
 
@@ -40,9 +41,9 @@ public class BeforeBattleMenu2Controller implements Initializable, ScreenManager
         loadPageOnStackPane(back.getParent(),"FXML/BeforeBattleMenu1.fxml","ltr");
     }
 
-
     public void setCustomButtonOnMouseEntered(){
         nodeFadeAnimation(customPaneDetail,200,0,1).play();
+        SoundDatas.playSFX(SoundDatas.BUTTON_MOUSEOVER);
     }
 
     public void setCustomButtonOnMouseExited(){
@@ -50,11 +51,13 @@ public class BeforeBattleMenu2Controller implements Initializable, ScreenManager
     }
 
     public void setCustomButtonOnMouseReleased() throws IOException {
+        SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
         loadPageOnStackPane(back.getParent(),"FXML/BeforeBattleMenu4.fxml","ltr");
     }
 
     public void setStoryButtonOnMouseEntered(){
         nodeFadeAnimation(storyPaneDetail,200,0,1).play();
+        SoundDatas.playSFX(SoundDatas.BUTTON_MOUSEOVER);
     }
 
     public void setStoryButtonOnMouseExited(){
@@ -62,6 +65,7 @@ public class BeforeBattleMenu2Controller implements Initializable, ScreenManager
     }
 
     public void setStoryButtonOnMouseReleased() throws IOException {
+        SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
         loadPageOnStackPane(back.getParent(),"FXML/BeforeBattleMenu3.fxml","rtl");
     }
 

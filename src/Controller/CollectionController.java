@@ -1,5 +1,6 @@
 package Controller;
 
+import Datas.SoundDatas;
 import Exceptions.*;
 import Model.*;
 import Presenter.*;
@@ -10,7 +11,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -21,7 +21,6 @@ import javafx.stage.FileChooser;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -88,16 +87,20 @@ public class CollectionController implements Initializable, ScreenManager, Accou
     public void setBackButtonOnMouseEntered() {
         back.setImage(new Image("file:images/hover_back_button_corner.png"));
     }
-    public void setBackButtonOnMousePressed() { back.setImage(new Image("file:images/pressed_back_button_corner.png")); }
+    public void setBackButtonOnMousePressed() {
+    SoundDatas.playSFX(SoundDatas.PAGE_CHANGING);
+    back.setImage(new Image("file:images/pressed_back_button_corner.png")); }
     public void setBackButtonOnMouseExited() {
         back.setImage(new Image("file:images/button_back_corner.png"));
     }
     public void setBackButtonOnMouseReleased() throws IOException { loadPageOnStackPane(back.getParent(), "FXML/MainMenu.fxml", "ltr"); }
 
     public void setImportButtonOnMouseOver() {
+        SoundDatas.playSFX(SoundDatas.BUTTON_MOUSEOVER);
         importButton.setImage(new Image("file:images/hover_import_button.png"));
     }
     public void setImportButtonOnMousePressed() {
+        SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
         importButton.setImage(new Image("file:images/pressed_import_button.png"));
     }
     public void setImportButtonOnMouseReleased() {
@@ -108,8 +111,11 @@ public class CollectionController implements Initializable, ScreenManager, Accou
     }
 
 
-    public void setCreateButtonOnMouseOver() { createButton.setImage(new Image("file:images/hover_Create_button.png")); }
+    public void setCreateButtonOnMouseOver() {
+    SoundDatas.playSFX(SoundDatas.BUTTON_MOUSEOVER);
+    createButton.setImage(new Image("file:images/hover_Create_button.png")); }
     public void setCreateButtonOnMousePressed() {
+        SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
         createButton.setImage(new Image("file:images/pressed_Create_button.png"));
     }
     public void setCreateButtonOnMouseReleased() {
@@ -120,6 +126,7 @@ public class CollectionController implements Initializable, ScreenManager, Accou
 
     public void setExportButtonOnMouseOver() {
         if (selectedDeckElement != null) {
+            SoundDatas.playSFX(SoundDatas.BUTTON_MOUSEOVER);
             exportDeckButton.setImage(new Image("file:images/hover_export_button.png"));
         } else {
             exportDeckButton.setImage(new Image("file:images/unavailable_export_button.png"));
@@ -127,6 +134,7 @@ public class CollectionController implements Initializable, ScreenManager, Accou
     }
     public void setExportButtonOnMousePressed() {
         if (selectedDeckElement != null) {
+            SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
             exportDeckButton.setImage(new Image("file:images/pressed_export_button.png"));
             exportDeck(selectedDeckElement);
         } else {
@@ -143,6 +151,7 @@ public class CollectionController implements Initializable, ScreenManager, Accou
 
     public void setEditButtonOnMouseOver() {
         if (selectedDeckElement != null) {
+            SoundDatas.playSFX(SoundDatas.BUTTON_MOUSEOVER);
             editDeckButton.setImage(new Image("file:images/hover_edit_button.png"));
         } else {
             editDeckButton.setImage(new Image("file:images/unavailable_edit_button.png"));
@@ -150,6 +159,7 @@ public class CollectionController implements Initializable, ScreenManager, Accou
     }
     public void setEditButtonOnMousePressed() {
         if (selectedDeckElement != null) {
+            SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
             editDeckButton.setImage(new Image("file:images/pressed_edit_button.png"));
             loadEditDeckTab();
             updateEachDeckCollectionTabs();
@@ -170,6 +180,7 @@ public class CollectionController implements Initializable, ScreenManager, Accou
 
     public void setDeleteDeckButtonOnMouseOver() {
         if (selectedDeckElement != null) {
+            SoundDatas.playSFX(SoundDatas.BUTTON_MOUSEOVER);
             deleteDeckButton.setImage(new Image("file:images/hover_delete_button.png"));
         } else {
             deleteDeckButton.setImage(new Image("file:images/unavailable_delete_button.png"));
@@ -177,6 +188,7 @@ public class CollectionController implements Initializable, ScreenManager, Accou
     }
     public void setDeleteDeckButtonOnMousePressed() {
         if (selectedDeckElement != null) {
+            SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
             deleteDeckButton.setImage(new Image("file:images/pressed_delete_button.png"));
             confirmationDialog("Confirmation","Are You Sure ?").setOnAction(event -> {
                 deleteDeck(selectedDeckElement);
@@ -198,6 +210,7 @@ public class CollectionController implements Initializable, ScreenManager, Accou
 
     public void setRenameDeckButtonOnMouseOver() {
         if (selectedDeckElement != null) {
+            SoundDatas.playSFX(SoundDatas.BUTTON_MOUSEOVER);
             deckRenameButton.setImage(new Image("file:images/hover_change_button.png"));
         } else {
             deckRenameButton.setImage(new Image("file:images/default_action_button.png"));
@@ -205,6 +218,7 @@ public class CollectionController implements Initializable, ScreenManager, Accou
     }
     public void setRenameDeckButtonOnMousePressed() {
         if (selectedDeckElement != null) {
+            SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
             deckRenameButton.setImage(new Image("file:images/pressed_change_button.png"));
             if(!deckRenameField.getText().equals("")) {
                 try {
@@ -230,6 +244,7 @@ public class CollectionController implements Initializable, ScreenManager, Accou
 
     public void setCardActionButtonOnMousePressed() {
         if (selectedAssetElement != null) {
+            SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
             if (userCollectionTab.isSelected()) {
                 cardActionButton.setImage(new Image("file:images/pressed_add_button.png"));
             } else if (deckCollectionTab.isSelected()) {
@@ -243,6 +258,7 @@ public class CollectionController implements Initializable, ScreenManager, Accou
         if (selectedAssetElement == null) {
             cardActionButton.setImage(new Image("file:images/unhover_button.png"));
         } else {
+            SoundDatas.playSFX(SoundDatas.BUTTON_MOUSEOVER);
             if (userCollectionTab.isSelected()) {
                 cardActionButton.setImage(new Image("file:images/hover_add_button.png"));
             } else if (deckCollectionTab.isSelected()) {
@@ -296,6 +312,7 @@ public class CollectionController implements Initializable, ScreenManager, Accou
         customCardTab.setGraphic(new ImageView(new Image("file:images/tab_customCard_button.png")));
         tabPane.setOnMouseClicked(event -> {
             if (isInRightTabCoordination(event.getX(), event.getY(), 10, 6, 160, 40)) {
+                SoundDatas.playSFX(SoundDatas.TAB_PRESS);
                 collectionTab.setGraphic(new ImageView(new Image("file:images/tab_collection_pressed_button.png")));
                 decksTab.setGraphic(new ImageView(new Image("file:images/tab_deck_button.png")));
                 if(!editDeckTab.isDisable()) {
@@ -303,6 +320,7 @@ public class CollectionController implements Initializable, ScreenManager, Accou
                 }
                 customCardTab.setGraphic(new ImageView(new Image("file:images/tab_customCard_button.png")));
             } else if (isInRightTabCoordination(event.getX(), event.getY(), 10 + 165 + 15, 6, 160, 40)) {
+                SoundDatas.playSFX(SoundDatas.TAB_PRESS);
                 collectionTab.setGraphic(new ImageView(new Image("file:images/tab_collection_button.png")));
                 decksTab.setGraphic(new ImageView(new Image("file:images/tab_deck_pressed_button.png")));
                 if(!editDeckTab.isDisable()) {
@@ -310,11 +328,13 @@ public class CollectionController implements Initializable, ScreenManager, Accou
                 }
                 customCardTab.setGraphic(new ImageView(new Image("file:images/tab_customCard_button.png")));
             } else if (!editDeckTab.isDisable() && isInRightTabCoordination(event.getX(), event.getY(), 10 + 340 + 15, 6, 160, 40)) {
+                SoundDatas.playSFX(SoundDatas.TAB_PRESS);
                 collectionTab.setGraphic(new ImageView(new Image("file:images/tab_collection_button.png")));
                 decksTab.setGraphic(new ImageView(new Image("file:images/tab_deck_button.png")));
                 editDeckTab.setGraphic(new ImageView(new Image("file:images/tab_selected_pressed_button.png")));
                 customCardTab.setGraphic(new ImageView(new Image("file:images/tab_customCard_button.png")));
             } else if (isInRightTabCoordination(event.getX(), event.getY(), 10 + 520 + 15, 6, 160, 40)) {
+                SoundDatas.playSFX(SoundDatas.TAB_PRESS);
                 collectionTab.setGraphic(new ImageView(new Image("file:images/tab_collection_button.png")));
                 decksTab.setGraphic(new ImageView(new Image("file:images/tab_deck_button.png")));
                 if(!editDeckTab.isDisable()) {
@@ -384,6 +404,7 @@ public class CollectionController implements Initializable, ScreenManager, Accou
             pane.setOnMouseExited(event -> pane.setStyle("-fx-background-color: -fx-primary;"));
             pane.setOnMousePressed(event -> pane.setStyle("-fx-background-color: #2c2c2c;"));
             pane.setOnMouseReleased(event -> {
+                SoundDatas.playSFX(SoundDatas.SELECT_ITEM);
                 selectedAssetElement = new Asset().searchAssetFromCardImage(assets, ((ImageView) pane.getChildren().get(0)).getImage());
                 if(collectionTab.isSelected()) {
                     selectedCardImageInCollectionTab.setImage(new Image(selectedAssetElement.getAssetImageAddress()));
@@ -424,6 +445,7 @@ public class CollectionController implements Initializable, ScreenManager, Accou
             pane.setOnMouseExited(event -> pane.setStyle("-fx-background-color: -fx-primary;"));
             pane.setOnMousePressed(event -> pane.setStyle("-fx-background-color: #2c2c2c;"));
             pane.setOnMouseReleased(event -> {
+                SoundDatas.playSFX(SoundDatas.SELECT_ITEM);
                 selectedDeckElement = Deck.findDeck(decks, getLabelOfEachCell(pane).getText());
                 updateRightPanelInDecksTab();
                 pane.setStyle("-fx-background-color: -fx-primary;");
@@ -562,13 +584,20 @@ public class CollectionController implements Initializable, ScreenManager, Accou
         jfxTextField.setStyle("-jfx-focus-color : #2b23a9;");
         yesButton.setStyle("-fx-background-color: #37b400; -fx-text-fill: #ffffff; -fx-font-family: 'Microsoft Tai Le'; -fx-font-weight:bold ;");
         yesButton.setOnMouseReleased(event -> {
-            if (!jfxTextField.getText().equals(""))
+            if (!jfxTextField.getText().equals("")) {
+                SoundDatas.playSFX(SoundDatas.DIALOG_YES_BUTTON);
                 dialog.close();
+            }else {
+                SoundDatas.playSFX(SoundDatas.DIALOG_NO_BUTTON);
+            }
         });
         JFXButton noButton = new JFXButton("cancle");
         noButton.setButtonType(JFXButton.ButtonType.RAISED);
         noButton.setStyle("-fx-background-color: #ff0000; -fx-text-fill: #ffffff; -fx-font-family: 'Microsoft Tai Le'; -fx-font-weight:bold ;");
-        noButton.setOnAction(event -> dialog.close());
+        noButton.setOnAction(event -> {
+            SoundDatas.playSFX(SoundDatas.DIALOG_NO_BUTTON);
+            dialog.close();
+        });
         dialog.setOnDialogClosed(event -> Main.getStackPane().getChildren().remove(dialog));
         dialogLayout.setActions(jfxTextField,yesButton,noButton);
         dialog.show();

@@ -1,13 +1,12 @@
 package Controller;
 
+import Datas.SoundDatas;
 import Model.Battle;
 import Presenter.Animationable;
 import Presenter.ScreenManager;
 import Presenter.TextFieldValidator;
 import View.Main;
 import com.jfoenix.controls.*;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -35,6 +34,7 @@ public class BeforeBattleMenu4Controller implements Initializable, ScreenManager
     }
 
     public void setBackButtonOnMousePressed(){
+        SoundDatas.playSFX(SoundDatas.PAGE_CHANGING);
         back.setImage(new Image("file:images/pressed_back_button_corner.png"));
     }
 
@@ -46,8 +46,8 @@ public class BeforeBattleMenu4Controller implements Initializable, ScreenManager
         loadPageOnStackPane(back.getParent(),"FXML/BeforeBattleMenu2.fxml","ltr");
     }
 
-
     public void setMode1ButtonOnMouseEntered(){
+        SoundDatas.playSFX(SoundDatas.BUTTON_MOUSEOVER);
         nodeFadeAnimation(mode1PaneDetail,200,0,1).play();
     }
 
@@ -56,10 +56,12 @@ public class BeforeBattleMenu4Controller implements Initializable, ScreenManager
     }
 
     public void setMode1ButtonOnMouseReleased() throws IOException {
+        SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
         loadPageOnStackPane(back.getParent(),"FXML/AIHeroChooseMenu.fxml","rtl");
     }
 
     public void setMode2ButtonOnMouseEntered(){
+        SoundDatas.playSFX(SoundDatas.BUTTON_MOUSEOVER);
         nodeFadeAnimation(mode2PaneDetail,200,0,1).play();
     }
 
@@ -68,6 +70,7 @@ public class BeforeBattleMenu4Controller implements Initializable, ScreenManager
     }
 
     public void setMode2ButtonOnMouseReleased() {
+        SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
         JFXDialogLayout dialogLayout = new JFXDialogLayout();
         dialogLayout.setPrefHeight(60);
         Text header = new Text("Set Number Of Flags");
@@ -76,7 +79,7 @@ public class BeforeBattleMenu4Controller implements Initializable, ScreenManager
         dialogLayout.setStyle("-fx-background-color: #acf5ff; -fx-text-fill: #ffffff");
         JFXDialog dialog = new JFXDialog(Main.getStackPane(), dialogLayout, JFXDialog.DialogTransition.CENTER, true);
         JFXTextField textField = new JFXTextField();
-        textField.setLabelFloat(true);;
+        textField.setLabelFloat(true);
         textField.setPromptText("Number Of Flags");
         setTextFieldRequiredFieldValidator(textField, "\\D+", "Invalid Input");
         JFXButton startButton = new JFXButton("start");
@@ -84,21 +87,27 @@ public class BeforeBattleMenu4Controller implements Initializable, ScreenManager
         startButton.setStyle("-fx-background-color: #37b400; -fx-text-fill: #ffffff; -fx-font-family: 'Microsoft Tai Le'; -fx-font-weight:bold;");
         startButton.setOnAction(event -> {
             if(!textField.getText().equals("") && Integer.parseInt(textField.getText())<=20 && Integer.parseInt(textField.getText())>=1) {
+                SoundDatas.playSFX(SoundDatas.DIALOG_YES_BUTTON);
                 startNewGame(anchorPane,Battle.soloCustomFlagModeConstructor(Integer.parseInt(textField.getText())));
                 dialog.close();
+            }else {
+                SoundDatas.playSFX(SoundDatas.DIALOG_NO_BUTTON);
             }
         });
-
         JFXButton CancleButton = new JFXButton("cancel");
         CancleButton.setButtonType(JFXButton.ButtonType.RAISED);
         CancleButton.setStyle("-fx-background-color: #ff0000; -fx-text-fill: #ffffff; -fx-font-family: 'Microsoft Tai Le'; -fx-font-weight:bold;");
-        CancleButton.setOnAction(event -> dialog.close());
+        CancleButton.setOnAction(event -> {
+            SoundDatas.playSFX(SoundDatas.DIALOG_NO_BUTTON);
+            dialog.close();
+        });
         dialog.setOnDialogClosed(event -> Main.getStackPane().getChildren().remove(dialog));
         dialogLayout.setActions(textField,startButton,CancleButton);
         dialog.show();
     }
 
     public void setMode3ButtonOnMouseEntered(){
+        SoundDatas.playSFX(SoundDatas.BUTTON_MOUSEOVER);
         nodeFadeAnimation(mode3PaneDetail,200,0,1).play();
     }
 
@@ -106,7 +115,8 @@ public class BeforeBattleMenu4Controller implements Initializable, ScreenManager
         nodeFadeAnimation(mode3PaneDetail,200,1,0).play();
     }
 
-    public void setMode3ButtonOnMouseReleased() throws IOException {
+    public void setMode3ButtonOnMouseReleased(){
+        SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
         startNewGame(anchorPane,Battle.soloCustomFlagModeConstructor(0));
     }
 

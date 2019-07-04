@@ -1,5 +1,6 @@
 package Controller;
 
+import Datas.SoundDatas;
 import Model.Battle;
 import Presenter.Animationable;
 import Presenter.ScreenManager;
@@ -30,6 +31,7 @@ public class BeforeBattleMenu3Controller implements Initializable, ScreenManager
     }
 
     public void setBackButtonOnMousePressed(){
+        SoundDatas.playSFX(SoundDatas.PAGE_CHANGING);
         back.setImage(new Image("file:images/pressed_back_button_corner.png"));
     }
 
@@ -43,6 +45,7 @@ public class BeforeBattleMenu3Controller implements Initializable, ScreenManager
 
 
     public void setLevel1ButtonOnMouseEntered(){
+        SoundDatas.playSFX(SoundDatas.BUTTON_MOUSEOVER);
         nodeFadeAnimation(level1PaneDetail,200,0,1).play();
     }
 
@@ -50,11 +53,13 @@ public class BeforeBattleMenu3Controller implements Initializable, ScreenManager
         nodeFadeAnimation(level1PaneDetail,200,1,0).play();
     }
 
-    public void setLevel1ButtonOnMouseReleased() throws IOException {
+    public void setLevel1ButtonOnMouseReleased() {
+        SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
         startNewGame(anchorPane,Battle.soloStoryModeConstructor(1));
     }
 
     public void setLevel2ButtonOnMouseEntered(){
+        SoundDatas.playSFX(SoundDatas.BUTTON_MOUSEOVER);
         nodeFadeAnimation(level2PaneDetail,200,0,1).play();
     }
 
@@ -62,11 +67,13 @@ public class BeforeBattleMenu3Controller implements Initializable, ScreenManager
         nodeFadeAnimation(level2PaneDetail,200,1,0).play();
     }
 
-    public void setLevel2ButtonOnMouseReleased() throws IOException {
+    public void setLevel2ButtonOnMouseReleased(){
+        SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
         startNewGame(anchorPane,Battle.soloStoryModeConstructor(2));
     }
 
     public void setLevel3ButtonOnMouseEntered(){
+        SoundDatas.playSFX(SoundDatas.BUTTON_MOUSEOVER);
         nodeFadeAnimation(level3PaneDetail,200,0,1).play();
     }
 
@@ -74,7 +81,8 @@ public class BeforeBattleMenu3Controller implements Initializable, ScreenManager
         nodeFadeAnimation(level3PaneDetail,200,1,0).play();
     }
 
-    public void setLevel3ButtonOnMouseReleased() throws IOException {
+    public void setLevel3ButtonOnMouseReleased(){
+        SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
         startNewGame(anchorPane,Battle.soloStoryModeConstructor(3));
     }
 

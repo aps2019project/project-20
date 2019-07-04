@@ -1,21 +1,14 @@
 package Controller;
 
+import Datas.SoundDatas;
 import Presenter.Animationable;
 import Presenter.ScreenManager;
-import View.Main;
 import com.jfoenix.controls.JFXRippler;
-import com.sun.javafx.geom.BaseBounds;
-import com.sun.javafx.geom.transform.BaseTransform;
-import com.sun.javafx.scene.BoundsAccessor;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.effect.Bloom;
-import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
 import java.io.IOException;
@@ -35,6 +28,7 @@ public class BeforeBattleMenu1Controller implements Initializable, ScreenManager
     }
 
     public void setBackButtonOnMousePressed(){
+        SoundDatas.playSFX(SoundDatas.PAGE_CHANGING);
         back.setImage(new Image("file:images/pressed_back_button_corner.png"));
     }
 
@@ -46,9 +40,9 @@ public class BeforeBattleMenu1Controller implements Initializable, ScreenManager
         loadPageOnStackPane(back.getParent(),"FXML/MainMenu.fxml","ltr");
     }
 
-
     public void setSoloButtonOnMouseEntered(){
         nodeFadeAnimation(soloPaneDetail,200,0,1).play();
+        SoundDatas.playSFX(SoundDatas.BUTTON_MOUSEOVER);
     }
 
     public void setSoloButtonOnMouseExited(){
@@ -56,11 +50,13 @@ public class BeforeBattleMenu1Controller implements Initializable, ScreenManager
     }
 
     public void setSoloButtonOnMouseReleased() throws IOException {
+        SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
         loadPageOnStackPane(back.getParent(),"FXML/BeforeBattleMenu2.fxml","rtl");
     }
 
     public void setMultiButtonOnMouseEntered(){
         nodeFadeAnimation(multiPaneDetail,200,0,1).play();
+        SoundDatas.playSFX(SoundDatas.BUTTON_MOUSEOVER);
     }
 
     public void setMultiButtonOnMouseExited(){
@@ -68,6 +64,7 @@ public class BeforeBattleMenu1Controller implements Initializable, ScreenManager
     }
 
     public void setMultiButtonOnMouseReleased(){
+        SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
       //todo
     }
 

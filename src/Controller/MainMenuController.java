@@ -1,5 +1,6 @@
 package Controller;
 
+import Datas.SoundDatas;
 import Exceptions.InvalidSelectMainDeckException;
 import Presenter.AccountManageable;
 import Presenter.DialogThrowable;
@@ -45,10 +46,12 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
 
     public void setBattleButtonPressed() {
         battle.setImage(new Image("file:images/pressed_battle_button.png"));
+        SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
     }
 
     public void setBattleMouseOver() {
         battle.setImage(new Image("file:images/hover_battle_button.png"));
+        SoundDatas.playSFX(SoundDatas.BUTTON_MOUSEOVER);
         description.setText("\n     You Can Start A Battle");
     }
 
@@ -63,11 +66,13 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
 
     public void setCollectionButtonPressed() {
         collection.setImage(new Image("file:images/pressed_collection_button.png"));
+        SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
     }
 
     public void setCollectionMouseOver() {
         collection.setImage(new Image("file:images/hover_collection_button.png"));
         description.setText("\n All Of Your Cards And Items\n                Are Here");
+        SoundDatas.playSFX(SoundDatas.BUTTON_MOUSEOVER);
     }
 
     public void setCollectionMouseUnOver() {
@@ -81,11 +86,13 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
 
     public void setShopButtonPressed() {
         shop.setImage(new Image("file:images/pressed_shop_button.png"));
+        SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
     }
 
     public void setShopMouseOver() {
         shop.setImage(new Image("file:images/hover_shop_button.png"));
         description.setText("\n     Your Can Buy Anything\n                From Here");
+        SoundDatas.playSFX(SoundDatas.BUTTON_MOUSEOVER);
     }
 
     public void setShopMouseUnOver() {
@@ -99,11 +106,13 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
 
     public void setLeaderBoardButtonPressed() {
         leaderBoard.setImage(new Image("file:images/pressed_leaderboard_button.png"));
+        SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
     }
 
     public void setLeaderBoardMouseOver() {
         leaderBoard.setImage(new Image("file:images/hover_leaderboard_button.png"));
         description.setText("\n  You Can See Your Ranking");
+        SoundDatas.playSFX(SoundDatas.BUTTON_MOUSEOVER);
     }
 
     public void setLeaderMouseUnOver() {
@@ -117,11 +126,13 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
 
     public void setMatchHistoryButtonPressed() {
         matchHistory.setImage(new Image("file:images/pressed_matchHistory_button.png"));
+        SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
     }
 
     public void setMatchHistoryMouseOver() {
         matchHistory.setImage(new Image("file:images/hover_matchHistory_button.png"));
         description.setText("\n  Matches You Have Played\n                Are Here");
+        SoundDatas.playSFX(SoundDatas.BUTTON_MOUSEOVER);
     }
 
     public void setMatchHistoryMouseUnOver() {
@@ -158,11 +169,10 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
         nodesList.addAnimatedNode(pane4);
         nodesList.addAnimatedNode(pane5);
 
-        //todo better graphic
-
         myProfile.setOnMouseEntered(event -> {
             myProfile.setImage(new Image("file:images/hover_profile_button.png"));
             description.setText("\n         Edit Your Profile");
+            SoundDatas.playSFX(SoundDatas.BUTTON_MOUSEOVER);
         });
         myProfile.setOnMouseExited(event -> {
             myProfile.setImage(new Image("file:images/profile.png"));
@@ -171,17 +181,20 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
         logout.setOnMouseEntered(event -> {
             logout.setImage(new Image("file:images/hover_logoff_button.png"));
             description.setText("\n                 Logout");
+            SoundDatas.playSFX(SoundDatas.BUTTON_MOUSEOVER);
         });
         logout.setOnMouseExited(event -> {
             logout.setImage(new Image("file:images/logoff.png"));
             description.setText("\n                Welcome");
         });
         logout.setOnMousePressed(event -> {
-           showTwoButtonMainMenuExitDialog(anchorPane.getScene(),"../View/FXML/FirstPage.fxml");
+            showTwoButtonMainMenuExitDialog(anchorPane.getScene(),"../View/FXML/FirstPage.fxml");
+            SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
         });
         save.setOnMouseEntered(event -> {
             save.setImage(new Image("file:images/hover_save_button.png"));
             description.setText("\n                  Save");
+            SoundDatas.playSFX(SoundDatas.BUTTON_MOUSEOVER);
         });
         save.setOnMouseExited(event -> {
             save.setImage(new Image("file:images/save.png"));
@@ -190,10 +203,12 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
         save.setOnMousePressed(event -> {
             saveAccount();
             showOneButtonInformationDialog("Seve Message","Changes Saved Successfully.",false);
+            SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
         });
         exit.setOnMouseEntered(event -> {
             exit.setImage(new Image("file:images/hover_exit_button.png"));
             description.setText("\n                  Exit");
+            SoundDatas.playSFX(SoundDatas.BUTTON_MOUSEOVER);
         });
         exit.setOnMouseExited(event -> {
             exit.setImage(new Image("file:images/exit.png"));
@@ -201,10 +216,12 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
         });
         exit.setOnMousePressed(event -> {
             showTwoButtonMainMenuExitDialog(anchorPane.getScene(),"");
+            SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
         });
         main.setOnMouseEntered(event -> {
             if (computeSnapshotSimilarity(main.getImage(), new Image("file:images/onClicked_toolbar.png")) != 100.0) {
                 main.setImage(new Image("file:images/ranked_chevron_full.png"));
+                SoundDatas.playSFX(SoundDatas.BUTTON_MOUSEOVER);
             }
         });
         main.setOnMouseExited(event -> {
@@ -213,6 +230,7 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
             }
         });
         main.setOnMouseClicked(event -> {
+            SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
             if (computeSnapshotSimilarity(main.getImage(), new Image("file:images/ranked_chevron_full.png")) == 100.0) {
                 main.setImage(new Image("file:images/onClicked_toolbar.png"));
             } else {

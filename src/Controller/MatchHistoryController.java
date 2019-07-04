@@ -1,6 +1,6 @@
 package Controller;
 
-import Model.Asset;
+import Datas.SoundDatas;
 import Model.MatchHistory;
 import Model.SavedBattle;
 import Presenter.AccountManageable;
@@ -9,7 +9,6 @@ import Presenter.ScreenManager;
 import com.jfoenix.controls.JFXTabPane;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
@@ -17,7 +16,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
@@ -48,6 +46,7 @@ public class MatchHistoryController implements Initializable, ScreenManager, Acc
     }
 
     public void setBackButtonOnMousePressed(){
+        SoundDatas.playSFX(SoundDatas.PAGE_CHANGING);
         back.setImage(new Image("file:images/pressed_back_button_corner.png"));
     }
 
@@ -75,6 +74,7 @@ public class MatchHistoryController implements Initializable, ScreenManager, Acc
 
     public void setDeleteButtonPressed() {
         if(saveTable.getSelectionModel().getSelectedItem()!=null) {
+            SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
             deleteButton.setImage(new Image("file:images/pressed_delete_button.png"));
         }else {
             deleteButton.setImage(new Image("file:images/unavailable_delete_button.png"));
@@ -83,6 +83,7 @@ public class MatchHistoryController implements Initializable, ScreenManager, Acc
 
     public void setDeleteButtonMouseOver() {
         if(saveTable.getSelectionModel().getSelectedItem()!=null) {
+            SoundDatas.playSFX(SoundDatas.BUTTON_MOUSEOVER);
             deleteButton.setImage(new Image("file:images/hover_delete_button.png"));
         }else {
             deleteButton.setImage(new Image("file:images/unavailable_delete_button.png"));
@@ -106,6 +107,7 @@ public class MatchHistoryController implements Initializable, ScreenManager, Acc
 
     public void setStartButtonPressed() {
         if(saveTable.getSelectionModel().getSelectedItem()!=null) {
+            SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
             startButton.setImage(new Image("file:images/start_button_pressed.png"));
         }else {
             startButton.setImage(new Image("file:images/start_button_unavailable.png"));
@@ -114,6 +116,7 @@ public class MatchHistoryController implements Initializable, ScreenManager, Acc
 
     public void setStartButtonMouseOver() {
         if(saveTable.getSelectionModel().getSelectedItem()!=null) {
+            SoundDatas.playSFX(SoundDatas.BUTTON_MOUSEOVER);
             startButton.setImage(new Image("file:images/start_button_hover.png"));
         }else {
             startButton.setImage(new Image("file:images/start_button_unavailable.png"));
@@ -139,9 +142,11 @@ public class MatchHistoryController implements Initializable, ScreenManager, Acc
         gameSavesTab.setGraphic(new ImageView(new Image("file:images/tab_savedBattles.png")));
         tabPane.setOnMouseClicked(event -> {
             if (isInRightTabCoordination(event.getX(), event.getY(), 10, 6, 160, 46)) {
+                SoundDatas.playSFX(SoundDatas.TAB_PRESS);
                 matchHistoryTab.setGraphic(new ImageView(new Image("file:images/tab_matchHistory_pressed.png")));
                 gameSavesTab.setGraphic(new ImageView(new Image("file:images/tab_savedBattles.png")));
             } else if (isInRightTabCoordination(event.getX(), event.getY(), 10 + 160 + 15, 6, 160, 40)) {
+                SoundDatas.playSFX(SoundDatas.TAB_PRESS);
                 gameSavesTab.setGraphic(new ImageView(new Image("file:images/tab_savedBattles_pressed.png")));
                 matchHistoryTab.setGraphic(new ImageView(new Image("file:images/tab_matchHistory.png")));
             }
@@ -166,7 +171,10 @@ public class MatchHistoryController implements Initializable, ScreenManager, Acc
         initializeMatchHistoryTabTable();
         initializeSavedBattlesTabTable();
 
-        saveTable.setOnMouseClicked(event -> setAvailableButtons());
+        saveTable.setOnMouseClicked(event -> {
+            SoundDatas.playSFX(SoundDatas.SELECT_ITEM);
+            setAvailableButtons();
+        });
     }
     public boolean isInRightTabCoordination(double x, double y, double tabX, double tabY, int tabWidth, int tabHeight) {
         return (x > tabX && x < tabX + tabWidth && y > tabY && y < tabY + tabHeight);

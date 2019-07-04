@@ -1,5 +1,6 @@
 package Controller;
 
+import Datas.SoundDatas;
 import Exceptions.InsufficientMoneyInBuyFromShopException;
 import Exceptions.MaximumNumberOfItemsInBuyException;
 import Model.Asset;
@@ -43,6 +44,7 @@ public class ShopController implements Initializable, ScreenManager, AccountMana
     }
 
     public void setBackButtonOnMousePressed() {
+        SoundDatas.playSFX(SoundDatas.PAGE_CHANGING);
         back.setImage(new Image("file:images/pressed_back_button_corner.png"));
     }
 
@@ -57,6 +59,7 @@ public class ShopController implements Initializable, ScreenManager, AccountMana
 
     public void setActionButtonOnMousePressed() {
         if (selectedElement != null) {
+            SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
             if (buyTab.isSelected()) {
                 actionButton.setImage(new Image("file:images/pressed_buy_button.png"));
             } else if (sellTab.isSelected()) {
@@ -70,6 +73,7 @@ public class ShopController implements Initializable, ScreenManager, AccountMana
         if (selectedElement == null) {
             actionButton.setImage(new Image("file:images/default_action_button.png"));
         } else {
+            SoundDatas.playSFX(SoundDatas.BUTTON_MOUSEOVER);
             if (buyTab.isSelected()) {
                 actionButton.setImage(new Image("file:images/hover_buy_button.png"));
             } else if (sellTab.isSelected()) {
@@ -120,9 +124,11 @@ public class ShopController implements Initializable, ScreenManager, AccountMana
         sellTab.setGraphic(new ImageView(new Image("file:images/tab_sell.png")));
         tabPane.setOnMouseClicked(event -> {
             if (ShopController.this.isInRightTabCoordination(event.getX(), event.getY(), 10, 6, 160, 46)) {
+                SoundDatas.playSFX(SoundDatas.TAB_PRESS);
                 buyTab.setGraphic(new ImageView(new Image("file:images/tab_buy_pressed.png")));
                 sellTab.setGraphic(new ImageView(new Image("file:images/tab_sell.png")));
             } else if (ShopController.this.isInRightTabCoordination(event.getX(), event.getY(), 10 + 160 + 15, 6, 160, 40)) {
+                SoundDatas.playSFX(SoundDatas.TAB_PRESS);
                 sellTab.setGraphic(new ImageView(new Image("file:images/tab_sell_pressed.png")));
                 buyTab.setGraphic(new ImageView(new Image("file:images/tab_buy.png")));
             }
@@ -166,7 +172,7 @@ public class ShopController implements Initializable, ScreenManager, AccountMana
             pane.setOnMouseExited(event -> pane.setStyle("-fx-background-color: -fx-primary;"));
             pane.setOnMousePressed(event -> pane.setStyle("-fx-background-color: #2c2c2c;"));
             pane.setOnMouseReleased(event -> {
-                //todo rippler
+                SoundDatas.playSFX(SoundDatas.SELECT_ITEM);
                 selectedElement = new Asset().searchAssetFromCardImage(assets,((ImageView) pane.getChildren().get(0)).getImage());
                 assetPrice.setText(selectedElement.getPrice() + " DR");
                 assetPrice.setVisible(true);

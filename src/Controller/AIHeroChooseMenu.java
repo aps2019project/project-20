@@ -1,9 +1,9 @@
 package Controller;
 
+import Datas.SoundDatas;
 import Model.Battle;
 import Presenter.Animationable;
 import Presenter.ScreenManager;
-import View.Main;
 import com.jfoenix.controls.JFXRippler;
 import javafx.fxml.Initializable;
 import javafx.scene.image.Image;
@@ -36,6 +36,7 @@ public class AIHeroChooseMenu implements Initializable , ScreenManager , Animati
     }
 
     public void setBackButtonOnMousePressed() {
+        SoundDatas.playSFX(SoundDatas.PAGE_CHANGING);
         back.setImage(new Image("file:images/pressed_back_button_corner.png"));
     }
 
@@ -49,6 +50,7 @@ public class AIHeroChooseMenu implements Initializable , ScreenManager , Animati
 
 
     public void setRostamButtonOnMouseEntered() {
+        SoundDatas.playSFX(SoundDatas.BUTTON_MOUSEOVER);
         nodeFadeAnimation(rostamPaneDetail, 200, 0, 1).play();
     }
 
@@ -56,11 +58,13 @@ public class AIHeroChooseMenu implements Initializable , ScreenManager , Animati
         nodeFadeAnimation(rostamPaneDetail, 200, 1, 0).play();
     }
 
-    public void setRostamButtonOnMouseReleased() throws IOException {
+    public void setRostamButtonOnMouseReleased() {
+        SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
         startNewGame(anchorPane,Battle.soloCustomKillHeroModeConstructor("rostam"));
     }
 
     public void setRakhshButtonOnMouseEntered() {
+        SoundDatas.playSFX(SoundDatas.BUTTON_MOUSEOVER);
         nodeFadeAnimation(rakhshPaneDetail, 200, 0, 1).play();
     }
 
@@ -68,11 +72,13 @@ public class AIHeroChooseMenu implements Initializable , ScreenManager , Animati
         nodeFadeAnimation(rakhshPaneDetail, 200, 1, 0).play();
     }
 
-    public void setRakhshButtonOnMouseReleased() throws IOException {
+    public void setRakhshButtonOnMouseReleased() {
+        SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
         startNewGame(anchorPane,Battle.soloCustomKillHeroModeConstructor("rakhsh"));
     }
 
     public void setSimorghButtonOnMouseEntered() {
+        SoundDatas.playSFX(SoundDatas.BUTTON_MOUSEOVER);
         nodeFadeAnimation(simorghPaneDetail, 200, 0, 1).play();
     }
 
@@ -80,11 +86,13 @@ public class AIHeroChooseMenu implements Initializable , ScreenManager , Animati
         nodeFadeAnimation(simorghPaneDetail, 200, 1, 0).play();
     }
 
-    public void setSimorghButtonOnMouseReleased() throws IOException {
+    public void setSimorghButtonOnMouseReleased() {
+        SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
         startNewGame(anchorPane,Battle.soloCustomKillHeroModeConstructor("simorgh"));
     }
 
     public void setArashButtonOnMouseEntered() {
+        SoundDatas.playSFX(SoundDatas.BUTTON_MOUSEOVER);
         nodeFadeAnimation(arashPaneDetail, 200, 0, 1).play();
     }
 
@@ -92,11 +100,13 @@ public class AIHeroChooseMenu implements Initializable , ScreenManager , Animati
         nodeFadeAnimation(arashPaneDetail, 200, 1, 0).play();
     }
 
-    public void setArashButtonOnMouseReleased() throws IOException {
+    public void setArashButtonOnMouseReleased() {
+        SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
         startNewGame(anchorPane,Battle.soloCustomKillHeroModeConstructor("arash"));
     }
 
     public void setKavehButtonOnMouseEntered() {
+        SoundDatas.playSFX(SoundDatas.BUTTON_MOUSEOVER);
         nodeFadeAnimation(kavehPaneDetail, 200, 0, 1).play();
     }
 
@@ -104,11 +114,13 @@ public class AIHeroChooseMenu implements Initializable , ScreenManager , Animati
         nodeFadeAnimation(kavehPaneDetail, 200, 1, 0).play();
     }
 
-    public void setKavehButtonOnMouseReleased() throws IOException {
+    public void setKavehButtonOnMouseReleased() {
+        SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
         startNewGame(anchorPane,Battle.soloCustomKillHeroModeConstructor("kaveh"));
     }
 
     public void setZahhakButtonOnMouseEntered() {
+        SoundDatas.playSFX(SoundDatas.BUTTON_MOUSEOVER);
         nodeFadeAnimation(zahhakPaneDetail, 200, 0, 1).play();
     }
 
@@ -116,11 +128,13 @@ public class AIHeroChooseMenu implements Initializable , ScreenManager , Animati
         nodeFadeAnimation(zahhakPaneDetail, 200, 1, 0).play();
     }
 
-    public void setZahhakButtonOnMouseReleased() throws IOException {
+    public void setZahhakButtonOnMouseReleased() {
+        SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
         startNewGame(anchorPane,Battle.soloCustomKillHeroModeConstructor("zahhak"));
     }
 
     public void setEsfandiarButtonOnMouseEntered() {
+        SoundDatas.playSFX(SoundDatas.BUTTON_MOUSEOVER);
         nodeFadeAnimation(esfandiarPaneDetail, 200, 0, 1).play();
     }
 
@@ -128,11 +142,13 @@ public class AIHeroChooseMenu implements Initializable , ScreenManager , Animati
         nodeFadeAnimation(esfandiarPaneDetail, 200, 1, 0).play();
     }
 
-    public void setEsfandiarButtonOnMouseReleased() throws IOException {
+    public void setEsfandiarButtonOnMouseReleased() {
+        SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
         startNewGame(anchorPane,Battle.soloCustomKillHeroModeConstructor("esfandiar"));
     }
 
     public void setDragonButtonOnMouseEntered() {
+        SoundDatas.playSFX(SoundDatas.BUTTON_MOUSEOVER);
         nodeFadeAnimation(dragonPaneDetail, 200, 0, 1).play();
     }
 
@@ -140,11 +156,13 @@ public class AIHeroChooseMenu implements Initializable , ScreenManager , Animati
         nodeFadeAnimation(dragonPaneDetail, 200, 1, 0).play();
     }
 
-    public void setDragonButtonOnMouseReleased() throws IOException {
+    public void setDragonButtonOnMouseReleased() {
+        SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
         startNewGame(anchorPane,Battle.soloCustomKillHeroModeConstructor("sevenHeadDragon"));
     }
 
     public void setLegendButtonOnMouseEntered() {
+        SoundDatas.playSFX(SoundDatas.BUTTON_MOUSEOVER);
         nodeFadeAnimation(legendPaneDetail, 200, 0, 1).play();
     }
 
@@ -152,11 +170,13 @@ public class AIHeroChooseMenu implements Initializable , ScreenManager , Animati
         nodeFadeAnimation(legendPaneDetail, 200, 1, 0).play();
     }
 
-    public void setLegendButtonOnMouseReleased() throws IOException {
+    public void setLegendButtonOnMouseReleased() {
+        SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
         startNewGame(anchorPane,Battle.soloCustomKillHeroModeConstructor("legend"));
     }
 
     public void setWhiteGhoulButtonOnMouseEntered() {
+        SoundDatas.playSFX(SoundDatas.BUTTON_MOUSEOVER);
         nodeFadeAnimation(whiteGhoulPaneDetail, 200, 0, 1).play();
     }
 
@@ -164,7 +184,8 @@ public class AIHeroChooseMenu implements Initializable , ScreenManager , Animati
         nodeFadeAnimation(whiteGhoulPaneDetail, 200, 1, 0).play();
     }
 
-    public void setWhiteGhoulButtonOnMouseReleased() throws IOException {
+    public void setWhiteGhoulButtonOnMouseReleased() {
+        SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
         startNewGame(anchorPane,Battle.soloCustomKillHeroModeConstructor("whiteDamn"));
     }
 
