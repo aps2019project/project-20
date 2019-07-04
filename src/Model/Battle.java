@@ -18,7 +18,6 @@ public abstract class Battle {
         NORMAL, FLAG_KEEPING, FLAG_COLLECTING;
     }
 
-    protected Mode mode;
     public final static int STORY_REWARD_L1 = 500;
     public final static int STORY_REWARD_L2 = 1000;
     public final static int STORY_REWARD_L3 = 1500;
@@ -30,13 +29,14 @@ public abstract class Battle {
     public int endGameStatus = UNFINISHED_GAME;
     public static final int FIRST_LATE_TURN = 15;
     public static final int MAX_MANA_IN_LATE_TURNS = 9;
-    public int eachPlayerManaAtFirstOfTurn = 2;
+    public static final int EACH_PLAYER_MANA_AT_FIRST_OF_TURN = 2;
     public static  final int NUMBER_OF_CARDS_IN_HAND = 5;
+    protected Mode mode;
     protected int turn;
     protected transient Account[] players = new Account[2];
     protected Deck[] playersDeck = new Deck[2];
     protected BattleGround battleGround = new BattleGround();
-    protected int[] playersMana = {eachPlayerManaAtFirstOfTurn, eachPlayerManaAtFirstOfTurn};
+    protected int[] playersMana = {EACH_PLAYER_MANA_AT_FIRST_OF_TURN, EACH_PLAYER_MANA_AT_FIRST_OF_TURN};
     protected ArrayList<BufferOfSpells>[] playersManaBuffEffected = new ArrayList[2];
     protected Card[] playersSelectedCard = new Card[2];
     protected Item[] playersSelectedItem = new Item[2];

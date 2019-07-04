@@ -1,11 +1,10 @@
 package Controller;
 
-import Datas.AssetDatas;
-import Datas.DeckDatas;
-import Datas.DeckDatas;
 import Exceptions.*;
 import Model.*;
+import Presenter.Animationable;
 import Presenter.CurrentAccount;
+import Presenter.DialogThrowable;
 import Presenter.ScreenManager;
 import com.jfoenix.controls.JFXTextArea;
 import javafx.animation.*;
@@ -20,9 +19,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
-import javafx.scene.shape.LineTo;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
 import javafx.util.Duration;
 
 import java.io.IOException;
@@ -33,7 +29,7 @@ import java.util.Iterator;
 import java.util.ResourceBundle;
 import static Model.BattleGround.CellEffect;
 
-public class BattleGroundController implements Initializable, ScreenManager {
+public class BattleGroundController implements Initializable, ScreenManager , DialogThrowable, Animationable {
     private static final int CELL_HEIGHT = 80;
     private static final int CELL_WIDTH = 80;
     private static final int MAX_NUMBER_OF_COLLECTIBLE_ITEMS = 9;
@@ -47,6 +43,11 @@ public class BattleGroundController implements Initializable, ScreenManager {
     public GridPane handAndNextCardGrid;
     public GridPane manaGemsRibbon;
     public GridPane collectedItemsGrid;
+    public ImageView menuButton;
+    public Pane pauseMenu;
+    public ImageView saveButton;
+    public ImageView exitButton;
+    public ImageView pauseMenuCloseButton;
     private Pane[] collectedItemsPanes;
     private ImageView[] collectedItemsImageViews;
     private Pane[][] groundPanes;
@@ -93,6 +94,7 @@ public class BattleGroundController implements Initializable, ScreenManager {
         initializeManaGemImages();
         initializeGround();
         initializeHandImages();
+        initializeMenuButtonEvents();
         setEndTurnEvent();
 
         TimeLine t0 = new TimeLine(progressbar);
@@ -751,6 +753,110 @@ public class BattleGroundController implements Initializable, ScreenManager {
                 }
             }
         };
-
     }
+
+    public void setMenuButtonReleased() {
+        pauseMenu.setVisible(true);
+        FadeTransition fadeTransition = nodeFadeAnimation(pauseMenu,300,0,1);
+        fadeTransition.play();
+        setMenuButtonMouseOver();
+    }
+
+    public void setMenuButtonPressed() {
+        menuButton.setImage(new Image("file:images/menu_button_pressed.png"));
+    }
+
+    public void setMenuButtonMouseOver() {
+        menuButton.setImage(new Image("file:images/menu_button_onmouseover.png"));
+    }
+
+    public void setMenuButtonMouseExited() {
+        menuButton.setImage(new Image("file:images/menu_button.png"));
+    }
+
+    public void setSaveButtonReleased() {
+        SavedBattle newSave = new SavedBattle(battle);
+        CurrentAccount.getCurrentAccount().getSavedBattles().add(0,newSave);
+        newSave.saveBattleInToFile(CurrentAccount.getCurrentAccount().getName(),"Data/AccountsData.json");
+        showOneButtonInformationDialog("Save Message","This Game Saved Successfully.",false);
+        setSaveButtonMouseOver();
+    }
+
+    public void setSaveButtonPressed() {
+        saveButton.setImage(new Image("file:images/save_button_pressed.png"));
+    }
+
+    public void setSaveButtonMouseOver() {
+        saveButton.setImage(new Image("file:images/save_button_hover.png"));
+    }
+
+    public void setSaveButtonMouseExited() {
+        saveButton.setImage(new Image("file:images/save_button.png"));
+    }
+
+    public void setExitButtonReleased(){
+        confirmationDialog("Exit Confirmation","Are You Sure To Exit From Battle ?").setOnAction(event -> {
+            try {
+                loadPageOnStackPane(battleGroundAnchorPane, "FXML/MainMenu.fxml", "rtl");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        setExitButtonMouseOver();
+    }
+
+    public void setExitButtonPressed() {
+        exitButton.setImage(new Image("file:images/exit_button_pressed.png"));
+    }
+
+    public void setExitButtonMouseOver() {
+        exitButton.setImage(new Image("file:images/exit_button_hover.png"));
+    }
+
+    public void setExitButtonMouseExited() {
+        exitButton.setImage(new Image("file:images/exit_button.png"));
+    }
+
+    public void setPauseMenuCloseButtonReleased() {
+        FadeTransition fadeTransition = nodeFadeAnimation(pauseMenu,300,1,0);
+        fadeTransition.setOnFinished((event)-> pauseMenu.setVisible(false));
+        fadeTransition.play();
+          setPauseMenuCloseButtonMouseOver();
+    }
+
+    public void setPauseMenuCloseButtonPressed() {
+        pauseMenuCloseButton.setImage(new Image("file:images/button_close_pressed.png"));
+    }
+
+    public void setPauseMenuCloseButtonMouseOver() {
+        pauseMenuCloseButton.setImage(new Image("file:images/button_close_hover.png"));
+    }
+
+    public void setPauseMenuCloseButtonMouseExited() {
+        pauseMenuCloseButton.setImage(new Image("file:images/button_close.png"));
+    }
+
+    public void initializeMenuButtonEvents(){
+        menuButton.setOnMouseReleased(event -> setMenuButtonReleased());
+        menuButton.setOnMousePressed(event -> setMenuButtonPressed());
+        menuButton.setOnMouseEntered(event -> setMenuButtonMouseOver());
+        menuButton.setOnMouseExited(event -> setMenuButtonMouseExited());
+
+        saveButton.setOnMouseReleased(event -> setSaveButtonReleased());
+        saveButton.setOnMousePressed(event -> setSaveButtonPressed());
+        saveButton.setOnMouseEntered(event -> setSaveButtonMouseOver());
+        saveButton.setOnMouseExited(event -> setSaveButtonMouseExited());
+
+        exitButton.setOnMouseReleased(event -> setExitButtonReleased());
+        exitButton.setOnMousePressed(event -> setExitButtonPressed());
+        exitButton.setOnMouseEntered(event -> setExitButtonMouseOver());
+        exitButton.setOnMouseExited(event -> setExitButtonMouseExited());
+
+        pauseMenuCloseButton.setOnMouseReleased(event -> setPauseMenuCloseButtonReleased());
+        pauseMenuCloseButton.setOnMousePressed(event -> setPauseMenuCloseButtonPressed());
+        pauseMenuCloseButton.setOnMouseEntered(event -> setPauseMenuCloseButtonMouseOver());
+        pauseMenuCloseButton.setOnMouseExited(event -> setPauseMenuCloseButtonMouseExited());
+    }
+
+
 }

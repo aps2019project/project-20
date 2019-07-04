@@ -18,7 +18,7 @@ public class Main extends Application implements ScreenManager {
     public static void main(String[] args) throws IOException {
 //        save default data
 //        try {
-//            Asset.saveCardsToJsonDatabase();
+//            Asset.saveDefaultCardsToJsonDatabase();
 //            Deck.saveDefaultDecksToJson();
 //        } catch (IOException e) {
 //            e.printStackTrace();

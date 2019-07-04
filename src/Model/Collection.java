@@ -36,33 +36,33 @@ public class Collection {
         this.assets = assets;
     }
 
-    public void writeCollectionOnJsonFileAppended(FileWriter fileWriter) {
-        try {
-            fileWriter.write("{\"assets\":[");
-            Gson gson = new Gson();
-            for (int i = 0; i < this.getAssets().size(); i++) {
-                if (this.getAssets().get(i) instanceof Hero || this.getAssets().get(i).isInstanceOfHero()) {
-                    fileWriter.write(gson.toJson(this.getAssets().get(i), Hero.class));
-                }
-                if (this.getAssets().get(i) instanceof Minion || this.getAssets().get(i).isInstanceOfMinion()) {
-                    fileWriter.write(gson.toJson(this.getAssets().get(i), Minion.class));
-                }
-                if (this.getAssets().get(i) instanceof Spell || this.getAssets().get(i).isInstanceOfSpell()) {
-                    fileWriter.write(gson.toJson(this.getAssets().get(i), Spell.class));
-                }
-                if (this.getAssets().get(i) instanceof Item || this.getAssets().get(i).isInstanceOfItem()) {
-                    fileWriter.write(gson.toJson(this.getAssets().get(i), Item.class));
-                }
-                if (i != assets.size() - 1) {
-                    fileWriter.write(",");
-                }
-            }
-            fileWriter.write("]}");
-            fileWriter.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+//    public void writeCollectionOnJsonFileAppended(FileWriter fileWriter) {
+//        try {
+//            fileWriter.write("{\"assets\":[");
+//            Gson gson = new Gson();
+//            for (int i = 0; i < this.getAssets().size(); i++) {
+//                if (this.getAssets().get(i) instanceof Hero || this.getAssets().get(i).isInstanceOfHero()) {
+//                    fileWriter.write(gson.toJson(this.getAssets().get(i), Hero.class));
+//                }
+//                if (this.getAssets().get(i) instanceof Minion || this.getAssets().get(i).isInstanceOfMinion()) {
+//                    fileWriter.write(gson.toJson(this.getAssets().get(i), Minion.class));
+//                }
+//                if (this.getAssets().get(i) instanceof Spell || this.getAssets().get(i).isInstanceOfSpell()) {
+//                    fileWriter.write(gson.toJson(this.getAssets().get(i), Spell.class));
+//                }
+//                if (this.getAssets().get(i) instanceof Item || this.getAssets().get(i).isInstanceOfItem()) {
+//                    fileWriter.write(gson.toJson(this.getAssets().get(i), Item.class));
+//                }
+//                if (i != assets.size() - 1) {
+//                    fileWriter.write(",");
+//                }
+//            }
+//            fileWriter.write("]}");
+//            fileWriter.flush();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     public void setAssetsOfCollectionFromADeck(Deck deck) {
         assets.add(deck.getHero());
