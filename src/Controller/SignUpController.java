@@ -42,5 +42,7 @@ public class SignUpController implements Initializable, AccountManageable, Scree
     public void initialize(URL location, ResourceBundle resources) {
         setTextFieldRequiredFieldValidator(SignUpUserName,"\\s+","");
         setPasswordFieldRequiredFieldValidator(SignUpPassword,"(.{0,8})|(\\s+)","atLeast 8 Characters");
+
+
     }
 }
