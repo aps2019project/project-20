@@ -2,8 +2,10 @@ package Model;
 
 import Controller.BattleGroundController;
 import Datas.AssetDatas;
+import Datas.SoundDatas;
 import Exceptions.*;
 
+import java.lang.management.PlatformLoggingMXBean;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -31,7 +33,7 @@ public abstract class Battle {
     public static final int FIRST_LATE_TURN = 15;
     public static final int MAX_MANA_IN_LATE_TURNS = 9;
     public static final int EACH_PLAYER_MANA_AT_FIRST_OF_TURN = 2;
-    public static  final int NUMBER_OF_CARDS_IN_HAND = 5;
+    public static final int NUMBER_OF_CARDS_IN_HAND = 5;
     protected Mode mode;
     protected int turn;
     protected transient Account[] players = new Account[2];
@@ -193,6 +195,8 @@ public abstract class Battle {
                 attacker.setAttackedThisTurn(true);
                 counterAttack(opponentWarrior, attacker);
         }
+        //add sound
+        SoundDatas.playSFX("sfx/sfx_voidhunter_attack_swing.m4a");
         determineDeadWarriors(attacker, playerIndex);
         determineDeadWarriors(opponentWarrior, 1 - playerIndex);
     }
@@ -213,7 +217,10 @@ public abstract class Battle {
                 break;
             case HYBRID:
                 hybridAttackOrCounterAttack(counterAttacker, opponentWarrior, distance, COUNTER_ATTACK);
+                break;
         }
+        //add sound
+        SoundDatas.playSFX("sfx/sfx_voidhunter_attack_impact.m4a");
     }
 
     public void determineDeadWarriors(Warrior warrior, int playerIndex) {
@@ -224,6 +231,8 @@ public abstract class Battle {
                 warrior.getCollectedFlag().setOwner(null);
             }
             playersGraveYard[playerIndex].getDeadCards().add(warrior);
+            //add sound
+            SoundDatas.playSFX("sfx/sfx_f4_siren_death.m4a");
         }
     }
 
@@ -292,10 +301,12 @@ public abstract class Battle {
                 } catch (Exception e) {
                     throw new NoAvailableBufferForCardException();
                 }
+                break;
         }
+        SoundDatas.playSFX("sfx/sfx_f1_oserix_attack_impact.m4a");
     }
 
-    public void  attackCombo(Account player, ArrayList<Minion> playerMinions, Warrior opponentWarrior) {
+    public void attackCombo(Account player, ArrayList<Minion> playerMinions, Warrior opponentWarrior) {
         for (int i = 0; i < playerMinions.size(); i++) {
             if (playerMinions.get(i).getOwner() == player) {
                 if ((playerMinions.get(i)).getActivateTimeOfSpecialPower() == COMBO)
@@ -308,6 +319,7 @@ public abstract class Battle {
     }
 
     public void insertCard(Account player, String cardName, int x, int y) {
+
         x--;
         y--;
         int playerIndex = getPlayerIndex(player);
@@ -319,6 +331,9 @@ public abstract class Battle {
             Card card = playersHand[playerIndex][i];
             if (card != null && card.getName().equals(cardName)) {
                 if (playersMana[playerIndex] >= card.getMP()) {
+                    //add sound
+                    SoundDatas.playSFX("sfx/sfx_ui_cardburn.m4a");
+
                     playersMana[playerIndex] -= card.getMP();
                     playersHand[playerIndex][i] = null;
                     if (card instanceof Spell)
@@ -369,9 +384,8 @@ public abstract class Battle {
         resetIsMovedThisTurn(player);
         setPlayersManaByDefault();
 
-        //added progress bar
-//        TimeLine t0 = new TimeLine();
-//        t0.start();
+//      add sound
+        SoundDatas.playSFX("sfx/sfx_ui_yourturn_1.m4a");
 
     }
 
@@ -498,6 +512,9 @@ public abstract class Battle {
         } catch (AssetNotFoundException e) {
             throw e;
         }
+
+        //add sound
+        SoundDatas.playSFX("sfx/sfx_spell_naturalselection.m4a");
         playersSelectedItem[playerIndex] = candidateItem;
     }
 
@@ -789,10 +806,10 @@ public abstract class Battle {
                 battleMode = Battle.Mode.NORMAL;
                 reward = STORY_REWARD_L1;
                 return new KillHeroBattle(battleMode,
-                                CurrentAccount.getCurrentAccount(), ai,
-                                new Deck(CurrentAccount.getCurrentAccount(), CurrentAccount.getCurrentAccount().getMainDeck().getName(), CurrentAccount.getCurrentAccount().getMainDeck().getHero(), CurrentAccount.getCurrentAccount().getMainDeck().getItems(), CurrentAccount.getCurrentAccount().getMainDeck().getCards()),
-                                AIDeck,
-                                new BattleGround(), reward);
+                        CurrentAccount.getCurrentAccount(), ai,
+                        new Deck(CurrentAccount.getCurrentAccount(), CurrentAccount.getCurrentAccount().getMainDeck().getName(), CurrentAccount.getCurrentAccount().getMainDeck().getHero(), CurrentAccount.getCurrentAccount().getMainDeck().getItems(), CurrentAccount.getCurrentAccount().getMainDeck().getCards()),
+                        AIDeck,
+                        new BattleGround(), reward);
             case 2:
                 AIDeck = new Deck(ai, "enemyDeckInStoryGameLevel2");
                 battleMode = Battle.Mode.FLAG_KEEPING;

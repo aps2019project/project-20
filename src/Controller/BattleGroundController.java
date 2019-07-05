@@ -1,5 +1,6 @@
 package Controller;
 
+import Datas.SoundDatas;
 import Exceptions.*;
 import Model.*;
 import Presenter.Animationable;
@@ -30,7 +31,7 @@ import java.util.ResourceBundle;
 
 import static Model.BattleGround.CellEffect;
 
-public class BattleGroundController implements Initializable, ScreenManager , DialogThrowable, Animationable {
+public class BattleGroundController implements Initializable, ScreenManager, DialogThrowable, Animationable {
     private static final int CELL_HEIGHT = 80;
     private static final int CELL_WIDTH = 80;
     private static final int MAX_NUMBER_OF_COLLECTIBLE_ITEMS = 9;
@@ -59,7 +60,7 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
     public JFXTextArea errorMessage;
     public ImageView endTurn;
     public ImageView cheatButton;
-    public  ProgressBar progressbar;
+    public ProgressBar progressbar;
     private HashMap<Warrior, Label> healthBars = new HashMap<>();
     //    public Button menuButton;
 //    public Button friendButton;
@@ -82,7 +83,7 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
         this.battle = battle;
     }
 
-    public  ProgressBar getProgressbar() {
+    public ProgressBar getProgressbar() {
         return progressbar;
     }
 
@@ -107,14 +108,9 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
 
 
         TimeLine t0 = new TimeLine(progressbar);
-        TimeLine t1 = new TimeLine(progressbar);
-
-
         t0.start();
-        battle.endTurn(battle.getPlayers()[0]);
 
-        t1.start();
-        battle.endTurn(battle.getPlayers()[1]);
+        SoundDatas.playSFX("sfx/music_playmode.m4a");
 
 
     }
@@ -363,12 +359,7 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
                         e.printStackTrace();
                     }
                     groundImageViews[i][j].setImage(new Image(freeCellImageAddress));
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            makeCellEffects();
-                        }
-                    });
+                    Platform.runLater(() -> makeCellEffects());
                 }
             });
             t1.start();
@@ -656,23 +647,20 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
     }
 
     private void handleError(RuntimeException e) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                errorBar.setImage(errorImage);
-                errorBar.setFitHeight(100);
-                errorBar.setFitWidth(300);
-                errorMessage.setVisible(true);
-                errorMessage.setText(getErrorMessage(e));
-                try {
-                    Thread.sleep(4000);
-                } catch (InterruptedException e1) {
-                    e1.printStackTrace();
-                }
-                errorBar.setImage(null);
-                errorMessage.setText(null);
-                errorMessage.setVisible(false);
+        new Thread(() -> {
+            errorBar.setImage(errorImage);
+            errorBar.setFitHeight(100);
+            errorBar.setFitWidth(300);
+            errorMessage.setVisible(true);
+            errorMessage.setText(getErrorMessage(e));
+            try {
+                Thread.sleep(4000);
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
             }
+            errorBar.setImage(null);
+            errorMessage.setText(null);
+            errorMessage.setVisible(false);
         }).start();
     }
 
@@ -761,7 +749,7 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
 
     public void setMenuButtonReleased() {
         pauseMenu.setVisible(true);
-        FadeTransition fadeTransition = nodeFadeAnimation(pauseMenu,300,0,1);
+        FadeTransition fadeTransition = nodeFadeAnimation(pauseMenu, 300, 0, 1);
         fadeTransition.play();
         setMenuButtonMouseOver();
     }
@@ -780,9 +768,9 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
 
     public void setSaveButtonReleased() {
         SavedBattle newSave = new SavedBattle(battle);
-        CurrentAccount.getCurrentAccount().getSavedBattles().add(0,newSave);
-        newSave.saveBattleInToFile(CurrentAccount.getCurrentAccount().getName(),"Data/AccountsData.json");
-        showOneButtonInformationDialog("Save Message","This Game Saved Successfully.",false);
+        CurrentAccount.getCurrentAccount().getSavedBattles().add(0, newSave);
+        newSave.saveBattleInToFile(CurrentAccount.getCurrentAccount().getName(), "Data/AccountsData.json");
+        showOneButtonInformationDialog("Save Message", "This Game Saved Successfully.", false);
         setSaveButtonMouseOver();
     }
 
@@ -798,8 +786,8 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
         saveButton.setImage(new Image("file:images/save_button.png"));
     }
 
-    public void setExitButtonReleased(){
-        confirmationDialog("Exit Confirmation","Are You Sure To Exit From Battle ?").setOnAction(event -> {
+    public void setExitButtonReleased() {
+        confirmationDialog("Exit Confirmation", "Are You Sure To Exit From Battle ?").setOnAction(event -> {
             try {
                 loadPageOnStackPane(battleGroundAnchorPane, "FXML/MainMenu.fxml", "rtl");
             } catch (IOException e) {
@@ -822,10 +810,10 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
     }
 
     public void setPauseMenuCloseButtonReleased() {
-        FadeTransition fadeTransition = nodeFadeAnimation(pauseMenu,300,1,0);
-        fadeTransition.setOnFinished((event)-> pauseMenu.setVisible(false));
+        FadeTransition fadeTransition = nodeFadeAnimation(pauseMenu, 300, 1, 0);
+        fadeTransition.setOnFinished((event) -> pauseMenu.setVisible(false));
         fadeTransition.play();
-          setPauseMenuCloseButtonMouseOver();
+        setPauseMenuCloseButtonMouseOver();
     }
 
     public void setPauseMenuCloseButtonPressed() {
@@ -840,7 +828,7 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
         pauseMenuCloseButton.setImage(new Image("file:images/button_close.png"));
     }
 
-    public void initializeMenuButtonEvents(){
+    public void initializeMenuButtonEvents() {
         menuButton.setOnMouseReleased(event -> setMenuButtonReleased());
         menuButton.setOnMousePressed(event -> setMenuButtonPressed());
         menuButton.setOnMouseEntered(event -> setMenuButtonMouseOver());

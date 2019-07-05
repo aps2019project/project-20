@@ -50,8 +50,6 @@ public class SignInController implements Initializable, AccountManageable, Scree
     public void initialize(URL location, ResourceBundle resources) {
         setTextFieldRequiredFieldValidator(LoginUserName, "\\s+", "");
         setPasswordFieldRequiredFieldValidator(loginPassword, "\\s+", "");
-        //add sound
-        SoundController soundController = new SoundController("music/music_tutorial.m4a", mediaPlayer);
-        soundController.initialize(location, resources);
+
     }
 }
