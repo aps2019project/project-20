@@ -29,6 +29,15 @@ public class Warrior extends Card {
         setImageAddresses(name);
     }
 
+    public Warrior(String name, String desc, int price, int ID, int MP, boolean doesHaveAction, BufferOfSpells buff, int range, int HP, int AP, AttackType attackType, boolean isTargetFriend) {
+        super(name, desc, price, ID, MP, doesHaveAction, buff, isTargetFriend);
+        this.range = range;
+        this.HP = HP;
+        this.AP = AP;
+        this.attackType = attackType;
+        setImageAddresses(name);
+    }
+
     public Flag getCollectedFlag() {
         return collectedFlag;
     }
@@ -154,6 +163,5 @@ public class Warrior extends Card {
         deathImageAddress = "file:images/cards/" + subClass + "/" + name + "/" + name + "_death.gif";
         idleImageAddress = "file:images/cards/" + subClass + "/" + name + "/" + name + "_idle.gif";
         runImageAddress = "file:images/cards/" + subClass + "/" + name + "/" + name + "_run.gif";
-        assetImageAddress = "file:images/cards/" + subClass + "/" + name + "/" + name + ".png";
     }
 }
