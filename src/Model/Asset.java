@@ -141,9 +141,9 @@ public class Asset implements ImageComparable {
         try {
             if (this instanceof Hero || isInstanceOfHero()) {
                 if (this.getAction().equals("NoAction")) {
-                    return new Hero(this.getName(), this.getPrice(), this.getID(), ((Hero) this).getRange(), ((Hero) this).getAP(), ((Hero) this).getHP(), false, ((Hero) this).getAttackType());
+                    return new Hero(this.getName(), this.getPrice(), this.getID(), ((Hero) this).getRange(), ((Hero) this).getAP(), ((Hero) this).getHP(), ((Hero) this).getAttackType());
                 }
-                return new Hero(this.getName(), this.getPrice(), this.getID(), ((Hero) this).getRange(), ((Hero) this).getAP(), ((Hero) this).getHP(), ((Hero) this).getMP(), ((Hero) this).getCoolDown(), ((Hero) this).getAttackType());
+                return new Hero(this.getName(), this.getPrice(), this.getID(), ((Hero) this).getRange(), ((Hero) this).getAP(), ((Hero) this).getHP(), ((Hero) this).getMP(), ((Hero) this).getCooldown(), ((Hero) this).getAttackType());
             }
             if (this instanceof Minion || isInstanceOfMinion()) {
                 if (this.getAction().equals("NoAction")) {

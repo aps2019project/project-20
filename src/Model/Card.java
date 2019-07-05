@@ -3,14 +3,22 @@ package Model;
 import java.util.ArrayList;
 
 public class Card extends Asset {
+    private BufferOfSpells buff = null;
+    private boolean isTargetFriend;
     private int MP;
-    protected ArrayList<BufferOfSpells> bufferEffected = new ArrayList<>();
+    private ArrayList<BufferOfSpells> bufferEffected = new ArrayList<>();
 
     public Card(){}
 
     public Card(String name, String desc, int price, int ID, int MP, boolean doesHaveAction) {
         super(name, desc, price, ID, doesHaveAction);
         this.MP = MP;
+    }
+
+    public Card(String name, String desc, int price, int ID, int MP, boolean doesHaveAction, BufferOfSpells buff, boolean isTargetFriend) {
+        this(name, desc, price, ID, MP, doesHaveAction);
+        this.buff = buff;
+        this.isTargetFriend = isTargetFriend;
     }
 
     public ArrayList<BufferOfSpells> getBufferEffected() {
@@ -29,4 +37,11 @@ public class Card extends Asset {
         this.MP = MP;
     }
 
+    public BufferOfSpells getBuff() {
+        return buff;
+    }
+
+    public boolean isTargetFriend() {
+        return isTargetFriend;
+    }
 }
