@@ -680,6 +680,12 @@ public class CollectionController implements Initializable, ScreenManager, Accou
     }
 
     public void createCard() {
+
+
+        //todo import card gif
+
+
+
         final int DEFAULT_MANA = 3;
         int minionID = 3040;
         int heroID = 2010;
