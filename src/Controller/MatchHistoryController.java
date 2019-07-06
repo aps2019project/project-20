@@ -5,8 +5,11 @@ import Model.MatchHistory;
 import Model.SavedBattle;
 import Presenter.AccountManageable;
 import Presenter.CurrentAccount;
+import Presenter.DialogThrowable;
 import Presenter.ScreenManager;
 import com.jfoenix.controls.JFXTabPane;
+import com.sun.deploy.util.NativeLibraryBundle;
+import javafx.animation.FadeTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
@@ -17,16 +20,26 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
+import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
+import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
 
+import javax.swing.*;
+import java.awt.*;
+import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-public class MatchHistoryController implements Initializable, ScreenManager, AccountManageable {
+public class MatchHistoryController implements Initializable, ScreenManager, AccountManageable, DialogThrowable {
     public ImageView back;
     public AnchorPane anchorPane;
-    public TableView<MatchHistory> leaderTable;
+    public TableView<MatchHistory> matchHistoryTable;
     public TableColumn<MatchHistory,Integer> numberCol;
     public TableColumn<MatchHistory,String>  opponentNameCol;
     public TableColumn<MatchHistory,String>  timeCol;
@@ -40,6 +53,7 @@ public class MatchHistoryController implements Initializable, ScreenManager, Acc
     public TableColumn<SavedBattle,Integer> numbersCol;
     public ImageView deleteButton;
     public ImageView startButton;
+    public ImageView replayButton;
 
     public void setBackButtonOnMouseEntered(){
         back.setImage(new Image("file:images/hover_back_button_corner.png"));
@@ -131,9 +145,37 @@ public class MatchHistoryController implements Initializable, ScreenManager, Acc
         }
     }
 
-    public void setAvailableButtons(){
-        startButton.setImage(new Image("file:images/start_button.png"));
-        deleteButton.setImage(new Image("file:images/available_delete_button.png"));
+    public void setReplayButtonReleased() {
+        if(matchHistoryTable.getSelectionModel().getSelectedItem()!=null) {
+            initializeMediaPane();
+            replayButton.setImage(new Image("file:images/button_play_hover.png"));
+        }
+    }
+
+    public void setReplayButtonPressed() {
+        if(matchHistoryTable.getSelectionModel().getSelectedItem()!=null) {
+            SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
+            replayButton.setImage(new Image("file:images/button_play_pressed.png"));
+        }else {
+            replayButton.setImage(new Image("file:images/button_play_unavailable.png"));
+        }
+    }
+
+    public void setReplayButtonMouseOver() {
+        if(matchHistoryTable.getSelectionModel().getSelectedItem()!=null) {
+            SoundDatas.playSFX(SoundDatas.BUTTON_MOUSEOVER);
+            replayButton.setImage(new Image("file:images/button_play_hover.png"));
+        }else {
+            replayButton.setImage(new Image("file:images/button_play_unavailable.png"));
+        }
+    }
+
+    public void setReplayButtonMouseExited() {
+        if(matchHistoryTable.getSelectionModel().getSelectedItem()!=null) {
+            replayButton.setImage(new Image("file:images/button_play_available.png"));
+        }else {
+            replayButton.setImage(new Image("file:images/button_play_unavailable.png"));
+        }
     }
 
     @Override
@@ -167,15 +209,19 @@ public class MatchHistoryController implements Initializable, ScreenManager, Acc
                 gameSavesTab.setGraphic(new ImageView(new Image("file:images/tab_savedBattles_pressed.png")));
             }
         });
-
         initializeMatchHistoryTabTable();
         initializeSavedBattlesTabTable();
-
         saveTable.setOnMouseClicked(event -> {
             SoundDatas.playSFX(SoundDatas.SELECT_ITEM);
-            setAvailableButtons();
+            startButton.setImage(new Image("file:images/start_button.png"));
+            deleteButton.setImage(new Image("file:images/available_delete_button.png"));
+        });
+        matchHistoryTable.setOnMouseClicked(event -> {
+            SoundDatas.playSFX(SoundDatas.SELECT_ITEM);
+            replayButton.setImage(new Image("file:images/button_play_available.png"));
         });
     }
+
     public boolean isInRightTabCoordination(double x, double y, double tabX, double tabY, int tabWidth, int tabHeight) {
         return (x > tabX && x < tabX + tabWidth && y > tabY && y < tabY + tabHeight);
     }
@@ -183,7 +229,7 @@ public class MatchHistoryController implements Initializable, ScreenManager, Acc
     public void initializeMatchHistoryTabTable(){
         ArrayList<MatchHistory> matchHistories = CurrentAccount.getCurrentAccount().getMatchHistories();
         for (int i = 0; i < matchHistories.size(); i++) {
-            matchHistories.get(i).setNumber(i+1);;
+            matchHistories.get(i).setNumber(i+1);
         }
 
         ObservableList<MatchHistory> myList = FXCollections.observableArrayList();
@@ -194,8 +240,8 @@ public class MatchHistoryController implements Initializable, ScreenManager, Acc
         resultCol.setCellValueFactory(new PropertyValueFactory<>("result"));
         opponentNameCol.setCellValueFactory(new PropertyValueFactory<>("opponentName"));
 
-        leaderTable.setItems(myList);
-        leaderTable.getColumns().addAll(timeCol,numberCol,opponentNameCol,resultCol);
+        matchHistoryTable.setItems(myList);
+        matchHistoryTable.getColumns().addAll(timeCol,numberCol,opponentNameCol,resultCol);
     }
 
     public void initializeSavedBattlesTabTable(){
@@ -213,6 +259,14 @@ public class MatchHistoryController implements Initializable, ScreenManager, Acc
 
         saveTable.setItems(myList);
         saveTable.getColumns().addAll(numbersCol,dateCol,opponentHeroNameCol);
+    }
+
+    public void initializeMediaPane(){
+        try {
+            Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler "+new File(matchHistoryTable.getSelectionModel().getSelectedItem().getVideoPath()).toURI().toURL().toString()).waitFor();
+        } catch (InterruptedException | IOException e) {
+            showOneButtonErrorDialog("Playing Video Error","you don't have any video player!!!");
+        }
     }
 
 }

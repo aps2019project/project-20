@@ -38,7 +38,7 @@
                     <content>
                         <AnchorPane prefHeight="1091.0" prefWidth="1858.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
                             <children>
-                                <TableView fx:id="leaderTable" layoutX="70.0" layoutY="38.0" prefHeight="662.0" prefWidth="1217.0" style="-fx-background-color: #8b8d8f;" stylesheets="../CSS/Screens.css">
+                                <TableView fx:id="matchHistoryTable" layoutX="76.0" layoutY="28.0" prefHeight="601.0" prefWidth="1207.0" style="-fx-background-color: #8b8d8f;" stylesheets="../CSS/Screens.css">
                                     <effect>
                                         <ColorAdjust contrast="1.0" />
                                     </effect>
@@ -52,6 +52,11 @@
                                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                     </columnResizePolicy>
                                 </TableView>
+                                <ImageView fx:id="replayButton" fitHeight="66.0" fitWidth="102.0" layoutX="629.0" layoutY="649.0" onMouseEntered="#setReplayButtonMouseOver" onMouseExited="#setReplayButtonMouseExited" onMousePressed="#setReplayButtonPressed" onMouseReleased="#setReplayButtonReleased" pickOnBounds="true">
+                                    <image>
+                                        <Image url="file:images/button_play_unavailable.png" />
+                                    </image>
+                                </ImageView>
                             </children>
                         </AnchorPane>
                     </content>
@@ -73,16 +78,16 @@
                                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                     </columnResizePolicy>
                                 </TableView>
-                        <ImageView fx:id="deleteButton" fitHeight="76.0" fitWidth="230.0" layoutX="327.0" layoutY="614.0" onMouseEntered="#setDeleteButtonMouseOver" onMouseExited="#setDeleteButtonMouseExited" onMousePressed="#setDeleteButtonPressed" onMouseReleased="#setDeleteButtonReleased" pickOnBounds="true">
-                           <image>
-                              <Image url="file:images/unavailable_delete_button.png" />
-                           </image>
-                        </ImageView>
-                        <ImageView fx:id="startButton" fitHeight="76.0" fitWidth="230.0" layoutX="758.0" layoutY="614.0" onMouseEntered="#setStartButtonMouseOver" onMouseExited="#setStartButtonMouseExited" onMousePressed="#setStartButtonPressed" onMouseReleased="#setStartButtonReleased" pickOnBounds="true">
-                           <image>
-                              <Image url="file:images/start_button_unavailable.png" />
-                           </image>
-                        </ImageView>
+                                <ImageView fx:id="deleteButton" fitHeight="76.0" fitWidth="230.0" layoutX="327.0" layoutY="614.0" onMouseEntered="#setDeleteButtonMouseOver" onMouseExited="#setDeleteButtonMouseExited" onMousePressed="#setDeleteButtonPressed" onMouseReleased="#setDeleteButtonReleased" pickOnBounds="true">
+                                    <image>
+                                        <Image url="file:images/unavailable_delete_button.png" />
+                                    </image>
+                                </ImageView>
+                                <ImageView fx:id="startButton" fitHeight="76.0" fitWidth="230.0" layoutX="758.0" layoutY="614.0" onMouseEntered="#setStartButtonMouseOver" onMouseExited="#setStartButtonMouseExited" onMousePressed="#setStartButtonPressed" onMouseReleased="#setStartButtonReleased" pickOnBounds="true">
+                                    <image>
+                                        <Image url="file:images/start_button_unavailable.png" />
+                                    </image>
+                                </ImageView>
                             </children>
                         </AnchorPane>
                     </content>

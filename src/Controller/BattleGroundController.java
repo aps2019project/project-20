@@ -2,10 +2,7 @@ package Controller;
 
 import Exceptions.*;
 import Model.*;
-import Presenter.Animationable;
-import Presenter.CurrentAccount;
-import Presenter.DialogThrowable;
-import Presenter.ScreenManager;
+import Presenter.*;
 import com.jfoenix.controls.JFXTextArea;
 import javafx.animation.*;
 import javafx.application.Platform;
@@ -30,10 +27,11 @@ import java.util.ResourceBundle;
 
 import static Model.BattleGround.CellEffect;
 
-public class BattleGroundController implements Initializable, ScreenManager , DialogThrowable, Animationable {
+public class BattleGroundController implements Initializable, ScreenManager , DialogThrowable, Animationable, DateGetter {
     private static final int CELL_HEIGHT = 80;
     private static final int CELL_WIDTH = 80;
     private static final int MAX_NUMBER_OF_COLLECTIBLE_ITEMS = 9;
+
     public StackPane mainStackPane;
     public ImageView battleGroundImage;
     public ImageView playerProfilePic;
@@ -74,9 +72,10 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
     private AIController aiController;
     private ImageView[] manaGemImageViews;
     private String dragAndDropKey = "Card dragged from hand.";
+    private ScreenRecordController screenRecordController;
+    private String startBattleDate;
 
-    public BattleGroundController() {
-    }
+    public BattleGroundController(){}
 
     public BattleGroundController(Battle battle) {
         this.battle = battle;
@@ -93,6 +92,14 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
 //        temp.setMainDeck(DeckDatas.getDefaultDeck());
 //        CurrentAccount.setCurrentAccount(temp);
 //        battle = Battle.soloCustomKillHeroModeConstructor("rostam");
+
+
+        startBattleDate = getDateFormat2();
+        screenRecordController = new ScreenRecordController(startBattleDate);
+        //for start capturing video
+        // screenRecordController.start();
+        //for finishing the game
+        //MatchHistory.BuildMatchHistory(startBattleDate,MatchHistory.Result.WIN,"AI",screenRecordController,CurrentAccount.getCurrentAccount());
 
         aiController = new AIController(battle);
         selectedCardBackground = new ImageView(new Image("file:images/card_background_highlight.png"));

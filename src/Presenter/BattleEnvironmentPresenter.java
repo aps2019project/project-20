@@ -1,5 +1,6 @@
 package Presenter;
 
+import Controller.ScreenRecordController;
 import Exceptions.AssetNotFoundException;
 import Exceptions.InvalidInGameAssetIDFormatException;
 import Exceptions.SpecialPowerMisMatchException;
@@ -117,26 +118,26 @@ public class BattleEnvironmentPresenter {
     }
 
     public int endGamePresenter() {
-        int status = battle.endGame();
-        if(status!=-1) {
-            switch (status) {
-                case 0:
-                    BattleEnvironment.ShowEndGame(battle.getPlayers()[0], battle.getPlayers()[1], battle, battle.getMode(), 0);
-                    battle.getPlayers()[0].getMatchHistories().add(new MatchHistory("0", MatchHistory.Result.DRAW, battle.getPlayers()[1].getName()));
-                    battle.getPlayers()[1].getMatchHistories().add(new MatchHistory("0", MatchHistory.Result.DRAW, battle.getPlayers()[0].getName()));
-                    return 0;
-                case 1:
-                    BattleEnvironment.ShowEndGame(battle.getPlayers()[0], battle.getPlayers()[1], battle, battle.getMode(), 1);
-                    battle.getPlayers()[0].getMatchHistories().add(new MatchHistory("0", MatchHistory.Result.WIN, battle.getPlayers()[0].getName()));
-                    battle.getPlayers()[1].getMatchHistories().add(new MatchHistory("0", MatchHistory.Result.LOOSE, battle.getPlayers()[1].getName()));
-                    return 1;
-                case 2:
-                    BattleEnvironment.ShowEndGame(battle.getPlayers()[0], battle.getPlayers()[1], battle, battle.getMode(), 2);
-                    battle.getPlayers()[0].getMatchHistories().add(new MatchHistory("0", MatchHistory.Result.LOOSE, battle.getPlayers()[0].getName()));
-                    battle.getPlayers()[1].getMatchHistories().add(new MatchHistory("0", MatchHistory.Result.WIN, battle.getPlayers()[1].getName()));
-                    return 2;
-            }
-        }
+//        int status = battle.endGame();
+//        if(status!=-1) {
+//            switch (status) {
+//                case 0:
+//                    BattleEnvironment.ShowEndGame(battle.getPlayers()[0], battle.getPlayers()[1], battle, battle.getMode(), 0);
+//                    battle.getPlayers()[0].getMatchHistories().add(new MatchHistory(battleStartDate, MatchHistory.Result.DRAW, battle.getPlayers()[1].getName()));
+//                    battle.getPlayers()[1].getMatchHistories().add(new MatchHistory(battleStartDate, MatchHistory.Result.DRAW, battle.getPlayers()[0].getName()));
+//                    return 0;
+//                case 1:
+//                    BattleEnvironment.ShowEndGame(battle.getPlayers()[0], battle.getPlayers()[1], battle, battle.getMode(), 1);
+//                    battle.getPlayers()[0].getMatchHistories().add(new MatchHistory(battleStartDate, MatchHistory.Result.WIN, battle.getPlayers()[0].getName()));
+//                    battle.getPlayers()[1].getMatchHistories().add(new MatchHistory(battleStartDate, MatchHistory.Result.LOOSE, battle.getPlayers()[1].getName()));
+//                    return 1;
+//                case 2:
+//                    BattleEnvironment.ShowEndGame(battle.getPlayers()[0], battle.getPlayers()[1], battle, battle.getMode(), 2);
+//                    battle.getPlayers()[0].getMatchHistories().add(new MatchHistory(battleStartDate, MatchHistory.Result.LOOSE, battle.getPlayers()[0].getName()));
+//                    battle.getPlayers()[1].getMatchHistories().add(new MatchHistory(battleStartDate, MatchHistory.Result.WIN, battle.getPlayers()[1].getName()));
+//                    return 2;
+//            }
+//        }
         return -1;
     }
 

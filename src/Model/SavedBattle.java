@@ -1,6 +1,6 @@
 package Model;
 
-import Presenter.RuntimeTypeAdapterFactory;
+import Presenter.DateGetter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -11,7 +11,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class SavedBattle {
+public class SavedBattle implements DateGetter {
 
     private String date;
     private String AIHeroName;
@@ -19,11 +19,7 @@ public class SavedBattle {
     private Battle battle;
 
     public SavedBattle(Battle battle) {
-        Calendar cal = Calendar.getInstance();
-        Date date=cal.getTime();
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd | HH:mm:ss");
-        String formattedDate=dateFormat.format(date);
-        this.date = formattedDate;
+        this.date = getDateFormat1();
         this.battle = battle;
         this.number=0;
         this.AIHeroName = battle.getPlayersDeck()[1].getHero().getName();
