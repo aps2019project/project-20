@@ -39,9 +39,7 @@ public interface ScreenManager extends Animationable {
             imageView.setLayoutX(0);imageView.setLayoutY(0);imageView.setFitHeight(1080);imageView.setFitWidth(1930);
             Main.getStackPane().getChildren().add(imageView);
             SlideShowThread slideShower = new SlideShowThread(Main.getStackPaneBackGroundImage());
-            stage.getScene().getWindow().setOnHidden(event -> {
-                slideShower.finalize();
-            });
+            stage.getScene().getWindow().setOnHidden(event -> slideShower.finalize());
             slideShower.start();
         }
         Main.getStackPane().getChildren().add(root);

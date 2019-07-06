@@ -17,6 +17,7 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.MalformedURLException;
@@ -424,7 +425,7 @@ public class CollectionController implements Initializable, ScreenManager, Accou
                 e.printStackTrace();
             }
             imageView.setFitWidth(250);
-            imageView.setFitHeight (320);
+            imageView.setFitHeight(320);
             Pane pane = new Pane();
             pane.setOnMouseEntered(event -> pane.setStyle("-fx-background-color: #949494;"));
             pane.setOnMouseExited(event -> pane.setStyle("-fx-background-color: -fx-primary;"));
@@ -681,137 +682,161 @@ public class CollectionController implements Initializable, ScreenManager, Accou
 
     public void createCard() {
 
-
         //todo import card gif
 
 
+        File selectedCard = makeFileChooser("import card");
 
-        final int DEFAULT_MANA = 3;
-        int minionID = 3040;
-        int heroID = 2010;
-        int spellID = 4020;
+        File selectedIdleGif = makeFileChooser("import idle gif");
 
-        int price = Integer.valueOf(priceText.getText());
-        int range = Integer.valueOf(rangeText.getText());
-        int AP = Integer.valueOf(APText.getText());
-        int HP = Integer.valueOf(HPText.getText());
-        int coolDown = Integer.valueOf(specialPowerCoolDownText.getText());
-        int squareSideLength = Integer.valueOf(sideLength.getText());
-        int effectValue = Integer.valueOf(effectValueText.getText());
-        int delay = Integer.valueOf(delayText.getText());
-        int last = Integer.valueOf(lastText.getText());
-        boolean isTargetFriend = false;
+        File selectedBreathingGif = makeFileChooser("import breathing gif");
 
-        ToggleGroup typeGroup = new ToggleGroup();
-        hero.setToggleGroup(typeGroup);
-        minion.setToggleGroup(typeGroup);
-        spell.setToggleGroup(typeGroup);
+        File selectedRunGif = makeFileChooser("import run gif");
 
-        ToggleGroup targetGroup=new ToggleGroup();
-        enemy.setToggleGroup(targetGroup);
-        player.setToggleGroup(targetGroup);
-        cells.setToggleGroup(targetGroup);
+        File selectedAttackGif = makeFileChooser("import attack gif");
 
-        ToggleGroup attackTypeGroup = new ToggleGroup();
-        melee.setToggleGroup(attackTypeGroup);
-        ranged.setToggleGroup(attackTypeGroup);
-        hybrid.setToggleGroup(attackTypeGroup);
+        File selectedDeathGif = makeFileChooser("import death gif");
 
-        ToggleGroup minionSpecialPowerActivation = new ToggleGroup();
-        ON_ATTACK.setToggleGroup(minionSpecialPowerActivation);
-        ON_DEATH.setToggleGroup(minionSpecialPowerActivation);
-        ON_DEFEND.setToggleGroup(minionSpecialPowerActivation);
-        ON_SPAWN.setToggleGroup(minionSpecialPowerActivation);
-        COMBO.setToggleGroup(minionSpecialPowerActivation);
-        PASSIVE.setToggleGroup(minionSpecialPowerActivation);
 
-        ToggleGroup minionBuffType = new ToggleGroup();
-        HOLY_BUFF.setToggleGroup(minionBuffType);
-        STUN_BUFF.setToggleGroup(minionBuffType);
-        POWER_BUFF_ATTACK.setToggleGroup(minionBuffType);
-        POWER_BUFF_HEALTH.setToggleGroup(minionBuffType);
-        WEAKNESS_BUFF_ATTACK.setToggleGroup(minionBuffType);
-        WEAKNESS_BUFF_HEALTH.setToggleGroup(minionBuffType);
-        POISON_BUFF.setToggleGroup(minionBuffType);
-        DISARM_BUFF.setToggleGroup(minionBuffType);
+        if (selectedCard != null && selectedIdleGif != null && selectedBreathingGif != null && selectedRunGif != null
+                && selectedAttackGif != null && selectedDeathGif != null) {
 
-        ToggleButton isTargetFriendButton = new ToggleButton();
-        if (isTargetFriendButton.isSelected())
-            isTargetFriend = true;
+            final int DEFAULT_MANA = 3;
+            int minionID = 3040;
+            int heroID = 2010;
+            int spellID = 4020;
 
-        AttackType attackType = null;
-        if (melee.isSelected()) {
-            attackType = AttackType.MELEE;
-        } else if (ranged.isSelected()) {
-            attackType = AttackType.RANGED;
-        } else if (hybrid.isSelected()) {
-            attackType = AttackType.HYBRID;
-        }
+            int price = Integer.valueOf(priceText.getText());
+            int range = Integer.valueOf(rangeText.getText());
+            int AP = Integer.valueOf(APText.getText());
+            int HP = Integer.valueOf(HPText.getText());
+            int coolDown = Integer.valueOf(specialPowerCoolDownText.getText());
+            int squareSideLength = Integer.valueOf(sideLength.getText());
+            int effectValue = Integer.valueOf(effectValueText.getText());
+            int delay = Integer.valueOf(delayText.getText());
+            int last = Integer.valueOf(lastText.getText());
+            boolean isTargetFriend = false;
 
-        Spell.TargetType targetType = null;
-        if (enemy.isSelected()) {
-            targetType = Spell.TargetType.ENEMY;
-        } else if (player.isSelected()) {
-            targetType = Spell.TargetType.PLAYER;
-        } else if (cells.isSelected()) {
-            targetType = Spell.TargetType.CELLS;
-        } else {
-            targetType = Spell.TargetType.WHOLE_OF_GROUND;
-        }
+            ToggleGroup typeGroup = new ToggleGroup();
+            hero.setToggleGroup(typeGroup);
+            minion.setToggleGroup(typeGroup);
+            spell.setToggleGroup(typeGroup);
 
-        Minion.ActivateTimeOfSpecialPower activateTimeOfSpecialPower = null;
-        if (ON_ATTACK.isSelected())
-            activateTimeOfSpecialPower = Minion.ActivateTimeOfSpecialPower.ON_ATTACK;
-        else if (ON_DEFEND.isSelected())
-            activateTimeOfSpecialPower = Minion.ActivateTimeOfSpecialPower.ON_DEFEND;
-        else if (ON_DEATH.isSelected())
-            activateTimeOfSpecialPower = Minion.ActivateTimeOfSpecialPower.ON_DEATH;
-        else if (ON_SPAWN.isSelected())
-            activateTimeOfSpecialPower = Minion.ActivateTimeOfSpecialPower.ON_SPAWN;
-        else if (COMBO.isSelected())
-            activateTimeOfSpecialPower = Minion.ActivateTimeOfSpecialPower.COMBO;
-        else if (PASSIVE.isSelected())
-            activateTimeOfSpecialPower = Minion.ActivateTimeOfSpecialPower.PASSIVE;
+            ToggleGroup targetGroup = new ToggleGroup();
+            enemy.setToggleGroup(targetGroup);
+            player.setToggleGroup(targetGroup);
+            cells.setToggleGroup(targetGroup);
 
-        BufferOfSpells.Type buffType = null;
-        if (HOLY_BUFF.isSelected())
-            buffType = BufferOfSpells.Type.HOLY_BUFF;
-        else if (POWER_BUFF_HEALTH.isSelected())
-            buffType = BufferOfSpells.Type.POWER_BUFF_HEALTH;
-        else if (POWER_BUFF_ATTACK.isSelected())
-            buffType = BufferOfSpells.Type.POWER_BUFF_ATTACK;
-        else if (WEAKNESS_BUFF_HEALTH.isSelected())
-            buffType = BufferOfSpells.Type.WEAKNESS_BUFF_HEALTH;
-        else if (WEAKNESS_BUFF_ATTACK.isSelected())
-            buffType = BufferOfSpells.Type.WEAKNESS_BUFF_ATTACK;
-        else if (STUN_BUFF.isSelected())
-            buffType = BufferOfSpells.Type.STUN_BUFF;
-        else if (POISON_BUFF.isSelected())
-            buffType = BufferOfSpells.Type.POISON_BUFF;
+            ToggleGroup attackTypeGroup = new ToggleGroup();
+            melee.setToggleGroup(attackTypeGroup);
+            ranged.setToggleGroup(attackTypeGroup);
+            hybrid.setToggleGroup(attackTypeGroup);
 
-        BufferOfSpells buff = new BufferOfSpells(last, buffType, effectValue, delay);
+            ToggleGroup minionSpecialPowerActivation = new ToggleGroup();
+            ON_ATTACK.setToggleGroup(minionSpecialPowerActivation);
+            ON_DEATH.setToggleGroup(minionSpecialPowerActivation);
+            ON_DEFEND.setToggleGroup(minionSpecialPowerActivation);
+            ON_SPAWN.setToggleGroup(minionSpecialPowerActivation);
+            COMBO.setToggleGroup(minionSpecialPowerActivation);
+            PASSIVE.setToggleGroup(minionSpecialPowerActivation);
 
-        if (minion.isSelected()) {
-            Minion minion = new Minion(nameText.getText(), nameText.getText(), price, minionID, range, AP, HP, DEFAULT_MANA, attackType, activateTimeOfSpecialPower, buff, isTargetFriend);
-            //TODO next line can't help because this is a local variable.
-            minionID++;
-            Asset.addNewAssetToDataBase(minion);
-            getCurrentAccount().getCollection().getAssets().add(minion);
-        }
-        if (hero.isSelected()) {
-            Hero hero = new Hero(nameText.getText(), price, heroID, range, AP, HP, DEFAULT_MANA, coolDown, attackType, buff, isTargetFriend);
-            //TODO next line can't help because this is a local variable.
-            heroID++;
-            Asset.addNewAssetToDataBase(hero);
-            getCurrentAccount().getCollection().getAssets().add(hero);
-        }
-        if (spell.isSelected()) {
-            Spell spell = new Spell(nameText.getText(), nameText.getText(), price, spellID, DEFAULT_MANA, targetType, squareSideLength, buff, isTargetFriend);
-            //TODO next line can't help because this is a local variable.
-            spellID++;
-            Asset.addNewAssetToDataBase(spell);
-            getCurrentAccount().getCollection().getAssets().add(spell);
+            ToggleGroup minionBuffType = new ToggleGroup();
+            HOLY_BUFF.setToggleGroup(minionBuffType);
+            STUN_BUFF.setToggleGroup(minionBuffType);
+            POWER_BUFF_ATTACK.setToggleGroup(minionBuffType);
+            POWER_BUFF_HEALTH.setToggleGroup(minionBuffType);
+            WEAKNESS_BUFF_ATTACK.setToggleGroup(minionBuffType);
+            WEAKNESS_BUFF_HEALTH.setToggleGroup(minionBuffType);
+            POISON_BUFF.setToggleGroup(minionBuffType);
+            DISARM_BUFF.setToggleGroup(minionBuffType);
+
+            ToggleButton isTargetFriendButton = new ToggleButton();
+            if (isTargetFriendButton.isSelected())
+                isTargetFriend = true;
+
+            AttackType attackType = null;
+            if (melee.isSelected()) {
+                attackType = AttackType.MELEE;
+            } else if (ranged.isSelected()) {
+                attackType = AttackType.RANGED;
+            } else if (hybrid.isSelected()) {
+                attackType = AttackType.HYBRID;
+            }
+
+            Spell.TargetType targetType = null;
+            if (enemy.isSelected()) {
+                targetType = Spell.TargetType.ENEMY;
+            } else if (player.isSelected()) {
+                targetType = Spell.TargetType.PLAYER;
+            } else if (cells.isSelected()) {
+                targetType = Spell.TargetType.CELLS;
+            } else {
+                targetType = Spell.TargetType.WHOLE_OF_GROUND;
+            }
+
+            Minion.ActivateTimeOfSpecialPower activateTimeOfSpecialPower = null;
+            if (ON_ATTACK.isSelected())
+                activateTimeOfSpecialPower = Minion.ActivateTimeOfSpecialPower.ON_ATTACK;
+            else if (ON_DEFEND.isSelected())
+                activateTimeOfSpecialPower = Minion.ActivateTimeOfSpecialPower.ON_DEFEND;
+            else if (ON_DEATH.isSelected())
+                activateTimeOfSpecialPower = Minion.ActivateTimeOfSpecialPower.ON_DEATH;
+            else if (ON_SPAWN.isSelected())
+                activateTimeOfSpecialPower = Minion.ActivateTimeOfSpecialPower.ON_SPAWN;
+            else if (COMBO.isSelected())
+                activateTimeOfSpecialPower = Minion.ActivateTimeOfSpecialPower.COMBO;
+            else if (PASSIVE.isSelected())
+                activateTimeOfSpecialPower = Minion.ActivateTimeOfSpecialPower.PASSIVE;
+
+            BufferOfSpells.Type buffType = null;
+            if (HOLY_BUFF.isSelected())
+                buffType = BufferOfSpells.Type.HOLY_BUFF;
+            else if (POWER_BUFF_HEALTH.isSelected())
+                buffType = BufferOfSpells.Type.POWER_BUFF_HEALTH;
+            else if (POWER_BUFF_ATTACK.isSelected())
+                buffType = BufferOfSpells.Type.POWER_BUFF_ATTACK;
+            else if (WEAKNESS_BUFF_HEALTH.isSelected())
+                buffType = BufferOfSpells.Type.WEAKNESS_BUFF_HEALTH;
+            else if (WEAKNESS_BUFF_ATTACK.isSelected())
+                buffType = BufferOfSpells.Type.WEAKNESS_BUFF_ATTACK;
+            else if (STUN_BUFF.isSelected())
+                buffType = BufferOfSpells.Type.STUN_BUFF;
+            else if (POISON_BUFF.isSelected())
+                buffType = BufferOfSpells.Type.POISON_BUFF;
+
+            BufferOfSpells buff = new BufferOfSpells(last, buffType, effectValue, delay);
+
+            if (minion.isSelected()) {
+                Minion minion = new Minion(nameText.getText(), nameText.getText(), price, minionID, range, AP, HP, DEFAULT_MANA, attackType, activateTimeOfSpecialPower, buff, isTargetFriend);
+                //TODO next line can't help because this is a local variable.
+                minionID++;
+                Asset.addNewAssetToDataBase(minion);
+                getCurrentAccount().getCollection().getAssets().add(minion);
+            }
+            if (hero.isSelected()) {
+                Hero hero = new Hero(nameText.getText(), price, heroID, range, AP, HP, DEFAULT_MANA, coolDown, attackType, buff, isTargetFriend);
+                //TODO next line can't help because this is a local variable.
+                heroID++;
+                Asset.addNewAssetToDataBase(hero);
+                getCurrentAccount().getCollection().getAssets().add(hero);
+            }
+            if (spell.isSelected()) {
+                Spell spell = new Spell(nameText.getText(), nameText.getText(), price, spellID, DEFAULT_MANA, targetType, squareSideLength, buff, isTargetFriend);
+                //TODO next line can't help because this is a local variable.
+                spellID++;
+                Asset.addNewAssetToDataBase(spell);
+                getCurrentAccount().getCollection().getAssets().add(spell);
+            }
         }
     }
 
+    public File makeFileChooser(String s) {
+        FileChooser importCard = new FileChooser();
+        importCard.setInitialDirectory(new File("../"));
+        importCard.setTitle(s);
+        importCard.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("png/gif Files", "*.png", "*.gif"));
+        File selectedFile = importCard.showOpenDialog(anchorPane.getScene().getWindow());
+
+        return selectedFile;
+    }
 }
