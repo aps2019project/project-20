@@ -48,6 +48,11 @@ public abstract class Battle {
     protected int battleID;
     protected int reward;
     private ArrayList<Card> inGroundCards = new ArrayList<>();
+    private ArrayList<Integer> IDsOfOnAttackItems = new ArrayList<>();
+    private ArrayList<Integer> IDsOfEndTurnItems = new ArrayList<>();
+    private ArrayList<Integer> IDsOfOnceCalledItems = new ArrayList<>();
+    private ArrayList<Integer> IDsOfOnSpawnItems = new ArrayList<>();
+    private ArrayList<Integer> IDsOfOnDeathItems = new ArrayList<>();
 
     public Deck[] getPlayersDeck() {
         return playersDeck;
@@ -105,6 +110,32 @@ public abstract class Battle {
         collectibleItems.add(AssetDatas.getChineseSword());
         for (int i = 0; i < collectibleItems.size(); i++)
             battleGround.getGround().get(itemsCoordinates.get(i) / BattleGround.getColumns()).set(itemsCoordinates.get(i) % BattleGround.getColumns(), collectibleItems.get(i));
+
+        //Adjusting other items' IDs
+        IDsOfEndTurnItems.add(AssetDatas.getKingWisdom().getID());
+
+        IDsOfOnAttackItems.add(AssetDatas.getDamoolArch().getID());
+        IDsOfOnAttackItems.add(AssetDatas.getTerrorHood().getID());
+        IDsOfOnAttackItems.add(AssetDatas.getPoisonousDagger().getID());
+        IDsOfOnAttackItems.add(AssetDatas.getShockHammer().getID());
+
+        IDsOfOnceCalledItems.add(AssetDatas.getKnowledgeCrown().getID());
+        IDsOfOnceCalledItems.add(AssetDatas.getNamoos_e_separ().getID());
+        IDsOfOnceCalledItems.add(AssetDatas.getSimorghWing().getID());
+
+        IDsOfOnDeathItems.add(AssetDatas.getDeathCurse().getID());
+        IDsOfOnDeathItems.add(AssetDatas.getSoulEater().getID());
+
+        IDsOfOnSpawnItems.add(AssetDatas.getBaptism().getID());
+        IDsOfOnSpawnItems.add(AssetDatas.getAssassinationDagger().getID());
+        //Applying once-action items at the first of battle
+        for (int i = 0; i < 2; i++) {
+            if (playersDeck[i].getItems().size() > 0 && playersDeck[i].getItems().get(0).getPrice() != 0) {
+                Item usableItem = playersDeck[i].getItems().get(0);
+                if (IDsOfOnceCalledItems.contains(usableItem.getID()))
+                    useItem(players[i], null, playersDeck[i].getItems().get(0));
+            }
+        }
     }
 
     public void selectWarrior(Account player, int cardID) {
@@ -216,9 +247,14 @@ public abstract class Battle {
                 warrior.getCollectedFlag().setOwner(null);
             }
             playersGraveYard[playerIndex].getDeadCards().add(warrior);
+            if (warrior instanceof Minion)
+                applyMinionSpecialPower((Minion) warrior, null, ON_DEATH);
+            if (playersDeck[playerIndex].getItems().size() > 0 && playersDeck[playerIndex].getItems().get(0).getPrice() != 0) {
+                Item usableItem = playersDeck[playerIndex].getItems().get(0);
+                if (IDsOfOnDeathItems.contains(usableItem.getID()))
+                    useItem(players[playerIndex], null, playersDeck[playerIndex].getItems().get(0));
+            }
         }
-        if (warrior instanceof Minion)
-            applyMinionSpecialPower((Minion) warrior, null, ON_DEATH);
     }
 
     public void meleeAttackOrCounterAttack(Warrior attacker, Warrior opponentWarrior, int distance, Status status) {
@@ -251,6 +287,12 @@ public abstract class Battle {
             applyMinionSpecialPower((Minion) attacker, opponentWarrior, ON_ATTACK);
         else if (status == COUNTER_ATTACK && attacker instanceof Minion)
             applyMinionSpecialPower((Minion) attacker, opponentWarrior, ON_DEFEND);
+        int attackerOwnerIndex = getPlayerIndex(attacker.getOwner());
+        if (playersDeck[attackerOwnerIndex].getItems().size() > 0 && playersDeck[attackerOwnerIndex].getItems().get(0).getPrice() != 0) {
+            Item usableItem = playersDeck[attackerOwnerIndex].getItems().get(0);
+            if (IDsOfOnAttackItems.contains(usableItem.getID()))
+                useItem(attacker.getOwner(), opponentWarrior, playersDeck[attackerOwnerIndex].getItems().get(0));
+        }
         opponentWarrior.changeHP(-1 * attacker.getAP());
     }
 
@@ -382,6 +424,7 @@ public abstract class Battle {
                             new Buffer(this).customSpellAction((Spell) card, card.getName(), card.getBuff(), x, y);
                         else
                             applySpellBuffers(player, players[1 - playerIndex], card, x, y);
+                        playersGraveYard[playerIndex].getDeadCards().add(card);
                     }
                     else {
                         if (battleGround.getGround().get(y).get(x) != null)
@@ -394,9 +437,15 @@ public abstract class Battle {
                         inGroundCards.add(card);
                         if (card instanceof Minion)
                             applyMinionSpecialPower((Minion) card, null, ON_SPAWN);
+                        if (playersDeck[playerIndex].getItems().size() > 0 && playersDeck[playerIndex].getItems().get(0).getPrice() != 0) {
+                            Item usableItem = playersDeck[playerIndex].getItems().get(0);
+                            if (IDsOfOnSpawnItems.contains(usableItem.getID()))
+                                useItem(players[playerIndex], null, playersDeck[playerIndex].getItems().get(0));
+                        }
                     }
                     return;
-                } else
+                }
+                else
                     throw new DontHaveEnoughManaException();
             }
         }
@@ -424,6 +473,11 @@ public abstract class Battle {
         applyAndHandleManaBuffers(opponent);
         applyEffectedBuffersOfWarriors(opponent);
         applyPassiveMinionSpecialPowers(player);
+        if (playersDeck[getPlayerIndex(player)].getItems().size() > 0 && playersDeck[getPlayerIndex(player)].getItems().get(0).getPrice() != 0) {
+            Item usableItem = playersDeck[getPlayerIndex(player)].getItems().get(0);
+            if (IDsOfEndTurnItems.contains(usableItem.getID()))
+                useItem(player, null, usableItem);
+        }
         fillEmptyPlacesOfHandFromDeck(player);
         battleGround.applyCellEffects(this, opponent);
         playersDeck[getPlayerIndex(opponent)].getHero().changeSpecialPowerCountdown(-1);
@@ -581,9 +635,12 @@ public abstract class Battle {
         }
     }
 
-    public void useItem(Account player, Account enemy, Item selectedItem) {
+    public void useItem(Account player, Warrior enemyWarrior, Item selectedItem) {
+        if (selectedItem == null)
+            return;
         int playerIndex = getPlayerIndex(player);
         Warrior collector = selectedItem.getCollector();
+        Account enemy = getOpponent(player);
         Buffer buffer = new Buffer(this);
         switch (selectedItem.getID()) {
             case 1000:
@@ -592,9 +649,9 @@ public abstract class Battle {
             case 1001:
                 buffer.namoos_e_separAction(playersDeck[playerIndex].getHero());
                 break;
-// TODO: implementation is hard.            case 1002:
-//                buffer.damoolArchAction(playersDeck[playerIndex].getHero(), enemyWarrior);
-//                break;
+             case 1002:
+                buffer.damoolArchAction(playersDeck[playerIndex].getHero(), enemyWarrior);
+                break;
             case 1003:
                 buffer.nooshdarooAction(player);
                 break;
@@ -634,9 +691,9 @@ public abstract class Battle {
             case 1015:
                 buffer.poisonousDaggerAction(collector, enemy);
                 break;
-// TODO: implementation is hard.            case 1016:
-//                buffer.shockHammerAction(enemyWarrior);
-//                break;
+            case 1016:
+                buffer.shockHammerAction(enemyWarrior);
+                break;
             case 1017:
                 buffer.soulEaterAction(enemy, collector);
                 break;

@@ -570,7 +570,6 @@ public class Buffer {
     }
 
     //Items
-    //TODO: Items' methods call must be edited.
     public void knowledgeCrownAction(Account player) {
         int playerIndex = battle.getPlayerIndex(player);
         battle.getPlayersManaBuffEffected()[playerIndex].add(new BufferOfSpells(3, MANA_BUFF, 1));

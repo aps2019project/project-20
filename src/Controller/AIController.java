@@ -225,7 +225,8 @@ public class AIController implements Initializable {
 
     //checked and fast forward
     public void AIUseSpecialPower(Battle battle) {
-        battle.applySpecialPower(battle.getPlayers()[1].getMainDeck().getHero(), findPlayerMinion(battle.getPlayers()[1]), Minion.ActivateTimeOfSpecialPower.ON_ATTACK);
+        //TODO
+//        battle.applyHeroSpecialPower(battle.getPlayers()[1], );
         showSpecialPowerAnimation();
     }
 

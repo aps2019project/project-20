@@ -1,7 +1,7 @@
 package Datas;
 
 import Model.*;
-import Presenter.RuntimeTypeAdapterFactory;
+//import Presenter.RuntimeTypeAdapterFactory;
 
 import static Model.AttackType.*;
 import static Model.Minion.ActivateTimeOfSpecialPower.*;
