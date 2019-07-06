@@ -11,15 +11,20 @@ public class Spell extends Card {
         ENEMY, PLAYER, CELLS, WHOLE_OF_GROUND
     }
 
-    public Spell(String name,String desc, int price, int ID,int MP, TargetType targetType) {
+    public Spell(String name, String desc, int price, int ID, int MP, TargetType targetType) {
         super(name, desc, price, ID, MP, true);
         this.targetType = targetType;
-        this.squareSideLength = 0;
+        this.squareSideLength = 1;
         setImageAddresses(name);
     }
 
     public Spell(String name, String desc, int price, int ID, int MP, TargetType targetType, int squareSideLength) {
-        super(name, desc, price, ID, MP, true);
+        this(name, desc, price, ID, MP, targetType);
+        this.squareSideLength = squareSideLength;
+    }
+
+    public Spell(String name, String desc, int price, int ID, int MP, TargetType targetType, int squareSideLength, BufferOfSpells buff, boolean isTargetFriend) {
+        super(name, desc, price, ID, MP, true, buff, isTargetFriend);
         this.targetType = targetType;
         this.squareSideLength = squareSideLength;
         setImageAddresses(name);
@@ -50,6 +55,5 @@ public class Spell extends Card {
         actionBarImageAddress = "file:images/cards/spell/" + name + "/" + name + "_actionbar.gif";
         activeImageAddress = "file:images/cards/spell/" + name + "/" + name + "_active.gif";
         effectImageAddress = "file:images/cards/spell/" + name + "/" + name + "_effect.gif";
-        assetImageAddress = "file:images/cards/spell/"+name+"/"+name+".png";
     }
 }

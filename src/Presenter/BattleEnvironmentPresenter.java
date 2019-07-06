@@ -69,7 +69,7 @@ public class BattleEnvironmentPresenter {
         x--;
         y--;
         if(battle.getBattleGround().getGround().get(y).get(x)!=null && battle.getBattleGround().getGround().get(y).get(x).getOwner()!=battle.getPlayers()[1]) {
-            battle.applySpecialPower(battle.getPlayersDeck()[0].getHero(),(Warrior)battle.getBattleGround().getGround().get(y).get(x),((Minion)battle.getBattleGround().getGround().get(y).get(x)).getActivateTimeOfSpecialPower());
+//            battle.applySpecialPower(battle.getPlayersDeck()[0].getHero(),(Warrior)battle.getBattleGround().getGround().get(y).get(x),((Minion)battle.getBattleGround().getGround().get(y).get(x)).getActivateTimeOfSpecialPower());
         }
         throw new SpecialPowerMisMatchException();
     }
@@ -97,7 +97,7 @@ public class BattleEnvironmentPresenter {
 //        if (!(battle.getBattleGround().getGround().get(y).get(x) instanceof Warrior)) {
 //            throw new InvalidTargetException();
 //        }
-        battle.useItem(battle.getPlayers()[0], battle.getPlayers()[1], battle.getPlayersSelectedItem()[0]);
+//        battle.useItem(battle.getPlayers()[0], battle.getPlayers()[1], battle.getPlayersSelectedItem()[0]);
     }
 
     public Card showInfoOfCard(String cardID) {

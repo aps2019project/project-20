@@ -31,5 +31,8 @@
     <orderEntry type="library" name="jfoenix-8.0.8" level="project" />
     <orderEntry type="library" name="com.gilecode.yagson:yagson:0.5" level="project" />
     <orderEntry type="library" name="jxcapture-3.5" level="project" />
+    <orderEntry type="library" name="java1" level="project" />
+    <orderEntry type="library" name="jar_files" level="project" />
+    <orderEntry type="library" name="yagson-0.5" level="project" />
   </component>
 </module>

@@ -1,6 +1,5 @@
 package Model;
 
-import Controller.BattleGroundController;
 import Datas.AssetDatas;
 import Exceptions.*;
 
@@ -19,6 +18,7 @@ public abstract class Battle {
         NORMAL, FLAG_KEEPING, FLAG_COLLECTING;
     }
 
+    protected Mode mode;
     public final static int STORY_REWARD_L1 = 500;
     public final static int STORY_REWARD_L2 = 1000;
     public final static int STORY_REWARD_L3 = 1500;
@@ -30,14 +30,13 @@ public abstract class Battle {
     public int endGameStatus = UNFINISHED_GAME;
     public static final int FIRST_LATE_TURN = 15;
     public static final int MAX_MANA_IN_LATE_TURNS = 9;
-    public static final int EACH_PLAYER_MANA_AT_FIRST_OF_TURN = 2;
+    public int eachPlayerManaAtFirstOfTurn = 2;
     public static  final int NUMBER_OF_CARDS_IN_HAND = 5;
-    protected Mode mode;
     protected int turn;
     protected transient Account[] players = new Account[2];
     protected Deck[] playersDeck = new Deck[2];
     protected BattleGround battleGround = new BattleGround();
-    protected int[] playersMana = {EACH_PLAYER_MANA_AT_FIRST_OF_TURN, EACH_PLAYER_MANA_AT_FIRST_OF_TURN};
+    protected int[] playersMana = {eachPlayerManaAtFirstOfTurn, eachPlayerManaAtFirstOfTurn};
     protected ArrayList<BufferOfSpells>[] playersManaBuffEffected = new ArrayList[2];
     protected Card[] playersSelectedCard = new Card[2];
     protected Item[] playersSelectedItem = new Item[2];
@@ -49,6 +48,11 @@ public abstract class Battle {
     protected int battleID;
     protected int reward;
     private ArrayList<Card> inGroundCards = new ArrayList<>();
+    private ArrayList<Integer> IDsOfOnAttackItems = new ArrayList<>();
+    private ArrayList<Integer> IDsOfEndTurnItems = new ArrayList<>();
+    private ArrayList<Integer> IDsOfOnceCalledItems = new ArrayList<>();
+    private ArrayList<Integer> IDsOfOnSpawnItems = new ArrayList<>();
+    private ArrayList<Integer> IDsOfOnDeathItems = new ArrayList<>();
 
     public Deck[] getPlayersDeck() {
         return playersDeck;
@@ -106,6 +110,32 @@ public abstract class Battle {
         collectibleItems.add(AssetDatas.getChineseSword());
         for (int i = 0; i < collectibleItems.size(); i++)
             battleGround.getGround().get(itemsCoordinates.get(i) / BattleGround.getColumns()).set(itemsCoordinates.get(i) % BattleGround.getColumns(), collectibleItems.get(i));
+
+        //Adjusting other items' IDs
+        IDsOfEndTurnItems.add(AssetDatas.getKingWisdom().getID());
+
+        IDsOfOnAttackItems.add(AssetDatas.getDamoolArch().getID());
+        IDsOfOnAttackItems.add(AssetDatas.getTerrorHood().getID());
+        IDsOfOnAttackItems.add(AssetDatas.getPoisonousDagger().getID());
+        IDsOfOnAttackItems.add(AssetDatas.getShockHammer().getID());
+
+        IDsOfOnceCalledItems.add(AssetDatas.getKnowledgeCrown().getID());
+        IDsOfOnceCalledItems.add(AssetDatas.getNamoos_e_separ().getID());
+        IDsOfOnceCalledItems.add(AssetDatas.getSimorghWing().getID());
+
+        IDsOfOnDeathItems.add(AssetDatas.getDeathCurse().getID());
+        IDsOfOnDeathItems.add(AssetDatas.getSoulEater().getID());
+
+        IDsOfOnSpawnItems.add(AssetDatas.getBaptism().getID());
+        IDsOfOnSpawnItems.add(AssetDatas.getAssassinationDagger().getID());
+        //Applying once-action items at the first of battle
+        for (int i = 0; i < 2; i++) {
+            if (playersDeck[i].getItems().size() > 0 && playersDeck[i].getItems().get(0).getPrice() != 0) {
+                Item usableItem = playersDeck[i].getItems().get(0);
+                if (IDsOfOnceCalledItems.contains(usableItem.getID()))
+                    useItem(players[i], null, playersDeck[i].getItems().get(0));
+            }
+        }
     }
 
     public void selectWarrior(Account player, int cardID) {
@@ -165,13 +195,6 @@ public abstract class Battle {
         if (attacker.isStun() || attacker.isAttackedThisTurn())
             throw new InvalidAttackException("The card can't attack twice!");
         int distance, playerIndex = getPlayerIndex(player);
-        //TODO method must be reconsidered.
-//        Warrior opponentWarrior;
-//        try {
-//            opponentWarrior = searchWarriorInBattleGround(opponentWarriorID);
-//        } catch (AssetNotFoundException e) {
-//            throw new AssetNotFoundException("Invalid card id");
-//        }
         // AshkbosAction
         if (opponentWarrior.getName().equals("ashkbos") && attacker.getAP() < opponentWarrior.getAP())
             return;
@@ -224,24 +247,30 @@ public abstract class Battle {
                 warrior.getCollectedFlag().setOwner(null);
             }
             playersGraveYard[playerIndex].getDeadCards().add(warrior);
+            if (warrior instanceof Minion)
+                applyMinionSpecialPower((Minion) warrior, null, ON_DEATH);
+            if (playersDeck[playerIndex].getItems().size() > 0 && playersDeck[playerIndex].getItems().get(0).getPrice() != 0) {
+                Item usableItem = playersDeck[playerIndex].getItems().get(0);
+                if (IDsOfOnDeathItems.contains(usableItem.getID()))
+                    useItem(players[playerIndex], null, playersDeck[playerIndex].getItems().get(0));
+            }
         }
     }
 
     public void meleeAttackOrCounterAttack(Warrior attacker, Warrior opponentWarrior, int distance, Status status) {
         if (distance == 1 || (distance == 2 && Math.abs(attacker.getXInGround() - opponentWarrior.getXInGround()) == 1)) {
-            if (status == ATTACK)
-                applySpecialPower(attacker, opponentWarrior, ON_ATTACK);
-            opponentWarrior.changeHP(-1 * attacker.getAP());
+            strikeEnemy(attacker, opponentWarrior, status);
+            //zahhak special power
+            if (status == ATTACK && attacker instanceof Hero && attacker.getName().equals("zahhak"))
+                new Buffer(this).zahhakAction(opponentWarrior);
         } else if (status == ATTACK)
             throw new InvalidAttackException("Opponent warrior is unavailable for attack");
     }
 
     public void rangedAttackOrCounterAttack(Warrior attacker, Warrior opponentWarrior, int distance, Status status) {
-        if (distance <= attacker.getRange() && !(distance == 1 || (distance == 2 && Math.abs(attacker.getXInGround() - opponentWarrior.getXInGround()) == 1))) {
-            if (status == ATTACK)
-                applySpecialPower(attacker, opponentWarrior, ON_ATTACK);
-            opponentWarrior.changeHP(-1 * attacker.getAP());
-        } else if (status == ATTACK)
+        if (distance <= attacker.getRange() && !(distance == 1 || (distance == 2 && Math.abs(attacker.getXInGround() - opponentWarrior.getXInGround()) == 1)))
+            strikeEnemy(attacker, opponentWarrior, status);
+        else if (status == ATTACK)
             throw new InvalidAttackException("Opponent warrior is unavailable for attack");
     }
 
@@ -253,13 +282,81 @@ public abstract class Battle {
         }
     }
 
-    public void applySpecialPower(Warrior attacker, Warrior opponentWarrior, ActivateTimeOfSpecialPower activateTimeOfSpecialPower) {
+    private void strikeEnemy(Warrior attacker, Warrior opponentWarrior, Status status) {
+        if (status == ATTACK && attacker instanceof Minion)
+            applyMinionSpecialPower((Minion) attacker, opponentWarrior, ON_ATTACK);
+        else if (status == COUNTER_ATTACK && attacker instanceof Minion)
+            applyMinionSpecialPower((Minion) attacker, opponentWarrior, ON_DEFEND);
+        int attackerOwnerIndex = getPlayerIndex(attacker.getOwner());
+        if (playersDeck[attackerOwnerIndex].getItems().size() > 0 && playersDeck[attackerOwnerIndex].getItems().get(0).getPrice() != 0) {
+            Item usableItem = playersDeck[attackerOwnerIndex].getItems().get(0);
+            if (IDsOfOnAttackItems.contains(usableItem.getID()))
+                useItem(attacker.getOwner(), opponentWarrior, playersDeck[attackerOwnerIndex].getItems().get(0));
+        }
+        opponentWarrior.changeHP(-1 * attacker.getAP());
+    }
+
+    public void applyHeroSpecialPower(Account player, Asset targetAsset, int x, int y) {
+        int playerIndex = getPlayerIndex(player);
+        Account opponent = getOpponent(player);
+        Buffer buffer = new Buffer(this);
+        Hero playerHero = playersDeck[playerIndex].getHero();
+        Warrior targetWarrior = null;
+        if (targetAsset instanceof Warrior)
+            targetWarrior = (Warrior) targetAsset;
+        // For custom card
+        if (playerHero.getBuff() != null) {
+            if (targetWarrior == null)
+                throw new InvalidTargetException("Please select a correct target.");
+            buffer.customWarriorAction(playerHero, targetWarrior, playerHero.getBuff(), playerHero.isTargetFriend(), null);
+        }
+
+        if (playerHero.getAction().equals("NoAction"))
+            throw new NoAvailableBufferForCardException("Your hero doesn't have special power.");
+        if (x != -1 && y != -1 && playerHero.getID() != 2005 && (targetWarrior == null || targetWarrior.getOwner() != opponent))
+            throw new InvalidTargetException("Please select an enemy warrior.");
+        if (playerHero.getSpecialPowerCountdown() > 0 || playersMana[playerIndex] < playerHero.getMP())
+            throw new InvalidCooldown("Cooldown of your special power hasn't reached.");
+
+        switch (playerHero.getID()) {
+            case 2000:
+                buffer.whiteDamnAction(player);
+                break;
+            case 2001:
+                buffer.simorghAction(opponent, battleGround);
+                break;
+            case 2002:
+                buffer.sevenHeadDragonAction(targetWarrior);
+                break;
+            case 2003:
+                buffer.rakhshAction(targetWarrior);
+                break;
+            case 2005:
+                buffer.kavehAction(battleGround, x, y);
+                break;
+            case 2006:
+                buffer.arashAction(player, opponent, battleGround);
+                break;
+            case 2007:
+                buffer.legendAction(targetWarrior);
+                break;
+            case 2008:
+                buffer.esfandiarAction(player);
+        }
+        playerHero.changeSpecialPowerCountdown(playerHero.getCooldown());
+    }
+
+    public void applyMinionSpecialPower(Minion attacker, Warrior opponentWarrior, ActivateTimeOfSpecialPower activateTimeOfSpecialPower) {
         if (attacker.getAction().equals("NoAction"))
             return;
-        Buffer buffer = new Buffer();
+        Buffer buffer = new Buffer(this);
         Class bufferClass = buffer.getClass();
         Class[] methodArgs;
         int playerIndex = getPlayerIndex(attacker.getOwner());
+        if (attacker.getID() >= 3040 && attacker.getID() < 4000) {
+            buffer.customWarriorAction(attacker, opponentWarrior, attacker.getBuff(), attacker.isTargetFriend(), attacker.getActivateTimeOfSpecialPower());
+            return;
+        }
         switch (activateTimeOfSpecialPower) {
             case PASSIVE:
                 methodArgs = new Class[]{Account.class, Minion.class, BattleGround.class};
@@ -273,6 +370,7 @@ public abstract class Battle {
                 switch (attacker.getName()) {
                     case "siavash":
                         buffer.siavashAction(playersDeck[playerIndex].getHero());
+                        break;
                     case "oneEyeGiant":
                         buffer.oneEyeGiantAction(attacker, battleGround);
                 }
@@ -280,7 +378,7 @@ public abstract class Battle {
             case ON_SPAWN:
                 methodArgs = new Class[]{Account.class, Minion.class, BattleGround.class};
                 try {
-                    bufferClass.getMethod(attacker.getAction(), methodArgs).invoke(buffer, opponentWarrior.getOwner(), attacker, battleGround);
+                    bufferClass.getMethod(attacker.getAction(), methodArgs).invoke(buffer, getOpponent(attacker.getOwner()), attacker, battleGround);
                 } catch (Exception e) {
                     throw new NoAvailableBufferForCardException();
                 }
@@ -321,8 +419,13 @@ public abstract class Battle {
                 if (playersMana[playerIndex] >= card.getMP()) {
                     playersMana[playerIndex] -= card.getMP();
                     playersHand[playerIndex][i] = null;
-                    if (card instanceof Spell)
-                        applySpellBuffers(player, players[1 - playerIndex], card, x, y);
+                    if (card instanceof Spell) {
+                        if (card.getBuff() != null)
+                            new Buffer(this).customSpellAction((Spell) card, card.getName(), card.getBuff(), x, y);
+                        else
+                            applySpellBuffers(player, players[1 - playerIndex], card, x, y);
+                        playersGraveYard[playerIndex].getDeadCards().add(card);
+                    }
                     else {
                         if (battleGround.getGround().get(y).get(x) != null)
                             throw new ThisCellFilledException();
@@ -332,9 +435,17 @@ public abstract class Battle {
                         ((Warrior) card).setMovedThisTurn(true);
                         playersSelectedCard[playerIndex] = card;
                         inGroundCards.add(card);
+                        if (card instanceof Minion)
+                            applyMinionSpecialPower((Minion) card, null, ON_SPAWN);
+                        if (playersDeck[playerIndex].getItems().size() > 0 && playersDeck[playerIndex].getItems().get(0).getPrice() != 0) {
+                            Item usableItem = playersDeck[playerIndex].getItems().get(0);
+                            if (IDsOfOnSpawnItems.contains(usableItem.getID()))
+                                useItem(players[playerIndex], null, playersDeck[playerIndex].getItems().get(0));
+                        }
                     }
                     return;
-                } else
+                }
+                else
                     throw new DontHaveEnoughManaException();
             }
         }
@@ -361,21 +472,33 @@ public abstract class Battle {
         Account opponent = getOpponent(player);
         applyAndHandleManaBuffers(opponent);
         applyEffectedBuffersOfWarriors(opponent);
+        applyPassiveMinionSpecialPowers(player);
+        if (playersDeck[getPlayerIndex(player)].getItems().size() > 0 && playersDeck[getPlayerIndex(player)].getItems().get(0).getPrice() != 0) {
+            Item usableItem = playersDeck[getPlayerIndex(player)].getItems().get(0);
+            if (IDsOfEndTurnItems.contains(usableItem.getID()))
+                useItem(player, null, usableItem);
+        }
         fillEmptyPlacesOfHandFromDeck(player);
-        endGame();
         battleGround.applyCellEffects(this, opponent);
+        playersDeck[getPlayerIndex(opponent)].getHero().changeSpecialPowerCountdown(-1);
+        endGame();
         turn++;
         resetIsAttackedThisTurn();
         resetIsMovedThisTurn(player);
         setPlayersManaByDefault();
-
-        //added progress bar
-//        TimeLine t0 = new TimeLine();
-//        t0.start();
-
     }
 
-    private Account getOpponent(Account player) {
+    private void applyPassiveMinionSpecialPowers(Account player) {
+        for (int i = 0; i < BattleGround.getRows(); i++) {
+            for (int j = 0; j < BattleGround.getColumns(); j++) {
+                Asset asset = battleGround.getGround().get(i).get(j);
+                if (asset instanceof  Minion && asset.getOwner() == player)
+                    applyMinionSpecialPower((Minion) asset, null, PASSIVE);
+            }
+        }
+    }
+
+    public Account getOpponent(Account player) {
         Account opponent;
         if (player == players[0])
             opponent = players[1];
@@ -494,7 +617,7 @@ public abstract class Battle {
         if (player == players[1])
             playerIndex = 1;
         try {
-            candidateItem = searchItemInPlayersDeck(playerIndex, collectibleItemID);
+            candidateItem = searcjItemInPlayersDeck(playerIndex, collectibleItemID);
         } catch (AssetNotFoundException e) {
             throw e;
         }
@@ -502,7 +625,7 @@ public abstract class Battle {
     }
 
     public void applySpellBuffers(Account player, Account enemy, Card playerSelectedSpell, int x, int y) {
-        Buffer buffer = new Buffer();
+        Buffer buffer = new Buffer(this);
         Class bufferClass = buffer.getClass();
         Class[] methodArgs = new Class[]{Account.class, Account.class, BattleGround.class, Integer.class, Integer.class};
         try {
@@ -512,69 +635,73 @@ public abstract class Battle {
         }
     }
 
-    public void useItem(Account player, Account enemy, Item selectedItem) {
+    public void useItem(Account player, Warrior enemyWarrior, Item selectedItem) {
+        if (selectedItem == null)
+            return;
         int playerIndex = getPlayerIndex(player);
         Warrior collector = selectedItem.getCollector();
+        Account enemy = getOpponent(player);
+        Buffer buffer = new Buffer(this);
         switch (selectedItem.getID()) {
             case 1000:
-                selectedItem.getBuffer().knowledgeCrownAction(player);
+                buffer.knowledgeCrownAction(player);
                 break;
             case 1001:
-                selectedItem.getBuffer().namoos_e_separAction(playersDeck[playerIndex].getHero());
+                buffer.namoos_e_separAction(playersDeck[playerIndex].getHero());
                 break;
-// TODO: implementation is hard.            case 1002:
-//                selectedItem.getBuffer().damoolArchAction(playersDeck[playerIndex].getHero(), enemyWarrior);
-//                break;
+             case 1002:
+                buffer.damoolArchAction(playersDeck[playerIndex].getHero(), enemyWarrior);
+                break;
             case 1003:
-                selectedItem.getBuffer().nooshdarooAction(player);
+                buffer.nooshdarooAction(player);
                 break;
             case 1004:
-                selectedItem.getBuffer().twoHornArrowAction(player);
+                buffer.twoHornArrowAction(player);
                 break;
             case 1005:
-                selectedItem.getBuffer().simorghWingAction(enemy);
+                buffer.simorghWingAction(enemy);
                 break;
             case 1006:
-                selectedItem.getBuffer().elixirAction(collector);
+                buffer.elixirAction(collector);
                 break;
             case 1007:
-                selectedItem.getBuffer().manaMixtureAction(collector);
+                buffer.manaMixtureAction(collector);
                 break;
             case 1008:
-                selectedItem.getBuffer().invulnerableMixtureAction(player);
+                buffer.invulnerableMixtureAction(player);
                 break;
             case 1009:
-                selectedItem.getBuffer().deathCurseAction(player);
+                buffer.deathCurseAction(player);
                 break;
             case 1010:
-                selectedItem.getBuffer().randomDamageAction(player);
+                buffer.randomDamageAction(player);
                 break;
             case 1011:
-                selectedItem.getBuffer().terrorHoodAction(enemy);
+                buffer.terrorHoodAction(enemy);
                 break;
             case 1012:
-                selectedItem.getBuffer().bladesOfAgilityAction(player);
+                buffer.bladesOfAgilityAction(player);
                 break;
             case 1013:
-                selectedItem.getBuffer().kingWisdomAction(player);
+                buffer.kingWisdomAction(player);
                 break;
             case 1014:
-                selectedItem.getBuffer().assassinationDaggerAction(enemy);
+                buffer.assassinationDaggerAction(enemy);
                 break;
             case 1015:
-                selectedItem.getBuffer().poisonousDaggerAction(collector, enemy);
+                buffer.poisonousDaggerAction(collector, enemy);
                 break;
-// TODO: implementation is hard.            case 1016:
-//                selectedItem.getBuffer().shockHammerAction(enemyWarrior);
-//                break;
+            case 1016:
+                buffer.shockHammerAction(enemyWarrior);
+                break;
             case 1017:
-                selectedItem.getBuffer().soulEaterAction(enemy, collector);
+                buffer.soulEaterAction(enemy, collector);
                 break;
             case 1018:
-                selectedItem.getBuffer().baptismAction((Minion) collector);
+                buffer.baptismAction((Minion) collector);
                 break;
             case 1019:
-                selectedItem.getBuffer().chineseSwordAction(collector);
+                buffer.chineseSwordAction(collector);
                 break;
         }
 
@@ -766,7 +893,7 @@ public abstract class Battle {
         return true;
     }
 
-    public Item searchItemInPlayersDeck(int playerIndex, int collectibleItemID) {
+    public Item searcjItemInPlayersDeck(int playerIndex, int collectibleItemID) {
         for (Item item : playersDeck[playerIndex].getItems())
             if (collectibleItemID == item.getID())
                 return item;
@@ -788,8 +915,10 @@ public abstract class Battle {
                 AIDeck = new Deck(ai, "enemyDeckInStoryGameLevel1");
                 battleMode = Battle.Mode.NORMAL;
                 reward = STORY_REWARD_L1;
-                return new KillHeroBattle(battleMode,
-                                CurrentAccount.getCurrentAccount(), ai,
+                return new KillHeroBattle
+                        (battleMode,
+                                CurrentAccount.getCurrentAccount(),
+                                ai,
                                 new Deck(CurrentAccount.getCurrentAccount(), CurrentAccount.getCurrentAccount().getMainDeck().getName(), CurrentAccount.getCurrentAccount().getMainDeck().getHero(), CurrentAccount.getCurrentAccount().getMainDeck().getItems(), CurrentAccount.getCurrentAccount().getMainDeck().getCards()),
                                 AIDeck,
                                 new BattleGround(), reward);
