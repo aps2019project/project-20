@@ -4,7 +4,7 @@ import Datas.AssetDatas;
 import Datas.DeckDatas;
 import Exceptions.*;
 import Presenter.CurrentAccount;
-import com.gilecode.yagson.YaGson;
+import com.gilecode.yagson.*;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
