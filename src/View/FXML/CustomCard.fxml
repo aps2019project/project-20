@@ -22,7 +22,7 @@
                         <Image url="file:images/codex/generic_background@2x.jpg" />
                     </image>
                 </ImageView>
-            <ImageView fx:id="createCardButton" fitHeight="227.0" fitWidth="77.0" onMouseClicked="#CreateCard" pickOnBounds="true" preserveRatio="true" StackPane.alignment="BOTTOM_LEFT">
+            <ImageView fx:id="createCardButton" fitHeight="227.0" fitWidth="77.0" onMouseClicked="#createCard" pickOnBounds="true" preserveRatio="true" StackPane.alignment="BOTTOM_LEFT">
                <image>
                   <Image url="file:images/create_card_button.png" />
                </image>

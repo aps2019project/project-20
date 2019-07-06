@@ -63,7 +63,7 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
     public ImageView cheatButton;
     public ProgressBar progressbar;
     private HashMap<Warrior, Label> healthBars = new HashMap<>();
-    //    public Button menuButton;
+//    public Button menuButton;
 //    public Button friendButton;
     public AnchorPane battleGroundAnchorPane;
     private ImageView[][] groundImageViews;
@@ -245,7 +245,7 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
         if (battle.getPlayersDeck()[0].getItems().size() == 1)
             playerDeckItem.setImage(new Image(battle.getPlayersDeck()[0].getItems().get(0).getActionbarImageAddress()));
 
-
+    }
         private void initializeSize (ImageView imageView){
             if (imageView == selectedCardBackground || (imageView.getImage() != null && imageView.getImage().impl_getUrl().equals(freeCellImageAddress)))
                 imageView.setOpacity(0.5);
@@ -986,4 +986,3 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
         }
 
     }
-}
