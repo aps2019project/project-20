@@ -34,5 +34,9 @@
     <orderEntry type="library" name="java1" level="project" />
     <orderEntry type="library" name="jar_files" level="project" />
     <orderEntry type="library" name="yagson-0.5" level="project" />
+    <orderEntry type="library" name="jxcapture" level="project" />
+    <orderEntry type="library" name="jniwrap-3.12" level="project" />
+    <orderEntry type="library" name="jxcapture-3.5-javadoc" level="project" />
+    <orderEntry type="library" name="gson-2.8.52" level="project" />
   </component>
 </module>
