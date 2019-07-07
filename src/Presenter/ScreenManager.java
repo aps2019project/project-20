@@ -3,7 +3,7 @@ package Presenter;
 import Controller.BattleGroundController;
 import Controller.SlideShowThread;
 import Model.Battle;
-import View.Client;
+import Client.Client;
 import com.jfoenix.controls.JFXDecorator;
 import javafx.animation.ParallelTransition;
 import javafx.application.Platform;
@@ -30,7 +30,7 @@ public interface ScreenManager extends Animationable {
         Client.setStackPane(new StackPane());
         Stage stage = new Stage();
         JFXDecorator jfxDecorator = new JFXDecorator(stage, Client.getStackPane());
-        jfxDecorator.getStylesheets().add(Client.class.getResource("CSS/Screens.Css").toExternalForm());
+        jfxDecorator.getStylesheets().add(Client.class.getResource("../View/CSS/Screens.Css").toExternalForm());
         Scene scene = new Scene(jfxDecorator);
         AnchorPane root = FXMLLoader.load(Client.class.getResource(FXMLAddress));
         stage.setScene(scene);

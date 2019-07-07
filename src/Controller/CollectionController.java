@@ -3,7 +3,7 @@ package Controller;
 import Exceptions.*;
 import Model.*;
 import Presenter.*;
-import View.Client;
+import Client.Client;
 import com.jfoenix.controls.*;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
@@ -115,7 +115,7 @@ public class CollectionController implements Initializable, ScreenManager, Accou
     }
 
     public void setBackButtonOnMouseReleased() throws IOException {
-        loadPageOnStackPane(back.getParent(), "FXML/MainMenu.fxml", "ltr");
+        loadPageOnStackPane(back.getParent(), "../View/FXML/MainMenu.fxml", "ltr");
     }
 
     public void setImportButtonOnMouseOver() {

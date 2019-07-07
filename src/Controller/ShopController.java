@@ -53,7 +53,7 @@ public class ShopController implements Initializable, ScreenManager, AccountMana
     }
 
     public void setBackButtonOnMouseReleased() throws IOException {
-        loadPageOnStackPane(back.getParent(), "FXML/MainMenu.fxml", "ltr");
+        loadPageOnStackPane(back.getParent(), "../View/FXML/MainMenu.fxml", "ltr");
     }
 
 

@@ -3,7 +3,7 @@ import Model.Account;
 import Presenter.CurrentAccount;
 import Presenter.DialogThrowable;
 import Presenter.ScreenManager;
-import View.Client;
+import Client.Client;
 import com.gilecode.yagson.YaGson;
 
 import java.io.IOException;
@@ -28,7 +28,7 @@ public class ClientListener extends Thread implements ScreenManager, DialogThrow
                     //Add Listeners
                     if (serverMessage.matches("loginSuccess .+")) {
                         CurrentAccount.setCurrentAccount(new YaGson().fromJson(serverMessage.substring(13), Account.class));
-                        openPageOnNewStageInThread(Client.getStackPane().getScene(),"FXML/MainMenu.fxml",true);
+                        openPageOnNewStageInThread(Client.getStackPane().getScene(),"../View/FXML/MainMenu.fxml",true);
                     }
                     if (serverMessage.matches("loginError userNotFound")) {
                         showOneButtonErrorDialogInThread("Login Error","User Not Found!!!");
@@ -42,7 +42,7 @@ public class ClientListener extends Thread implements ScreenManager, DialogThrow
                     }
                     if (serverMessage.matches("signUpSuccess .+")) {
                         CurrentAccount.setCurrentAccount(new YaGson().fromJson(serverMessage.substring(14), Account.class));
-                        openPageOnNewStageInThread(Client.getStackPane().getScene(),"FXML/MainMenu.fxml",true);
+                        openPageOnNewStageInThread(Client.getStackPane().getScene(),"../View/FXML/MainMenu.fxml",true);
                     }
                     if (serverMessage.matches("signUpError repeatedAccount")) {
                         showOneButtonErrorDialogInThread("signUp Error","This Account Has Already Been Made!!!");

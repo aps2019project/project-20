@@ -16,11 +16,11 @@ public class FirstPageController implements Initializable, ScreenManager {
     public AnchorPane anchorPane;
 
     public void setLogin() throws IOException {
-        loadPageOnStackPane(anchorPane,"FXML/SignIn.fxml","rtl");
+        loadPageOnStackPane(anchorPane,"../View/FXML/SignIn.fxml","rtl");
     }
 
     public void setSignup() throws IOException {
-        loadPageOnStackPane(anchorPane,"FXML/SignUp.fxml","ltr");
+        loadPageOnStackPane(anchorPane,"../View/FXML/SignUp.fxml","ltr");
     }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
