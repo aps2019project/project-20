@@ -1,10 +1,11 @@
 package Presenter;
 
 import Datas.SoundDatas;
-import View.Main;
+import View.Client;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
+import javafx.application.Platform;
 import javafx.scene.text.Text;
 
 public interface DialogThrowable extends ScreenManager {
@@ -19,7 +20,7 @@ public interface DialogThrowable extends ScreenManager {
         dialogLayout.setHeading(header);
         dialogLayout.setBody(footer);
         dialogLayout.setStyle("-fx-background-color: #ffee00; -fx-text-fill: #ffffff");
-        JFXDialog dialog = new JFXDialog(Main.getStackPane(), dialogLayout, JFXDialog.DialogTransition.CENTER, true);
+        JFXDialog dialog = new JFXDialog(Client.getStackPane(), dialogLayout, JFXDialog.DialogTransition.CENTER, true);
         dialog.setStyle("-fx-background-image: url('file:images/error.png')");
         JFXButton button = new JFXButton("Okey");
         button.setButtonType(JFXButton.ButtonType.RAISED);
@@ -28,7 +29,7 @@ public interface DialogThrowable extends ScreenManager {
             SoundDatas.playSFX(SoundDatas.DIALOG_NO_BUTTON);
             dialog.close();
         });
-        dialog.setOnDialogClosed(event -> Main.getStackPane().getChildren().remove(dialog));
+        dialog.setOnDialogClosed(event -> Client.getStackPane().getChildren().remove(dialog));
         dialogLayout.setActions(button);
         dialog.show();
     }
@@ -43,7 +44,7 @@ public interface DialogThrowable extends ScreenManager {
         dialogLayout.setHeading(header);
         dialogLayout.setBody(footer);
         dialogLayout.setStyle("-fx-background-color: #acf5ff; -fx-text-fill: #ffffff");
-        JFXDialog dialog = new JFXDialog(Main.getStackPane(), dialogLayout, JFXDialog.DialogTransition.CENTER, true);
+        JFXDialog dialog = new JFXDialog(Client.getStackPane(), dialogLayout, JFXDialog.DialogTransition.CENTER, true);
         if(isShowImage) {
             dialog.setStyle("-fx-background-image: url('file:images/information.png')");
         }
@@ -54,7 +55,7 @@ public interface DialogThrowable extends ScreenManager {
             SoundDatas.playSFX(SoundDatas.DIALOG_NO_BUTTON);
             dialog.close();
         });
-        dialog.setOnDialogClosed(event -> Main.getStackPane().getChildren().remove(dialog));
+        dialog.setOnDialogClosed(event -> Client.getStackPane().getChildren().remove(dialog));
         dialogLayout.setActions(button);
         dialog.show();
     }
@@ -70,7 +71,7 @@ public interface DialogThrowable extends ScreenManager {
         footer.setStyle("-fx-text-fill: #000000;  -fx-font-family: 'Microsoft Tai Le'; -fx-font-weight:bold ;");
         dialogLayout.setBody(footer);
         dialogLayout.setStyle("-fx-background-color: #acf5ff; -fx-text-fill: #ffffff");
-        JFXDialog dialog = new JFXDialog(Main.getStackPane(), dialogLayout, JFXDialog.DialogTransition.CENTER, true);
+        JFXDialog dialog = new JFXDialog(Client.getStackPane(), dialogLayout, JFXDialog.DialogTransition.CENTER, true);
         JFXButton yesButton = new JFXButton("yes");
         yesButton.setButtonType(JFXButton.ButtonType.RAISED);
         yesButton.setStyle("-fx-background-color: #37b400; -fx-text-fill: #ffffff; -fx-font-family: 'Microsoft Tai Le'; -fx-font-weight:bold ;");
@@ -85,11 +86,24 @@ public interface DialogThrowable extends ScreenManager {
             SoundDatas.playSFX(SoundDatas.DIALOG_NO_BUTTON);
             dialog.close();
         });
-        dialog.setOnDialogClosed(event -> Main.getStackPane().getChildren().remove(dialog));
+        dialog.setOnDialogClosed(event -> Client.getStackPane().getChildren().remove(dialog));
         dialogLayout.setActions(yesButton,noButton);
         dialog.show();
         return yesButton;
     }
+
+    default void showOneButtonErrorDialogInThread(String title, String body){
+        Platform.runLater(() -> {
+            showOneButtonErrorDialog(title,body);
+        });
+    }
+
+    default void showOneButtonInformationDialogInThread(String title, String body, boolean isShowImage) {
+        Platform.runLater(() -> {
+            showOneButtonInformationDialog(title,body,isShowImage);
+        });
+    }
+
 }
 
 

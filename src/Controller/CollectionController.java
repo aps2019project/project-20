@@ -3,7 +3,7 @@ package Controller;
 import Exceptions.*;
 import Model.*;
 import Presenter.*;
-import View.Main;
+import View.Client;
 import com.jfoenix.controls.*;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
@@ -18,8 +18,6 @@ import javafx.stage.FileChooser;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.Inet4Address;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -600,7 +598,7 @@ public class CollectionController implements Initializable, ScreenManager, Accou
         header.setStyle("-fx-text-fill: #ff0000;  -fx-font-family: 'Microsoft Tai Le'; -fx-font-weight:bold ;");
         dialogLayout.setHeading(header);
         dialogLayout.setStyle("-fx-background-color: #acf5ff; -fx-text-fill: #ffffff");
-        JFXDialog dialog = new JFXDialog(Main.getStackPane(), dialogLayout, JFXDialog.DialogTransition.CENTER, true);
+        JFXDialog dialog = new JFXDialog(Client.getStackPane(), dialogLayout, JFXDialog.DialogTransition.CENTER, true);
         JFXButton yesButton = new JFXButton("create");
         yesButton.setButtonType(JFXButton.ButtonType.RAISED);
         JFXTextField jfxTextField = new JFXTextField();
@@ -615,7 +613,7 @@ public class CollectionController implements Initializable, ScreenManager, Accou
         noButton.setButtonType(JFXButton.ButtonType.RAISED);
         noButton.setStyle("-fx-background-color: #ff0000; -fx-text-fill: #ffffff; -fx-font-family: 'Microsoft Tai Le'; -fx-font-weight:bold ;");
         noButton.setOnAction(event -> dialog.close());
-        dialog.setOnDialogClosed(event -> Main.getStackPane().getChildren().remove(dialog));
+        dialog.setOnDialogClosed(event -> Client.getStackPane().getChildren().remove(dialog));
         dialogLayout.setActions(jfxTextField, yesButton, noButton);
         dialog.show();
 

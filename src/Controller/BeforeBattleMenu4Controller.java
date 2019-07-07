@@ -5,7 +5,7 @@ import Model.Battle;
 import Presenter.Animationable;
 import Presenter.ScreenManager;
 import Presenter.TextFieldValidator;
-import View.Main;
+import View.Client;
 import com.jfoenix.controls.*;
 import javafx.fxml.Initializable;
 import javafx.scene.image.Image;
@@ -77,7 +77,7 @@ public class BeforeBattleMenu4Controller implements Initializable, ScreenManager
         header.setStyle("-fx-text-fill: #ff0000;  -fx-font-family: 'Microsoft Tai Le'; -fx-font-weight:bold;");
         dialogLayout.setHeading(header);
         dialogLayout.setStyle("-fx-background-color: #acf5ff; -fx-text-fill: #ffffff");
-        JFXDialog dialog = new JFXDialog(Main.getStackPane(), dialogLayout, JFXDialog.DialogTransition.CENTER, true);
+        JFXDialog dialog = new JFXDialog(Client.getStackPane(), dialogLayout, JFXDialog.DialogTransition.CENTER, true);
         JFXTextField textField = new JFXTextField();
         textField.setLabelFloat(true);
         textField.setPromptText("Number Of Flags");
@@ -101,7 +101,7 @@ public class BeforeBattleMenu4Controller implements Initializable, ScreenManager
             SoundDatas.playSFX(SoundDatas.DIALOG_NO_BUTTON);
             dialog.close();
         });
-        dialog.setOnDialogClosed(event -> Main.getStackPane().getChildren().remove(dialog));
+        dialog.setOnDialogClosed(event -> Client.getStackPane().getChildren().remove(dialog));
         dialogLayout.setActions(textField,startButton,CancleButton);
         dialog.show();
     }

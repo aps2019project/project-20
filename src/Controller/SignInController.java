@@ -1,11 +1,10 @@
 package Controller;
 
-import Exceptions.UserNotFoundException;
-import Exceptions.WrongPasswordException;
 import Presenter.AccountManageable;
 import Presenter.DialogThrowable;
 import Presenter.ScreenManager;
 import Presenter.TextFieldValidator;
+import View.Client;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
@@ -30,16 +29,8 @@ public class SignInController implements Initializable, AccountManageable, Scree
             showOneButtonErrorDialog("SignIn Error", "some of fields are empty.");
             return;
         }
-        try {
-            loginPresenter(LoginUserName.getText(), loginPassword.getText());
-        } catch (UserNotFoundException e){
-            showOneButtonErrorDialog("Login Error","User Not Found!!!");
-            return;
-        }catch (WrongPasswordException e){
-            showOneButtonErrorDialog("Login Error","Password Is Not Correct!!!");
-            return;
-        }
-        loadPageInNewStage(signIn.getScene(),"FXML/MainMenu.fxml",true);
+        Client.connectToServer();
+        Client.getWriter().println(("logIn " +LoginUserName.getText()+" "+loginPassword.getText()));
     }
 
     public void setBack() throws IOException {

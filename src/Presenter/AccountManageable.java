@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public interface AccountManageable {
 
-    default void loginPresenter(String userName, String password){
+    default void login(String userName, String password){
         Account account;
         try {
             account = Account.login(userName,password);
@@ -20,7 +20,7 @@ public interface AccountManageable {
         CurrentAccount.setCurrentAccount(account);
     }
 
-    default void createAccountPresenter(String userName,String password){
+    default void createAccount(String userName, String password){
         Account account = null;
         try {
             account = Account.createAccount(userName, password);

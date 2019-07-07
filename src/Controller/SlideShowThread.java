@@ -2,7 +2,7 @@ package Controller;
 
 import Datas.SoundDatas;
 import Presenter.Animationable;
-import View.Main;
+import View.Client;
 import javafx.animation.FadeTransition;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -34,8 +34,8 @@ public class SlideShowThread extends Thread implements Animationable {
 
     @Override
     public void run() {
-        FadeTransition fadeInTransition = nodeFadeAnimation(Main.getStackPaneBackGroundImage(), 1000, 1, 0);
-        FadeTransition fadeOutTransition = nodeFadeAnimation(Main.getStackPaneBackGroundImage(), 1000, 0, 1);
+        FadeTransition fadeInTransition = nodeFadeAnimation(Client.getStackPaneBackGroundImage(), 1000, 1, 0);
+        FadeTransition fadeOutTransition = nodeFadeAnimation(Client.getStackPaneBackGroundImage(), 1000, 0, 1);
         mediaPlayer.play();
         mediaPlayer.setOnEndOfMedia(() -> {
             mediaPlayer = SoundDatas.getRandomSound();

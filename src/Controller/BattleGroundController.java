@@ -97,13 +97,14 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         //TODO Next three lines are Just for test and must be replaced properly.
-//        Account temp = new Account("reza", "1234");
-//        temp.setMainDeck(DeckDatas.getDefaultDeck());
-//        CurrentAccount.setCurrentAccount(temp);
-//        battle = Battle.soloCustomKillHeroModeConstructor("rostam");
-        startBattleDate = getDateFormat2();
-        screenRecordController = new ScreenRecordController(startBattleDate);
-        //for start capturing video
+        Account temp = new Account("reza", "1234");
+        temp.setMainDeck(DeckDatas.getDefaultDeck());
+        CurrentAccount.setCurrentAccount(temp);
+        battle = Battle.soloCustomKillHeroModeConstructor("rostam");
+
+//        startBattleDate = getDateFormat2();
+//        screenRecordController = new ScreenRecordController(startBattleDate);
+//        //for start capturing video
         // screenRecordController.start();
         //for finishing the game
         //MatchHistory.BuildMatchHistory(startBattleDate,MatchHistory.Result.WIN,"AI",screenRecordController,CurrentAccount.getCurrentAccount());
@@ -575,7 +576,7 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
                     Asset asset = battle.getBattleGround().getGround().get(i).get(j);
                     //To update dead cards' images
                     if (asset == null)
-                        groundImageViews[i][j].setImage(null);
+                        groundImageViews[i][j].setImage(new Image(freeCellImageAddress));
 
                     if (asset instanceof Warrior) {
                         healthBars.get(asset).setText(String.valueOf(((Warrior) asset).getHP()));
