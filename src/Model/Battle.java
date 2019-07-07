@@ -3,6 +3,7 @@ package Model;
 import Datas.AssetDatas;
 import Exceptions.*;
 
+import java.awt.event.WindowAdapter;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -133,7 +134,7 @@ public abstract class Battle {
             if (playersDeck[i].getItems().size() > 0 && playersDeck[i].getItems().get(0).getPrice() != 0) {
                 Item usableItem = playersDeck[i].getItems().get(0);
                 if (IDsOfOnceCalledItems.contains(usableItem.getID()))
-                    useItem(players[i], null, playersDeck[i].getItems().get(0));
+                    useItem(players[i], null, null, playersDeck[i].getItems().get(0));
             }
         }
     }
@@ -247,12 +248,12 @@ public abstract class Battle {
                 warrior.getCollectedFlag().setOwner(null);
             }
             playersGraveYard[playerIndex].getDeadCards().add(warrior);
-            if (warrior instanceof Minion)
+            if (warrior instanceof Minion && ((Minion) warrior).getActivateTimeOfSpecialPower() == ON_DEATH)
                 applyMinionSpecialPower((Minion) warrior, null, ON_DEATH);
             if (playersDeck[playerIndex].getItems().size() > 0 && playersDeck[playerIndex].getItems().get(0).getPrice() != 0) {
                 Item usableItem = playersDeck[playerIndex].getItems().get(0);
                 if (IDsOfOnDeathItems.contains(usableItem.getID()))
-                    useItem(players[playerIndex], null, playersDeck[playerIndex].getItems().get(0));
+                    useItem(players[playerIndex],warrior, null, playersDeck[playerIndex].getItems().get(0));
             }
         }
     }
@@ -283,15 +284,15 @@ public abstract class Battle {
     }
 
     private void strikeEnemy(Warrior attacker, Warrior opponentWarrior, Status status) {
-        if (status == ATTACK && attacker instanceof Minion)
+        if (status == ATTACK && attacker instanceof Minion && ((Minion) attacker).getActivateTimeOfSpecialPower() == ON_ATTACK)
             applyMinionSpecialPower((Minion) attacker, opponentWarrior, ON_ATTACK);
-        else if (status == COUNTER_ATTACK && attacker instanceof Minion)
+        else if (status == COUNTER_ATTACK && attacker instanceof Minion && ((Minion) attacker).getActivateTimeOfSpecialPower() == ON_DEFEND)
             applyMinionSpecialPower((Minion) attacker, opponentWarrior, ON_DEFEND);
         int attackerOwnerIndex = getPlayerIndex(attacker.getOwner());
         if (playersDeck[attackerOwnerIndex].getItems().size() > 0 && playersDeck[attackerOwnerIndex].getItems().get(0).getPrice() != 0) {
             Item usableItem = playersDeck[attackerOwnerIndex].getItems().get(0);
             if (IDsOfOnAttackItems.contains(usableItem.getID()))
-                useItem(attacker.getOwner(), opponentWarrior, playersDeck[attackerOwnerIndex].getItems().get(0));
+                useItem(attacker.getOwner(), attacker, opponentWarrior, playersDeck[attackerOwnerIndex].getItems().get(0));
         }
         opponentWarrior.changeHP(-1 * attacker.getAP());
     }
@@ -315,8 +316,10 @@ public abstract class Battle {
             throw new NoAvailableBufferForCardException("Your hero doesn't have special power.");
         if (x != -1 && y != -1 && playerHero.getID() != 2005 && (targetWarrior == null || targetWarrior.getOwner() != opponent))
             throw new InvalidTargetException("Please select an enemy warrior.");
-        if (playerHero.getSpecialPowerCountdown() > 0 || playersMana[playerIndex] < playerHero.getMP())
+        if (playerHero.getSpecialPowerCountdown() > 0)
             throw new InvalidCooldown("Cooldown of your special power hasn't reached.");
+        if (playersMana[playerIndex] < playerHero.getMP())
+            throw new InsufficientManaException();
 
         switch (playerHero.getID()) {
             case 2000:
@@ -344,6 +347,7 @@ public abstract class Battle {
                 buffer.esfandiarAction(player);
         }
         playerHero.changeSpecialPowerCountdown(playerHero.getCooldown());
+        playersMana[playerIndex] -= playerHero.getMP();
     }
 
     public void applyMinionSpecialPower(Minion attacker, Warrior opponentWarrior, ActivateTimeOfSpecialPower activateTimeOfSpecialPower) {
@@ -363,7 +367,7 @@ public abstract class Battle {
                 try {
                     bufferClass.getMethod(attacker.getAction(), methodArgs).invoke(buffer, attacker.getOwner(), attacker, battleGround);
                 } catch (Exception e) {
-                    throw new NoAvailableBufferForCardException();
+                    e.printStackTrace();
                 }
                 break;
             case ON_DEATH:
@@ -409,8 +413,6 @@ public abstract class Battle {
         x--;
         y--;
         int playerIndex = getPlayerIndex(player);
-        if (battleGround.getGround().get(y).get(x) != null)
-            throw new InvalidInsertInBattleGroundException();
         if (!isThereAnyAdjacentOwnWarrior(player, x, y, battleGround))
             throw new InvalidInsertInBattleGroundException("Invalid target");
         for (int i = 0; i < NUMBER_OF_CARDS_IN_HAND; i++) {
@@ -435,18 +437,18 @@ public abstract class Battle {
                         ((Warrior) card).setMovedThisTurn(true);
                         playersSelectedCard[playerIndex] = card;
                         inGroundCards.add(card);
-                        if (card instanceof Minion)
+                        if (card instanceof Minion && ((Minion) card).getActivateTimeOfSpecialPower() == ON_SPAWN)
                             applyMinionSpecialPower((Minion) card, null, ON_SPAWN);
                         if (playersDeck[playerIndex].getItems().size() > 0 && playersDeck[playerIndex].getItems().get(0).getPrice() != 0) {
                             Item usableItem = playersDeck[playerIndex].getItems().get(0);
                             if (IDsOfOnSpawnItems.contains(usableItem.getID()))
-                                useItem(players[playerIndex], null, playersDeck[playerIndex].getItems().get(0));
+                                useItem(players[playerIndex], (Warrior) card,null, playersDeck[playerIndex].getItems().get(0));
                         }
                     }
                     return;
                 }
                 else
-                    throw new DontHaveEnoughManaException();
+                    throw new InsufficientManaException();
             }
         }
         throw new AssetNotFoundException("Invalid card name");
@@ -476,11 +478,12 @@ public abstract class Battle {
         if (playersDeck[getPlayerIndex(player)].getItems().size() > 0 && playersDeck[getPlayerIndex(player)].getItems().get(0).getPrice() != 0) {
             Item usableItem = playersDeck[getPlayerIndex(player)].getItems().get(0);
             if (IDsOfEndTurnItems.contains(usableItem.getID()))
-                useItem(player, null, usableItem);
+                useItem(player, null, null, usableItem);
         }
         fillEmptyPlacesOfHandFromDeck(player);
         battleGround.applyCellEffects(this, opponent);
-        playersDeck[getPlayerIndex(opponent)].getHero().changeSpecialPowerCountdown(-1);
+        if (playersDeck[getPlayerIndex(opponent)].getHero().getSpecialPowerCountdown() > 0)
+            playersDeck[getPlayerIndex(opponent)].getHero().changeSpecialPowerCountdown(-1);
         endGame();
         turn++;
         resetIsAttackedThisTurn();
@@ -492,7 +495,7 @@ public abstract class Battle {
         for (int i = 0; i < BattleGround.getRows(); i++) {
             for (int j = 0; j < BattleGround.getColumns(); j++) {
                 Asset asset = battleGround.getGround().get(i).get(j);
-                if (asset instanceof  Minion && asset.getOwner() == player)
+                if (asset instanceof  Minion && ((Minion) asset).getActivateTimeOfSpecialPower() == PASSIVE && asset.getOwner() == player)
                     applyMinionSpecialPower((Minion) asset, null, PASSIVE);
             }
         }
@@ -617,7 +620,7 @@ public abstract class Battle {
         if (player == players[1])
             playerIndex = 1;
         try {
-            candidateItem = searcjItemInPlayersDeck(playerIndex, collectibleItemID);
+            candidateItem = searchItemInPlayersDeck(playerIndex, collectibleItemID);
         } catch (AssetNotFoundException e) {
             throw e;
         }
@@ -635,7 +638,7 @@ public abstract class Battle {
         }
     }
 
-    public void useItem(Account player, Warrior enemyWarrior, Item selectedItem) {
+    public void useItem(Account player, Warrior playerWarrior, Warrior enemyWarrior, Item selectedItem) {
         if (selectedItem == null)
             return;
         int playerIndex = getPlayerIndex(player);
@@ -670,9 +673,9 @@ public abstract class Battle {
             case 1008:
                 buffer.invulnerableMixtureAction(player);
                 break;
-            case 1009:
-                buffer.deathCurseAction(player);
-                break;
+//TODO hard to implement           case 1009:
+//                buffer.deathCurseAction(playerWarrior);
+//                break;
             case 1010:
                 buffer.randomDamageAction(player);
                 break;
@@ -689,16 +692,16 @@ public abstract class Battle {
                 buffer.assassinationDaggerAction(enemy);
                 break;
             case 1015:
-                buffer.poisonousDaggerAction(collector, enemy);
+                buffer.poisonousDaggerAction(enemy);
                 break;
             case 1016:
-                buffer.shockHammerAction(enemyWarrior);
+                buffer.shockHammerAction(playerWarrior, enemyWarrior);
                 break;
             case 1017:
-                buffer.soulEaterAction(enemy, collector);
+                buffer.soulEaterAction(player);
                 break;
             case 1018:
-                buffer.baptismAction((Minion) collector);
+                buffer.baptismAction((Minion) playerWarrior);
                 break;
             case 1019:
                 buffer.chineseSwordAction(collector);
@@ -893,7 +896,7 @@ public abstract class Battle {
         return true;
     }
 
-    public Item searcjItemInPlayersDeck(int playerIndex, int collectibleItemID) {
+    public Item searchItemInPlayersDeck(int playerIndex, int collectibleItemID) {
         for (Item item : playersDeck[playerIndex].getItems())
             if (collectibleItemID == item.getID())
                 return item;
@@ -949,9 +952,11 @@ public abstract class Battle {
     }
 
     public static Battle soloCustomKillHeroModeConstructor(String heroName) {
-        Hero customHero = Hero.searchHeroForCustomGame(heroName);
         AI ai = new AI("AI", "1234");
         Deck AIDeck = new Deck(ai, "defaultDeck");
+        Hero customHero = Hero.searchHeroForCustomGame(heroName);
+        customHero.setOwner(ai);
+        AIDeck.setHero(customHero);
         Battle.Mode battleMode = Battle.Mode.NORMAL;
         int reward = CUSTOM_REWARD;
         return new KillHeroBattle

@@ -339,7 +339,7 @@ public class BattleEnvironment {
         } catch (ThisCellFilledException e) {
             showMessage(5);
             return;
-        } catch (DontHaveEnoughManaException e) {
+        } catch (InsufficientManaException e) {
             showMessage(9);
             return;
         }

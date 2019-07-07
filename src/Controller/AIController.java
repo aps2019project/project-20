@@ -2,23 +2,16 @@ package Controller;
 
 import Exceptions.*;
 import Model.*;
-import Controller.BattleGroundController;
-import Presenter.CurrentAccount;
 import com.jfoenix.controls.JFXTextArea;
 import javafx.animation.TranslateTransition;
-import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
@@ -350,7 +343,7 @@ public class AIController implements Initializable {
             battle.insertCard(battle.getPlayers()[1], battle.getPlayersHand()[1][selectedCardCoordinates[1] - 1].getName(), j + 1, i + 1);
             showInsertAnimation(i, j);
             battle.selectWarrior(battle.getPlayers()[1], insertedCard.getID());
-        } catch (AssetNotFoundException | InvalidInsertInBattleGroundException | ThisCellFilledException | DontHaveEnoughManaException e) {
+        } catch (AssetNotFoundException | InvalidInsertInBattleGroundException | ThisCellFilledException | InsufficientManaException e) {
             handleError();
         }
     }

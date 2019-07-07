@@ -640,9 +640,9 @@ public class Buffer {
         }
     }
 
-    public void deathCurseAction(Account player) {
-        Account opponent = battle.getOpponent(player);
-        ArrayList<Warrior> enemyWarriors = getWarriorsOfPlayer(battleGround, opponent);
+    public void deathCurseAction(Warrior deadWarrior) {
+        Account player = deadWarrior.getOwner();
+        ArrayList<Warrior> enemyWarriors = getWarriorsOfPlayer(battleGround, player);
         ArrayList<Minion> minions = new ArrayList<>();
         for (Warrior warrior : enemyWarriors) {
             if (warrior instanceof Minion)
@@ -650,7 +650,7 @@ public class Buffer {
         }
         if (minions.size() > 0) {
             int randomMinionIndex = randomNumberGenerator(minions.size());
-            //TODO
+            //TODO hard to implement
         }
     }
 
@@ -689,7 +689,7 @@ public class Buffer {
         battle.getPlayersDeck()[opponentIndex].getHero().changeHP(-1);
     }
 
-    public void poisonousDaggerAction(Warrior collector, Account enemy) {
+    public void poisonousDaggerAction(Account enemy) {
         ArrayList<Warrior> enemyWarriors = getWarriorsOfPlayer(battleGround, enemy);
         if (enemyWarriors.size() > 0) {
             int randomWarriorIndex = randomNumberGenerator(enemyWarriors.size());
@@ -697,16 +697,17 @@ public class Buffer {
         }
     }
 
-    public void shockHammerAction(Warrior attackedEnemyWarrior) {
-        attackedEnemyWarrior.getBufferEffected().add(new BufferOfSpells(1, DISARM_BUFF));
+    public void shockHammerAction(Warrior playerAttacker, Warrior attackedEnemyWarrior) {
+        if (playerAttacker instanceof Hero)
+            attackedEnemyWarrior.getBufferEffected().add(new BufferOfSpells(1, DISARM_BUFF));
     }
 
-    public void soulEaterAction(Account enemy, Warrior targetOwnWarrior) {
-        if (targetOwnWarrior.getOwner() == enemy) {
-            targetOwnWarrior.getBufferEffected().add(new BufferOfSpells(POWER_BUFF_ATTACK, 1, false));
-            return;
+    public void soulEaterAction(Account player) {
+        ArrayList<Warrior> playerWarriors = getWarriorsOfPlayer(battleGround, player);
+        if (playerWarriors.size() > 0) {
+            int randomWarriorIndex = randomNumberGenerator(playerWarriors.size());
+            playerWarriors.get(randomWarriorIndex).getBufferEffected().add(new BufferOfSpells(POWER_BUFF_ATTACK, 1, false));
         }
-        throw new TargetSelectedException_Spell();
     }
 
     public void baptismAction(Minion spawnedMinion) {
