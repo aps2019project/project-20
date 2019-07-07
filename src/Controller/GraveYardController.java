@@ -1,17 +1,18 @@
 package Controller;
 
 import Model.*;
-import Presenter.ScreenManager;
 import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
+import java.io.IOException;
+import java.net.URL;
+import Presenter.ScreenManager;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import java.io.IOException;
-import java.net.URL;
 import java.util.ResourceBundle;
 
 public class GraveYardController implements Initializable, ScreenManager {
@@ -22,6 +23,8 @@ public class GraveYardController implements Initializable, ScreenManager {
     private Pane[][] opponentDeadCardsPanes = new Pane[10][2];
     public ImageView exitButton;
     private Battle battle;
+
+    public GraveYardController(){}
 
     public GraveYardController(Battle battle) {
         this.battle = battle;
@@ -46,12 +49,16 @@ public class GraveYardController implements Initializable, ScreenManager {
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 2; j++) {
                 ImageView deadCardImageView = null;
-                Asset deadAsset = battle.getPlayersGraveYard()[playerIndex].getDeadCards().get(i * 2 + j);
-                if (deadAsset instanceof Warrior)
-                    deadCardImageView = new ImageView(new Image(((Warrior) deadAsset).getDeathImageAddress()));
-                else if (deadAsset instanceof Spell)
-                    deadCardImageView = new ImageView(new Image(((Spell) deadAsset).getActionBarImageAddress()));
-                panes[i][j] = new Pane(deadCardImageView);
+                Asset deadAsset = null;
+                panes[i][j] = new Pane();
+                if (battle.getPlayersGraveYard()[playerIndex].getDeadCards().size() > i * 2 + j) {
+                    deadAsset = battle.getPlayersGraveYard()[playerIndex].getDeadCards().get(i * 2 + j);
+                    if (deadAsset instanceof Warrior)
+                        deadCardImageView = new ImageView(new Image(((Warrior) deadAsset).getDeathImageAddress()));
+                    else if (deadAsset instanceof Spell)
+                        deadCardImageView = new ImageView(new Image(((Spell) deadAsset).getActionBarImageAddress()));
+                    panes[i][j].getChildren().add(deadCardImageView);
+                }
                 gridPane.add(panes[i][j], j, i);
             }
         }
@@ -75,7 +82,7 @@ public class GraveYardController implements Initializable, ScreenManager {
             public void handle(MouseEvent event) {
                 exitButton.setImage(new Image("file:images/exit_button_pressed.png"));
                 try {
-                    loadPageOnStackPane(graveYardAnchorPane, "BattleGround.fxml", "ltr");
+                    loadPageOnStackPane(graveYardAnchorPane, "../View/FXML/BattleGround.fxml", "rtl");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

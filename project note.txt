@@ -35,3 +35,7 @@ done: swap x, y
 reflection
 flag battle
 done: giv and piran and ...
+
+
+------unempty cell condition must not be checked during insertion of spells
+spawned warrior must be passed to useItem.

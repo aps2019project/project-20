@@ -17,7 +17,6 @@ import java.util.ResourceBundle;
 
 public class SignInController implements Initializable, AccountManageable, ScreenManager, DialogThrowable, TextFieldValidator {
 
-
     public JFXTextField LoginUserName;
     public JFXPasswordField loginPassword;
     public JFXButton signIn;

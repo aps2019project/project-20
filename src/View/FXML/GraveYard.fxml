@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane fx:controller="Controller.GraveYardController" fx:id="graveYardAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="705.0" prefWidth="1050.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="graveYardAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="705.0" prefWidth="1050.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
     <children>
       <Pane fx:id="firstPlayerGraveYard" layoutX="86.0" layoutY="54.0" prefHeight="555.0" prefWidth="301.0">
          <children>
