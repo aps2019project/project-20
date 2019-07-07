@@ -40,7 +40,7 @@ public class BeforeBattleMenu3Controller implements Initializable, ScreenManager
     }
 
     public void setBackButtonOnMouseReleased() throws IOException {
-        loadPageOnStackPane(back.getParent(),"FXML/BeforeBattleMenu2.fxml","ltr");
+        loadPageOnStackPane(back.getParent(),"../View/FXML/BeforeBattleMenu2.fxml","ltr");
     }
 
 

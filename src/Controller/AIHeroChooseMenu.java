@@ -45,7 +45,7 @@ public class AIHeroChooseMenu implements Initializable , ScreenManager , Animati
     }
 
     public void setBackButtonOnMouseReleased() throws IOException {
-        loadPageOnStackPane(back.getParent(), "FXML/BeforeBattleMenu4.fxml", "ltr");
+        loadPageOnStackPane(back.getParent(), "../View/FXML/BeforeBattleMenu4.fxml", "ltr");
     }
 
 

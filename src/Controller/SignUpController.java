@@ -1,10 +1,10 @@
 package Controller;
 
-import Exceptions.RepeatedUserNameException;
 import Presenter.AccountManageable;
 import Presenter.DialogThrowable;
 import Presenter.ScreenManager;
 import Presenter.TextFieldValidator;
+import Client.Client;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
@@ -25,17 +25,12 @@ public class SignUpController implements Initializable, AccountManageable, Scree
             showOneButtonErrorDialog("SignUp Error","some of fields are empty.");
             return;
         }
-        try {
-            createAccountPresenter(SignUpUserName.getText(), SignUpPassword.getText());
-        }catch (RepeatedUserNameException e){
-            showOneButtonErrorDialog("signUp Error","This Account Has Already Been Made!!!");
-            return;
-        }
-        loadPageInNewStage(signUp.getScene(),"FXML/MainMenu.fxml",true);
+        Client.connectToServer();
+        Client.getWriter().println(("signUp " +SignUpUserName.getText()+" "+SignUpPassword.getText()));
     }
 
     public void setBack() throws IOException {
-        loadPageOnStackPane(back.getParent(),"FXML/FirstPage.fxml","rtl");
+        loadPageOnStackPane(back.getParent(),"../View/FXML/FirstPage.fxml","rtl");
     }
 
     @Override

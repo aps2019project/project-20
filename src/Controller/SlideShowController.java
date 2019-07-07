@@ -1,6 +1,6 @@
 package Controller;
 
-import View.Main;
+import Client.Client;
 
 import javafx.animation.FadeTransition;
 import javafx.scene.image.Image;
@@ -10,7 +10,7 @@ import javafx.util.Duration;
 import java.util.Random;
 
 public class SlideShowController extends Thread {
-    private ImageView imageView = Main.getStackPaneBackGroundImage();
+    private ImageView imageView = Client.getStackPaneBackGroundImage();
 
     @Override
     public void run() {
@@ -18,8 +18,8 @@ public class SlideShowController extends Thread {
         fadeInTransition.setDuration(new Duration(1000));
         FadeTransition fadeOutTransition = new FadeTransition();
         fadeOutTransition.setDuration(new Duration(1000));
-        fadeInTransition.setNode(Main.getStackPaneBackGroundImage());
-        fadeOutTransition.setNode(Main.getStackPaneBackGroundImage());
+        fadeInTransition.setNode(Client.getStackPaneBackGroundImage());
+        fadeOutTransition.setNode(Client.getStackPaneBackGroundImage());
         fadeInTransition.setFromValue(1);
         fadeInTransition.setToValue(0);
         fadeOutTransition.setFromValue(0);

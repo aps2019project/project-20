@@ -24,8 +24,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
-//import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
-//import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -69,7 +67,7 @@ public class MatchHistoryController implements Initializable, ScreenManager, Acc
     }
 
     public void setBackButtonOnMouseReleased() throws IOException {
-        loadPageOnStackPane(back.getParent(),"FXML/MainMenu.fxml","ltr");
+        loadPageOnStackPane(back.getParent(),"../View/FXML/MainMenu.fxml","ltr");
     }
 
     public void setDeleteButtonReleased() {

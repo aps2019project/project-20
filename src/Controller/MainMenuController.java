@@ -6,7 +6,7 @@ import Presenter.AccountManageable;
 import Presenter.DialogThrowable;
 import Presenter.ImageComparable;
 import Presenter.ScreenManager;
-import View.Main;
+import Client.Client;
 import com.jfoenix.controls.*;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
@@ -41,7 +41,7 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
                 return;
             }
         }
-        loadPageOnStackPane(anchorPane, "FXML/BeforeBattleMenu1.fxml", "rtl");
+        loadPageOnStackPane(anchorPane, "../View/FXML/BeforeBattleMenu1.fxml", "rtl");
     }
 
     public void setBattleButtonPressed() {
@@ -61,7 +61,7 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
     }
 
     public void setCollectionButtonReleased() throws IOException {
-        loadPageOnStackPane(anchorPane, "FXML/Collection.fxml", "rtl");
+        loadPageOnStackPane(anchorPane, "../View/FXML/Collection.fxml", "rtl");
     }
 
     public void setCollectionButtonPressed() {
@@ -81,7 +81,7 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
     }
 
     public void setShopButtonReleased() throws IOException {
-        loadPageOnStackPane(anchorPane, "FXML/Shop.fxml", "rtl");
+        loadPageOnStackPane(anchorPane, "../View/FXML/Shop.fxml", "rtl");
     }
 
     public void setShopButtonPressed() {
@@ -101,7 +101,7 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
     }
 
     public void setLeaderBoardButtonReleased() throws IOException {
-        loadPageOnStackPane(anchorPane, "FXML/LeaderBoard.fxml", "rtl");
+        loadPageOnStackPane(anchorPane, "../View/FXML/LeaderBoard.fxml", "rtl");
     }
 
     public void setLeaderBoardButtonPressed() {
@@ -121,7 +121,7 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
     }
 
     public void setMatchHistoryButtonReleased() throws IOException {
-        loadPageOnStackPane(anchorPane, "FXML/MatchHistory.fxml", "rtl");
+        loadPageOnStackPane(anchorPane, "../View/FXML/MatchHistory.fxml", "rtl");
     }
 
     public void setMatchHistoryButtonPressed() {
@@ -251,16 +251,18 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
         dialogLayout.setHeading(header);
         dialogLayout.setBody(footer);
         dialogLayout.setStyle("-fx-background-color: #fdfbff; -fx-text-fill: #ffffff");
-        JFXDialog dialog = new JFXDialog(Main.getStackPane(), dialogLayout, JFXDialog.DialogTransition.CENTER, true);
+        JFXDialog dialog = new JFXDialog(Client.getStackPane(), dialogLayout, JFXDialog.DialogTransition.CENTER, true);
         dialog.setStyle("-fx-background-image: url('file:images/information.png')");
         JFXButton yesButton = new JFXButton("YES");
         yesButton.setButtonType(JFXButton.ButtonType.RAISED);
         yesButton.setStyle("-fx-background-color: #37b400; -fx-text-fill: #ffffff; -fx-font-family: 'Microsoft Tai Le'; -fx-font-weight:bold;");
         yesButton.setOnAction(event -> {
             if (nextPageAddress.equals("")) {
+                Client.getWriter().println(("logOut"));
                 System.exit(0);
             } else{
                 try {
+                    Client.getWriter().println(("logOut"));
                     loadPageInNewStage(prevScene, nextPageAddress, false);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -270,7 +272,7 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
         noButton.setButtonType(JFXButton.ButtonType.RAISED);
         noButton.setStyle("-fx-background-color: #ff0000; -fx-text-fill: #ffffff; -fx-font-family: 'Microsoft Tai Le'; -fx-font-weight:bold;");
         noButton.setOnAction(event -> dialog.close());
-        dialog.setOnDialogClosed(event -> Main.getStackPane().getChildren().remove(dialog));
+        dialog.setOnDialogClosed(event -> Client.getStackPane().getChildren().remove(dialog));
         dialogLayout.setActions(yesButton, noButton);
         dialog.show();
     }

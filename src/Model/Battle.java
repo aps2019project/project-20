@@ -952,11 +952,11 @@ public abstract class Battle {
     }
 
     public static Battle soloCustomKillHeroModeConstructor(String heroName) {
+        Hero customHero = Hero.searchHeroForCustomGame(heroName);
         AI ai = new AI("AI", "1234");
         Deck AIDeck = new Deck(ai, "defaultDeck");
-        Hero customHero = Hero.searchHeroForCustomGame(heroName);
-        customHero.setOwner(ai);
         AIDeck.setHero(customHero);
+        customHero.setOwner(ai);
         Battle.Mode battleMode = Battle.Mode.NORMAL;
         int reward = CUSTOM_REWARD;
         return new KillHeroBattle

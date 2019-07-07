@@ -38,7 +38,7 @@ public class BeforeBattleMenu2Controller implements Initializable, ScreenManager
     }
 
     public void setBackButtonOnMouseReleased() throws IOException {
-        loadPageOnStackPane(back.getParent(),"FXML/BeforeBattleMenu1.fxml","ltr");
+        loadPageOnStackPane(back.getParent(),"../View/FXML/BeforeBattleMenu1.fxml","ltr");
     }
 
     public void setCustomButtonOnMouseEntered(){
@@ -52,7 +52,7 @@ public class BeforeBattleMenu2Controller implements Initializable, ScreenManager
 
     public void setCustomButtonOnMouseReleased() throws IOException {
         SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
-        loadPageOnStackPane(back.getParent(),"FXML/BeforeBattleMenu4.fxml","ltr");
+        loadPageOnStackPane(back.getParent(),"../View/FXML/BeforeBattleMenu4.fxml","ltr");
     }
 
     public void setStoryButtonOnMouseEntered(){
@@ -66,7 +66,7 @@ public class BeforeBattleMenu2Controller implements Initializable, ScreenManager
 
     public void setStoryButtonOnMouseReleased() throws IOException {
         SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
-        loadPageOnStackPane(back.getParent(),"FXML/BeforeBattleMenu3.fxml","rtl");
+        loadPageOnStackPane(back.getParent(),"../View/FXML/BeforeBattleMenu3.fxml","rtl");
     }
 
     @Override
