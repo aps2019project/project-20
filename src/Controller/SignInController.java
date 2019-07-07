@@ -4,7 +4,7 @@ import Presenter.AccountManageable;
 import Presenter.DialogThrowable;
 import Presenter.ScreenManager;
 import Presenter.TextFieldValidator;
-import View.Client;
+import Client.Client;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
@@ -34,7 +34,7 @@ public class SignInController implements Initializable, AccountManageable, Scree
     }
 
     public void setBack() throws IOException {
-        loadPageOnStackPane(back.getParent(), "FXML/FirstPage.fxml", "ltr");
+        loadPageOnStackPane(back.getParent(), "../View/FXML/FirstPage.fxml", "ltr");
     }
 
     @Override

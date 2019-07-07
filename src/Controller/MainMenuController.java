@@ -6,7 +6,7 @@ import Presenter.AccountManageable;
 import Presenter.DialogThrowable;
 import Presenter.ImageComparable;
 import Presenter.ScreenManager;
-import View.Client;
+import Client.Client;
 import com.jfoenix.controls.*;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
@@ -41,7 +41,7 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
                 return;
             }
         }
-        loadPageOnStackPane(anchorPane, "FXML/BeforeBattleMenu1.fxml", "rtl");
+        loadPageOnStackPane(anchorPane, "../View/FXML/BeforeBattleMenu1.fxml", "rtl");
     }
 
     public void setBattleButtonPressed() {
@@ -61,7 +61,7 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
     }
 
     public void setCollectionButtonReleased() throws IOException {
-        loadPageOnStackPane(anchorPane, "FXML/Collection.fxml", "rtl");
+        loadPageOnStackPane(anchorPane, "../View/FXML/Collection.fxml", "rtl");
     }
 
     public void setCollectionButtonPressed() {
@@ -81,7 +81,7 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
     }
 
     public void setShopButtonReleased() throws IOException {
-        loadPageOnStackPane(anchorPane, "FXML/Shop.fxml", "rtl");
+        loadPageOnStackPane(anchorPane, "../View/FXML/Shop.fxml", "rtl");
     }
 
     public void setShopButtonPressed() {
@@ -101,7 +101,7 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
     }
 
     public void setLeaderBoardButtonReleased() throws IOException {
-        loadPageOnStackPane(anchorPane, "FXML/LeaderBoard.fxml", "rtl");
+        loadPageOnStackPane(anchorPane, "../View/FXML/LeaderBoard.fxml", "rtl");
     }
 
     public void setLeaderBoardButtonPressed() {
@@ -121,7 +121,7 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
     }
 
     public void setMatchHistoryButtonReleased() throws IOException {
-        loadPageOnStackPane(anchorPane, "FXML/MatchHistory.fxml", "rtl");
+        loadPageOnStackPane(anchorPane, "../View/FXML/MatchHistory.fxml", "rtl");
     }
 
     public void setMatchHistoryButtonPressed() {

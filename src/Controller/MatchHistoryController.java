@@ -67,7 +67,7 @@ public class MatchHistoryController implements Initializable, ScreenManager, Acc
     }
 
     public void setBackButtonOnMouseReleased() throws IOException {
-        loadPageOnStackPane(back.getParent(),"FXML/MainMenu.fxml","ltr");
+        loadPageOnStackPane(back.getParent(),"../View/FXML/MainMenu.fxml","ltr");
     }
 
     public void setDeleteButtonReleased() {

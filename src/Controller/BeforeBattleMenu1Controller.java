@@ -37,7 +37,7 @@ public class BeforeBattleMenu1Controller implements Initializable, ScreenManager
     }
 
     public void setBackButtonOnMouseReleased() throws IOException {
-        loadPageOnStackPane(back.getParent(),"FXML/MainMenu.fxml","ltr");
+        loadPageOnStackPane(back.getParent(),"../View/FXML/MainMenu.fxml","ltr");
     }
 
     public void setSoloButtonOnMouseEntered(){
@@ -51,7 +51,7 @@ public class BeforeBattleMenu1Controller implements Initializable, ScreenManager
 
     public void setSoloButtonOnMouseReleased() throws IOException {
         SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
-        loadPageOnStackPane(back.getParent(),"FXML/BeforeBattleMenu2.fxml","rtl");
+        loadPageOnStackPane(back.getParent(),"../View/FXML/BeforeBattleMenu2.fxml","rtl");
     }
 
     public void setMultiButtonOnMouseEntered(){

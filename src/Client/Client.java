@@ -1,6 +1,5 @@
-package View;
+package Client;
 
-import Client.ClientListener;
 import Model.*;
 import Presenter.ScreenManager;
 import javafx.application.Application;
@@ -43,7 +42,7 @@ public class Client extends Application implements ScreenManager {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        loadPageInNewStage(null, "FXML/FirstPage.fxml", false);
+        loadPageInNewStage(null, "../View/FXML/FirstPage.fxml", false);
     }
 
     public static void connectToServer() throws IOException {

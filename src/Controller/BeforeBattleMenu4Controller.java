@@ -5,7 +5,7 @@ import Model.Battle;
 import Presenter.Animationable;
 import Presenter.ScreenManager;
 import Presenter.TextFieldValidator;
-import View.Client;
+import Client.Client;
 import com.jfoenix.controls.*;
 import javafx.fxml.Initializable;
 import javafx.scene.image.Image;
@@ -43,7 +43,7 @@ public class BeforeBattleMenu4Controller implements Initializable, ScreenManager
     }
 
     public void setBackButtonOnMouseReleased() throws IOException {
-        loadPageOnStackPane(back.getParent(),"FXML/BeforeBattleMenu2.fxml","ltr");
+        loadPageOnStackPane(back.getParent(),"../View/FXML/BeforeBattleMenu2.fxml","ltr");
     }
 
     public void setMode1ButtonOnMouseEntered(){
@@ -57,7 +57,7 @@ public class BeforeBattleMenu4Controller implements Initializable, ScreenManager
 
     public void setMode1ButtonOnMouseReleased() throws IOException {
         SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
-        loadPageOnStackPane(back.getParent(),"FXML/AIHeroChooseMenu.fxml","rtl");
+        loadPageOnStackPane(back.getParent(),"../View/FXML/AIHeroChooseMenu.fxml","rtl");
     }
 
     public void setMode2ButtonOnMouseEntered(){

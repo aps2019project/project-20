@@ -143,7 +143,7 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
         enterGraveYard.setOnMousePressed(event -> {
             enterGraveYard.setImage(new Image("file:images/button_graveYard_pressed.png"));
             try {
-                loadPageOnStackPane(battleGroundAnchorPane, "GraveYard.fxml", "ltr");
+                loadPageOnStackPane(battleGroundAnchorPane, "View/FXML/GraveYard.fxml", "ltr");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -859,7 +859,7 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
         public void setExitButtonReleased () {
             confirmationDialog("Exit Confirmation", "Are You Sure To Exit From Battle ?").setOnAction(event -> {
                 try {
-                    loadPageOnStackPane(battleGroundAnchorPane, "FXML/MainMenu.fxml", "rtl");
+                    loadPageOnStackPane(battleGroundAnchorPane, "../View/FXML/MainMenu.fxml", "rtl");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

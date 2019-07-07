@@ -1,6 +1,6 @@
 package Controller;
 
-import View.Client;
+import Client.Client;
 
 import javafx.animation.FadeTransition;
 import javafx.scene.image.Image;
