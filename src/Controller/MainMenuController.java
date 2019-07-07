@@ -1,5 +1,6 @@
 package Controller;
 
+import Chat.Chat;
 import Datas.SoundDatas;
 import Exceptions.InvalidSelectMainDeckException;
 import Presenter.AccountManageable;
@@ -8,13 +9,16 @@ import Presenter.ImageComparable;
 import Presenter.ScreenManager;
 import Client.Client;
 import com.jfoenix.controls.*;
+import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -28,6 +32,7 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
     public ImageView leaderBoard;
     public JFXTextArea description;
     public AnchorPane anchorPane;
+    public ImageView chatButton;
 
     public void setBattleButtonReleased() throws IOException {
         if (getCurrentAccount().getMainDeck()==null){
@@ -237,8 +242,12 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
                 main.setImage(new Image("file:images/ranked_chevron_full.png"));
             }
         });
+        chatButton.setOnMouseClicked(event -> {
+                    Chat chat = new Chat();
+                    chat.start(new Stage());
+        });
 
-        anchorPane.getChildren().add(nodesList);
+                anchorPane.getChildren().add(nodesList);
 
     }
 

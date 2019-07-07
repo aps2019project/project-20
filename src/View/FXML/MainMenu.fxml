@@ -20,13 +20,13 @@
                     <ImageView fx:id="battle" accessibleRole="PARENT" fitHeight="125.0" fitWidth="367.0" onMouseEntered="#setBattleMouseOver" onMouseExited="#setBattleMouseUnOver" onMousePressed="#setBattleButtonPressed" onMouseReleased="#setBattleButtonReleased" BorderPane.alignment="CENTER_LEFT">
                         <Image url="file:images/unhover_battle_button.png" />
                     </ImageView>
-                    <ImageView id="mainMenuButton" fx:id="collection" accessibleRole="PARENT" fitHeight="125.0" fitWidth="367.0" onMouseEntered="#setCollectionMouseOver" onMouseExited="#setCollectionMouseUnOver" onMouseReleased="#setCollectionButtonReleased"  onMousePressed="#setCollectionButtonPressed" BorderPane.alignment="CENTER_LEFT">
+                    <ImageView id="mainMenuButton" fx:id="collection" accessibleRole="PARENT" fitHeight="125.0" fitWidth="367.0" onMouseEntered="#setCollectionMouseOver" onMouseExited="#setCollectionMouseUnOver" onMousePressed="#setCollectionButtonPressed" onMouseReleased="#setCollectionButtonReleased" BorderPane.alignment="CENTER_LEFT">
                         <Image url="file:images/unhover_collection_button.png" />
                     </ImageView>
-                    <ImageView id="mainMenuButton" fx:id="shop" accessibleRole="PARENT" fitHeight="125.0" fitWidth="367.0" onMouseEntered="#setShopMouseOver" onMouseExited="#setShopMouseUnOver" onMouseReleased="#setShopButtonReleased" onMousePressed="#setShopButtonPressed" BorderPane.alignment="CENTER_LEFT">
+                    <ImageView id="mainMenuButton" fx:id="shop" accessibleRole="PARENT" fitHeight="125.0" fitWidth="367.0" onMouseEntered="#setShopMouseOver" onMouseExited="#setShopMouseUnOver" onMousePressed="#setShopButtonPressed" onMouseReleased="#setShopButtonReleased" BorderPane.alignment="CENTER_LEFT">
                         <Image url="file:images/unhover_shop_button.png" />
                     </ImageView>
-                    <ImageView id="mainMenuButton" fx:id="matchHistory" accessibleRole="PARENT" fitHeight="125.0" fitWidth="367.0" onMouseEntered="#setMatchHistoryMouseOver" onMouseExited="#setMatchHistoryMouseUnOver" onMouseReleased="#setMatchHistoryButtonReleased" onMousePressed="#setMatchHistoryButtonPressed" BorderPane.alignment="CENTER_LEFT">
+                    <ImageView id="mainMenuButton" fx:id="matchHistory" accessibleRole="PARENT" fitHeight="125.0" fitWidth="367.0" onMouseEntered="#setMatchHistoryMouseOver" onMouseExited="#setMatchHistoryMouseUnOver" onMousePressed="#setMatchHistoryButtonPressed" onMouseReleased="#setMatchHistoryButtonReleased" BorderPane.alignment="CENTER_LEFT">
                         <Image url="file:images/unhover_matchHistory_button.png" />
                     </ImageView>
                     <ImageView id="mainMenuButton" fx:id="leaderBoard" accessibleRole="PARENT" fitHeight="125.0" fitWidth="367.0" onMouseEntered="#setLeaderBoardMouseOver" onMouseExited="#setLeaderMouseUnOver" onMousePressed="#setLeaderBoardButtonPressed" onMouseReleased="#setLeaderBoardButtonReleased" BorderPane.alignment="CENTER_LEFT">
@@ -40,5 +40,10 @@
                 </image>
             </ImageView>
          <JFXTextArea id="mainMenuTextFlow" fx:id="description" editable="false" layoutX="111.0" layoutY="849.0" prefHeight="162.0" prefWidth="312.0" stylesheets="@../CSS/TextFlows.css" />
+      <ImageView fx:id="chatButton" fitHeight="150.0" fitWidth="200.0" layoutX="611.0" layoutY="260.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="file:images/chat_button.png" />
+         </image>
+      </ImageView>
     </children>
 </AnchorPane>

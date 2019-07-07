@@ -56,7 +56,6 @@ public class Chat extends Application {
         chatView.appendTextToConversation(message);
     }
 
-
     public void startChatClient() throws IOException {
         getChatClient().start();
     }
