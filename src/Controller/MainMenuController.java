@@ -1,5 +1,6 @@
 package Controller;
 
+import Chat.Chat;
 import Datas.SoundDatas;
 import Exceptions.InvalidSelectMainDeckException;
 import Presenter.AccountManageable;
@@ -8,13 +9,16 @@ import Presenter.ImageComparable;
 import Presenter.ScreenManager;
 import Client.Client;
 import com.jfoenix.controls.*;
+import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -28,6 +32,7 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
     public ImageView leaderBoard;
     public JFXTextArea description;
     public AnchorPane anchorPane;
+    public ImageView chatButton;
 
     public void setBattleButtonReleased() throws IOException {
         if (getCurrentAccount().getMainDeck()==null){
@@ -147,16 +152,19 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
         ImageView logout = new ImageView(new Image("file:images/logoff.png"));
         ImageView save = new ImageView(new Image("file:images/save.png"));
         ImageView exit = new ImageView(new Image("file:images/exit.png"));
+
         Pane pane1 = new Pane();
         Pane pane2 = new Pane();
         Pane pane3 = new Pane();
         Pane pane4 = new Pane();
         Pane pane5 = new Pane();
+
         pane1.getChildren().add(main);
         pane2.getChildren().add(myProfile);
         pane3.getChildren().add(logout);
         pane4.getChildren().add(save);
         pane5.getChildren().add(exit);
+
 
         JFXNodesList nodesList = new JFXNodesList();
         nodesList.setSpacing(20);
@@ -238,7 +246,16 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
             }
         });
 
-        anchorPane.getChildren().add(nodesList);
+
+
+
+
+        chatButton.setOnMouseClicked(event -> {
+                    Chat chat = new Chat();
+                    chat.start(new Stage());
+        });
+
+                anchorPane.getChildren().add(nodesList);
 
     }
 
