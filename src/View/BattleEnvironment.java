@@ -190,7 +190,7 @@ public class BattleEnvironment {
             System.out.printf("Your Hero HP : %s - %s : Opponent Hero HP", battleEnvironmentPresenter.getBattle().getPlayersDeck()[0].getHero().getHP(), battleEnvironmentPresenter.getBattle().getPlayersDeck()[1].getHero().getHP());
         }
         if (battleEnvironmentPresenter.getBattle().getMode() == Battle.Mode.FLAG_KEEPING) {
-            System.out.printf("Flag Position : (%d,%d)\n", ((KeepFlagBattle) battleEnvironmentPresenter.getBattle()).getSingleFlag().getXInGround()+1, ((KeepFlagBattle) battleEnvironmentPresenter.getBattle()).getSingleFlag().getYInGround()+1);
+            System.out.printf("Flag Position : (%d,%d)\n", ((KeepFlagBattle) battleEnvironmentPresenter.getBattle()).getSingleFlag().getXInGround() + 1, ((KeepFlagBattle) battleEnvironmentPresenter.getBattle()).getSingleFlag().getYInGround() + 1);
             if (((KeepFlagBattle) battleEnvironmentPresenter.getBattle()).getSingleFlag().getOwner() != null) {
                 System.out.printf("Flag Owner : %s", ((KeepFlagBattle) battleEnvironmentPresenter.getBattle()).getSingleFlag().getOwner().getName());
             }
@@ -339,7 +339,7 @@ public class BattleEnvironment {
         } catch (ThisCellFilledException e) {
             showMessage(5);
             return;
-        } catch (DontHaveEnoughManaException e) {
+        } catch (InsufficientManaException e) {
             showMessage(9);
             return;
         }
@@ -368,7 +368,7 @@ public class BattleEnvironment {
     public int selectItem(Scanner scanner) {
         System.out.println("Enter Item ID: ");
         try {
-        int itemID = scanner.nextInt();
+            int itemID = scanner.nextInt();
             battleEnvironmentPresenter.selectItemPresenter(itemID);
         } catch (InputMismatchException e) {
             showMessage(12);
