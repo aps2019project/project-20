@@ -152,16 +152,19 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
         ImageView logout = new ImageView(new Image("file:images/logoff.png"));
         ImageView save = new ImageView(new Image("file:images/save.png"));
         ImageView exit = new ImageView(new Image("file:images/exit.png"));
+
         Pane pane1 = new Pane();
         Pane pane2 = new Pane();
         Pane pane3 = new Pane();
         Pane pane4 = new Pane();
         Pane pane5 = new Pane();
+
         pane1.getChildren().add(main);
         pane2.getChildren().add(myProfile);
         pane3.getChildren().add(logout);
         pane4.getChildren().add(save);
         pane5.getChildren().add(exit);
+
 
         JFXNodesList nodesList = new JFXNodesList();
         nodesList.setSpacing(20);
@@ -242,6 +245,11 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
                 main.setImage(new Image("file:images/ranked_chevron_full.png"));
             }
         });
+
+
+
+
+
         chatButton.setOnMouseClicked(event -> {
                     Chat chat = new Chat();
                     chat.start(new Stage());
