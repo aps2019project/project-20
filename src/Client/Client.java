@@ -52,7 +52,7 @@ public class Client extends Application implements ScreenManager {
         client = new Socket(Client.getPROXY(), Client.getServerPort());
         reader = new BufferedReader(new InputStreamReader(Client.getClient().getInputStream()));
         writer = new PrintWriter(Client.getClient().getOutputStream(), true);
-        battleGroundController = new ClientBattleGroundController(battle, clientIndex);
+//        battleGroundController = new ClientBattleGroundController(battle, clientIndex);
         messageListener = new ClientListener();
         messageListener.start();
     }

@@ -192,7 +192,7 @@ public class ShopController implements Initializable, ScreenManager, AccountMana
                 Label label = new Label(String.valueOf(assetContainers.get(i).getQuantity()));
                 label.setStyle("-fx-font-family:Microsoft Tai Le; -fx-font-size: 20.0; -fx-font-weight: bold; -fx-text-fill: #ffffff;");
                 ImageView imageView1 = new ImageView(new Image("file:images/unit_stats_instructional_bg@2x.png"));
-                imageView1.setFitWidth(50);imageView1.setFitHeight(30);imageView1.setLayoutX(100);imageView1.setLayoutY(285);
+                imageView1.setFitWidth(50);imageView1.setFitHeight(30);imageView1.setLayoutX(102);imageView1.setLayoutY(285);
                 Pane pane = new Pane();
                 pane.setPrefWidth(250);
                 pane.setPrefHeight(320);
