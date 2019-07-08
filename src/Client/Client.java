@@ -1,5 +1,7 @@
 package Client;
 
+import Controller.BattleGroundController;
+import Controller.ClientBattleGroundController;
 import Model.*;
 import Presenter.ScreenManager;
 import javafx.application.Application;
@@ -27,7 +29,9 @@ public class Client extends Application implements ScreenManager {
     private static Scene currentScene;
     private static ClientListener messageListener;
     private static Object rLock = new Object();
-
+    private static int clientIndex; //TODO must be set by server at the beginning of each match.
+    private static Battle battle; //TODO must be set by server at the beginning of each match.
+    private static ClientBattleGroundController battleGroundController;
 
     public static void main(String[] args) throws IOException {
 //        save default data
@@ -49,6 +53,7 @@ public class Client extends Application implements ScreenManager {
         client = new Socket(Client.getPROXY(), Client.getServerPort());
         reader = new BufferedReader(new InputStreamReader(Client.getClient().getInputStream()));
         writer = new PrintWriter(Client.getClient().getOutputStream(), true);
+        battleGroundController = new ClientBattleGroundController(battle, clientIndex);
         messageListener = new ClientListener();
         messageListener.start();
     }
@@ -150,9 +155,7 @@ public class Client extends Application implements ScreenManager {
         return rLock;
     }
 
-    public static void setrLock(Object rLock) {
-        Client.rLock = rLock;
+    public static ClientBattleGroundController getBattleGroundController() {
+        return battleGroundController;
     }
-
-
 }

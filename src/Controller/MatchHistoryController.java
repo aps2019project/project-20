@@ -236,7 +236,7 @@ public class MatchHistoryController implements Initializable, ScreenManager, Acc
         timeCol.setCellValueFactory(new PropertyValueFactory<>("time"));
         numberCol.setCellValueFactory(new PropertyValueFactory<>("number"));
         resultCol.setCellValueFactory(new PropertyValueFactory<>("result"));
-        opponentNameCol.setCellValueFactory(new PropertyValueFactory<>("opponentName"));
+        opponentNameCol.setCellValueFactory(new PropertyValueFactory<>("playerName1"));
 
         matchHistoryTable.setItems(myList);
         matchHistoryTable.getColumns().addAll(timeCol,numberCol,opponentNameCol,resultCol);

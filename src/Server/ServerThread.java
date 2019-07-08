@@ -3,11 +3,9 @@ package Server;
 import Exceptions.RepeatedUserNameException;
 import Exceptions.UserNotFoundException;
 import Exceptions.WrongPasswordException;
-import Model.Account;
-import Model.Battle;
-import Presenter.AccountManageable;
-import Presenter.CurrentAccount;
+import Model.*;
 import com.gilecode.yagson.YaGson;
+import com.jniwrapper.Int;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -68,11 +66,65 @@ public class ServerThread extends Thread {
                         this.finalize();
                         continue;
                     }
+
+                    //Battle Listeners
+                    if (data.matches("applyHeroSpecialPower;.+")) {
+                        Account player = new YaGson().fromJson(data.split(";")[1], Account.class);
+                        Asset targetAsset = new YaGson().fromJson(data.split(";")[2], Asset.class);
+                        int x = Integer.valueOf(data.split(";")[3]);
+                        int y = Integer.valueOf(data.split(";")[4]);
+                        battle.applyHeroSpecialPower(player, targetAsset, x, y);
+                        sendInstructionToPlayers("applyHeroSpecialPower;");
+                        String updatedBattle = new YaGson().toJson(battle, Battle.class);
+                        connectedThread.sendMessageToClient("opponentAction;applyHeroSpecialPower;" + updatedBattle);
+                    }
+                    if (data.matches("useItem;.+")) {
+                        Account player = new YaGson().fromJson(data.split(";")[1], Account.class);
+                        Item item = new YaGson().fromJson(data.split(";")[2], Item.class);
+                        battle.useItem(player, null, null, item);
+                        sendInstructionToPlayers("useItem;");
+                    }
+                    if (data.matches("insertCard;.+")) {
+                        Account player = new YaGson().fromJson(data.split(";")[1], Account.class);
+                        Card card = new YaGson().fromJson(data.split(";")[2], Card.class);
+                        int x = Integer.valueOf(data.split(";")[3]);
+                        int y = Integer.valueOf(data.split(";")[4]);
+                        battle.insertCard(player, card.getName(), x, y);
+                        sendInstructionToPlayers("insertCard;");
+                        String updatedBattle = new YaGson().toJson(battle, Battle.class);
+                        connectedThread.sendMessageToClient("opponentAction;insertCard;" + (y - 1) + ";" + (x - 1) + ";" + data.split(";")[2] + ";" + updatedBattle);
+                    }
+                    if (data.matches("cardMoveTo;.+")) {
+                        Account player = new YaGson().fromJson(data.split(";")[1], Account.class);
+                        Card warrior = new YaGson().fromJson(data.split(";")[2], Card.class);
+                        int x = Integer.valueOf(data.split(";")[3]);
+                        int y = Integer.valueOf(data.split(";")[4]);
+                        battle.cardMoveTo(player, (Warrior) warrior, x, y);
+                        sendInstructionToPlayers("cardMoveTo");
+                        String updatedBattle = new YaGson().toJson(battle, Battle.class);
+                        connectedThread.sendMessageToClient("opponentAction;cardMoveTo;" + (y - 1) + ";" + (x - 1) + ";" + updatedBattle);
+                    }
+                    if (data.matches("attack;.+")) {
+                        Account player = new YaGson().fromJson(data.split(";")[1], Account.class);
+                        Card attacker = new YaGson().fromJson(data.split(";")[2], Card.class);
+                        Warrior attackedWarrior = new YaGson().fromJson(data.split(";")[3], Warrior.class);
+                        int i = Integer.valueOf(data.split(";")[4]);
+                        int j = Integer.valueOf(data.split(";")[5]);
+                        battle.attack(player, (Warrior) attacker, attackedWarrior);
+                        sendInstructionToPlayers("attack;");
+                        String updatedBattle = new YaGson().toJson(battle, Battle.class);
+                        connectedThread.sendMessageToClient("opponentAction;attack;" + data.split(";")[3] + ";" + i + ";" + j + ";" + updatedBattle);
+                    }
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void sendInstructionToPlayers(String action) throws IOException {
+        String updatedBattle = new YaGson().toJson(battle, Battle.class);
+        sendMessageToClient(action + updatedBattle);
     }
 
     private void login(String data) throws IOException {
