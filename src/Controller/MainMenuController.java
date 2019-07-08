@@ -2,11 +2,13 @@ package Controller;
 
 import Datas.SoundDatas;
 import Exceptions.InvalidSelectMainDeckException;
+import Model.Account;
 import Presenter.AccountManageable;
 import Presenter.DialogThrowable;
 import Presenter.ImageComparable;
 import Presenter.ScreenManager;
 import Client.Client;
+import com.gilecode.yagson.YaGson;
 import com.jfoenix.controls.*;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
@@ -201,9 +203,8 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
             description.setText("\n                Welcome");
         });
         save.setOnMousePressed(event -> {
-            saveAccount();
-            showOneButtonInformationDialog("Seve Message","Changes Saved Successfully.",false);
             SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
+            Client.getWriter().println("save "+new YaGson().toJson(getCurrentAccount(), Account.class));
         });
         exit.setOnMouseEntered(event -> {
             exit.setImage(new Image("file:images/hover_exit_button.png"));

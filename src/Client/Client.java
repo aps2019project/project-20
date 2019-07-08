@@ -1,5 +1,7 @@
 package Client;
 
+import Controller.OnlinePlayersTableController;
+import Controller.ShopController;
 import Model.*;
 import Presenter.ScreenManager;
 import javafx.application.Application;
@@ -28,15 +30,11 @@ public class Client extends Application implements ScreenManager {
     private static ClientListener messageListener;
     private static Object rLock = new Object();
 
+    private static ShopController clientShopController;
+    private static OnlinePlayersTableController onlinePlayersTableController;
+
 
     public static void main(String[] args) throws IOException {
-//        save default data
-//        try {
-//            Asset.saveDefaultCardsToJsonDatabase();
-//            Deck.saveDefaultDecksToJson();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
         launch(args);
     }
 
@@ -58,7 +56,7 @@ public class Client extends Application implements ScreenManager {
             reader.close();
             writer.close();
             client.close();
-            messageListener.finalize();
+            messageListener.kill();
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
@@ -79,6 +77,16 @@ public class Client extends Application implements ScreenManager {
             }
         }
         return null;
+    }
+
+    public static void waitForListener(){
+        synchronized (Client.getrLock()) {
+            try {
+                Client.getrLock().wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public static Pane getPaneOfMainStackPane() {
@@ -152,5 +160,21 @@ public class Client extends Application implements ScreenManager {
 
     public static void setrLock(Object rLock) {
         Client.rLock = rLock;
+    }
+
+    public static ShopController getClientShopController() {
+        return clientShopController;
+    }
+
+    public static void setClientShopController(ShopController clientShopController) {
+        Client.clientShopController = clientShopController;
+    }
+
+    public static OnlinePlayersTableController getOnlinePlayersTableController() {
+        return onlinePlayersTableController;
+    }
+
+    public static void setOnlinePlayersTableController(OnlinePlayersTableController onlinePlayersTableController) {
+        Client.onlinePlayersTableController = onlinePlayersTableController;
     }
 }

@@ -1,21 +1,28 @@
 package Server;
 
-import Exceptions.RepeatedUserNameException;
-import Exceptions.UserNotFoundException;
-import Exceptions.WrongPasswordException;
-import Model.Account;
-import Model.Battle;
-import Presenter.AccountManageable;
-import Presenter.CurrentAccount;
+import Exceptions.*;
+import Model.*;
 import com.gilecode.yagson.YaGson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Scanner;
 
+import static Model.Shop.shop;
+
 public class ServerThread extends Thread {
+    private boolean kill;
+
+    private enum CurrentPageType {
+        LEADER_BOARD, ONLINE_PLAYERS_BOARD, SHOP_COLLECTION_BOARD, NONE
+    }
+
+    private CurrentPageType pageType;
     private InputStream inputStream;
     private OutputStream outputStream;
     private Socket client;
@@ -23,38 +30,26 @@ public class ServerThread extends Thread {
     private Battle battle;
     private ServerThread connectedThread;
     private String SendingMessage;
-    private Object lock = new Object();
 
-    @Override
-    protected void finalize() {
-        try {
-            client.close();
-            inputStream.close();
-            outputStream.close();
-            ServerMain.getMyThreads().remove(this);
-            System.out.println("Client Disconnected");
-        } catch (IOException e) {
-            System.out.println("Could not close socket");
-            System.exit(-1);
-        }
-    }
+    private Object lock = new Object();
 
     public ServerThread(Socket client) throws IOException {
         this.client = client;
         inputStream = client.getInputStream();
         outputStream = client.getOutputStream();
+        kill = false;
+        pageType = CurrentPageType.NONE;
     }
 
     @Override
     public void run() {
         Scanner clientScanner = new Scanner(inputStream);
         try {
-            while (true) {
+            while (!kill) {
                 if (!client.isClosed() && clientScanner.hasNext()) {
                     String data = clientScanner.nextLine();
                     System.out.println(data);
                     String command = data.split("\\s")[0];
-
                     //Add Listeners
                     if ("logIn".equals(command)) {
                         login(data);
@@ -64,14 +59,172 @@ public class ServerThread extends Thread {
                         createAccount(data);
                         continue;
                     }
-                    if ("logOut".equals(command)){
-                        this.finalize();
+                    if ("logOut".equals(command)) {
+                        kill();
+                        return;
+                    }
+                    if ("getLeaderBoard".equals(command)) {
+                        sendLeaderBoard(false);
+                        continue;
+                    }
+                    if ("exitFromPage".equals(command)) {
+                        pageType = CurrentPageType.NONE;
+                        continue;
+                    }
+                    if ("getShopCollection".equals(command)) {
+                        sendShopCollection(false);
+                        continue;
+                    }
+                    if ("buy".equals(command)) {
+                        buy(data);
+                        continue;
+                    }
+                    if ("sell".equals(command)) {
+                        sell(data);
+                        continue;
+                    }
+                    if ("save".equals(command)) {
+                        save(data);
+                        continue;
+                    }
+                    if ("getOnlinePlayersTable".equals(command)) {
+                        sendOnlinePlayersTable(false);
+                        continue;
+                    }
+                    if ("battleQuest".equals(command)) {
+                        sendBattleRequestMessage(data);
+                        continue;
+                    }
+                    if ("rejectBattleMessage".equals(command)) {
+                        sendBattleRejectMessage(data);
+                        continue;
+                    }
+                    if ("acceptBattleMessage".equals(command)) {
+                        sendBattleAcceptMessage(data);
                         continue;
                     }
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+
+    synchronized private void sendBattleRequestMessage(String data) throws IOException {
+        ServerThread destination = ServerThread.searchServerThreadInServer(data.substring(12));
+        synchronized (destination.getOutputStream()) {
+            destination.sendMessageToClient("matchQuest " + currentAccount.getName());
+        }
+    }
+
+    private void sendBattleRejectMessage(String data) throws IOException {
+        ServerThread destination = ServerThread.searchServerThreadInServer(data.substring(20));
+        synchronized (destination.getOutputStream()) {
+            destination.sendMessageToClient("requestDeclined");
+        }
+    }
+
+    private void sendBattleAcceptMessage(String data) throws IOException {
+        ServerThread destination = ServerThread.searchServerThreadInServer(data.substring(20));
+        //todo make battle and threads connection
+
+
+        synchronized (destination.getOutputStream()) {
+            destination.sendMessageToClient("startingBattle " + " ... ");
+        }
+        sendMessageToClient("startingBattle " + " ... ");
+        autoUpdateOnlinePlayersTableForAllClients();
+    }
+
+    synchronized private void sendOnlinePlayersTable(boolean isUpdate) throws IOException {
+        ArrayList<Account> accounts = Account.getAccountsFromFile("Data/AccountsData.json");
+        ArrayList<PlayerViewer> playerViewers = new ArrayList<>();
+        for (int i = 0; i < accounts.size(); i++) {
+            if (!accounts.get(i).getName().equals(currentAccount.getName())) {
+                ServerThread serverThreadFound;
+                try {
+                    serverThreadFound = searchServerThreadInServer(accounts.get(i).getName());
+                } catch (ServerThreadNotFoundException e) {
+                    playerViewers.add(0, new PlayerViewer(accounts.get(i).getName(), PlayerViewer.Status.OFFLINE));
+                    continue;
+                }
+                if (serverThreadFound.getConnectedThread() != null) {
+                    playerViewers.add(0, new PlayerViewer(accounts.get(i).getName(), "Playing With " + serverThreadFound.getConnectedThread().getCurrentAccount().getName()));
+                } else {
+                    playerViewers.add(0, new PlayerViewer(accounts.get(i).getName(), PlayerViewer.Status.FREE));
+                }
+            }
+        }
+        if (!isUpdate) {
+            sendMessageToClient("onlinePlayersTable " + new YaGson().toJson(playerViewers, new TypeToken<Collection<PlayerViewer>>(){}.getType()));
+            pageType = CurrentPageType.ONLINE_PLAYERS_BOARD;
+        } else {
+            sendMessageToClient("updateOnlinePlayersTable " + new YaGson().toJson(playerViewers, new TypeToken<Collection<PlayerViewer>>(){}.getType()));
+        }
+    }
+
+    synchronized private void save(String data) throws IOException {
+        Account newAccount = new YaGson().fromJson(data.substring(5), Account.class);
+        newAccount.saveInToFile("Data/AccountsData.json");
+        sendMessageToClient("saveSuccess");
+    }
+
+    synchronized private void buy(String data) throws IOException {
+        String args = data.substring(4);
+        AssetContainer buyItem = shop.searchInShop((new YaGson().fromJson(args, Asset.class)).getName());
+        try {
+            Shop.buy(currentAccount, buyItem);
+        } catch (InsufficientMoneyInBuyFromShopException e) {
+            sendMessageToClient("buyError InsufficientMoney");
+            return;
+        } catch (MaximumNumberOfItemsInBuyException e) {
+            sendMessageToClient("buyError MaximumNumberOfItems");
+            return;
+        } catch (NotEnoughQuantityException e) {
+            sendMessageToClient("buyError NotEnoughQuantity");
+            return;
+        }
+        sendMessageToClient("buySuccess " + new YaGson().toJson(currentAccount, Account.class) + " || " + new YaGson().toJson(shop.getAssetContainers(), new TypeToken<Collection<AssetContainer>>() {
+        }.getType()));
+        autoUpdateShopViewForAllClients();
+    }
+
+    synchronized private void sell(String data) throws IOException {
+        String args = data.substring(5);
+        AssetContainer sellItem = shop.searchInShop((new YaGson().fromJson(args, Asset.class)).getName());
+        Shop.sell(currentAccount, sellItem);
+        sendMessageToClient("sellSuccess " + new YaGson().toJson(currentAccount, Account.class) + " || " + new YaGson().toJson(shop.getAssetContainers(), new TypeToken<Collection<AssetContainer>>() {
+        }.getType()));
+        autoUpdateShopViewForAllClients();
+    }
+
+    private void sendShopCollection(boolean isUpdate) throws IOException {
+        if (isUpdate) {
+            sendMessageToClient("updateShopCollection " + new YaGson().toJson(shop.getAssetContainers(), new TypeToken<Collection<AssetContainer>>() {
+            }.getType()));
+        } else {
+            sendMessageToClient("shopCollection " + new YaGson().toJson(shop.getAssetContainers(), new TypeToken<Collection<AssetContainer>>() {
+            }.getType()));
+            pageType = CurrentPageType.SHOP_COLLECTION_BOARD;
+        }
+    }
+
+    private void sendLeaderBoard(boolean isUpdate) throws IOException {
+        ArrayList<Account> accounts = new ArrayList<>();
+        try {
+            accounts = Account.getAccountsFromFile("Data/AccountsData.json");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Account.sortAccounts(accounts);
+        if (isUpdate) {
+            sendMessageToClient("updateLeaderTable " + new YaGson().toJson(accounts, new TypeToken<Collection<Account>>() {
+            }.getType()));
+        } else {
+            sendMessageToClient("leaderTable " + new YaGson().toJson(accounts, new TypeToken<Collection<Account>>() {
+            }.getType()));
+            pageType = CurrentPageType.LEADER_BOARD;
         }
     }
 
@@ -86,29 +239,74 @@ public class ServerThread extends Thread {
             disconnectServerWithMessage("loginError wrongPassword");
             return;
         }
-        sendMessageToClient("loginSuccess "+new YaGson().toJson(currentAccount,Account.class));
+        sendMessageToClient("loginSuccess " + new YaGson().toJson(currentAccount, Account.class));
+        autoUpdateOnlinePlayersTableForAllClients();
     }
 
-    private void createAccount(String data) throws IOException {
+    synchronized private void createAccount(String data) throws IOException {
         String[] args = data.split("\\s");
         try {
             currentAccount = Account.createAccount(args[1], args[2]);
-        } catch (RepeatedUserNameException e){
+        } catch (RepeatedUserNameException e) {
             disconnectServerWithMessage("signUpError repeatedAccount");
             return;
         }
-        sendMessageToClient("signUpSuccess "+new YaGson().toJson(currentAccount,Account.class));
+        sendMessageToClient("signUpSuccess " + new YaGson().toJson(currentAccount, Account.class));
+        autoUpdateLeaderBoardViewForAllClients();
+        autoUpdateOnlinePlayersTableForAllClients();
+    }
+
+    private void autoUpdateShopViewForAllClients() throws IOException {
+        synchronized (Server.getThreads()) {
+            for (int i = 0; i < Server.getThreads().size(); i++) {
+                if (!Server.getThreads().get(i).getCurrentAccount().getName().equals(currentAccount.getName()) && Server.getThreads().get(i).getPageType() == CurrentPageType.SHOP_COLLECTION_BOARD) {
+                    Server.getThreads().get(i).sendShopCollection(true);
+                }
+            }
+        }
+    }
+
+    //todo at end of a battle call this method
+    private void autoUpdateOnlinePlayersTableForAllClients() throws IOException {
+        synchronized (Server.getThreads()) {
+            for (int i = 0; i < Server.getThreads().size(); i++) {
+                if (Server.getThreads().get(i).getPageType() == CurrentPageType.ONLINE_PLAYERS_BOARD) {
+                    Server.getThreads().get(i).sendOnlinePlayersTable(true);
+                }
+            }
+        }
+    }
+
+    private void autoUpdateLeaderBoardViewForAllClients() throws IOException {
+        synchronized (Server.getThreads()) {
+            for (int i = 0; i < Server.getThreads().size(); i++) {
+                if (Server.getThreads().get(i).getPageType() == CurrentPageType.LEADER_BOARD) {
+                    Server.getThreads().get(i).sendLeaderBoard(true);
+                }
+            }
+        }
     }
 
     public void disconnectServerWithMessage(String sendingMessage) throws IOException {
         outputStream.write((sendingMessage + "\n").getBytes());
         outputStream.flush();
-        this.finalize();
+        kill();
     }
 
     public void sendMessageToClient(String sendingMessage) throws IOException {
         outputStream.write((sendingMessage + "\n").getBytes());
         outputStream.flush();
+    }
+
+    public static ServerThread searchServerThreadInServer(String accountName) {
+        synchronized (Server.getThreads()) {
+            for (int i = 0; i < Server.getThreads().size(); i++) {
+                if (Server.getThreads().get(i).getCurrentAccount().getName().equals(accountName)) {
+                    return Server.getThreads().get(i);
+                }
+            }
+            throw new ServerThreadNotFoundException();
+        }
     }
 
     public InputStream getInputStream() {
@@ -117,6 +315,16 @@ public class ServerThread extends Thread {
 
     public OutputStream getOutputStream() {
         return outputStream;
+    }
+
+    public void kill() throws IOException {
+        autoUpdateOnlinePlayersTableForAllClients();
+        this.kill = true;
+        client.close();
+        inputStream.close();
+        outputStream.close();
+        Server.getThreads().remove(this);
+        System.out.println("Client Disconnected");
     }
 
     public Socket getClient() {
@@ -157,5 +365,13 @@ public class ServerThread extends Thread {
 
     public void setMatch(Battle match) {
         this.battle = match;
+    }
+
+    public CurrentPageType getPageType() {
+        return pageType;
+    }
+
+    public void setPageType(CurrentPageType pageType) {
+        this.pageType = pageType;
     }
 }

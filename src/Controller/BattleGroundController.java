@@ -101,6 +101,8 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
 //        temp.setMainDeck(DeckDatas.getDefaultDeck());
 //        CurrentAccount.setCurrentAccount(temp);
 //        battle = Battle.soloCustomKillHeroModeConstructor("rostam");
+
+
         startBattleDate = getDateFormat2();
         screenRecordController = new ScreenRecordController(startBattleDate);
         //for start capturing video
@@ -143,7 +145,7 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
         enterGraveYard.setOnMousePressed(event -> {
             enterGraveYard.setImage(new Image("file:images/button_graveYard_pressed.png"));
             try {
-                loadPageOnStackPane(battleGroundAnchorPane, "View/FXML/GraveYard.fxml", "ltr");
+                loadPageOnStackPane(battleGroundAnchorPane, "../View/FXML/GraveYard.fxml", "ltr");
             } catch (IOException e) {
                 e.printStackTrace();
             }
