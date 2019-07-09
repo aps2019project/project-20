@@ -31,12 +31,8 @@ public class Client extends Application implements ScreenManager {
     private static Scene currentScene;
     private static ClientListener messageListener;
     private static Object rLock = new Object();
-
     private static ShopController clientShopController;
     private static OnlinePlayersTableController onlinePlayersTableController;
-
-    private static int clientIndex; //TODO must be set by server at the beginning of each match.
-    private static Battle battle; //TODO must be set by server at the beginning of each match.
     private static ClientBattleGroundController battleGroundController;
 
     public static void main(String[] args) throws IOException {

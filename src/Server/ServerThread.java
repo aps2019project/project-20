@@ -1,10 +1,11 @@
 package Server;
 
+import Client.Client;
+import Controller.ScreenRecordController;
 import Exceptions.*;
 import Model.*;
 import com.gilecode.yagson.YaGson;
 import com.google.gson.reflect.TypeToken;
-import com.jniwrapper.Int;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -106,53 +107,18 @@ public class ServerThread extends Thread {
                     }
 
                     //Battle Listeners
-                    if (data.matches("applyHeroSpecialPower;.+")) {
-                        Account player = new YaGson().fromJson(data.split(";")[1], Account.class);
-                        Asset targetAsset = new YaGson().fromJson(data.split(";")[2], Asset.class);
-                        int x = Integer.valueOf(data.split(";")[3]);
-                        int y = Integer.valueOf(data.split(";")[4]);
-                        battle.applyHeroSpecialPower(player, targetAsset, x, y);
-                        sendInstructionToPlayers("applyHeroSpecialPower;");
-                        String updatedBattle = new YaGson().toJson(battle, Battle.class);
-                        connectedThread.sendMessageToClient("opponentAction;applyHeroSpecialPower;" + updatedBattle);
-                    }
-                    if (data.matches("useItem;.+")) {
-                        Account player = new YaGson().fromJson(data.split(";")[1], Account.class);
-                        Item item = new YaGson().fromJson(data.split(";")[2], Item.class);
-                        battle.useItem(player, null, null, item);
-                        sendInstructionToPlayers("useItem;");
-                    }
-                    if (data.matches("insertCard;.+")) {
-                        Account player = new YaGson().fromJson(data.split(";")[1], Account.class);
-                        Card card = new YaGson().fromJson(data.split(";")[2], Card.class);
-                        int x = Integer.valueOf(data.split(";")[3]);
-                        int y = Integer.valueOf(data.split(";")[4]);
-                        battle.insertCard(player, card.getName(), x, y);
-                        sendInstructionToPlayers("insertCard;");
-                        String updatedBattle = new YaGson().toJson(battle, Battle.class);
-                        connectedThread.sendMessageToClient("opponentAction;insertCard;" + (y - 1) + ";" + (x - 1) + ";" + data.split(";")[2] + ";" + updatedBattle);
-                    }
-                    if (data.matches("cardMoveTo;.+")) {
-                        Account player = new YaGson().fromJson(data.split(";")[1], Account.class);
-                        Card warrior = new YaGson().fromJson(data.split(";")[2], Card.class);
-                        int x = Integer.valueOf(data.split(";")[3]);
-                        int y = Integer.valueOf(data.split(";")[4]);
-                        battle.cardMoveTo(player, (Warrior) warrior, x, y);
-                        sendInstructionToPlayers("cardMoveTo");
-                        String updatedBattle = new YaGson().toJson(battle, Battle.class);
-                        connectedThread.sendMessageToClient("opponentAction;cardMoveTo;" + (y - 1) + ";" + (x - 1) + ";" + updatedBattle);
-                    }
-                    if (data.matches("attack;.+")) {
-                        Account player = new YaGson().fromJson(data.split(";")[1], Account.class);
-                        Card attacker = new YaGson().fromJson(data.split(";")[2], Card.class);
-                        Warrior attackedWarrior = new YaGson().fromJson(data.split(";")[3], Warrior.class);
-                        int i = Integer.valueOf(data.split(";")[4]);
-                        int j = Integer.valueOf(data.split(";")[5]);
-                        battle.attack(player, (Warrior) attacker, attackedWarrior);
-                        sendInstructionToPlayers("attack;");
-                        String updatedBattle = new YaGson().toJson(battle, Battle.class);
-                        connectedThread.sendMessageToClient("opponentAction;attack;" + data.split(";")[3] + ";" + i + ";" + j + ";" + updatedBattle);
-                    }
+                    if (data.matches("applyHeroSpecialPower;.+"))
+                        handleApplyHeroSpecialPower(data);
+                    if (data.matches("useItem;.+"))
+                        handleUseItem(data);
+                    if (data.matches("insertCard;.+"))
+                        handleInsertCard(data);
+                    if (data.matches("cardMoveTo;.+"))
+                        handleCardMoveTo(data);
+                    if (data.matches("attack;.+"))
+                        handleAttack(data);
+                    if (data.matches("endGame;.+"))
+                        handleEndGame(data);
                 }
             }
         } catch (IOException e) {
@@ -160,7 +126,89 @@ public class ServerThread extends Thread {
         }
     }
 
-    private void sendInstructionToPlayers(String action) throws IOException {
+    private void handleEndGame(String data) throws IOException {
+        Account firstAccount = new YaGson().fromJson(data.split(";")[2], Account.class);
+        Account secondAccount = new YaGson().fromJson(data.split(";")[3], Account.class);
+        int endTurnStatus = Integer.valueOf(data.split(";")[4]);
+        ScreenRecordController screenRecordController = new YaGson().fromJson(data.split(";")[5], ScreenRecordController.class);
+        MatchHistory.Result firstAgainstSecond = makeResult(endTurnStatus);
+        MatchHistory.buildMatchHistory(data.split(";")[1], firstAccount, secondAccount, firstAgainstSecond, screenRecordController);
+        sendMessageToClient("endGame;");
+        connectedThread.sendMessageToClient("opponentAction;endGame;" + endTurnStatus);
+    }
+
+    private void handleAttack(String data) throws IOException {
+        Account player = new YaGson().fromJson(data.split(";")[1], Account.class);
+        Card attacker = new YaGson().fromJson(data.split(";")[2], Card.class);
+        Warrior attackedWarrior = new YaGson().fromJson(data.split(";")[3], Warrior.class);
+        int i = Integer.valueOf(data.split(";")[4]);
+        int j = Integer.valueOf(data.split(";")[5]);
+        battle.attack(player, (Warrior) attacker, attackedWarrior);
+        sendInstructionToRequester("attack;");
+        String updatedBattle = new YaGson().toJson(battle, Battle.class);
+        connectedThread.sendMessageToClient("opponentAction;attack;" + data.split(";")[3] + ";" + i + ";" + j + ";" + updatedBattle);
+    }
+
+    private void handleCardMoveTo(String data) throws IOException {
+        Account player = new YaGson().fromJson(data.split(";")[1], Account.class);
+        Card warrior = new YaGson().fromJson(data.split(";")[2], Card.class);
+        int x = Integer.valueOf(data.split(";")[3]);
+        int y = Integer.valueOf(data.split(";")[4]);
+        battle.cardMoveTo(player, (Warrior) warrior, x, y);
+        sendInstructionToRequester("cardMoveTo");
+        String updatedBattle = new YaGson().toJson(battle, Battle.class);
+        connectedThread.sendMessageToClient("opponentAction;cardMoveTo;" + (y - 1) + ";" + (x - 1) + ";" + updatedBattle);
+    }
+
+    private void handleInsertCard(String data) throws IOException {
+        Account player = new YaGson().fromJson(data.split(";")[1], Account.class);
+        Card card = new YaGson().fromJson(data.split(";")[2], Card.class);
+        int x = Integer.valueOf(data.split(";")[3]);
+        int y = Integer.valueOf(data.split(";")[4]);
+        battle.insertCard(player, card.getName(), x, y);
+        sendInstructionToRequester("insertCard;");
+        String updatedBattle = new YaGson().toJson(battle, Battle.class);
+        connectedThread.sendMessageToClient("opponentAction;insertCard;" + (y - 1) + ";" + (x - 1) + ";" + data.split(";")[2] + ";" + updatedBattle);
+    }
+
+    private void handleUseItem(String data) throws IOException {
+        Account player = new YaGson().fromJson(data.split(";")[1], Account.class);
+        Item item = new YaGson().fromJson(data.split(";")[2], Item.class);
+        battle.useItem(player, null, null, item);
+        sendInstructionToRequester("useItem;");
+    }
+
+    private void handleApplyHeroSpecialPower(String data) throws IOException {
+        Account player = new YaGson().fromJson(data.split(";")[1], Account.class);
+        Asset targetAsset = new YaGson().fromJson(data.split(";")[2], Asset.class);
+        int x = Integer.valueOf(data.split(";")[3]);
+        int y = Integer.valueOf(data.split(";")[4]);
+        battle.applyHeroSpecialPower(player, targetAsset, x, y);
+        sendInstructionToRequester("applyHeroSpecialPower;");
+        String updatedBattle = new YaGson().toJson(battle, Battle.class);
+        connectedThread.sendMessageToClient("opponentAction;applyHeroSpecialPower;" + updatedBattle);
+    }
+
+    private MatchHistory.Result makeResult(int endTurnStatus) {
+        MatchHistory.Result firstAgainstSecond = null;
+        switch (endTurnStatus) {
+            case Battle.FIRST_PLAYER_WIN:
+                firstAgainstSecond = MatchHistory.Result.WIN;
+                battle.getPlayers()[0].setBudget(battle.getPlayers()[0].getBudget() + battle.getReward());
+                break;
+            case Battle.SECOND_PLAYER_WIN:
+                firstAgainstSecond = MatchHistory.Result.LOSE;
+                battle.getPlayers()[1].setBudget(battle.getPlayers()[1].getBudget() + battle.getReward());
+                break;
+            case Battle.DRAW:
+                firstAgainstSecond = MatchHistory.Result.DRAW;
+                battle.getPlayers()[0].setBudget(battle.getPlayers()[0].getBudget() + battle.getReward() / 2);
+                battle.getPlayers()[1].setBudget(battle.getPlayers()[1].getBudget() + battle.getReward() / 2);
+        }
+        return firstAgainstSecond;
+    }
+
+    private void sendInstructionToRequester(String action) throws IOException {
         String updatedBattle = new YaGson().toJson(battle, Battle.class);
         sendMessageToClient(action + updatedBattle);
     }
@@ -182,13 +230,13 @@ public class ServerThread extends Thread {
 
     private void sendBattleAcceptMessage(String data) throws IOException {
         ServerThread destination = ServerThread.searchServerThreadInServer(data.substring(20));
-        //todo make battle and threads connection
-
-
+        battle = Battle.customKillHeroModeConstructor(currentAccount, destination.getCurrentAccount());
+        destination.setBattle(battle);
+        String jsonBattle = new YaGson().toJson(battle, Battle.class);
         synchronized (destination.getOutputStream()) {
-            destination.sendMessageToClient("startingBattle " + " ... ");
+            destination.sendMessageToClient("startingBattle;0;" + jsonBattle);
         }
-        sendMessageToClient("startingBattle " + " ... ");
+        sendMessageToClient("startingBattle;1;" + jsonBattle);
         autoUpdateOnlinePlayersTableForAllClients();
     }
 
@@ -428,5 +476,9 @@ public class ServerThread extends Thread {
 
     public void setPageType(CurrentPageType pageType) {
         this.pageType = pageType;
+    }
+
+    public void setBattle(Battle battle) {
+        this.battle = battle;
     }
 }

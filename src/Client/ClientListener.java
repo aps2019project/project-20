@@ -2,12 +2,8 @@ package Client;
 
 import Controller.LeaderBoardController;
 import Datas.SoundDatas;
-import Model.Account;
-import Model.AssetContainer;
-import Model.PlayerViewer;
+import Model.*;
 import Presenter.CurrentAccount;
-import Model.Card;
-import Model.Warrior;
 import Presenter.DialogThrowable;
 import Presenter.ScreenManager;
 import com.gilecode.yagson.YaGson;
@@ -131,8 +127,9 @@ public class ClientListener extends Thread implements ScreenManager, DialogThrow
                             Client.getrLock().notify();
                         }
                     }
-                    if (serverMessage.matches("startingBattle .+")) {
-                        //todo set the battle
+                    if (serverMessage.matches("startingBattle;.+")) {
+                        Client.getBattleGroundController().setClientIndex(Integer.valueOf(serverMessage.split(";")[1]));
+                        Client.getBattleGroundController().setBattle(new YaGson().fromJson(serverMessage.split(";")[2], Battle.class));
                         synchronized (Client.getrLock()) {
                             Client.getrLock().notify();
                         }
@@ -143,36 +140,52 @@ public class ClientListener extends Thread implements ScreenManager, DialogThrow
                             Client.getrLock().notify();
                         }
                     }
-                    if (serverMessage.matches("opponentAction;.+")) {
-                        switch (serverMessage.split(";")[1]) {
-                            case "applyHeroSpecialPower":
-                                Client.getBattleGroundController().showOpponentSpecialPowerUsing();
-                                break;
-                            case "insertCard":
-                                int i = Integer.valueOf(serverMessage.split(";")[2]);
-                                int j = Integer.valueOf(serverMessage.split(";")[3]);
-                                Card handCard = new YaGson().fromJson(serverMessage.split(";")[4], Card.class);
-                                Client.getBattleGroundController().showInsertAnimation(i, j, handCard, false);
-                                Client.getBattleGroundController().updateGroundCells();
-                                break;
-                            case "cardMoveTo":
-                                int i1 = Integer.valueOf(serverMessage.split(";")[2]);
-                                int j1 = Integer.valueOf(serverMessage.split(";")[3]);
-                                Client.getBattleGroundController().showMove(i1, j1, false);
-                                break;
-                            case "attack":
-                                Warrior attackedWarrior = new YaGson().fromJson(serverMessage.split(";")[2], Warrior.class);
-                                int i2 = Integer.valueOf(serverMessage.split(";")[3]);
-                                int j2 = Integer.valueOf(serverMessage.split(";")[4]);
-                                //TODO sent battle isn't used.
-                                Client.getBattleGroundController().showAttackAnimation(attackedWarrior, i2, j2, false);
-                                Client.getBattleGroundController().updateGroundCells();
+                    if (serverMessage.matches("endGame;")) {
+                        synchronized (Client.getrLock()) {
+                            Client.getrLock().notify();
                         }
+                    }
+                    if (serverMessage.matches("opponentAction;.+")) {
+                        handleOpponentAction(serverMessage);
                     }
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void handleOpponentAction(String serverMessage) {
+        switch (serverMessage.split(";")[1]) {
+            case "applyHeroSpecialPower":
+                Client.getBattleGroundController().setBattle(new YaGson().fromJson(serverMessage.split(";")[2], Battle.class));
+                Client.getBattleGroundController().showOpponentSpecialPowerUsing();
+                break;
+            case "insertCard":
+                int i = Integer.valueOf(serverMessage.split(";")[2]);
+                int j = Integer.valueOf(serverMessage.split(";")[3]);
+                Card handCard = new YaGson().fromJson(serverMessage.split(";")[4], Card.class);
+                Client.getBattleGroundController().setBattle(new YaGson().fromJson(serverMessage.split(";")[5], Battle.class));
+                Client.getBattleGroundController().showInsertAnimation(i, j, handCard, false);
+                Client.getBattleGroundController().updateGroundCells();
+                break;
+            case "cardMoveTo":
+                int i1 = Integer.valueOf(serverMessage.split(";")[2]);
+                int j1 = Integer.valueOf(serverMessage.split(";")[3]);
+                Client.getBattleGroundController().setBattle(new YaGson().fromJson(serverMessage.split(";")[4], Battle.class));
+                Client.getBattleGroundController().showMove(i1, j1, false);
+                break;
+            case "attack":
+                Warrior attackedWarrior = new YaGson().fromJson(serverMessage.split(";")[2], Warrior.class);
+                int i2 = Integer.valueOf(serverMessage.split(";")[3]);
+                int j2 = Integer.valueOf(serverMessage.split(";")[4]);
+                Client.getBattleGroundController().setBattle(new YaGson().fromJson(serverMessage.split(";")[5], Battle.class));
+                Client.getBattleGroundController().showAttackAnimation(attackedWarrior, i2, j2, false);
+                Client.getBattleGroundController().updateGroundCells();
+                break;
+            case "endGame":
+                Client.getBattleGroundController().showEndGame(Integer.valueOf(serverMessage.split(";")[2]));
+                //TODO client must be redirected to main menu.
         }
     }
 

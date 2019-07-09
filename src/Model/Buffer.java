@@ -650,7 +650,7 @@ public class Buffer {
         }
         if (minions.size() > 0) {
             int randomMinionIndex = randomNumberGenerator(minions.size());
-            //TODO hard to implement
+
         }
     }
 

@@ -16,7 +16,6 @@ public class Flag extends Asset {
         this.yInGround = yInGround;
     }
 
-    //TODO: flags must be distributed uniformly in the battleGround using a method like the next one.
     public Flag(Flag[] currentFlags, int cursor) {
         int randomY;
         int randomX;
