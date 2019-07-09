@@ -62,18 +62,19 @@ public class AIController implements Initializable {
         try {
             switch (key) {
                 case 0:
-                    selectAICard(battle, i, j);
+//                    selectAICard(battle, i, j);
                     insertAICard(battle, i, j);
 
                     break;
                 case 1:
-                    selectAICard(battle, i, j);
+                    Hero hero = battle.getPlayers()[1].getMainDeck().getHero();
+                    selectAICard(battle, hero.getXInGround(), hero.getYInGround());
                     AIAttackPlayerHero(battle.getPlayers()[1], battle);
 
                     break;
                 case 2:
                     selectAICard(battle, i, j);
-                    moveAICard(battle, i, j);
+                    moveAICard(battle, i-1, j);
 
                     break;
                 case 3:
@@ -264,7 +265,6 @@ public class AIController implements Initializable {
         selectedCardCoordinates[1] = j;
         battleGroundGrid.add(selectedCardBackground, j, i);
     }
-
 
     public void handleError() {
         battle.endTurn(battle.getPlayers()[1]);
