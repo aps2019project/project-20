@@ -47,8 +47,8 @@
                     </columnConstraints>
                     <rowConstraints>
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="88.0" minHeight="10.0" prefHeight="88.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="93.0" minHeight="10.0" prefHeight="88.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
@@ -100,11 +100,12 @@
                 </JFXTextArea>
             </children>
         </Pane>
-        <Pane layoutX="850.0" layoutY="769.0" prefHeight="78.0" prefWidth="77.0">
+        <Pane layoutX="809.0" layoutY="782.0" prefHeight="78.0" prefWidth="218.0">
             <children>
                 <ImageView fx:id="endTurn" fitHeight="63.0" fitWidth="112.0" layoutX="10.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true">
                     <Image url="file:images/ENDTURN_button.png" />
                 </ImageView>
+            <Label fx:id="whoseTurn" layoutX="92.0" layoutY="28.0" prefHeight="23.0" prefWidth="112.0" text="First Player Turn" />
             </children>
         </Pane>
         <Pane layoutX="42.0" layoutY="812.0" prefHeight="70.0" prefWidth="121.0">
@@ -292,5 +293,13 @@
          </rowConstraints>
       </GridPane>
       <ProgressBar fx:id="progressbar1" cache="true" layoutX="530.0" layoutY="226.0" prefWidth="200.0" progress="0.0" />
+      <Pane fx:id="endGamePane" layoutX="404.0" layoutY="388.0" prefHeight="260.0" prefWidth="231.0" visible="false">
+         <children>
+            <ImageView fitHeight="235.0" fitWidth="200.0" layoutX="17.0" layoutY="18.0" pickOnBounds="true" preserveRatio="true">
+              <Image url="file:images/button_primary@2x.png" />
+            </ImageView>
+            <JFXTextArea fx:id="endGameBanner" layoutX="29.0" layoutY="50.0" prefHeight="156.0" prefWidth="172.0" />
+         </children>
+      </Pane>
     </children>
 </AnchorPane>

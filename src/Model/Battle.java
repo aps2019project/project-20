@@ -28,7 +28,7 @@ public abstract class Battle {
     public final static int DRAW = 0;
     public final static int FIRST_PLAYER_WIN = 1;
     public final static int SECOND_PLAYER_WIN = 2;
-    public int endGameStatus = UNFINISHED_GAME;
+//    public int endGameStatus = UNFINISHED_GAME;
     public static final int FIRST_LATE_TURN = 15;
     public static final int MAX_MANA_IN_LATE_TURNS = 9;
     public int eachPlayerManaAtFirstOfTurn = 2;
@@ -99,13 +99,13 @@ public abstract class Battle {
         playersDeck[1].getHero().setXInGround(BattleGround.getColumns() - 1);
 
         //Locating collectible Items
-        itemsCoordinates = differentRandomNumbersGenerator(9, BattleGround.getColumns() * BattleGround.getRows(), 18, 26);
+        itemsCoordinates = differentRandomNumbersGenerator(8, BattleGround.getColumns() * BattleGround.getRows(), 18, 26);
         collectibleItems.add(AssetDatas.getNooshdaroo());
         collectibleItems.add(AssetDatas.getTwoHornArrow());
         collectibleItems.add(AssetDatas.getElixir());
         collectibleItems.add(AssetDatas.getManaMixture());
         collectibleItems.add(AssetDatas.getInvulnerableMixture());
-        collectibleItems.add(AssetDatas.getDeathCurse());
+//        collectibleItems.add(AssetDatas.getDeathCurse());
         collectibleItems.add(AssetDatas.getRandomDamage());
         collectibleItems.add(AssetDatas.getBladesOfAgility());
         collectibleItems.add(AssetDatas.getChineseSword());
@@ -470,7 +470,7 @@ public abstract class Battle {
         return isThereAnyAdjacentOwnWarrior;
     }
 
-    public void endTurn(Account player) {
+    public int endTurn(Account player) {
         Account opponent = getOpponent(player);
         applyAndHandleManaBuffers(opponent);
         applyEffectedBuffersOfWarriors(opponent);
@@ -484,11 +484,12 @@ public abstract class Battle {
         battleGround.applyCellEffects(this, opponent);
         if (playersDeck[getPlayerIndex(opponent)].getHero().getSpecialPowerCountdown() > 0)
             playersDeck[getPlayerIndex(opponent)].getHero().changeSpecialPowerCountdown(-1);
-        endGame();
+        int endGameStatus = endGame();
         turn++;
         resetIsAttackedThisTurn();
         resetIsMovedThisTurn(player);
         setPlayersManaByDefault();
+        return endGameStatus;
     }
 
     private void applyPassiveMinionSpecialPowers(Account player) {
@@ -673,9 +674,6 @@ public abstract class Battle {
             case 1008:
                 buffer.invulnerableMixtureAction(player);
                 break;
-//TODO hard to implement           case 1009:
-//                buffer.deathCurseAction(playerWarrior);
-//                break;
             case 1010:
                 buffer.randomDamageAction(player);
                 break;
@@ -951,7 +949,7 @@ public abstract class Battle {
         return null;
     }
 
-    public static Battle soloCustomKillHeroModeConstructor(String heroName) {
+    public static Battle customKillHeroModeConstructor(String heroName) {
         Hero customHero = Hero.searchHeroForCustomGame(heroName);
         AI ai = new AI("AI", "1234");
         Deck AIDeck = new Deck(ai, "defaultDeck");
@@ -968,7 +966,14 @@ public abstract class Battle {
                         new BattleGround(), reward);
     }
 
-    public static Battle soloCustomFlagModeConstructor(int numberOfFlags) {
+    public static Battle customKillHeroModeConstructor(Account firstPlayer, Account secondPlayer) {
+        Deck firstPlayerDeck = new Deck(firstPlayer, firstPlayer.getMainDeck().getName(), firstPlayer.getMainDeck().getHero(), firstPlayer.getMainDeck().getItems(), firstPlayer.getMainDeck().getCards());
+        Deck secondPlayerDeck = new Deck(secondPlayer, secondPlayer.getMainDeck().getName(), secondPlayer.getMainDeck().getHero(), secondPlayer.getMainDeck().getItems(), secondPlayer.getMainDeck().getCards());
+        return new KillHeroBattle(Mode.NORMAL, firstPlayer, secondPlayer, firstPlayerDeck, secondPlayerDeck, new BattleGround(), Battle.CUSTOM_REWARD);
+    }
+
+
+    public static Battle customFlagModeConstructor(int numberOfFlags) {
         AI ai = new AI("AI", "1234");
         Deck AIDeck = new Deck(ai, "defaultDeck");
         Battle.Mode battleMode;
@@ -996,6 +1001,14 @@ public abstract class Battle {
         }
     }
 
+    public static Battle customFlagModeConstructor(Account firstPlayer, Account secondPlayer, int numberOfFlags) {
+        Deck firstPlayerDeck = new Deck(firstPlayer, firstPlayer.getMainDeck().getName(), firstPlayer.getMainDeck().getHero(), firstPlayer.getMainDeck().getItems(), firstPlayer.getMainDeck().getCards());
+        Deck secondPlayerDeck = new Deck(secondPlayer, secondPlayer.getMainDeck().getName(), secondPlayer.getMainDeck().getHero(), secondPlayer.getMainDeck().getItems(), secondPlayer.getMainDeck().getCards());
+        if (numberOfFlags == 0)
+            return new KeepFlagBattle(Mode.FLAG_KEEPING, firstPlayer, secondPlayer, firstPlayerDeck, secondPlayerDeck, new BattleGround(), Battle.CUSTOM_REWARD);
+        else
+            return new CollectFlagBattle(Mode.FLAG_COLLECTING, firstPlayer, secondPlayer, firstPlayerDeck, secondPlayerDeck, new BattleGround(), Battle.CUSTOM_REWARD, numberOfFlags);
+    }
     public ArrayList<Card> getInGroundCards() {
         return inGroundCards;
     }
