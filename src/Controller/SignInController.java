@@ -28,8 +28,14 @@ public class SignInController implements Initializable, AccountManageable, Scree
             showOneButtonErrorDialog("SignIn Error", "some of fields are empty.");
             return;
         }
-        Client.connectToServer();
-        Client.getWriter().println(("logIn " +LoginUserName.getText()+" "+loginPassword.getText()));
+        try {
+            Client.connectToServer();
+        } catch (Exception e) {
+            showOneButtonErrorDialog("Login Error", "You are disconnected!!!");
+            return;
+        }
+        Client.getWriter().println(("logIn " + LoginUserName.getText() + " " + loginPassword.getText()));
+
     }
 
     public void setBack() throws IOException {

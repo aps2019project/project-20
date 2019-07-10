@@ -21,21 +21,26 @@ public class SignUpController implements Initializable, AccountManageable, Scree
     public JFXButton back;
 
     public void setSignUp() throws IOException {
-        if(SignUpPassword.getText().equals("") || SignUpUserName.getText().equals("")){
-            showOneButtonErrorDialog("SignUp Error","some of fields are empty.");
+        if (SignUpPassword.getText().equals("") || SignUpUserName.getText().equals("")) {
+            showOneButtonErrorDialog("SignUp Error", "some of fields are empty.");
             return;
         }
-        Client.connectToServer();
-        Client.getWriter().println(("signUp " +SignUpUserName.getText()+" "+SignUpPassword.getText()));
+        try {
+            Client.connectToServer();
+        } catch (Exception e) {
+            showOneButtonErrorDialog("SignUp Error", "You are disconnected!!!");
+            return;
+        }
+        Client.getWriter().println(("signUp " + SignUpUserName.getText() + " " + SignUpPassword.getText()));
     }
 
     public void setBack() throws IOException {
-        loadPageOnStackPane(back.getParent(),"../View/FXML/FirstPage.fxml","rtl");
+        loadPageOnStackPane(back.getParent(), "../View/FXML/FirstPage.fxml", "rtl");
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setTextFieldRequiredFieldValidator(SignUpUserName,"\\s+","");
-        setPasswordFieldRequiredFieldValidator(SignUpPassword,"(.{0,8})|(\\s+)","atLeast 8 Characters");
+        setTextFieldRequiredFieldValidator(SignUpUserName, "\\s+", "");
+        setPasswordFieldRequiredFieldValidator(SignUpPassword, "(.{0,8})|(\\s+)", "atLeast 8 Characters");
     }
 }

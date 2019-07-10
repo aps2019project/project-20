@@ -21,6 +21,7 @@ public class Spell extends Card {
     public Spell(String name, String desc, int price, int ID, int MP, TargetType targetType, int squareSideLength) {
         this(name, desc, price, ID, MP, targetType);
         this.squareSideLength = squareSideLength;
+        setImageAddresses(name);
     }
 
     public Spell(String name, String desc, int price, int ID, int MP, TargetType targetType, int squareSideLength, BufferOfSpells buff, boolean isTargetFriend) {
@@ -55,5 +56,6 @@ public class Spell extends Card {
         actionBarImageAddress = "file:images/cards/spell/" + name + "/" + name + "_actionbar.gif";
         activeImageAddress = "file:images/cards/spell/" + name + "/" + name + "_active.gif";
         effectImageAddress = "file:images/cards/spell/" + name + "/" + name + "_effect.gif";
+        assetImageAddress = "file:images/cards/spell/" + name + "/" + name + ".png";
     }
 }

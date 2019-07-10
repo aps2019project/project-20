@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class MatchHistory {
-    public enum Result {WIN, LOOSE, DRAW}
+    public enum Result {WIN, LOSE, DRAW}
 
     private String time;
     private int number;
@@ -25,13 +25,27 @@ public class MatchHistory {
         this.videoPath = videoPath;
     }
 
-    public static void BuildMatchHistory(String time, Result result, String opponentName, ScreenRecordController controller, Account account) {
-        MatchHistory matchHistory = new MatchHistory(time, result, opponentName, controller.getPath());
-        account.getMatchHistories().add(0,matchHistory);
+    public static void buildMatchHistory(String time, Account firstAccount, Account secondAccount, Result firstAgainstSecond, ScreenRecordController controller) {
+        MatchHistory firstPlayerMatchHistory = new MatchHistory(time, firstAgainstSecond, secondAccount.getName(), controller.getPath());
+        Result secondAgainstFirst = null;
+        switch (firstAgainstSecond) {
+            case WIN:
+                secondAgainstFirst = Result.LOSE;
+                break;
+            case LOSE:
+                secondAgainstFirst = Result.WIN;
+                break;
+            case DRAW:
+                secondAgainstFirst = Result.DRAW;
+        }
+        MatchHistory secondPlayerMatchHistory = new MatchHistory(time, secondAgainstFirst, firstAccount.getName(), controller.getPath());
+        firstAccount.getMatchHistories().add(0,firstPlayerMatchHistory);
+        secondAccount.getMatchHistories().add(0, secondPlayerMatchHistory);
         synchronized (controller.getFinish()) {
             controller.getFinish().notify();
         }
-        matchHistory.saveMatchHistoryInToFile(account.getName(), "Data/AccountsData.json");
+        firstPlayerMatchHistory.saveMatchHistoryInToFile(firstAccount.getName(), "Data/AccountsData.json");
+        secondPlayerMatchHistory.saveMatchHistoryInToFile(secondAccount.getName(), "Data/AccountsData.json");
     }
 
     public void saveMatchHistoryInToFile(String accountName, String path) {

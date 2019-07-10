@@ -60,7 +60,7 @@ public class AIHeroChooseMenu implements Initializable , ScreenManager , Animati
 
     public void setRostamButtonOnMouseReleased() {
         SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
-        startNewGame(anchorPane,Battle.soloCustomKillHeroModeConstructor("rostam"));
+        startNewGame(anchorPane,Battle.customKillHeroModeConstructor("rostam"));
     }
 
     public void setRakhshButtonOnMouseEntered() {
@@ -74,7 +74,7 @@ public class AIHeroChooseMenu implements Initializable , ScreenManager , Animati
 
     public void setRakhshButtonOnMouseReleased() {
         SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
-        startNewGame(anchorPane,Battle.soloCustomKillHeroModeConstructor("rakhsh"));
+        startNewGame(anchorPane,Battle.customKillHeroModeConstructor("rakhsh"));
     }
 
     public void setSimorghButtonOnMouseEntered() {
@@ -88,7 +88,7 @@ public class AIHeroChooseMenu implements Initializable , ScreenManager , Animati
 
     public void setSimorghButtonOnMouseReleased() {
         SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
-        startNewGame(anchorPane,Battle.soloCustomKillHeroModeConstructor("simorgh"));
+        startNewGame(anchorPane,Battle.customKillHeroModeConstructor("simorgh"));
     }
 
     public void setArashButtonOnMouseEntered() {
@@ -102,7 +102,7 @@ public class AIHeroChooseMenu implements Initializable , ScreenManager , Animati
 
     public void setArashButtonOnMouseReleased() {
         SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
-        startNewGame(anchorPane,Battle.soloCustomKillHeroModeConstructor("arash"));
+        startNewGame(anchorPane,Battle.customKillHeroModeConstructor("arash"));
     }
 
     public void setKavehButtonOnMouseEntered() {
@@ -116,7 +116,7 @@ public class AIHeroChooseMenu implements Initializable , ScreenManager , Animati
 
     public void setKavehButtonOnMouseReleased() {
         SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
-        startNewGame(anchorPane,Battle.soloCustomKillHeroModeConstructor("kaveh"));
+        startNewGame(anchorPane,Battle.customKillHeroModeConstructor("kaveh"));
     }
 
     public void setZahhakButtonOnMouseEntered() {
@@ -130,7 +130,7 @@ public class AIHeroChooseMenu implements Initializable , ScreenManager , Animati
 
     public void setZahhakButtonOnMouseReleased() {
         SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
-        startNewGame(anchorPane,Battle.soloCustomKillHeroModeConstructor("zahhak"));
+        startNewGame(anchorPane,Battle.customKillHeroModeConstructor("zahhak"));
     }
 
     public void setEsfandiarButtonOnMouseEntered() {
@@ -144,7 +144,7 @@ public class AIHeroChooseMenu implements Initializable , ScreenManager , Animati
 
     public void setEsfandiarButtonOnMouseReleased() {
         SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
-        startNewGame(anchorPane,Battle.soloCustomKillHeroModeConstructor("esfandiar"));
+        startNewGame(anchorPane,Battle.customKillHeroModeConstructor("esfandiar"));
     }
 
     public void setDragonButtonOnMouseEntered() {
@@ -158,7 +158,7 @@ public class AIHeroChooseMenu implements Initializable , ScreenManager , Animati
 
     public void setDragonButtonOnMouseReleased() {
         SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
-        startNewGame(anchorPane,Battle.soloCustomKillHeroModeConstructor("sevenHeadDragon"));
+        startNewGame(anchorPane,Battle.customKillHeroModeConstructor("sevenHeadDragon"));
     }
 
     public void setLegendButtonOnMouseEntered() {
@@ -172,7 +172,7 @@ public class AIHeroChooseMenu implements Initializable , ScreenManager , Animati
 
     public void setLegendButtonOnMouseReleased() {
         SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
-        startNewGame(anchorPane,Battle.soloCustomKillHeroModeConstructor("legend"));
+        startNewGame(anchorPane,Battle.customKillHeroModeConstructor("legend"));
     }
 
     public void setWhiteGhoulButtonOnMouseEntered() {
@@ -186,7 +186,7 @@ public class AIHeroChooseMenu implements Initializable , ScreenManager , Animati
 
     public void setWhiteGhoulButtonOnMouseReleased() {
         SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
-        startNewGame(anchorPane,Battle.soloCustomKillHeroModeConstructor("whiteDamn"));
+        startNewGame(anchorPane,Battle.customKillHeroModeConstructor("whiteDamn"));
     }
 
 

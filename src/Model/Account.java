@@ -172,7 +172,7 @@ public class Account implements Comparable<Account> {
         throw new UserNotFoundException("User not found.");
     }
 
-    public static ArrayList<Account> getAccountsFromFile(String filePath) throws IOException {
+    synchronized public static ArrayList<Account> getAccountsFromFile(String filePath) throws IOException {
         Reader reader = new FileReader(filePath);
         ArrayList<Account> currentAccounts = new YaGson().fromJson(reader,new TypeToken<java.util.Collection<Account>>(){}.getType());
         reader.close();

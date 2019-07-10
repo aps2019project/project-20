@@ -129,11 +129,11 @@ public class BattleEnvironmentPresenter {
 //                case 1:
 //                    BattleEnvironment.ShowEndGame(battle.getPlayers()[0], battle.getPlayers()[1], battle, battle.getMode(), 1);
 //                    battle.getPlayers()[0].getMatchHistories().add(new MatchHistory(battleStartDate, MatchHistory.Result.WIN, battle.getPlayers()[0].getName()));
-//                    battle.getPlayers()[1].getMatchHistories().add(new MatchHistory(battleStartDate, MatchHistory.Result.LOOSE, battle.getPlayers()[1].getName()));
+//                    battle.getPlayers()[1].getMatchHistories().add(new MatchHistory(battleStartDate, MatchHistory.Result.LOSE, battle.getPlayers()[1].getName()));
 //                    return 1;
 //                case 2:
 //                    BattleEnvironment.ShowEndGame(battle.getPlayers()[0], battle.getPlayers()[1], battle, battle.getMode(), 2);
-//                    battle.getPlayers()[0].getMatchHistories().add(new MatchHistory(battleStartDate, MatchHistory.Result.LOOSE, battle.getPlayers()[0].getName()));
+//                    battle.getPlayers()[0].getMatchHistories().add(new MatchHistory(battleStartDate, MatchHistory.Result.LOSE, battle.getPlayers()[0].getName()));
 //                    battle.getPlayers()[1].getMatchHistories().add(new MatchHistory(battleStartDate, MatchHistory.Result.WIN, battle.getPlayers()[1].getName()));
 //                    return 2;
 //            }

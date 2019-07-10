@@ -1,10 +1,14 @@
 package Controller;
 
+import Datas.SoundDatas;
 import Exceptions.*;
 import Model.*;
 import Presenter.*;
 import Client.Client;
+import com.gilecode.yagson.YaGson;
 import com.jfoenix.controls.*;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -114,8 +118,47 @@ public class CollectionController implements Initializable, ScreenManager, Accou
         back.setImage(new Image("file:images/button_back_corner.png"));
     }
 
-    public void setBackButtonOnMouseReleased() throws IOException {
-        loadPageOnStackPane(back.getParent(), "../View/FXML/MainMenu.fxml", "ltr");
+    public void setBackButtonOnMouseReleased() {
+        SoundDatas.playSFX(SoundDatas.NORMAL_DIALOG);
+        JFXDialogLayout dialogLayout = new JFXDialogLayout();
+        dialogLayout.setPrefHeight(60);
+        Text header = new Text("Confirmation");
+        header.setStyle("-fx-text-fill: #ff0000;  -fx-font-family: 'Microsoft Tai Le'; -fx-font-weight:bold ;");
+        dialogLayout.setHeading(header);
+        Text footer = new Text("Do You Want To Save Changes ? (Recommended)");
+        footer.setStyle("-fx-text-fill: #000000;  -fx-font-family: 'Microsoft Tai Le'; -fx-font-weight:bold ;");
+        dialogLayout.setBody(footer);
+        dialogLayout.setStyle("-fx-background-color: #acf5ff; -fx-text-fill: #ffffff");
+        JFXDialog dialog = new JFXDialog(Client.getStackPane(), dialogLayout, JFXDialog.DialogTransition.CENTER, true);
+        JFXButton yesButton = new JFXButton("yes");
+        yesButton.setButtonType(JFXButton.ButtonType.RAISED);
+        yesButton.setStyle("-fx-background-color: #37b400; -fx-text-fill: #ffffff; -fx-font-family: 'Microsoft Tai Le'; -fx-font-weight:bold ;");
+        yesButton.setOnMouseReleased(event -> {
+            SoundDatas.playSFX(SoundDatas.DIALOG_YES_BUTTON);
+            Client.getWriter().println("save "+new YaGson().toJson(getCurrentAccount(), Account.class));
+            dialog.close();
+            try {
+                loadPageOnStackPane(back.getParent(), "../View/FXML/MainMenu.fxml", "ltr");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        JFXButton noButton = new JFXButton("no");
+        noButton.setButtonType(JFXButton.ButtonType.RAISED);
+        noButton.setStyle("-fx-background-color: #ff0000; -fx-text-fill: #ffffff; -fx-font-family: 'Microsoft Tai Le'; -fx-font-weight:bold ;");
+        noButton.setOnAction(event -> {
+            SoundDatas.playSFX(SoundDatas.DIALOG_NO_BUTTON);
+            dialog.close();
+            try {
+                loadPageOnStackPane(back.getParent(), "../View/FXML/MainMenu.fxml", "ltr");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        dialog.setOnDialogClosed(event -> Client.getStackPane().getChildren().remove(dialog));
+        dialogLayout.setActions(yesButton,noButton);
+        dialog.show();
+
     }
 
     public void setImportButtonOnMouseOver() {
@@ -177,6 +220,8 @@ public class CollectionController implements Initializable, ScreenManager, Accou
         }
     }
 
+
+
     public void setEditButtonOnMouseOver() {
         if (selectedDeckElement != null) {
             editDeckButton.setImage(new Image("file:images/hover_edit_button.png"));
@@ -204,6 +249,8 @@ public class CollectionController implements Initializable, ScreenManager, Accou
             editDeckButton.setImage(new Image("file:images/unavailable_edit_button.png"));
         }
     }
+
+
 
     public void setDeleteDeckButtonOnMouseOver() {
         if (selectedDeckElement != null) {
@@ -234,6 +281,8 @@ public class CollectionController implements Initializable, ScreenManager, Accou
             deleteDeckButton.setImage(new Image("file:images/unavailable_delete_button.png"));
         }
     }
+
+
 
     public void setRenameDeckButtonOnMouseOver() {
         if (selectedDeckElement != null) {
@@ -268,6 +317,8 @@ public class CollectionController implements Initializable, ScreenManager, Accou
             deckRenameButton.setImage(new Image("file:images/default_action_button.png"));
         }
     }
+
+
 
     public void setCardActionButtonOnMousePressed() {
         if (selectedAssetElement != null) {
@@ -632,9 +683,9 @@ public class CollectionController implements Initializable, ScreenManager, Accou
         });
     }
 
-    public void selectingMainDeckEventHandler() {
-        setMainDeckButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue) {
+    public void selectingMainDeckEventHandler(){
+        setMainDeckButton.setOnMouseClicked((event) -> {
+            if (setMainDeckButton.isSelected()) {
                 try {
                     chooseMainDeck(selectedDeckElement);
                 } catch (InvalidSelectMainDeckException e) {
@@ -643,9 +694,11 @@ public class CollectionController implements Initializable, ScreenManager, Accou
                     return;
                 }
                 showOneButtonInformationDialog("Message", "Your Deck was Chosen Successfully!!!", false);
-            } else if (oldValue) {
+                fillFlowPaneDeckCollection(decksFlowPane,getCurrentAccount().getDecks());
+            } else if (!setMainDeckButton.isSelected()) {
                 removeMainDeck();
                 showOneButtonInformationDialog("Warning", "You Can't Play Until Choosing Main Deck!!!", true);
+                fillFlowPaneDeckCollection(decksFlowPane,getCurrentAccount().getDecks());
             }
         });
     }
@@ -834,7 +887,6 @@ public class CollectionController implements Initializable, ScreenManager, Accou
         importCard.setTitle(s);
         importCard.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("png/gif Files", "*.png", "*.gif"));
         File selectedFile = importCard.showOpenDialog(anchorPane.getScene().getWindow());
-
         return selectedFile;
     }
 }

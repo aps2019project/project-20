@@ -63,9 +63,9 @@ public class BeforeBattleMenu1Controller implements Initializable, ScreenManager
         nodeFadeAnimation(multiPaneDetail,200,1,0).play();
     }
 
-    public void setMultiButtonOnMouseReleased(){
+    public void setMultiButtonOnMouseReleased() throws IOException {
         SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
-      //todo
+        loadPageOnStackPane(back.getParent(),"../View/FXML/OnlinePlayersTable.fxml","rtl");
     }
 
     @Override

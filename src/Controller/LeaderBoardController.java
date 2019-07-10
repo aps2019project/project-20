@@ -1,8 +1,10 @@
 package Controller;
 
+import Client.Client;
 import Datas.SoundDatas;
 import Model.Account;
 import Presenter.ScreenManager;
+import com.gilecode.yagson.YaGson;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
@@ -26,7 +28,7 @@ public class LeaderBoardController implements Initializable, ScreenManager {
     public TableColumn<Account,String> nameCol;
     public TableColumn<Account,Integer> winCol;
     public TableColumn<Account,Integer> loosesCol;
-
+    private static ObservableList<Account> myList = FXCollections.observableArrayList();
 
     public void setBackButtonOnMouseEntered(){
         back.setImage(new Image("file:images/hover_back_button_corner.png"));
@@ -42,6 +44,7 @@ public class LeaderBoardController implements Initializable, ScreenManager {
     }
 
     public void setBackButtonOnMouseReleased() throws IOException {
+        Client.getWriter().println("exitFromPage");
         loadPageOnStackPane(back.getParent(),"../View/FXML/MainMenu.fxml","ltr");
     }
 
@@ -49,16 +52,12 @@ public class LeaderBoardController implements Initializable, ScreenManager {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        ArrayList<Account> accountsReceivedFromServer = new ArrayList<>();
-        try {
-            accountsReceivedFromServer = Account.getAccountsFromFile("Data/AccountsData.json");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Account.sortAccounts(accountsReceivedFromServer);
+        Client.getWriter().println("getLeaderBoard");
+        Client.waitForListener();
 
-        ObservableList<Account> myList = FXCollections.observableArrayList();
-        myList.addAll(accountsReceivedFromServer);
+        Account[] accountsReceivedFromServer = new YaGson().fromJson(Client.getMessageListener().getDataFromServer(), Account[].class);
+
+        myList.setAll(accountsReceivedFromServer);
 
         rankCol.setCellValueFactory(new PropertyValueFactory<>("rank"));
         nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -67,7 +66,14 @@ public class LeaderBoardController implements Initializable, ScreenManager {
 
         leaderTable.setItems(myList);
         leaderTable.getColumns().addAll(rankCol,nameCol,winCol,loosesCol);
-
     }
 
+
+    public static ObservableList<Account> getMyList() {
+        return myList;
+    }
+
+    public static void setMyList(ObservableList<Account> myList) {
+        LeaderBoardController.myList = myList;
+    }
 }

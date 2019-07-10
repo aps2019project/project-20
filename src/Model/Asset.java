@@ -276,6 +276,16 @@ public class Asset implements ImageComparable {
         fileWriter.close();
     }
 
+    public static void removeAssetFromCollection(String assetName,ArrayList<Asset> assets){
+        for (Asset asset : assets) {
+            if(asset.getName().equals(assetName)){
+                assets.remove(asset);
+                return;
+            }
+        }
+        throw new AssetNotFoundException();
+    }
+
     public static void addNewAssetToDataBase(Asset asset){
         ArrayList<Asset> assets = new ArrayList<>();
         try {
