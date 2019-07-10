@@ -2,6 +2,7 @@ package Server;
 
 import Model.Account;
 import Model.AssetContainer;
+import Model.Shop;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -36,7 +37,7 @@ public class Server extends Application {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 //        save default data
 //        Asset.saveDefaultCardsToJsonDatabase();
 //        Deck.saveDefaultDecksToJson();

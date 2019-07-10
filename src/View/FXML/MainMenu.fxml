@@ -34,7 +34,7 @@
                     </ImageView>
                 </children>
             </VBox>
-            <ImageView accessibleRole="PARENT" fitHeight="187.0" fitWidth="410.0" layoutX="62.0" layoutY="836.0">
+            <ImageView accessibleRole="PARENT" fitHeight="193.0" fitWidth="410.0" layoutX="62.0" layoutY="831.0">
                 <image>
                     <Image url="file:images/diamond_main_menu_container@2x.png" />
                 </image>

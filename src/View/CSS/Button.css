@@ -15,27 +15,11 @@
     -fx-text-fill: white;
 }
 
-/*.jfx-button {*/
+.jfx-progress-bar > .track, .jfx-progress-bar > .bar {
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+}
 
-    /*-fx-background-color: #182e6d;*/
-    /*-fx-border-color: #59a1ff;*/
-    /*-fx-border-width: 3;*/
-    /*-jfx-button-type: RAISED;*/
-    /*-fx-text-fill: white;*/
-/*}*/
-
-/*.button:focused {*/
-    /*-fx-border-color: #59a1ff;*/
-    /*-fx-border-width: 3,3;*/
-    /*-fx-border-radius: 0, 0;*/
-    /*-fx-border-insets: 1 1 1 1, 0;*/
-/*}*/
-
-/*.button:pressed {*/
-    /*-fx-background-color: black;*/
-    /*-fx-text-fill: white;*/
-/*}*/
-
-/*.button, .toggle-button {*/
-    /*-shrink-animate-on-press: true;*/
-/*}*/
+.jfx-progress-bar > .bar {
+    -fx-background-color: black;
+}
