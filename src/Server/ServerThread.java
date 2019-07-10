@@ -1,5 +1,6 @@
 package Server;
 
+import Client.Client;
 import Exceptions.*;
 import Model.*;
 import com.gilecode.yagson.YaGson;
@@ -346,16 +347,22 @@ public class ServerThread extends Thread {
     private void login(String data) throws IOException {
         String[] args = data.split("\\s");
         try {
+            searchServerThreadInServer(args[1]);
+        }catch (ServerThreadNotFoundException e) {
+        try {
             currentAccount = Account.login(args[1], args[2]);
-        } catch (UserNotFoundException e) {
+        } catch (UserNotFoundException e1) {
             disconnectServerWithMessage("loginError userNotFound");
             return;
-        } catch (WrongPasswordException e) {
+        } catch (WrongPasswordException e1) {
             disconnectServerWithMessage("loginError wrongPassword");
             return;
         }
         sendMessageToClient("loginSuccess " + new YaGson().toJson(currentAccount, Account.class));
         autoUpdateOnlinePlayersTableForAllClients();
+            return;
+        }
+        disconnectServerWithMessage("loginError repeatedLogin");
     }
 
     synchronized private void createAccount(String data) throws IOException {
@@ -426,7 +433,7 @@ public class ServerThread extends Thread {
     public static ServerThread searchServerThreadInServer(String accountName) {
         synchronized (Server.getThreads()) {
             for (int i = 0; i < Server.getThreads().size(); i++) {
-                if (Server.getThreads().get(i).getCurrentAccount().getName().equals(accountName)) {
+                if (Server.getThreads().get(i).getCurrentAccount()!=null && Server.getThreads().get(i).getCurrentAccount().getName().equals(accountName)) {
                     return Server.getThreads().get(i);
                 }
             }

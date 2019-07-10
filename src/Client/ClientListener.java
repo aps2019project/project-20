@@ -51,6 +51,11 @@ public class ClientListener extends Thread implements ScreenManager, DialogThrow
                         Client.closeConnection();
                         return;
                     }
+                    if (serverMessage.matches("loginError repeatedLogin")) {
+                        showOneButtonErrorDialogInThread("Login Error", "You Have Already SignedIn Before!!!");
+                        Client.closeConnection();
+                        return;
+                    }
                     if (serverMessage.matches("signUpSuccess .+")) {
                         CurrentAccount.setCurrentAccount(new YaGson().fromJson(serverMessage.substring(14), Account.class));
                         openPageOnNewStageInThread(Client.getStackPane().getScene(), "../View/FXML/MainMenu.fxml", true);
