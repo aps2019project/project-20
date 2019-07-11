@@ -34,16 +34,16 @@
                     </ImageView>
                 </children>
             </VBox>
-            <ImageView accessibleRole="PARENT" fitHeight="193.0" fitWidth="410.0" layoutX="62.0" layoutY="831.0">
+            <ImageView fx:id="chatButton" accessibleRole="PARENT" fitHeight="193.0" fitWidth="410.0" layoutX="62.0" layoutY="831.0" pickOnBounds="true" preserveRatio="true">
                 <image>
                     <Image url="file:images/diamond_main_menu_container@2x.png" />
                 </image>
             </ImageView>
          <JFXTextArea id="mainMenuTextFlow" fx:id="description" editable="false" layoutX="111.0" layoutY="849.0" prefHeight="162.0" prefWidth="312.0" stylesheets="@../CSS/TextFlows.css" />
-      <ImageView fx:id="chatButton" fitHeight="150.0" fitWidth="200.0" layoutX="611.0" layoutY="260.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="file:images/chat_button.png" />
-         </image>
-      </ImageView>
+      <!--<ImageView fx:id="chatButton" fitHeight="150.0" fitWidth="200.0" layoutX="611.0" layoutY="260.0" pickOnBounds="true" preserveRatio="true">-->
+         <!--<image>-->
+            <!--<Image url="file:images/chat_button.png" />-->
+         <!--</image>-->
+      <!--</ImageView>-->
     </children>
 </AnchorPane>

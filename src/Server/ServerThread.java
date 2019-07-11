@@ -143,6 +143,9 @@ public class ServerThread extends Thread {
                     if (data.matches("Chat;.+")){
                         handleChat(data);
                     }
+                    if (data.matches("Create;.+")){
+                        handleCreateCard(data);
+                    }
                 }
             }
         } catch (IOException e) {
@@ -162,6 +165,14 @@ public class ServerThread extends Thread {
         autoUpdateOnlinePlayersTableForAllClients();
     }
 
+    private void handleCreateCard (String data) throws IOException {
+        synchronized (shop.getAssetContainers()){
+           shop.addNewAssetToShop(new AssetContainer(new YaGson().fromJson(data.substring(7),Asset.class)));
+           shop.saveToDataBase();
+           sendMessageToClient("CreateCustomCard;");
+           autoUpdateShopViewForAllClients();
+        }
+    }
     private  void handleChat(String data) throws IOException {
         synchronized (Server.getThreads()){
         for (ServerThread thread : Server.getThreads()) {

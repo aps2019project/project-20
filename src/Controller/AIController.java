@@ -57,7 +57,9 @@ public class AIController implements Initializable {
         int i = makeRandomNumber(BattleGround.getRows());
         int j = makeRandomNumber(BattleGround.getColumns());
         int key = makeRandomNumber(6);
-        System.err.println(key);
+
+        selectAICard(battle , i , j);
+        System.out.println(key);
 
         try {
             switch (key) {

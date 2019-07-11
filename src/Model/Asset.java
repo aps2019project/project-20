@@ -1,6 +1,7 @@
 package Model;
 
 import Datas.AssetDatas;
+import Model.Shop;
 import Exceptions.AssetNotFoundException;
 import Exceptions.RepeatedAddingAssetToDatabaseException;
 import Presenter.ImageComparable;
@@ -114,22 +115,22 @@ public class Asset implements ImageComparable {
         throw new AssetNotFoundException("");
     }
 
-    public static ArrayList<Asset> searchAndGetAssetCollectionFromCollection(ArrayList<Asset> assets ,String assetName){
-        if(assetName.equals("") || assets == null){
+    public static ArrayList<Asset> searchAndGetAssetCollectionFromCollection(ArrayList<Asset> assets, String assetName) {
+        if (assetName.equals("") || assets == null) {
             return assets;
         }
         ArrayList<Asset> result = new ArrayList<>();
         for (Asset asset : assets) {
-            if(asset != null && asset.getName().matches(".*"+assetName+".*")){
+            if (asset != null && asset.getName().matches(".*" + assetName + ".*")) {
                 result.add(asset);
             }
         }
         return result;
     }
 
-    public Asset searchAssetFromCardImage(ArrayList<Asset> assets, Image assetCardImage){
+    public Asset searchAssetFromCardImage(ArrayList<Asset> assets, Image assetCardImage) {
         for (Asset asset : assets) {
-            if(assetCardImage.impl_getUrl().split("/")[assetCardImage.impl_getUrl().split("/").length-1].equals(asset.getAssetImageAddress().split("/")[asset.getAssetImageAddress().split("/").length-1])){
+            if (assetCardImage.impl_getUrl().split("/")[assetCardImage.impl_getUrl().split("/").length - 1].equals(asset.getAssetImageAddress().split("/")[asset.getAssetImageAddress().split("/").length - 1])) {
                 return asset;
             }
         }
@@ -157,10 +158,10 @@ public class Asset implements ImageComparable {
             if (this instanceof Item || isInstanceOfItem()) {
                 return new Item(this.getName(), this.getDesc(), this.getPrice(), this.getID());
             }
-        }catch (ClassCastException e){
+        } catch (ClassCastException e) {
             e.printStackTrace();
         }
-       return null;
+        return null;
     }
 
     public static Card searchCard(ArrayList<Card> cards, String name) {
@@ -265,20 +266,21 @@ public class Asset implements ImageComparable {
         assets.add(AssetDatas.getBaptism());
         assets.add(AssetDatas.getChineseSword());
 
-        writeAssetArrayInFile(assets,"Data/CardsData.json");
+        writeAssetArrayInFile(assets, "Data/CardsData.json");
 
     }
 
-    public static void writeAssetArrayInFile(ArrayList<Asset> assets,String path) throws IOException {
+    public static void writeAssetArrayInFile(ArrayList<Asset> assets, String path) throws IOException {
         FileWriter fileWriter = new FileWriter(path);
-        fileWriter.write(new YaGson().toJson(assets,new TypeToken<java.util.Collection<Asset>>() {}.getType()));
+        fileWriter.write(new YaGson().toJson(assets, new TypeToken<java.util.Collection<Asset>>() {
+        }.getType()));
         fileWriter.flush();
         fileWriter.close();
     }
 
-    public static void removeAssetFromCollection(String assetName,ArrayList<Asset> assets){
+    public static void removeAssetFromCollection(String assetName, ArrayList<Asset> assets) {
         for (Asset asset : assets) {
-            if(asset.getName().equals(assetName)){
+            if (asset.getName().equals(assetName)) {
                 assets.remove(asset);
                 return;
             }
@@ -286,19 +288,19 @@ public class Asset implements ImageComparable {
         throw new AssetNotFoundException();
     }
 
-    public static void addNewAssetToDataBase(Asset asset){
+    public static void addNewAssetToDataBase(Asset asset) {
         ArrayList<Asset> assets = new ArrayList<>();
         try {
-            assets=getAssetsFromFile();
+            assets = getAssetsFromFile();
         } catch (IOException e) {
             e.printStackTrace();
         }
         try {
             Asset.searchAsset(assets, asset.getName());
-        }catch (AssetNotFoundException e){
-          assets.add(asset);
+        } catch (AssetNotFoundException e) {
+            assets.add(asset);
             try {
-                writeAssetArrayInFile(assets,"Data/CardsData.json");
+                writeAssetArrayInFile(assets, "Data/CardsData.json");
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
@@ -308,7 +310,8 @@ public class Asset implements ImageComparable {
 
     public static ArrayList<Asset> getAssetsFromFile() throws IOException {
         Reader reader = new FileReader("Data/CardsData.json");
-        ArrayList<Asset> assets = new YaGson().fromJson(reader, new TypeToken<java.util.Collection<Asset>>(){}.getType());
+        ArrayList<Asset> assets = new YaGson().fromJson(reader, new TypeToken<java.util.Collection<Asset>>() {
+        }.getType());
         reader.close();
         return assets;
     }
@@ -378,25 +381,26 @@ public class Asset implements ImageComparable {
         this.assetImageAddress = assetImageAddress;
     }
 
-    protected void setImageAddresses(String name){}
-
-    public boolean isInstanceOfHero(){
-        return (this.getID()>=2000) && (this.getID()<3000);
+    protected void setImageAddresses(String name) {
     }
 
-    public boolean isInstanceOfMinion(){
-        return (this.getID()>=3000) && (this.getID()<4000);
+    public boolean isInstanceOfHero() {
+        return (this.getID() >= 2000) && (this.getID() < 3000);
     }
 
-    public boolean isInstanceOfItem(){
-        return (this.getID()>=1000) && (this.getID()<2000);
+    public boolean isInstanceOfMinion() {
+        return (this.getID() >= 3000) && (this.getID() < 4000);
     }
 
-    public boolean isInstanceOfSpell(){
-        return (this.getID()>=4000) && (this.getID()<4000);
+    public boolean isInstanceOfItem() {
+        return (this.getID() >= 1000) && (this.getID() < 2000);
     }
 
-    public boolean isInstanceOfCard(){
+    public boolean isInstanceOfSpell() {
+        return (this.getID() >= 4000) && (this.getID() < 4000);
+    }
+
+    public boolean isInstanceOfCard() {
         return !isInstanceOfItem();
     }
 }

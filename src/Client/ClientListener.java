@@ -184,6 +184,9 @@ public class ClientListener extends Thread implements ScreenManager, DialogThrow
                             });
                         }
                     }
+                    if ( serverMessage.matches("CreateCustomCard;")){
+                        showOneButtonInformationDialogInThread("Create Custom Card","Your CustomCard Createed Successful",false);
+                    }
                     if (serverMessage.matches("endBattle")) {
                         loadPageOnStackPaneInThread(Client.getPaneOfMainStackPane(), "../View/FXML/MainMenu.fxml", "rtl");
                     }
