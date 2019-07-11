@@ -399,7 +399,7 @@ public abstract class Battle {
 
     public void  attackCombo(Account player, ArrayList<Minion> playerMinions, Warrior opponentWarrior) {
         for (int i = 0; i < playerMinions.size(); i++) {
-            if (playerMinions.get(i).getOwner() == player) {
+            if (playerMinions.get(i).getOwner().getName().equals(player.getName())) {
                 if ((playerMinions.get(i)).getActivateTimeOfSpecialPower() == COMBO)
                     attack(player, playerMinions.get(i), opponentWarrior);
                 else {
@@ -461,7 +461,7 @@ public abstract class Battle {
             for (int j = -1; j <= 1; j++) {
                 if (i == 0 && j == 0)
                     continue;
-                if (y + j >= 0 && x + i >= 0 && y + j < BattleGround.getRows() && x + i < BattleGround.getColumns() && battleGround.getGround().get(y + j).get(x + i) != null && battleGround.getGround().get(y + j).get(x + i).getOwner() == player) {
+                if (y + j >= 0 && x + i >= 0 && y + j < BattleGround.getRows() && x + i < BattleGround.getColumns() && battleGround.getGround().get(y + j).get(x + i) != null && battleGround.getGround().get(y + j).get(x + i).getOwner().getName().equals(player.getName())) {
                     isThereAnyAdjacentOwnWarrior = true;
                     break outer;
                 }
@@ -490,9 +490,8 @@ public abstract class Battle {
         resetIsMovedThisTurn(player);
         setPlayersManaByDefault();
 
-
-        TimeLine t0 = new TimeLine(BattleGroundController.getProgressbar());
-        t0 . start();
+//        TimeLine t0 = new TimeLine(BattleGroundController.getProgressbar());
+//        t0 . start();
 
 
 
@@ -503,7 +502,7 @@ public abstract class Battle {
         for (int i = 0; i < BattleGround.getRows(); i++) {
             for (int j = 0; j < BattleGround.getColumns(); j++) {
                 Asset asset = battleGround.getGround().get(i).get(j);
-                if (asset instanceof  Minion && ((Minion) asset).getActivateTimeOfSpecialPower() == PASSIVE && asset.getOwner() == player)
+                if (asset instanceof  Minion && ((Minion) asset).getActivateTimeOfSpecialPower() == PASSIVE && asset.getOwner().getName().equals(player.getName()))
                     applyMinionSpecialPower((Minion) asset, null, PASSIVE);
             }
         }
@@ -511,7 +510,7 @@ public abstract class Battle {
 
     public Account getOpponent(Account player) {
         Account opponent;
-        if (player == players[0])
+        if (player.getName().equals(players[0].getName()))
             opponent = players[1];
         else
             opponent = players[0];
@@ -547,7 +546,7 @@ public abstract class Battle {
         for (int i = 0; i < BattleGround.getRows(); i++) {
             for (int j = 0; j < BattleGround.getColumns(); j++) {
                 if (battleGround.getGround().get(i).get(j) == null || battleGround.getGround().get(i).get(j) instanceof Item
-                        || battleGround.getGround().get(i).get(j) instanceof Flag || battleGround.getGround().get(i).get(j).getOwner() == player)
+                        || battleGround.getGround().get(i).get(j) instanceof Flag || battleGround.getGround().get(i).get(j).getOwner().getName().equals(player.getName()))
                     continue;
                 warrior = (Warrior) battleGround.getGround().get(i).get(j);
                 applyEffectedBuffersOfWarrior(warrior, END_TURN);
@@ -591,7 +590,7 @@ public abstract class Battle {
 
     public int getPlayerIndex(Account player) {
         int playerIndex = 0;
-        if (player == players[1])
+        if (player.getName().equals(players[1].getName()))
             playerIndex = 1;
         return playerIndex;
     }
@@ -609,7 +608,7 @@ public abstract class Battle {
     private void resetIsMovedThisTurn(Account player) {
         for (ArrayList<Asset> assets : battleGround.getGround()) {
             for (Asset asset : assets) {
-                if (asset instanceof Warrior && asset.getOwner() == player)
+                if (asset instanceof Warrior && asset.getOwner().getName().equals(player.getName()))
                     ((Warrior) asset).setMovedThisTurn(false);
             }
         }
@@ -625,7 +624,7 @@ public abstract class Battle {
     public void selectItem(Account player, int collectibleItemID) {
         int playerIndex = 0;
         Item candidateItem;
-        if (player == players[1])
+        if (player.getName().equals(players[1].getName()))
             playerIndex = 1;
         try {
             candidateItem = searchItemInPlayersDeck(playerIndex, collectibleItemID);
@@ -889,13 +888,13 @@ public abstract class Battle {
         if (x > BattleGround.getColumns() || x < 0 || y > BattleGround.getRows() || y < 0)
             return false;
         if ((battleGround.getGround().get(y).get((warrior.getXInGround() + x) / 2) != null &&
-                Math.abs(warrior.getXInGround() - x) == 2 && battleGround.getGround().get(y).get((warrior.getXInGround() + x) / 2).getOwner() == players[1 - playerIndex])
+                Math.abs(warrior.getXInGround() - x) == 2 && battleGround.getGround().get(y).get((warrior.getXInGround() + x) / 2).getOwner().getName().equals(players[1 - playerIndex].getName()))
                 || (battleGround.getGround().get((warrior.getYInGround() + y) / 2).get(x) != null &&
-                Math.abs(warrior.getYInGround() - y) == 2 && battleGround.getGround().get((warrior.getXInGround() + y) / 2).get(x).getOwner() == players[1 - playerIndex]))
+                Math.abs(warrior.getYInGround() - y) == 2 && battleGround.getGround().get((warrior.getXInGround() + y) / 2).get(x).getOwner().getName().equals(players[1 - playerIndex].getName())))
             throw new InvalidTargetException("Invalid target");
         if (Math.abs(x - warrior.getXInGround()) == 1) {
-            if (battleGround.getGround().get(warrior.getYInGround()).get(x) != null && battleGround.getGround().get(warrior.getYInGround()).get(x).getOwner() == players[1 - playerIndex]
-                    && battleGround.getGround().get(y).get(warrior.getXInGround()).getOwner() == players[1 - playerIndex])
+            if (battleGround.getGround().get(warrior.getYInGround()).get(x) != null && battleGround.getGround().get(warrior.getYInGround()).get(x).getOwner().getName().equals(players[1 - playerIndex].getName())
+                    && battleGround.getGround().get(y).get(warrior.getXInGround()).getOwner().getName().equals(players[1 - playerIndex].getName()))
                 throw new InvalidTargetException("Invalid target");
         }
         return true;

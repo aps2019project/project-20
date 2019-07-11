@@ -171,7 +171,9 @@ public class ServerThread extends Thread {
         synchronized (connectedThread.getClient().getOutputStream()) {
             connectedThread.sendMessageToClient("opponentAction;endGame;" + endTurnStatus);
         }
+        connectedThread.setBattle(null);
         connectedThread = null;
+        battle = null;
         autoUpdateOnlinePlayersTableForAllClients();
     }
 
