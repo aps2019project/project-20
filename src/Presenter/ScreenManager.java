@@ -1,6 +1,7 @@
 package Presenter;
 
 import Controller.BattleGroundController;
+import Controller.ClientBattleGroundController;
 import Controller.SlideShowThread;
 import Model.Battle;
 import Client.Client;
@@ -66,10 +67,16 @@ public interface ScreenManager extends Animationable {
         parallelTransition.play();
     }
 
-    default void startNewGame(Parent prevPane,Battle battle){
-        Client.getStackPane().getChildren().remove(prevPane);
+    default void startNewGame(Battle battle, int clientIndex) {
+        Client.getStackPane().getChildren().remove(Client.getPaneOfMainStackPane());
         FXMLLoader loader = new FXMLLoader();
-        BattleGroundController battleGroundController = new BattleGroundController(battle);
+        BattleGroundController battleGroundController = null;
+        if (clientIndex == -1) //No network game.
+            battleGroundController = new BattleGroundController(battle);
+        else if (clientIndex == 0 || clientIndex == 1) {
+            battleGroundController = new ClientBattleGroundController(battle, clientIndex);
+            Client.setBattleGroundController((ClientBattleGroundController) battleGroundController);
+        }
         loader.setController(battleGroundController);
         AnchorPane root = new AnchorPane();
         try {
@@ -78,6 +85,15 @@ public interface ScreenManager extends Animationable {
             e.printStackTrace();
         }
         Client.getStackPane().getChildren().add(root);
+    }
+
+    default void startNewGameInThread(Battle battle, int clientIndex) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                startNewGame(battle, clientIndex);
+            }
+        });
     }
 
     default void openPageOnNewStageInThread(Scene prevScene, String FXMLAddress, boolean isInFullScreen){

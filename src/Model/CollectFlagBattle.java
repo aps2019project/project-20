@@ -6,6 +6,7 @@ public class CollectFlagBattle extends Battle{
     private static final int DEFAULT_NUMBER_OF_FLAGS = 7;
     private static int numberOfFlags;
     private Flag[] flags;
+    private int[] numberOfPlayersCollectedFlags = new int[]{0, 0};
 
 
     public CollectFlagBattle(Mode mode, Account firstPlayer, Account secondPlayer, Deck firstPlayerDeck, Deck secondPlayerDeck, BattleGround battleGround, int reward) {
@@ -21,20 +22,19 @@ public class CollectFlagBattle extends Battle{
     }
 
     @Override
+    protected void collectFlag(int playerIndex, Warrior warrior, int flagX, int flagY) {
+        warrior.setCollectedFlag(((Flag) battleGround.getGround().get(flagY).get(flagX)));
+        battleGround.getGround().get(flagY).set(flagX, null);
+        numberOfPlayersCollectedFlags[playerIndex] ++;
+    }
+
+    @Override
     public int endGame() {
-        int numberOfFirstPlayersFlags = 0;
-        int numberOfSecondPlayersFlags = 0;
-        for (Flag flag: flags){
-            if (flag.getOwner() == players[0])
-                numberOfFirstPlayersFlags++;
-            else if (flag.getOwner() == players[1])
-                numberOfSecondPlayersFlags++;
-        }
-        if (numberOfFirstPlayersFlags >= numberOfFlags / 2) {
+        if (numberOfPlayersCollectedFlags[0] >= numberOfFlags / 2) {
             players[0].setBudget(players[0].getBudget() + reward);
             return FIRST_PLAYER_WIN;
         }
-        else if (numberOfSecondPlayersFlags >= numberOfFlags / 2) {
+        else if (numberOfPlayersCollectedFlags[1] >= numberOfFlags / 2) {
             players[0].setBudget(players[1].getBudget() + reward);
             return SECOND_PLAYER_WIN;
         }
@@ -50,13 +50,21 @@ public class CollectFlagBattle extends Battle{
         return numberOfFlags;
     }
 
-    public static int getNumberOfPlayerFlags(Account player,Flag[] flags){
-        int num=0;
-        for (Flag flag : flags) {
-            if(flag.owner==player){
-                num++;
-            }
-        }
-        return num;
+    public int[] getNumberOfPlayersCollectedFlags() {
+        return numberOfPlayersCollectedFlags;
+    }
+
+    //    public static int getNumberOfPlayerFlags(Account player, Flag[] flags){
+//        int num=0;
+//        for (Flag flag : flags) {
+//            if(flag.owner==player){
+//                num++;
+//            }
+//        }
+//        return num;
+//    }
+
+    public void changeNumberOfPlayerCollectedFlags(int playerIndex, int value) {
+        numberOfPlayersCollectedFlags[playerIndex] += value;
     }
 }

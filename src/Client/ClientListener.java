@@ -128,13 +128,13 @@ public class ClientListener extends Thread implements ScreenManager, DialogThrow
                         }
                     }
                     if (serverMessage.matches("startingBattle;.+")) {
-                        Client.getBattleGroundController().setClientIndex(Integer.valueOf(serverMessage.split(";")[1]));
-                        Client.getBattleGroundController().setBattle(new YaGson().fromJson(serverMessage.split(";")[2], Battle.class));
                         synchronized (Client.getrLock()) {
                             Client.getrLock().notify();
                         }
+                        Battle newBattle = new YaGson().fromJson(serverMessage.split(";")[2], Battle.class);
+                        startNewGameInThread(newBattle, Integer.valueOf(serverMessage.split(";")[1]));
                     }
-                    if (serverMessage.matches("applyHeroSpecialPower;.+|useItem;.+|insertCard;.+|cardMoveTo;.+|attack;.+|")) {
+                    if (isBattleCommand(serverMessage)) {
                         setDataFromServer(serverMessage.split(";")[1]);
                         synchronized (Client.getrLock()) {
                             Client.getrLock().notify();
@@ -144,6 +144,8 @@ public class ClientListener extends Thread implements ScreenManager, DialogThrow
                         synchronized (Client.getrLock()) {
                             Client.getrLock().notify();
                         }
+                        Thread.sleep(4000);
+                        loadPageOnStackPaneInThread(Client.getBattleGroundController().battleGroundAnchorPane, "../View/FXML/MainMenu.fxml", "ltr");
                     }
                     if (serverMessage.matches("opponentAction;.+")) {
                         handleOpponentAction(serverMessage);
@@ -152,40 +154,96 @@ public class ClientListener extends Thread implements ScreenManager, DialogThrow
             }
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+    }
+
+    public boolean isBattleCommand(String serverMessage) {
+        return serverMessage.matches("(selectCard;.+)|(applyHeroSpecialPower;.+)|(useItem;.+)|(insertCard;.+)|(cardMoveTo;.+)|(attack;.+)|(endTurn;.+)");
+//        return serverMessage.matches("selectCard;.+") || serverMessage.matches("applyHeroSpecialPower;.+") || serverMessage.matches("useItem;.+") || serverMessage.matches("insertCard;.+") || serverMessage.matches("cardMoveTo;.+") || serverMessage.matches("attack;.+") || serverMessage.matches("endTurn;.+");
     }
 
     private void handleOpponentAction(String serverMessage) {
         switch (serverMessage.split(";")[1]) {
-            case "applyHeroSpecialPower":
-                Client.getBattleGroundController().setBattle(new YaGson().fromJson(serverMessage.split(";")[2], Battle.class));
-                Client.getBattleGroundController().showOpponentSpecialPowerUsing();
-                break;
-            case "insertCard":
+            case "selectCard":
                 int i = Integer.valueOf(serverMessage.split(";")[2]);
                 int j = Integer.valueOf(serverMessage.split(";")[3]);
+                Client.getBattleGroundController().setBattle(new YaGson().fromJson(serverMessage.split(";")[4], Battle.class));
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        Client.getBattleGroundController().updateOpponentSelectedCardCoordinates(i, j);
+                    }
+                });
+                break;
+            case "applyHeroSpecialPower":
+                Client.getBattleGroundController().setBattle(new YaGson().fromJson(serverMessage.split(";")[2], Battle.class));
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        Client.getBattleGroundController().showOpponentSpecialPowerUsing();
+                    }
+                });
+                break;
+            case "insertCard":
+                int i0 = Integer.valueOf(serverMessage.split(";")[2]);
+                int j0 = Integer.valueOf(serverMessage.split(";")[3]);
                 Card handCard = new YaGson().fromJson(serverMessage.split(";")[4], Card.class);
                 Client.getBattleGroundController().setBattle(new YaGson().fromJson(serverMessage.split(";")[5], Battle.class));
-                Client.getBattleGroundController().showInsertAnimation(i, j, handCard, false);
-                Client.getBattleGroundController().updateGroundCells();
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        Client.getBattleGroundController().showInsertAnimation(i0, j0, handCard, false);
+                        Client.getBattleGroundController().updateGroundCells();
+                    }
+                });
                 break;
             case "cardMoveTo":
                 int i1 = Integer.valueOf(serverMessage.split(";")[2]);
                 int j1 = Integer.valueOf(serverMessage.split(";")[3]);
                 Client.getBattleGroundController().setBattle(new YaGson().fromJson(serverMessage.split(";")[4], Battle.class));
-                Client.getBattleGroundController().showMove(i1, j1, false);
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        Client.getBattleGroundController().showMove(i1, j1, false);
+                        Client.getBattleGroundController().updateFlagLabels();
+                    }
+                });
                 break;
             case "attack":
                 Warrior attackedWarrior = new YaGson().fromJson(serverMessage.split(";")[2], Warrior.class);
                 int i2 = Integer.valueOf(serverMessage.split(";")[3]);
                 int j2 = Integer.valueOf(serverMessage.split(";")[4]);
                 Client.getBattleGroundController().setBattle(new YaGson().fromJson(serverMessage.split(";")[5], Battle.class));
-                Client.getBattleGroundController().showAttackAnimation(attackedWarrior, i2, j2, false);
-                Client.getBattleGroundController().updateGroundCells();
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        Client.getBattleGroundController().showAttackAnimation(attackedWarrior, i2, j2, false);
+                        Client.getBattleGroundController().updateGroundCells();
+                    }
+                });
+                break;
+            case "endTurn":
+                Client.getBattleGroundController().setBattle(new YaGson().fromJson(serverMessage.split(";")[2], Battle.class));
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        Client.getBattleGroundController().updateManaGemImages();
+                        Client.getBattleGroundController().setWhoseTurnLabel();
+                        Client.getBattleGroundController().updateGroundCells();
+                        Client.getBattleGroundController().updateCellEffects();
+                    }
+                });
                 break;
             case "endGame":
                 Client.getBattleGroundController().showEndGame(Integer.valueOf(serverMessage.split(";")[2]));
-                //TODO client must be redirected to main menu.
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                loadPageOnStackPaneInThread(Client.getBattleGroundController().battleGroundAnchorPane, "../View/FXML/MainMenu.fxml", "ltr");
         }
     }
 

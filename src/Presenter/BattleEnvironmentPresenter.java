@@ -1,11 +1,9 @@
 package Presenter;
 
-import Controller.ScreenRecordController;
 import Exceptions.AssetNotFoundException;
 import Exceptions.InvalidInGameAssetIDFormatException;
 import Exceptions.SpecialPowerMisMatchException;
 import Model.*;
-import View.BattleEnvironment;
 
 import java.util.ArrayList;
 

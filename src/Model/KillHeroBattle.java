@@ -6,6 +6,9 @@ public class KillHeroBattle extends Battle{
     }
 
     @Override
+    protected void collectFlag(int playerIndex, Warrior warrior, int flagX, int flagY) {}
+
+    @Override
     public int endGame() {
         if (playersDeck[0].getHero().getHP() <= 0 && playersDeck[1].getHero().getHP() <= 0)
             return DRAW;

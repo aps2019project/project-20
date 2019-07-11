@@ -168,7 +168,7 @@ public abstract class Battle {
             }
         }
         if (battleGround.getGround().get(y).get(x) instanceof Flag)
-            collectFlag(warrior, x, y);
+            collectFlag(playerIndex, warrior, x, y);
         else if (battleGround.getGround().get(y).get(x) instanceof Item)
             collectItem((Item) battleGround.getGround().get(y).get(x), warrior, playersDeck[playerIndex], y, x);
         else if (battleGround.getGround().get(y).get(x) instanceof Card)
@@ -187,10 +187,7 @@ public abstract class Battle {
         battleGround.getGround().get(y).set(x, null);
     }
 
-    private void collectFlag(Warrior warrior, int flagX, int flagY) {
-        warrior.setCollectedFlag(((Flag) battleGround.getGround().get(flagY).get(flagX)));
-        battleGround.getGround().get(flagY).set(flagX, null);
-    }
+    protected abstract void collectFlag(int playerIndex, Warrior warrior, int flagX, int flagY);
 
     public void attack(Account player, Warrior attacker, Warrior opponentWarrior) throws RuntimeException {
         if (attacker.isStun() || attacker.isAttackedThisTurn())
@@ -246,6 +243,8 @@ public abstract class Battle {
             if (warrior.getCollectedFlag() != null) {
                 warrior.getCollectedFlag().setKeptDuration(0);
                 warrior.getCollectedFlag().setOwner(null);
+                if (this instanceof CollectFlagBattle)
+                    ((CollectFlagBattle)this).changeNumberOfPlayerCollectedFlags(playerIndex, -1);
             }
             playersGraveYard[playerIndex].getDeadCards().add(warrior);
             if (warrior instanceof Minion && ((Minion) warrior).getActivateTimeOfSpecialPower() == ON_DEATH)

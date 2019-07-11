@@ -88,7 +88,7 @@ public class BeforeBattleMenu4Controller implements Initializable, ScreenManager
         startButton.setOnAction(event -> {
             if(!textField.getText().equals("") && Integer.parseInt(textField.getText())<=20 && Integer.parseInt(textField.getText())>=1) {
                 SoundDatas.playSFX(SoundDatas.DIALOG_YES_BUTTON);
-                startNewGame(anchorPane,Battle.customFlagModeConstructor(Integer.parseInt(textField.getText())));
+                startNewGame(Battle.customFlagModeConstructor(Integer.parseInt(textField.getText())), -1);
                 dialog.close();
             }else {
                 SoundDatas.playSFX(SoundDatas.DIALOG_NO_BUTTON);
@@ -117,7 +117,7 @@ public class BeforeBattleMenu4Controller implements Initializable, ScreenManager
 
     public void setMode3ButtonOnMouseReleased(){
         SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
-        startNewGame(anchorPane,Battle.customFlagModeConstructor(0));
+        startNewGame(Battle.customFlagModeConstructor(0), -1);
     }
 
     @Override
