@@ -145,14 +145,8 @@ public abstract class Battle {
         }
     }
 
-    public void selectWarrior(Account player, int cardID) {
+    public void selectWarrior(Account player, Warrior warrior) {
         int playerIndex = getPlayerIndex(player);
-        Warrior warrior;
-        try {
-            warrior = searchWarriorInBattleGround(cardID);
-        } catch (AssetNotFoundException e) {
-            throw new AssetNotFoundException("Invalid card id");
-        }
         playersSelectedCard[playerIndex] = warrior;
     }
 
@@ -466,7 +460,7 @@ public abstract class Battle {
             for (int j = -1; j <= 1; j++) {
                 if (i == 0 && j == 0)
                     continue;
-                if (y + j >= 0 && x + i >= 0 && y + j < BattleGround.getRows() && x + i < BattleGround.getColumns() && battleGround.getGround().get(y + j).get(x + i) != null && battleGround.getGround().get(y + j).get(x + i).getOwner().getName().equals(player.getName())) {
+                if (y + j >= 0 && x + i >= 0 && y + j < BattleGround.getRows() && x + i < BattleGround.getColumns() && battleGround.getGround().get(y + j).get(x + i) != null && battleGround.getGround().get(y + j).get(x + i).getOwner() != null && battleGround.getGround().get(y + j).get(x + i).getOwner().getName().equals(player.getName())) {
                     isThereAnyAdjacentOwnWarrior = true;
                     break outer;
                 }
@@ -839,16 +833,16 @@ public abstract class Battle {
         this.itemsCoordinates = itemsCoordinates;
     }
 
-    public Warrior searchWarriorInBattleGround(int warriorID) {
-        for (int i = 0; i < BattleGround.getRows(); i++) {
-            for (int j = 0; j < BattleGround.getColumns(); j++) {
-                Asset asset = battleGround.getGround().get(i).get(j);
-                if (asset instanceof Warrior && warriorID == asset.getID())
-                    return (Warrior) asset;
-            }
-        }
-        throw new AssetNotFoundException("Asset not found in the battleground.");
-    }
+//    public Warrior searchWarriorInBattleGround(int warriorID) {
+//        for (int i = 0; i < BattleGround.getRows(); i++) {
+//            for (int j = 0; j < BattleGround.getColumns(); j++) {
+//                Asset asset = battleGround.getGround().get(i).get(j);
+//                if (asset instanceof Warrior && warriorID == asset.getID())
+//                    return (Warrior) asset;
+//            }
+//        }
+//        throw new AssetNotFoundException("Asset not found in the battleground.");
+//    }
 
     public static ArrayList<Integer> differentRandomNumbersGenerator(int numberOfRandomNumbers, int supremeValueOfRange, int... invalidCells) {
         ArrayList<Integer> answer = new ArrayList<>();
@@ -874,13 +868,13 @@ public abstract class Battle {
         return answer;
     }
 
-    public Card searchCardInHand(Account player, int cardID) {
-        int playerIndex = getPlayerIndex(player);
-        for (Card card : playersHand[playerIndex])
-            if (cardID == card.getID())
-                return card;
-        throw new AssetNotFoundException("Card not found in the handAndNextCardGrid");
-    }
+//    public Card searchCardInHand(Account player, int cardID) {
+//        int playerIndex = getPlayerIndex(player);
+//        for (Card card : playersHand[playerIndex])
+//            if (cardID == card.getID())
+//                return card;
+//        throw new AssetNotFoundException("Card not found in the handAndNextCardGrid");
+//    }
 
     public boolean isValidCoordinates(int x, int y, Warrior warrior, int playerIndex) {
         if (x > BattleGround.getColumns() || x < 0 || y > BattleGround.getRows() || y < 0)
@@ -905,10 +899,10 @@ public abstract class Battle {
         throw new AssetNotFoundException("Asset not found.");
     }
 
-    public Card searchCardWithInGameCardID(ArrayList<Asset> cards, String cardId) {
-        String cardName = cardId.split("_")[1];
-        return (Card) Asset.searchAsset(cards, cardName);
-    }
+//    public Card searchCardWithInGameCardID(ArrayList<Asset> cards, String cardId) {
+//        String cardName = cardId.split("_")[1];
+//        return (Card) Asset.searchAsset(cards, cardName);
+//    }
 
     public static Battle soloStoryModeConstructor(int levelNumber) {
         Deck AIDeck;

@@ -227,7 +227,7 @@ public class AIController implements Initializable {
             Card insertedCard = AIHand[makeRandomNumber(battle.getNUMBER_OF_CARDS_IN_HAND())];
             battle.insertCard(battle.getPlayers()[1], battle.getPlayersHand()[1][selectedCardCoordinates[1] - 1].getName(), j + 1, i + 1);
             showInsertAnimation(i, j);
-            battle.selectWarrior(battle.getPlayers()[1], insertedCard.getID());
+//            battle.selectWarrior(battle.getPlayers()[1], insertedCard.getID());
         } catch (AssetNotFoundException | InvalidInsertInBattleGroundException | ThisCellFilledException | InsufficientManaException e) {
             handleError();
         }
@@ -257,7 +257,7 @@ public class AIController implements Initializable {
             if (asset != null && asset.getOwner() == battle.getPlayers()[1])
                 break;
         }
-        battle.selectWarrior(battle.getPlayers()[1], asset.getID());
+//        battle.selectWarrior(battle.getPlayers()[1], asset.getID());
         if (selectedCardCoordinates[0] == -1) //Card is already in hand.
             handAndNextCard.getChildren().remove(selectedCardBackground);
         else if (selectedCardCoordinates[0] > -1) {

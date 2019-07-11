@@ -593,12 +593,12 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
 
     private void selectCardInGround (Asset asset,int i, int j) {
         if (this instanceof ClientBattleGroundController) {
-            Client.getWriter().println("selectCard;" + new YaGson().toJson(asset.getOwner(), Account.class) + ";" + asset.getID());
+            Client.getWriter().println("selectCard;" + new YaGson().toJson(asset.getOwner(), Account.class) + ";" + new YaGson().toJson(asset, Asset.class));
             waitForServerAnswer();
             battle = new YaGson().fromJson(Client.getMessageListener().getDataFromServer(), Battle.class);
         }
         else
-          battle.selectWarrior(asset.getOwner(), asset.getID());
+          battle.selectWarrior(asset.getOwner(), (Warrior) asset);
         if (playerSelectedCardCoordinates[0] == -1) //Card is already in hand.
             handAndNextCardPanes[playerSelectedCardCoordinates[1]].getChildren().remove(selectedCardBackground);
         else if (playerSelectedCardCoordinates[0] > -1)
