@@ -64,6 +64,6 @@ public class Flag extends Asset {
 
     @Override
     protected void setImageAddresses(String name) {
-        //TODO must be implemented.
+        this.assetImageAddress = "file:images/flag_icon.png";
     }
 }

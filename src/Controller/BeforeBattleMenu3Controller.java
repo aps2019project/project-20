@@ -55,7 +55,7 @@ public class BeforeBattleMenu3Controller implements Initializable, ScreenManager
 
     public void setLevel1ButtonOnMouseReleased() {
         SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
-        startNewGame(anchorPane,Battle.soloStoryModeConstructor(1));
+        startNewGame(Battle.soloStoryModeConstructor(1), -1);
     }
 
     public void setLevel2ButtonOnMouseEntered(){
@@ -69,7 +69,7 @@ public class BeforeBattleMenu3Controller implements Initializable, ScreenManager
 
     public void setLevel2ButtonOnMouseReleased(){
         SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
-        startNewGame(anchorPane,Battle.soloStoryModeConstructor(2));
+        startNewGame(Battle.soloStoryModeConstructor(2), -1);
     }
 
     public void setLevel3ButtonOnMouseEntered(){
@@ -83,7 +83,7 @@ public class BeforeBattleMenu3Controller implements Initializable, ScreenManager
 
     public void setLevel3ButtonOnMouseReleased(){
         SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
-        startNewGame(anchorPane,Battle.soloStoryModeConstructor(3));
+        startNewGame(Battle.soloStoryModeConstructor(3), -1);
     }
 
     @Override

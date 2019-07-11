@@ -158,6 +158,10 @@ public class Client extends Application implements ScreenManager {
         return rLock;
     }
 
+    public static void setBattleGroundController(ClientBattleGroundController battleGroundController) {
+        Client.battleGroundController = battleGroundController;
+    }
+
     public static ClientBattleGroundController getBattleGroundController() {
         return battleGroundController;
     }

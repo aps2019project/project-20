@@ -3,13 +3,19 @@ package Model;
 import java.lang.reflect.Array;
 import java.util.List;
 
-public class KeepFlagBattle extends Battle{
-    private Flag singleFlag = new Flag();
+public class KeepFlagBattle extends Battle {
+    private Flag singleFlag;
     private static final int DURATION_TO_WIN = 7;
 
     public KeepFlagBattle(Mode mode, Account firstPlayer, Account secondPlayer, Deck firstPlayerDeck, Deck secondPlayerDeck, BattleGround battleGround, int reward) {
         super(mode, firstPlayer, secondPlayer, firstPlayerDeck, secondPlayerDeck, battleGround, reward);
         singleFlag = Flag.insertFlagsInBattleGround(this,1)[0];
+    }
+
+    @Override
+    protected void collectFlag(int playerIndex, Warrior warrior, int flagX, int flagY) {
+        warrior.setCollectedFlag(((Flag) battleGround.getGround().get(flagY).get(flagX)));
+        battleGround.getGround().get(flagY).set(flagX, null);
     }
 
     @Override
@@ -24,6 +30,8 @@ public class KeepFlagBattle extends Battle{
                 return SECOND_PLAYER_WIN;
             }
         }
+        if (singleFlag.getOwner() != null)
+            singleFlag.setKeptDuration(singleFlag.getKeptDuration() + 1);
         return UNFINISHED_GAME;
     }
 

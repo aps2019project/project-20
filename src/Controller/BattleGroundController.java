@@ -25,19 +25,43 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
 import static Model.BattleGround.CellEffect;
 
-public class BattleGroundController implements Initializable, ScreenManager, DialogThrowable, Animationable, DateGetter {
+public class BattleGroundController implements Initializable, ScreenManager , DialogThrowable, Animationable, DateGetter {
+    //Pair components
+    public Button specialPowerButton0;
+    public Button specialPowerButton1;
+
+    public Label successfulSpecialPowerBanner0;
+    public Label successfulSpecialPowerBanner1;
+
+    public ImageView deckItem0;
+    public ImageView deckItem1;
+
+    public GridPane manaGemsRibbon0;
+    public GridPane manaGemsRibbon1;
+
+    public GridPane collectedItemsGrid0;
+    public GridPane collectedItemsGrid1;
+
+    public Label numberOfCollectedFlagsLabel0;
+    public Label numberOfCollectedFlagsLabel1;
+
+    public Pane collectedItemsPane0;
+    public Pane collectedItemsPane1;
+
+    public ProgressBar progressbar0;
+    public ProgressBar progressbar1;
+
     private static final int CELL_HEIGHT = 80;
     private static final int CELL_WIDTH = 80;
     private static final int MAX_NUMBER_OF_COLLECTIBLE_ITEMS = 9;
     private static final double MARGIN_WIDTH = 30;
-    protected int clientIndex = 0;
+    protected int clientIndex;
     public StackPane mainStackPane;
     public ImageView battleGroundImage;
     public ImageView profilePic0;
@@ -45,7 +69,7 @@ public class BattleGroundController implements Initializable, ScreenManager, Dia
     public Button specialPowerButton;
     public Label successfulSpecialPowerBanner;
     public ImageView deckItem;
-    public ImageView opponentProfilePic;
+//    public ImageView opponentProfilePic;
     public Label playerName0;
     public Label playerName1;
     public GridPane groundGrid;
@@ -59,6 +83,9 @@ public class BattleGroundController implements Initializable, ScreenManager, Dia
     public ImageView pauseMenuCloseButton;
     private Pane[] collectedItemsPanes;
     private ImageView[] collectedItemsImageViews;
+//    private Label numberOfCollectedFlagsLabel;
+    public Label durationOfKeepingFlagLabel;
+    public Label singleFlagKeeperLabel;
     private Pane[][] groundPanes;
     private Pane[] handAndNextCardPanes;
     public ImageView errorBar;
@@ -105,6 +132,7 @@ public class BattleGroundController implements Initializable, ScreenManager, Dia
     public BattleGroundController(Battle battle) {
         this.battle = battle;
         itemsCursor = battle.getPlayersDeck()[clientIndex].getItems().size();
+        clientIndex = 0;
     }
 
     public static ProgressBar getProgressbar() {
@@ -118,13 +146,14 @@ public class BattleGroundController implements Initializable, ScreenManager, Dia
 //        temp.setMainDeck(DeckDatas.getDefaultDeck());
 //        CurrentAccount.setCurrentAccount(temp);
 //        battle = Battle.customKillHeroModeConstructor("rostam");
+        initializePairComponentsOfPage();
         startBattleDate = getDateFormat2();
         screenRecordController = new ScreenRecordController(startBattleDate);
         //for start capturing video
         // screenRecordController.start();
         //for finishing the game
-
-        aiController = new AIController(battle);
+        if (!(this instanceof ClientBattleGroundController))
+            aiController = new AIController(battle);
         selectedCardBackground = new ImageView(new Image("file:images/card_background_highlight.png"));
         errorImage = new Image("file:images/notification_quest_small.png");
         successfulSpecialPowerBanner.setText("");
@@ -169,6 +198,36 @@ public class BattleGroundController implements Initializable, ScreenManager, Dia
 //        timeline.setOnFinished(event -> battle.endTurn(battle.getPlayers()[clientIndex]));
 //        timeline.play();
 
+    }
+
+    private void initializePairComponentsOfPage() {
+        specialPowerButton = clientIndex == 0 ? specialPowerButton0 : specialPowerButton1;
+        successfulSpecialPowerBanner = clientIndex == 0 ? successfulSpecialPowerBanner0: successfulSpecialPowerBanner1;
+        deckItem = clientIndex == 0 ? deckItem0 : deckItem1;
+        manaGemsRibbon = clientIndex == 0 ? manaGemsRibbon0 : manaGemsRibbon1;
+        collectedItemsGrid = clientIndex == 0 ? collectedItemsGrid0 : collectedItemsGrid1;
+        progressbar = clientIndex == 0 ? progressbar0 : progressbar1;
+        if (clientIndex == 0) {
+            specialPowerButton1.setVisible(false);
+            successfulSpecialPowerBanner1.setVisible(false);
+            deckItem1.setVisible(false);
+            manaGemsRibbon1.setVisible(false);
+            collectedItemsPane1.setVisible(false);
+        }
+        else if (clientIndex == 1) {
+            specialPowerButton0.setVisible(false);
+            successfulSpecialPowerBanner0.setVisible(false);
+            deckItem0.setVisible(false);
+            manaGemsRibbon0.setVisible(false);
+            collectedItemsPane0.setVisible(false);
+        }
+        if (battle instanceof CollectFlagBattle) {
+            numberOfCollectedFlagsLabel0.setVisible(true);
+            numberOfCollectedFlagsLabel1.setVisible(true);
+        }
+        else if (battle instanceof KeepFlagBattle) {
+            durationOfKeepingFlagLabel.setVisible(true);
+        }
     }
 
     private void initializeIDsOfspecialPowersNeedingCell() {
@@ -302,10 +361,10 @@ public class BattleGroundController implements Initializable, ScreenManager, Dia
     }
 
     private void initializeProfilesInfo() {
-        String firstHeroName = battle.getPlayers()[clientIndex].getMainDeck().getHero().getName();
+        String firstHeroName = battle.getPlayers()[0].getMainDeck().getHero().getName();
         String secondHeroName = battle.getPlayers()[1].getMainDeck().getHero().getName();
         profilePic0.setImage(new Image("file:images/cards/hero/" + firstHeroName + "/" + firstHeroName + "_profile.png"));
-        opponentProfilePic.setImage(new Image("file:images/cards/hero/" + secondHeroName + "/" + secondHeroName + "_profile.png"));
+        profilePic1.setImage(new Image("file:images/cards/hero/" + secondHeroName + "/" + secondHeroName + "_profile.png"));
         playerName0.setText(battle.getPlayers()[0].getName());
         playerName1.setText(battle.getPlayers()[1].getName());
     }
@@ -425,28 +484,26 @@ public class BattleGroundController implements Initializable, ScreenManager, Dia
                 public void handle(MouseEvent event) {
                     if (clientIndex != battle.getTurn() % 2)
                         return;
-                    new Thread(() -> {
-                        if (BattleGroundController.this instanceof ClientBattleGroundController) {
-                            Client.getWriter().println("useItem;" + new YaGson().toJson(battle.getPlayers()[clientIndex], Account.class) + ";" + new YaGson().toJson(battle.getPlayersDeck()[clientIndex].getItems().get(index), Item.class));
-                            synchronized (Client.getrLock()) {
-                                try {
-                                    Client.getrLock().wait();
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (BattleGroundController.this instanceof ClientBattleGroundController) {
+                                Client.getWriter().println("useItem;" + new YaGson().toJson(battle.getPlayers()[clientIndex], Account.class) + ";" + new YaGson().toJson(battle.getPlayersDeck()[clientIndex].getItems().get(index), Item.class));
+                                waitForServerAnswer();
+                                battle = new YaGson().fromJson(Client.getMessageListener().getDataFromServer(), Battle.class);
                             }
-                            battle = new YaGson().fromJson(Client.getMessageListener().getDataFromServer(), Battle.class);
-                        } else
-                            battle.useItem(battle.getPlayers()[clientIndex], null, null, battle.getPlayersDeck()[clientIndex].getItems().get(index));
-                        imageView.setImage(new Image(battle.getPlayersDeck()[clientIndex].getItems().get(index).getActiveImageAddress()));
-                        try {
-                            Thread.sleep(2000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
+                            else
+                                battle.useItem(battle.getPlayers()[clientIndex], null, null, battle.getPlayersDeck()[clientIndex].getItems().get(index));
+                            imageView.setImage(new Image(battle.getPlayersDeck()[clientIndex].getItems().get(index).getActiveImageAddress()));
+                            try {
+                                Thread.sleep(2000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            for (int i = index; i < itemsCursor; i++)
+                                collectedItemsImageViews[i].setImage(collectedItemsImageViews[i + 1].getImage());
+                            itemsCursor--;
                         }
-                        for (int i = index; i < itemsCursor; i++)
-                            collectedItemsImageViews[i].setImage(collectedItemsImageViews[i + 1].getImage());
-                        itemsCursor--;
                     }).start();
                 }
             });
@@ -466,7 +523,7 @@ public class BattleGroundController implements Initializable, ScreenManager, Dia
         if (asset instanceof Warrior) {
             groundPanes[i][j].getChildren().add(hpBars.get(asset));
             groundPanes[i][j].getChildren().add(apBars.get(asset));
-            locateHpAndApLabels(groundPanes[i][j], asset);
+            locateHpAndApLabels(groundPanes[i][j], (Warrior) asset);
         }
     }
 
@@ -486,9 +543,9 @@ public class BattleGroundController implements Initializable, ScreenManager, Dia
                 }
 
                 if (asset instanceof Warrior) {
-                    if (asset.getOwner() == battle.getPlayers()[clientIndex])
+                    if (asset.getOwner().getName().equals(battle.getPlayers()[clientIndex].getName()))
                         selectCardInGround(asset, i, j);
-                    else if (asset.getOwner() == battle.getPlayers()[1 - clientIndex] && playerSelectedCardCoordinates[0] > -1)
+                    else if (asset.getOwner().getName().equals(battle.getPlayers()[1 - clientIndex]) && playerSelectedCardCoordinates[0] > -1)
                         attack((Warrior) asset, i, j);
                 } else if (playerSelectedCardCoordinates[0] > -1)
                     moveCard(i, j);
@@ -521,8 +578,14 @@ public class BattleGroundController implements Initializable, ScreenManager, Dia
         });
     }
 
-    private void selectCardInGround(Asset asset, int i, int j) {
-        battle.selectWarrior(asset.getOwner(), asset.getID());
+    private void selectCardInGround (Asset asset,int i, int j) {
+        if (this instanceof ClientBattleGroundController) {
+            Client.getWriter().println("selectCard;" + new YaGson().toJson(asset.getOwner(), Account.class) + ";" + asset.getID());
+            waitForServerAnswer();
+            battle = new YaGson().fromJson(Client.getMessageListener().getDataFromServer(), Battle.class);
+        }
+        else
+          battle.selectWarrior(asset.getOwner(), asset.getID());
         if (playerSelectedCardCoordinates[0] == -1) //Card is already in hand.
             handAndNextCardPanes[playerSelectedCardCoordinates[1]].getChildren().remove(selectedCardBackground);
         else if (playerSelectedCardCoordinates[0] > -1)
@@ -532,7 +595,17 @@ public class BattleGroundController implements Initializable, ScreenManager, Dia
         groundPanes[i][j].getChildren().add(selectedCardBackground);
     }
 
-    private void insertCard(int i, int j) {
+    private void waitForServerAnswer() {
+        synchronized (Client.getrLock()) {
+            try {
+                Client.getrLock().wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void insertCard (int i, int j){
         try {
             Card handCard = battle.getPlayersHand()[clientIndex][playerSelectedCardCoordinates[1] - 1]; // Because after the next line, target card becomes null.
             if (BattleGroundController.this instanceof ClientBattleGroundController) {
@@ -628,6 +701,7 @@ public class BattleGroundController implements Initializable, ScreenManager, Dia
             showMove(i, j, true);
             if (targetCell instanceof Item)
                 addItemToInventory((Item) targetCell);
+            updateFlagLabels();
 //                updateGroundCells();
         } catch (InvalidTargetException | ThisCellFilledException | WarriorSecondMoveInTurnException e) {
             handleError(e);
@@ -642,7 +716,18 @@ public class BattleGroundController implements Initializable, ScreenManager, Dia
         itemsCursor++;
     }
 
-    public void updateGroundCells() {
+    public void updateFlagLabels(){
+        if (battle instanceof CollectFlagBattle) {
+            numberOfCollectedFlagsLabel0.setText("Number of collected flags: " + ((CollectFlagBattle) battle).getNumberOfPlayersCollectedFlags()[0]);
+            numberOfCollectedFlagsLabel1.setText("Number of collected flags: " + ((CollectFlagBattle) battle).getNumberOfPlayersCollectedFlags()[1]);
+        }
+        else if (battle instanceof KeepFlagBattle) {
+            durationOfKeepingFlagLabel.setText("Duration of keeping flag: " + ((KeepFlagBattle) battle).getSingleFlag().getKeptDuration());
+            singleFlagKeeperLabel.setText("Single flag holder: " + ((KeepFlagBattle) battle).getSingleFlag().getOwner().getName());
+        }
+    }
+
+    public void updateGroundCells () {
         for (int i = 0; i < BattleGround.getRows(); i++) {
             for (int j = 0; j < BattleGround.getColumns(); j++) {
                 Asset asset = battle.getBattleGround().getGround().get(i).get(j);
@@ -651,28 +736,29 @@ public class BattleGroundController implements Initializable, ScreenManager, Dia
                     groundImageViews[i][j].setImage(new Image(freeCellImageAddress));
 
                 if (asset instanceof Warrior)
-                    locateHpAndApLabels(groundPanes[i][j], asset);
+                    locateHpAndApLabels(groundPanes[i][j], (Warrior) asset);
                 initializeSize(groundImageViews[i][j]);
                 setGroundCellEvent(groundImageViews[i][j], asset, i, j);
             }
         }
     }
 
-    private void locateHpAndApLabels(Pane pane, Asset asset) {
-        hpBars.get(asset).setText(String.valueOf(((Warrior) asset).getHP()));
-        hpBars.get(asset).setLayoutX(pane.getLayoutX());
-        hpBars.get(asset).setLayoutY(pane.getLayoutY() - 2 * pane.getHeight());
-        apBars.get(asset).setText(String.valueOf(((Warrior) asset).getAP()));
-        apBars.get(asset).setLayoutX(pane.getLayoutX() + MARGIN_WIDTH);
-        apBars.get(asset).setLayoutY(pane.getLayoutY() - 2 * pane.getHeight());
+    //TODO why does the following method throw NPE.
+    private void locateHpAndApLabels(Pane pane, Warrior warrior) {
+        hpBars.get(warrior).setText(String.valueOf(warrior.getHP()));
+        hpBars.get(warrior).setLayoutX(pane.getLayoutX());
+        hpBars.get(warrior).setLayoutY(pane.getLayoutY() - 2 * pane.getHeight());
+        apBars.get(warrior).setText(String.valueOf(warrior.getAP()));
+        apBars.get(warrior).setLayoutX(pane.getLayoutX() + MARGIN_WIDTH);
+        apBars.get(warrior).setLayoutY(pane.getLayoutY() - 2 * pane.getHeight());
     }
 
     public void showMove(int i, int j, boolean isOwn) {
-        Warrior warrior = (Warrior) battle.getPlayersSelectedCard()[clientIndex];
+        Warrior warrior = isOwn ? (Warrior) battle.getPlayersSelectedCard()[clientIndex] : (Warrior) battle.getPlayersSelectedCard()[1 - clientIndex];
         new Thread(new Runnable() {
             @Override
             public void run() {
-                animateMove(warrior, i, j, true);
+                animateMove(warrior, i, j, isOwn);
                 ImageView targetImageView = isOwn ? groundImageViews[playerSelectedCardCoordinates[0]][playerSelectedCardCoordinates[1]] : groundImageViews[opponentSelectedCardCoordinates[0]][opponentSelectedCardCoordinates[1]];
                 targetImageView.setImage(new Image(freeCellImageAddress));
                 initializeSize(targetImageView);
@@ -691,17 +777,16 @@ public class BattleGroundController implements Initializable, ScreenManager, Dia
                 if (isOwn) {
                     playerSelectedCardCoordinates[0] = i;
                     playerSelectedCardCoordinates[1] = j;
-                } else {
-                    opponentSelectedCardCoordinates[0] = i;
-                    opponentSelectedCardCoordinates[1] = j;
                 }
+                else
+                    updateOpponentSelectedCardCoordinates(i, j);
             }
         }).start();
     }
 
-    private void animateMove(Warrior warrior, int finalRow, int finalColumn, boolean isOwn) {
-        Pane startPane = groundPanes[playerSelectedCardCoordinates[0]][playerSelectedCardCoordinates[1]];
-        Pane endPane = groundPanes[finalRow][finalColumn];
+    private void animateMove (Warrior warrior,int finalRow, int finalColumn, boolean isOwn){
+//        Pane startPane = groundPanes[playerSelectedCardCoordinates[0]][playerSelectedCardCoordinates[1]];
+//        Pane endPane = groundPanes[finalRow][finalColumn];
         ImageView startImageView = isOwn ? groundImageViews[playerSelectedCardCoordinates[0]][playerSelectedCardCoordinates[1]] : groundImageViews[opponentSelectedCardCoordinates[0]][opponentSelectedCardCoordinates[1]];
         ImageView endImageView = groundImageViews[finalRow][finalColumn];
 
@@ -814,15 +899,13 @@ public class BattleGroundController implements Initializable, ScreenManager, Dia
                 int endTurnStatus = battle.endTurn(battle.getPlayers()[clientIndex]);
                 if (!(endTurnStatus == Battle.UNFINISHED_GAME)) {
                     Client.getWriter().println("endGame;" + startBattleDate + ";" + new YaGson().toJson(battle.getPlayers()[clientIndex], Account.class) + ";" + new YaGson().toJson(battle.getPlayers()[1 - clientIndex], Account.class) + ";" + endTurnStatus + ";" + new YaGson().toJson(screenRecordController, ScreenRecordController.class));
-                    synchronized (Client.getrLock()) {
-                        try {
-                            Client.getrLock().wait();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
+                    waitForServerAnswer();
                     showEndGame(endTurnStatus);
                     //TODO must be redirected to main menu.
+                }
+                else {
+                    Client.getWriter().println("endTurn;" + clientIndex);
+                    waitForServerAnswer();
                 }
                 updateManaGemImages();
                 updateHandImages();
@@ -835,11 +918,15 @@ public class BattleGroundController implements Initializable, ScreenManager, Dia
                 }
 //                    graveYardController.initializeDeadCardsImages(true);
 //                    graveYardController.initializeDeadCardsImages(false);
-                whoseTurn.setText(battle.getTurn() % 2 == 0 ? "First Player Turn" : "Second Player Turn");
+                setWhoseTurnLabel();
                 updateGroundCells();
                 updateCellEffects();
             }
         });
+    }
+
+    public void setWhoseTurnLabel() {
+        whoseTurn.setText(battle.getTurn() % 2 == 0 ? "First Player Turn" : "Second Player Turn");
     }
 
     public void showEndGame(int endTurnStatus) {
@@ -860,7 +947,7 @@ public class BattleGroundController implements Initializable, ScreenManager, Dia
         endGameBanner.setText(endGameBannerText);
     }
 
-    private void updateManaGemImages() {
+    public void updateManaGemImages () {
         for (int i = 0; i < battle.getPlayersMana()[clientIndex]; i++)
             manaGemImageViews[i].setImage(new Image("file:images/icon_mana.png"));
         for (int i = battle.getPlayersMana()[clientIndex]; i < Battle.MAX_MANA_IN_LATE_TURNS; i++)
@@ -888,7 +975,7 @@ public class BattleGroundController implements Initializable, ScreenManager, Dia
         }
     }
 
-    private void updateCellEffects() {
+    public void updateCellEffects () {
         for (int i = 0; i < BattleGround.getRows(); i++) {
             for (int j = 0; j < BattleGround.getColumns(); j++) {
                 for (CellEffect cellEffect : battle.getBattleGround().getEffectsPosition().get(i).get(j)) {
@@ -907,21 +994,29 @@ public class BattleGroundController implements Initializable, ScreenManager, Dia
         }
     }
 
-    private void handleError(RuntimeException e) {
-        new Thread(() -> {
-            errorBar.setImage(errorImage);
-            errorBar.setFitHeight(100);
-            errorBar.setFitWidth(300);
-            errorMessage.setVisible(true);
-            errorMessage.setText(getErrorMessage(e));
-            try {
-                Thread.sleep(4000);
-            } catch (InterruptedException e1) {
-                e1.printStackTrace();
+    public void updateOpponentSelectedCardCoordinates(int i, int j) {
+        opponentSelectedCardCoordinates[0] = i;
+        opponentSelectedCardCoordinates[1] = j;
+    }
+
+    private void handleError (RuntimeException e){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                errorBar.setImage(errorImage);
+                errorBar.setFitHeight(100);
+                errorBar.setFitWidth(300);
+                errorMessage.setVisible(true);
+                errorMessage.setText(getErrorMessage(e));
+                try {
+                    Thread.sleep(4000);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+                errorBar.setImage(null);
+                errorMessage.setText(null);
+                errorMessage.setVisible(false);
             }
-            errorBar.setImage(null);
-            errorMessage.setText(null);
-            errorMessage.setVisible(false);
         }).start();
     }
 
@@ -1000,7 +1095,7 @@ public class BattleGroundController implements Initializable, ScreenManager, Dia
         this.clientIndex = clientIndex;
     }
 
-    private Node getNodeFromGridPane(GridPane gridPane, int col, int row) {
+    private Node getNodeFromGridPane (GridPane gridPane, int col, int row) {
         for (Node node : gridPane.getChildren()) {
             if (GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row) {
                 return node;
@@ -1038,7 +1133,7 @@ public class BattleGroundController implements Initializable, ScreenManager, Dia
                     case DIGIT4:
                         //Mode4
                         for (Card inGroundCard : battle.getInGroundCards()) {
-                            if (inGroundCard.getOwner() == battle.getPlayers()[clientIndex] && inGroundCard instanceof Warrior) {
+                            if (inGroundCard.getOwner().getName().equals(battle.getPlayers()[clientIndex].getName()) && inGroundCard instanceof Warrior) {
                                 ((Warrior) inGroundCard).changeHP(20);
                             }
                         }
@@ -1047,7 +1142,7 @@ public class BattleGroundController implements Initializable, ScreenManager, Dia
                     case DIGIT5:
                         //Mode5
                         for (Card inGroundCard : battle.getInGroundCards()) {
-                            if (inGroundCard.getOwner() == battle.getPlayers()[1] && inGroundCard instanceof Warrior) {
+                            if (inGroundCard.getOwner().getName().equals(battle.getPlayers()[1 - clientIndex].getName()) && inGroundCard instanceof Warrior) {
                                 ((Warrior) inGroundCard).changeHP(-10);
                             }
                         }

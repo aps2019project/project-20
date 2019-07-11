@@ -112,7 +112,8 @@ public class MatchHistoryController implements Initializable, ScreenManager, Acc
 
     public void setStartButtonReleased() {
         if(saveTable.getSelectionModel().getSelectedItem()!=null) {
-            startNewGame(anchorPane, saveTable.getSelectionModel().getSelectedItem().getBattle());
+            //todo some of battleGround data like accumulated items is not saved
+            startNewGame(saveTable.getSelectionModel().getSelectedItem().getBattle(), -1);
             startButton.setImage(new Image("file:images/start_button_hover.png"));
         }
     }
