@@ -750,16 +750,32 @@ public class CollectionController implements Initializable, ScreenManager, Accou
             int heroID = 2010;
             int spellID = 4020;
 
-            int price = Integer.valueOf(priceText.getText());
-            int range = Integer.valueOf(rangeText.getText());
-            int AP = Integer.valueOf(APText.getText());
-            int HP = Integer.valueOf(HPText.getText());
-            int coolDown = Integer.valueOf(specialPowerCoolDownText.getText());
-            int squareSideLength = Integer.valueOf(sideLength.getText());
-            int effectValue = Integer.valueOf(effectValueText.getText());
-            int delay = Integer.valueOf(delayText.getText());
-            int last = Integer.valueOf(lastText.getText());
+            int price = 100;
+            int range = 10;
+            int AP = 10;
+            int HP = 10;
+            int coolDown = 10;
+            int squareSideLength = 2;
+            int effectValue = 20;
+            int delay = 20;
+            int last = 20;
             boolean isTargetFriend = false;
+            if (priceText.getText() != null &&rangeText.getText()!=null && APText.getText()!=null &&  HPText.getText()!= null &&
+                    specialPowerCoolDownText.getText() != null && sideLength.getText()!=null && effectValueText.getText()!=null &&
+            lastText.getText()!=null && delayText.getText() != null ) {
+                price = Integer.valueOf(priceText.getText());
+                range = Integer.valueOf(rangeText.getText());
+                AP = Integer.valueOf(APText.getText());
+                HP = Integer.valueOf(HPText.getText());
+                coolDown = Integer.valueOf(specialPowerCoolDownText.getText());
+                squareSideLength = Integer.valueOf(sideLength.getText());
+                effectValue = Integer.valueOf(effectValueText.getText());
+                delay = Integer.valueOf(delayText.getText());
+                last = Integer.valueOf(lastText.getText());
+                isTargetFriend = false;
+            }
+
+            
 
             ToggleGroup typeGroup = new ToggleGroup();
             hero.setToggleGroup(typeGroup);
@@ -854,7 +870,7 @@ public class CollectionController implements Initializable, ScreenManager, Accou
                 Minion minion = new Minion(nameText.getText(), nameText.getText(), price, minionID, range, AP, HP, DEFAULT_MANA, attackType, activateTimeOfSpecialPower, buff, isTargetFriend);
                 //TODO next line can't help because this is a local variable.
                 minionID++;
-                Client.getWriter().println("Create;" + new YaGson().toJson(minion,Minion.class));
+                Client.getWriter().println("Create;" + new YaGson().toJson(minion, Minion.class));
                 Client.waitForListener();
 //                Asset.addNewAssetToDataBase(minion);
                 getCurrentAccount().getCollection().getAssets().add(minion);
@@ -863,7 +879,7 @@ public class CollectionController implements Initializable, ScreenManager, Accou
                 Hero hero = new Hero(nameText.getText(), price, heroID, range, AP, HP, DEFAULT_MANA, coolDown, attackType, buff, isTargetFriend);
                 //TODO next line can't help because this is a local variable.
                 heroID++;
-                Client.getWriter().println("Create;" + new YaGson().toJson(hero,Hero.class));
+                Client.getWriter().println("Create;" + new YaGson().toJson(hero, Hero.class));
                 Client.waitForListener();
 //                Asset.addNewAssetToDataBase(hero);
                 getCurrentAccount().getCollection().getAssets().add(hero);
@@ -872,7 +888,7 @@ public class CollectionController implements Initializable, ScreenManager, Accou
                 Spell spell = new Spell(nameText.getText(), nameText.getText(), price, spellID, DEFAULT_MANA, targetType, squareSideLength, buff, isTargetFriend);
                 //TODO next line can't help because this is a local variable.
                 spellID++;
-                Client.getWriter().println("Create;" + new YaGson().toJson(spell,Spell.class));
+                Client.getWriter().println("Create;" + new YaGson().toJson(spell, Spell.class));
                 Client.waitForListener();
 //                Asset.addNewAssetToDataBase(spell);
                 getCurrentAccount().getCollection().getAssets().add(spell);

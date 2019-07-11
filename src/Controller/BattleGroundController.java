@@ -152,8 +152,9 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
         //for start capturing video
         // screenRecordController.start();
         //for finishing the game
-        if (!(this instanceof ClientBattleGroundController))
+        if (!(this instanceof ClientBattleGroundController)){
             aiController = new AIController(battle);
+        }
         selectedCardBackground = new ImageView(new Image("file:images/card_background_highlight.png"));
         errorImage = new Image("file:images/notification_quest_small.png");
         successfulSpecialPowerBanner.setText("");
@@ -874,54 +875,45 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
     }
 
     private void setEndTurnEvent() {
-        endTurn.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                if (clientIndex != battle.getTurn() % 2)
-                    return;
-                endTurn.setOpacity(0.6);
-            }
+        endTurn.setOnMouseEntered(event -> {
+            if (clientIndex != battle.getTurn() % 2)
+                return;
+            endTurn.setOpacity(0.6);
         });
-        endTurn.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                if (clientIndex != battle.getTurn() % 2)
-                    return;
-                endTurn.setOpacity(1);
-            }
+        endTurn.setOnMouseExited(event -> {
+            if (clientIndex != battle.getTurn() % 2)
+                return;
+            endTurn.setOpacity(1);
         });
-        endTurn.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                if (clientIndex != battle.getTurn() % 2)
-                    return;
-                endTurn.setOpacity(1);
-                int endTurnStatus = battle.endTurn(battle.getPlayers()[clientIndex]);
-                if (!(endTurnStatus == Battle.UNFINISHED_GAME)) {
-                    Client.getWriter().println("endGame;" + startBattleDate + ";" + new YaGson().toJson(battle.getPlayers()[clientIndex], Account.class) + ";" + new YaGson().toJson(battle.getPlayers()[1 - clientIndex], Account.class) + ";" + endTurnStatus + ";" + new YaGson().toJson(screenRecordController, ScreenRecordController.class));
-                    waitForServerAnswer();
-                    showEndGame(endTurnStatus);
-                    //TODO must be redirected to main menu.
-                }
-                else {
-                    Client.getWriter().println("endTurn;" + clientIndex);
-                    waitForServerAnswer();
-                }
-                updateManaGemImages();
-                updateHandImages();
-                if (!(BattleGroundController.this instanceof ClientBattleGroundController))
-                    aiController.handleAIEvent(battle);
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+        endTurn.setOnMouseClicked(event -> {
+            if (clientIndex != battle.getTurn() % 2)
+                return;
+            endTurn.setOpacity(1);
+            int endTurnStatus = battle.endTurn(battle.getPlayers()[clientIndex]);
+            if (!(endTurnStatus == Battle.UNFINISHED_GAME)) {
+                Client.getWriter().println("endGame;" + startBattleDate + ";" + new YaGson().toJson(battle.getPlayers()[clientIndex], Account.class) + ";" + new YaGson().toJson(battle.getPlayers()[1 - clientIndex], Account.class) + ";" + endTurnStatus + ";" + new YaGson().toJson(screenRecordController, ScreenRecordController.class));
+                waitForServerAnswer();
+                showEndGame(endTurnStatus);
+                //TODO must be redirected to main menu.
+            }
+            else {
+                Client.getWriter().println("endTurn;" + clientIndex);
+                waitForServerAnswer();
+            }
+            updateManaGemImages();
+            updateHandImages();
+            if (!(BattleGroundController.this instanceof ClientBattleGroundController))
+                aiController.handleAIEvent(battle);
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 //                    graveYardController.initializeDeadCardsImages(true);
 //                    graveYardController.initializeDeadCardsImages(false);
-                setWhoseTurnLabel();
-                updateGroundCells();
-                updateCellEffects();
-            }
+            setWhoseTurnLabel();
+            updateGroundCells();
+            updateCellEffects();
         });
     }
 
