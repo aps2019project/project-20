@@ -7,9 +7,11 @@ import Exceptions.*;
 import Model.*;
 import Presenter.*;
 import com.gilecode.yagson.YaGson;
+import com.jfoenix.controls.JFXProgressBar;
 import com.jfoenix.controls.JFXTextArea;
 import javafx.animation.*;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -141,14 +143,32 @@ public class BattleGroundController implements Initializable, ScreenManager, Dia
 
         cheatButton.setOnMouseClicked(event -> cheatMode());
 
-        TimeLine t0 = new TimeLine(progressbar);
+//        TimeLine t0 = new TimeLine(progressbar);
 //        TimeLine t1 = new TimeLine(progressbar);
-//
-        t0.start();
-        battle.endTurn(battle.getPlayers()[clientIndex]);
-
+//        t0.start();
+//        battle.endTurn(battle.getPlayers()[clientIndex]);
 //        t1.start();
 //        battle.endTurn(battle.getPlayers()[1]);
+
+//        JFXProgressBar jfxBar = new JFXProgressBar();
+//        jfxBar.setStyle("-fx-background-color: #ffffff;");
+//        jfxBar.setLayoutX(506);
+//        jfxBar.setLayoutY(97);
+//        jfxBar.setPrefWidth(226);
+//        jfxBar.setPrefWidth(226);
+//        JFXProgressBar jfxBarInf = new JFXProgressBar();
+//        jfxBarInf.setStyle("-fx-background-color: #ffffff;");
+//        jfxBarInf.setLayoutX(506);
+//        jfxBarInf.setLayoutY(97);
+//        jfxBarInf.setPrefWidth(226);
+//        jfxBarInf.setPrefWidth(226);
+//        jfxBarInf.setProgress(-1.0f);
+//        Timeline timeline = new Timeline(
+//                new KeyFrame(Duration.ZERO, new KeyValue(jfxBarInf.progressProperty(), 0), new KeyValue(jfxBar.progressProperty(), 0)),
+//                new KeyFrame(Duration.millis(20000), new KeyValue(jfxBarInf.progressProperty(), 1), new KeyValue(jfxBar.progressProperty(), 1)));
+//        timeline.setOnFinished(event -> battle.endTurn(battle.getPlayers()[clientIndex]));
+//        timeline.play();
+
     }
 
     private void initializeIDsOfspecialPowersNeedingCell() {

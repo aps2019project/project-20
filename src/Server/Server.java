@@ -46,11 +46,6 @@ public class Server extends Application {
     }
 
     public static void kill(){
-        try {
-            AssetContainer.writeAssetContainersArrayInFile(shop.getAssetContainers(),"Data/ShopData.json");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         System.out.println("Server turned off");
         System.exit(0);
     }

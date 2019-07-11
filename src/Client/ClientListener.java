@@ -182,6 +182,9 @@ public class ClientListener extends Thread implements ScreenManager, DialogThrow
                             });
                         }
                     }
+                    if ( serverMessage.matches("CreateCustomCard;")){
+                        showOneButtonInformationDialogInThread("Create Custom Card","Your CustomCard Createed Successful",false);
+                    }
                 }
             }
         } catch (IOException e) {

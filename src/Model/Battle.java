@@ -10,6 +10,11 @@ import java.util.Iterator;
 
 import Model.Minion.*;
 import Presenter.CurrentAccount;
+import com.jfoenix.controls.JFXProgressBar;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
 
 import static Model.Minion.ActivateTimeOfSpecialPower.*;
 import static Model.Status.*;
@@ -490,12 +495,6 @@ public abstract class Battle {
         resetIsAttackedThisTurn();
         resetIsMovedThisTurn(player);
         setPlayersManaByDefault();
-
-
-        TimeLine t0 = new TimeLine(BattleGroundController.getProgressbar());
-        t0 . start();
-
-
 
         return endGameStatus;
     }

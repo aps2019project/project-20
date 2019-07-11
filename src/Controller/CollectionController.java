@@ -135,7 +135,7 @@ public class CollectionController implements Initializable, ScreenManager, Accou
         yesButton.setStyle("-fx-background-color: #37b400; -fx-text-fill: #ffffff; -fx-font-family: 'Microsoft Tai Le'; -fx-font-weight:bold ;");
         yesButton.setOnMouseReleased(event -> {
             SoundDatas.playSFX(SoundDatas.DIALOG_YES_BUTTON);
-            Client.getWriter().println("save "+new YaGson().toJson(getCurrentAccount(), Account.class));
+            Client.getWriter().println("save " + new YaGson().toJson(getCurrentAccount(), Account.class));
             dialog.close();
             try {
                 loadPageOnStackPane(back.getParent(), "../View/FXML/MainMenu.fxml", "ltr");
@@ -156,7 +156,7 @@ public class CollectionController implements Initializable, ScreenManager, Accou
             }
         });
         dialog.setOnDialogClosed(event -> Client.getStackPane().getChildren().remove(dialog));
-        dialogLayout.setActions(yesButton,noButton);
+        dialogLayout.setActions(yesButton, noButton);
         dialog.show();
 
     }
@@ -221,7 +221,6 @@ public class CollectionController implements Initializable, ScreenManager, Accou
     }
 
 
-
     public void setEditButtonOnMouseOver() {
         if (selectedDeckElement != null) {
             editDeckButton.setImage(new Image("file:images/hover_edit_button.png"));
@@ -249,7 +248,6 @@ public class CollectionController implements Initializable, ScreenManager, Accou
             editDeckButton.setImage(new Image("file:images/unavailable_edit_button.png"));
         }
     }
-
 
 
     public void setDeleteDeckButtonOnMouseOver() {
@@ -281,7 +279,6 @@ public class CollectionController implements Initializable, ScreenManager, Accou
             deleteDeckButton.setImage(new Image("file:images/unavailable_delete_button.png"));
         }
     }
-
 
 
     public void setRenameDeckButtonOnMouseOver() {
@@ -317,7 +314,6 @@ public class CollectionController implements Initializable, ScreenManager, Accou
             deckRenameButton.setImage(new Image("file:images/default_action_button.png"));
         }
     }
-
 
 
     public void setCardActionButtonOnMousePressed() {
@@ -683,7 +679,7 @@ public class CollectionController implements Initializable, ScreenManager, Accou
         });
     }
 
-    public void selectingMainDeckEventHandler(){
+    public void selectingMainDeckEventHandler() {
         setMainDeckButton.setOnMouseClicked((event) -> {
             if (setMainDeckButton.isSelected()) {
                 try {
@@ -694,11 +690,11 @@ public class CollectionController implements Initializable, ScreenManager, Accou
                     return;
                 }
                 showOneButtonInformationDialog("Message", "Your Deck was Chosen Successfully!!!", false);
-                fillFlowPaneDeckCollection(decksFlowPane,getCurrentAccount().getDecks());
+                fillFlowPaneDeckCollection(decksFlowPane, getCurrentAccount().getDecks());
             } else if (!setMainDeckButton.isSelected()) {
                 removeMainDeck();
                 showOneButtonInformationDialog("Warning", "You Can't Play Until Choosing Main Deck!!!", true);
-                fillFlowPaneDeckCollection(decksFlowPane,getCurrentAccount().getDecks());
+                fillFlowPaneDeckCollection(decksFlowPane, getCurrentAccount().getDecks());
             }
         });
     }
@@ -732,9 +728,6 @@ public class CollectionController implements Initializable, ScreenManager, Accou
     }
 
     public void createCard() {
-
-        //todo import card gif
-
 
         File selectedCard = makeFileChooser("import card");
 
@@ -861,21 +854,27 @@ public class CollectionController implements Initializable, ScreenManager, Accou
                 Minion minion = new Minion(nameText.getText(), nameText.getText(), price, minionID, range, AP, HP, DEFAULT_MANA, attackType, activateTimeOfSpecialPower, buff, isTargetFriend);
                 //TODO next line can't help because this is a local variable.
                 minionID++;
-                Asset.addNewAssetToDataBase(minion);
+                Client.getWriter().println("Create;" + new YaGson().toJson(minion,Minion.class));
+                Client.waitForListener();
+//                Asset.addNewAssetToDataBase(minion);
                 getCurrentAccount().getCollection().getAssets().add(minion);
             }
             if (hero.isSelected()) {
                 Hero hero = new Hero(nameText.getText(), price, heroID, range, AP, HP, DEFAULT_MANA, coolDown, attackType, buff, isTargetFriend);
                 //TODO next line can't help because this is a local variable.
                 heroID++;
-                Asset.addNewAssetToDataBase(hero);
+                Client.getWriter().println("Create;" + new YaGson().toJson(hero,Hero.class));
+                Client.waitForListener();
+//                Asset.addNewAssetToDataBase(hero);
                 getCurrentAccount().getCollection().getAssets().add(hero);
             }
             if (spell.isSelected()) {
                 Spell spell = new Spell(nameText.getText(), nameText.getText(), price, spellID, DEFAULT_MANA, targetType, squareSideLength, buff, isTargetFriend);
                 //TODO next line can't help because this is a local variable.
                 spellID++;
-                Asset.addNewAssetToDataBase(spell);
+                Client.getWriter().println("Create;" + new YaGson().toJson(spell,Spell.class));
+                Client.waitForListener();
+//                Asset.addNewAssetToDataBase(spell);
                 getCurrentAccount().getCollection().getAssets().add(spell);
             }
         }
