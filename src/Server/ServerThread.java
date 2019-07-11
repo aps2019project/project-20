@@ -119,6 +119,10 @@ public class ServerThread extends Thread {
                         sendAuctionCollection();
                         continue;
                     }
+                    if ("exitFromBattle".equals(command)) {
+                        exitFromBattle();
+                        continue;
+                    }
                     //Battle Listeners
                     if (data.matches("selectCard;.+"))
                         handleSelectCard(data);
@@ -146,18 +150,26 @@ public class ServerThread extends Thread {
         }
     }
 
+    private void exitFromBattle() throws IOException {
+        sendMessageToClient("endBattle");
+        synchronized (connectedThread.getOutputStream()){
+            connectedThread.sendMessageToClient("ForceEndFromBattle");
+        }
+        battle=null;
+        connectedThread.setBattle(null);
+        connectedThread.setConnectedThread(null);
+        connectedThread = null;
+        autoUpdateOnlinePlayersTableForAllClients();
+    }
+
     private  void handleChat(String data) throws IOException {
-
+        synchronized (Server.getThreads()){
         for (ServerThread thread : Server.getThreads()) {
-            synchronized (thread){
                 thread.sendMessageToClient(data);
-
             }
         }
-
-
-
     }
+
     private void handleEndGame(String data) throws IOException {
         Account firstAccount = new YaGson().fromJson(data.split(";")[2], Account.class);
         Account secondAccount = new YaGson().fromJson(data.split(";")[3], Account.class);

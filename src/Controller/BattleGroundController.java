@@ -148,7 +148,7 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
         startBattleDate = getDateFormat2();
         screenRecordController = new ScreenRecordController(startBattleDate);
         //for start capturing video
-        // screenRecordController.start();
+         screenRecordController.start();
         //for finishing the game
         if (!(this instanceof ClientBattleGroundController))
             aiController = new AIController(battle);
@@ -341,8 +341,8 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
     }
 
     private void initializeProfilesInfo() {
-        String firstHeroName = battle.getPlayers()[0].getMainDeck().getHero().getName();
-        String secondHeroName = battle.getPlayers()[1].getMainDeck().getHero().getName();
+        String firstHeroName = battle.getPlayersDeck()[0].getHero().getName();
+        String secondHeroName = battle.getPlayersDeck()[1].getHero().getName();
         profilePic0.setImage(new Image("file:images/cards/hero/" + firstHeroName + "/" + firstHeroName + "_profile.png"));
         profilePic1.setImage(new Image("file:images/cards/hero/" + secondHeroName + "/" + secondHeroName + "_profile.png"));
         playerName0.setText(battle.getPlayers()[0].getName());
@@ -1162,11 +1162,13 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
     }
 
     public void setSaveButtonReleased() {
-        SavedBattle newSave = new SavedBattle(battle);
-        CurrentAccount.getCurrentAccount().getSavedBattles().add(0, newSave);
-        newSave.saveBattleInToFile(CurrentAccount.getCurrentAccount().getName(), "Data/AccountsData.json");
-        showOneButtonInformationDialog("Save Message", "This Game Saved Successfully.", false);
-        setSaveButtonMouseOver();
+        if(!(this instanceof ClientBattleGroundController)) {
+            SavedBattle newSave = new SavedBattle(battle);
+            CurrentAccount.getCurrentAccount().getSavedBattles().add(0, newSave);
+            newSave.saveBattleInToFile(CurrentAccount.getCurrentAccount().getName(), "Data/AccountsData.json");
+            showOneButtonInformationDialog("Save Message", "This Game Saved Successfully.", false);
+            setSaveButtonMouseOver();
+        }
     }
 
     public void setSaveButtonPressed() {
@@ -1183,8 +1185,16 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
 
     public void setExitButtonReleased() {
         confirmationDialog("Exit Confirmation", "Are You Sure To Exit From Battle ?").setOnAction(event -> {
+            if(this instanceof ClientBattleGroundController){
+                Client.getWriter().println("exitFromBattle");
+                screenRecordController.stopRecording();
+                screenRecordController.deleteMove();
+                return;
+            }
             try {
                 loadPageOnStackPane(battleGroundAnchorPane, "../View/FXML/MainMenu.fxml", "rtl");
+                screenRecordController.stopRecording();
+                screenRecordController.deleteMove();
             } catch (IOException e) {
                 e.printStackTrace();
             }
