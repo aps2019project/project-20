@@ -184,6 +184,15 @@ public class ClientListener extends Thread implements ScreenManager, DialogThrow
                             });
                         }
                     }
+                    if ( serverMessage.matches("CreateCustomCard;")){
+                        showOneButtonInformationDialogInThread("Create Custom Card","Your CustomCard Createed Successful",false);
+                    }
+                    if (serverMessage.matches("endBattle")) {
+                        loadPageOnStackPaneInThread(Client.getPaneOfMainStackPane(), "../View/FXML/MainMenu.fxml", "rtl");
+                    }
+                    if (serverMessage.matches("ForceEndFromBattle")) {
+                        showOneButtonCloseBattleDialog();
+                    }
                 }
             }
         } catch (IOException e) {
@@ -281,6 +290,34 @@ public class ClientListener extends Thread implements ScreenManager, DialogThrow
         }
     }
 
+    private void showOneButtonCloseBattleDialog() {
+        Platform.runLater(() -> {
+            SoundDatas.playSFX(SoundDatas.ERROR_DIALOG);
+            JFXDialogLayout dialogLayout = new JFXDialogLayout();
+            Text header = new Text("Battle Game Error");
+            Text footer = new Text("You Opponent Ran Away!!!");
+            header.setStyle("-fx-text-fill: #ff0000;  -fx-font-family: 'Microsoft Tai Le'; -fx-font-weight:bold;");
+            footer.setStyle("-fx-text-fill: #000000;  -fx-font-family: 'Microsoft Tai Le'; -fx-font-weight:bold;");
+            dialogLayout.setHeading(header);
+            dialogLayout.setBody(footer);
+            dialogLayout.setStyle("-fx-background-color: #ffee00; -fx-text-fill: #ffffff");
+            JFXDialog dialog = new JFXDialog(Client.getStackPane(), dialogLayout, JFXDialog.DialogTransition.CENTER, true);
+            dialog.setStyle("-fx-background-image: url('file:images/error.png')");
+            JFXButton button = new JFXButton("Okey");
+            button.setButtonType(JFXButton.ButtonType.RAISED);
+            button.setStyle("-fx-background-color: #ff0000; -fx-text-fill: #ffffff; -fx-font-family: 'Microsoft Tai Le'; -fx-font-weight:bold;");
+            button.setOnAction(event -> {
+                SoundDatas.playSFX(SoundDatas.DIALOG_NO_BUTTON);
+                dialog.close();
+            });
+            dialog.setOnDialogClosed(event -> Client.getStackPane().getChildren().remove(dialog));
+            dialogLayout.setActions(button);
+            dialog.show();
+            dialog.setOnDialogClosed(event -> {
+                openPageOnNewStageInThread(Client.getStackPane().getScene(), "../View/FXML/MainMenu.fxml", false);
+            });
+        });
+    }
 
     private void showBattleInvitation(String inviterName) {
         //todo change sound and graphic

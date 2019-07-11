@@ -7,9 +7,11 @@ import Exceptions.*;
 import Model.*;
 import Presenter.*;
 import com.gilecode.yagson.YaGson;
+import com.jfoenix.controls.JFXProgressBar;
 import com.jfoenix.controls.JFXTextArea;
 import javafx.animation.*;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -145,10 +147,11 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
         startBattleDate = getDateFormat2();
         screenRecordController = new ScreenRecordController(startBattleDate);
         //for start capturing video
-        // screenRecordController.start();
+         screenRecordController.start();
         //for finishing the game
-        if (!(this instanceof ClientBattleGroundController))
+        if (!(this instanceof ClientBattleGroundController)){
             aiController = new AIController(battle);
+        }
         selectedCardBackground = new ImageView(new Image("file:images/card_background_highlight.png"));
         errorImage = new Image("file:images/notification_quest_small.png");
         successfulSpecialPowerBanner.setText("");
@@ -175,6 +178,26 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
 
 //        t1.start();
 //        battle.endTurn(battle.getPlayers()[1]);
+
+//        JFXProgressBar jfxBar = new JFXProgressBar();
+//        jfxBar.setStyle("-fx-background-color: #ffffff;");
+//        jfxBar.setLayoutX(506);
+//        jfxBar.setLayoutY(97);
+//        jfxBar.setPrefWidth(226);
+//        jfxBar.setPrefWidth(226);
+//        JFXProgressBar jfxBarInf = new JFXProgressBar();
+//        jfxBarInf.setStyle("-fx-background-color: #ffffff;");
+//        jfxBarInf.setLayoutX(506);
+//        jfxBarInf.setLayoutY(97);
+//        jfxBarInf.setPrefWidth(226);
+//        jfxBarInf.setPrefWidth(226);
+//        jfxBarInf.setProgress(-1.0f);
+//        Timeline timeline = new Timeline(
+//                new KeyFrame(Duration.ZERO, new KeyValue(jfxBarInf.progressProperty(), 0), new KeyValue(jfxBar.progressProperty(), 0)),
+//                new KeyFrame(Duration.millis(20000), new KeyValue(jfxBarInf.progressProperty(), 1), new KeyValue(jfxBar.progressProperty(), 1)));
+//        timeline.setOnFinished(event -> battle.endTurn(battle.getPlayers()[clientIndex]));
+//        timeline.play();
+
     }
 
     private void initializePairComponentsOfPage() {
@@ -874,54 +897,45 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
     }
 
     private void setEndTurnEvent() {
-        endTurn.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                if (clientIndex != battle.getTurn() % 2)
-                    return;
-                endTurn.setOpacity(0.6);
-            }
+        endTurn.setOnMouseEntered(event -> {
+            if (clientIndex != battle.getTurn() % 2)
+                return;
+            endTurn.setOpacity(0.6);
         });
-        endTurn.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                if (clientIndex != battle.getTurn() % 2)
-                    return;
-                endTurn.setOpacity(1);
-            }
+        endTurn.setOnMouseExited(event -> {
+            if (clientIndex != battle.getTurn() % 2)
+                return;
+            endTurn.setOpacity(1);
         });
-        endTurn.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                if (clientIndex != battle.getTurn() % 2)
-                    return;
-                endTurn.setOpacity(1);
-                int endTurnStatus = battle.endTurn(battle.getPlayers()[clientIndex]);
-                if (!(endTurnStatus == Battle.UNFINISHED_GAME)) {
-                    Client.getWriter().println("endGame;" + startBattleDate + ";" + new YaGson().toJson(battle.getPlayers()[clientIndex], Account.class) + ";" + new YaGson().toJson(battle.getPlayers()[1 - clientIndex], Account.class) + ";" + endTurnStatus + ";" + new YaGson().toJson(screenRecordController, ScreenRecordController.class));
-                    waitForServerAnswer();
-                    showEndGame(endTurnStatus);
-                    //TODO must be redirected to main menu.
-                }
-                else {
-                    Client.getWriter().println("endTurn;" + clientIndex);
-                    waitForServerAnswer();
-                }
-                updateManaGemImages();
-                updateHandImages();
-                if (!(BattleGroundController.this instanceof ClientBattleGroundController))
-                    aiController.handleAIEvent(battle);
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+        endTurn.setOnMouseClicked(event -> {
+            if (clientIndex != battle.getTurn() % 2)
+                return;
+            endTurn.setOpacity(1);
+            int endTurnStatus = battle.endTurn(battle.getPlayers()[clientIndex]);
+            if (!(endTurnStatus == Battle.UNFINISHED_GAME)) {
+                Client.getWriter().println("endGame;" + startBattleDate + ";" + new YaGson().toJson(battle.getPlayers()[clientIndex], Account.class) + ";" + new YaGson().toJson(battle.getPlayers()[1 - clientIndex], Account.class) + ";" + endTurnStatus + ";" + new YaGson().toJson(screenRecordController, ScreenRecordController.class));
+                waitForServerAnswer();
+                showEndGame(endTurnStatus);
+                //TODO must be redirected to main menu.
+            }
+            else {
+                Client.getWriter().println("endTurn;" + clientIndex);
+                waitForServerAnswer();
+            }
+            updateManaGemImages();
+            updateHandImages();
+            if (!(BattleGroundController.this instanceof ClientBattleGroundController))
+                aiController.handleAIEvent(battle);
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 //                    graveYardController.initializeDeadCardsImages(true);
 //                    graveYardController.initializeDeadCardsImages(false);
-                setWhoseTurnLabel();
-                updateGroundCells();
-                updateCellEffects();
-            }
+            setWhoseTurnLabel();
+            updateGroundCells();
+            updateCellEffects();
         });
     }
 
@@ -1171,11 +1185,13 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
     }
 
     public void setSaveButtonReleased() {
-        SavedBattle newSave = new SavedBattle(battle);
-        CurrentAccount.getCurrentAccount().getSavedBattles().add(0, newSave);
-        newSave.saveBattleInToFile(CurrentAccount.getCurrentAccount().getName(), "Data/AccountsData.json");
-        showOneButtonInformationDialog("Save Message", "This Game Saved Successfully.", false);
-        setSaveButtonMouseOver();
+        if(!(this instanceof ClientBattleGroundController)) {
+            SavedBattle newSave = new SavedBattle(battle);
+            CurrentAccount.getCurrentAccount().getSavedBattles().add(0, newSave);
+            newSave.saveBattleInToFile(CurrentAccount.getCurrentAccount().getName(), "Data/AccountsData.json");
+            showOneButtonInformationDialog("Save Message", "This Game Saved Successfully.", false);
+            setSaveButtonMouseOver();
+        }
     }
 
     public void setSaveButtonPressed() {
@@ -1192,8 +1208,16 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
 
     public void setExitButtonReleased() {
         confirmationDialog("Exit Confirmation", "Are You Sure To Exit From Battle ?").setOnAction(event -> {
+            if(this instanceof ClientBattleGroundController){
+                Client.getWriter().println("exitFromBattle");
+                screenRecordController.stopRecording();
+                screenRecordController.deleteMove();
+                return;
+            }
             try {
                 loadPageOnStackPane(battleGroundAnchorPane, "../View/FXML/MainMenu.fxml", "rtl");
+                screenRecordController.stopRecording();
+                screenRecordController.deleteMove();
             } catch (IOException e) {
                 e.printStackTrace();
             }

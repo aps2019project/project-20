@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXRadioButton?>
 <?import com.jfoenix.controls.JFXTabPane?>
+<?import com.jfoenix.controls.JFXTextArea?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import com.jfoenix.controls.JFXToggleButton?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -20,69 +21,46 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<?import com.jfoenix.controls.JFXTextArea?>
-<?import com.jfoenix.controls.JFXRadioButton?>
-<AnchorPane fx:id="anchorPane" layoutX="0" prefHeight="1091.0" prefWidth="1858.0"
-            xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="Controller.CollectionController">
+<AnchorPane fx:id="anchorPane" layoutX="0" prefHeight="1091.0" prefWidth="1858.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.CollectionController">
     <children>
-        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#8b8d8f" height="956.0" layoutX="162.0" layoutY="94.0"
-                   opacity="0.69" stroke="BLACK" strokeType="INSIDE" style="-fx-stroke-width: 3;" width="1634.0"
-                   AnchorPane.bottomAnchor="41.0" AnchorPane.leftAnchor="162.0" AnchorPane.rightAnchor="62.0"
-                   AnchorPane.topAnchor="94.0"/>
-        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#797e83" height="791.0" layoutX="324.0" layoutY="209.0"
-                   stroke="#17f1f5" strokeType="INSIDE" strokeWidth="3.0" width="1342.0"/>
-        <ImageView fx:id="back" fitHeight="97.0" fitWidth="101.0" layoutX="165.0" layoutY="97.0"
-                   onMouseEntered="#setBackButtonOnMouseEntered" onMouseExited="#setBackButtonOnMouseExited"
-                   onMousePressed="#setBackButtonOnMousePressed" onMouseReleased="#setBackButtonOnMouseReleased"
-                   pickOnBounds="true" preserveRatio="true">
+        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#8b8d8f" height="956.0" layoutX="162.0" layoutY="94.0" opacity="0.69" stroke="BLACK" strokeType="INSIDE" style="-fx-stroke-width: 3;" width="1634.0" AnchorPane.bottomAnchor="41.0" AnchorPane.leftAnchor="162.0" AnchorPane.rightAnchor="62.0" AnchorPane.topAnchor="94.0" />
+        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#797e83" height="791.0" layoutX="324.0" layoutY="209.0" stroke="#17f1f5" strokeType="INSIDE" strokeWidth="3.0" width="1342.0" />
+        <ImageView fx:id="back" fitHeight="97.0" fitWidth="101.0" layoutX="165.0" layoutY="97.0" onMouseEntered="#setBackButtonOnMouseEntered" onMouseExited="#setBackButtonOnMouseExited" onMousePressed="#setBackButtonOnMousePressed" onMouseReleased="#setBackButtonOnMouseReleased" pickOnBounds="true" preserveRatio="true">
             <image>
-                <Image url="file:images/button_back_corner.png"/>
+                <Image url="file:images/button_back_corner.png" />
             </image>
         </ImageView>
         <ImageView fitHeight="143.0" fitWidth="486.0" layoutX="736.0" layoutY="23.0" pickOnBounds="true">
             <image>
-                <Image url="file:images/gauntlet_control_bar_bg.png"/>
+                <Image url="file:images/gauntlet_control_bar_bg.png" />
             </image>
         </ImageView>
-        <Label accessibleRole="PARENT" alignment="CENTER" graphicTextGap="3.0" layoutX="782.0" layoutY="19.0"
-               prefHeight="151.0" prefWidth="380.0" text="COLLECTION" textFill="WHITE">
+        <Label accessibleRole="PARENT" alignment="CENTER" graphicTextGap="3.0" layoutX="782.0" layoutY="19.0" prefHeight="151.0" prefWidth="380.0" text="COLLECTION" textFill="WHITE">
             <font>
-                <Font name="Javanese Text" size="55.0"/>
+                <Font name="Javanese Text" size="55.0" />
             </font>
         </Label>
-        <JFXTabPane fx:id="tabPane" accessibleRole="PARENT" layoutX="331.0" layoutY="219.0" prefHeight="774.0"
-                    prefWidth="1328.0" stylesheets="../CSS/Screens.css" tabClosingPolicy="UNAVAILABLE">
+        <JFXTabPane fx:id="tabPane" accessibleRole="PARENT" layoutX="331.0" layoutY="219.0" prefHeight="774.0" prefWidth="1328.0" stylesheets="../CSS/Screens.css" tabClosingPolicy="UNAVAILABLE">
             <tabs>
                 <Tab fx:id="collectionTab">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="710.0" prefWidth="1307.0">
                             <children>
-                                <ScrollPane fitToHeight="true" hbarPolicy="NEVER" layoutY="61.0" prefHeight="663.0"
-                                            prefWidth="790.0"
-                                            style="-fx-background-color: #797E83; -fx-stroke-width: 5;">
+                                <ScrollPane fitToHeight="true" hbarPolicy="NEVER" layoutY="61.0" prefHeight="663.0" prefWidth="790.0" style="-fx-background-color: #797E83; -fx-stroke-width: 5;">
                                     <content>
-                                        <FlowPane fx:id="collectionFlowPane" prefHeight="644.0" prefWidth="780.0"
-                                                  style="-fx-background-color: #797E83;">
+                                        <FlowPane fx:id="collectionFlowPane" prefHeight="644.0" prefWidth="780.0" style="-fx-background-color: #797E83;">
                                         </FlowPane>
                                     </content>
                                 </ScrollPane>
-                                <JFXTextField fx:id="collectionSearchField" alignment="CENTER" focusColor="#67f0f5"
-                                              labelFloat="true" layoutX="919.0" layoutY="39.0" prefHeight="39.0"
-                                              prefWidth="244.0" promptText="Search"
-                                              style="-fx-text-fill: #ffffff; -fx-prompt-text-fill: #ffffff;"
-                                              unFocusColor="WHITE">
+                                <JFXTextField fx:id="collectionSearchField" alignment="CENTER" focusColor="#67f0f5" labelFloat="true" layoutX="919.0" layoutY="39.0" prefHeight="39.0" prefWidth="244.0" promptText="Search" style="-fx-text-fill: #ffffff; -fx-prompt-text-fill: #ffffff;" unFocusColor="WHITE">
                                     <font>
-                                        <Font name="Droid Serif" size="18.0"/>
+                                        <Font name="Droid Serif" size="18.0" />
                                     </font>
                                 </JFXTextField>
-                                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#797e83" height="556.0" layoutX="816.0"
-                                           layoutY="111.0" stroke="#17f1f5" strokeType="INSIDE" strokeWidth="3.0"
-                                           width="437.0"/>
-                                <ImageView fx:id="selectedCardImageInCollectionTab" fitHeight="517.0" fitWidth="397.0"
-                                           layoutX="836.0" layoutY="130.0" pickOnBounds="true">
+                                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#797e83" height="556.0" layoutX="816.0" layoutY="111.0" stroke="#17f1f5" strokeType="INSIDE" strokeWidth="3.0" width="437.0" />
+                                <ImageView fx:id="selectedCardImageInCollectionTab" fitHeight="517.0" fitWidth="397.0" layoutX="836.0" layoutY="130.0" pickOnBounds="true">
                                     <image>
-                                        <Image url="file:images/card_glow_line.png"/>
+                                        <Image url="file:images/card_glow_line.png" />
                                     </image>
                                 </ImageView>
                             </children>
@@ -93,105 +71,65 @@
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="710.0" prefWidth="1307.0">
                             <children>
-                                <ScrollPane fitToHeight="true" hbarPolicy="NEVER" layoutX="52.0" layoutY="78.0"
-                                            prefHeight="641.0" prefWidth="870.0"
-                                            style="-fx-background-color: #797E83; -fx-stroke-width: 5;">
+                                <ScrollPane fitToHeight="true" hbarPolicy="NEVER" layoutX="52.0" layoutY="78.0" prefHeight="641.0" prefWidth="870.0" style="-fx-background-color: #797E83; -fx-stroke-width: 5;">
                                     <content>
-                                        <FlowPane fx:id="decksFlowPane" prefHeight="639.0" prefWidth="856.0"
-                                                  rowValignment="TOP" style="-fx-background-color: #797E83;">
+                                        <FlowPane fx:id="decksFlowPane" prefHeight="639.0" prefWidth="856.0" rowValignment="TOP" style="-fx-background-color: #797E83;">
                                         </FlowPane>
                                     </content>
                                 </ScrollPane>
-                                <JFXTextField fx:id="decksSearchField" alignment="CENTER" focusColor="#67f0f5"
-                                              labelFloat="true" layoutX="664.0" layoutY="29.0" prefHeight="36.0"
-                                              prefWidth="244.0" promptText="Search"
-                                              style="-fx-text-fill: #ffffff; -fx-prompt-text-fill: #ffffff;"
-                                              unFocusColor="WHITE">
+                                <JFXTextField fx:id="decksSearchField" alignment="CENTER" focusColor="#67f0f5" labelFloat="true" layoutX="664.0" layoutY="29.0" prefHeight="36.0" prefWidth="244.0" promptText="Search" style="-fx-text-fill: #ffffff; -fx-prompt-text-fill: #ffffff;" unFocusColor="WHITE">
                                     <font>
-                                        <Font name="Droid Serif" size="15.0"/>
+                                        <Font name="Droid Serif" size="15.0" />
                                     </font>
                                 </JFXTextField>
                                 <Pane layoutX="939.0" layoutY="79.0" prefHeight="639.0" prefWidth="327.0">
                                     <children>
-                                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#797e83" height="639.0"
-                                                   stroke="#17f1f5" strokeType="INSIDE" strokeWidth="3.0"
-                                                   width="327.0"/>
-                                        <ImageView fitHeight="631.0" fitWidth="320.0" layoutX="3.0" layoutY="4.0"
-                                                   pickOnBounds="true">
+                                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#797e83" height="639.0" stroke="#17f1f5" strokeType="INSIDE" strokeWidth="3.0" width="327.0" />
+                                        <ImageView fitHeight="631.0" fitWidth="320.0" layoutX="3.0" layoutY="4.0" pickOnBounds="true">
                                             <image>
-                                                <Image url="file:images/gradient-bg.png"/>
+                                                <Image url="file:images/gradient-bg.png" />
                                             </image>
                                         </ImageView>
-                                        <ImageView fx:id="deleteDeckButton" fitHeight="84.0" fitWidth="227.0"
-                                                   layoutX="50.0" layoutY="540.0"
-                                                   onMouseEntered="#setDeleteDeckButtonOnMouseOver"
-                                                   onMouseExited="#setDeleteDeckButtonOnMouseExited"
-                                                   onMousePressed="#setDeleteDeckButtonOnMousePressed"
-                                                   onMouseReleased="#setDeleteDeckButtonOnMouseOver"
-                                                   pickOnBounds="true">
+                                        <ImageView fx:id="deleteDeckButton" fitHeight="84.0" fitWidth="227.0" layoutX="50.0" layoutY="540.0" onMouseEntered="#setDeleteDeckButtonOnMouseOver" onMouseExited="#setDeleteDeckButtonOnMouseExited" onMousePressed="#setDeleteDeckButtonOnMousePressed" onMouseReleased="#setDeleteDeckButtonOnMouseOver" pickOnBounds="true">
                                             <image>
-                                                <Image url="file:images/unavailable_delete_button.png"/>
+                                                <Image url="file:images/unavailable_delete_button.png" />
                                             </image>
                                         </ImageView>
-                                        <ImageView fx:id="exportDeckButton" fitHeight="84.0" fitWidth="227.0"
-                                                   layoutX="50.0" layoutY="460.0"
-                                                   onMouseEntered="#setExportButtonOnMouseOver"
-                                                   onMouseExited="#setExportButtonOnMouseExited"
-                                                   onMousePressed="#setExportButtonOnMousePressed"
-                                                   onMouseReleased="#setExportButtonOnMouseOver" pickOnBounds="true">
+                                        <ImageView fx:id="exportDeckButton" fitHeight="84.0" fitWidth="227.0" layoutX="50.0" layoutY="460.0" onMouseEntered="#setExportButtonOnMouseOver" onMouseExited="#setExportButtonOnMouseExited" onMousePressed="#setExportButtonOnMousePressed" onMouseReleased="#setExportButtonOnMouseOver" pickOnBounds="true">
                                             <image>
-                                                <Image url="file:images/unavailable_export_button.png"/>
+                                                <Image url="file:images/unavailable_export_button.png" />
                                             </image>
                                         </ImageView>
-                                        <ImageView fx:id="editDeckButton" fitHeight="84.0" fitWidth="227.0"
-                                                   layoutX="50.0" layoutY="380.0"
-                                                   onMouseEntered="#setEditButtonOnMouseOver"
-                                                   onMouseExited="#setEditButtonOnMouseExited"
-                                                   onMousePressed="#setEditButtonOnMousePressed"
-                                                   onMouseReleased="#setEditButtonOnMouseOver" pickOnBounds="true">
+                                        <ImageView fx:id="editDeckButton" fitHeight="84.0" fitWidth="227.0" layoutX="50.0" layoutY="380.0" onMouseEntered="#setEditButtonOnMouseOver" onMouseExited="#setEditButtonOnMouseExited" onMousePressed="#setEditButtonOnMousePressed" onMouseReleased="#setEditButtonOnMouseOver" pickOnBounds="true">
                                             <image>
-                                                <Image url="file:images/unavailable_edit_button.png"/>
+                                                <Image url="file:images/unavailable_edit_button.png" />
                                             </image>
                                         </ImageView>
-                                        <ImageView fx:id="selectedDeckImage" fitHeight="356.0" fitWidth="266.0"
-                                                   layoutX="30.0" layoutY="18.0" pickOnBounds="true">
+                                        <ImageView fx:id="selectedDeckImage" fitHeight="356.0" fitWidth="266.0" layoutX="30.0" layoutY="18.0" pickOnBounds="true">
                                             <image>
-                                                <Image url="file:images/card_shadow_map.png"/>
+                                                <Image url="file:images/card_shadow_map.png" />
                                             </image>
                                         </ImageView>
-                                        <ImageView fitHeight="67.0" fitWidth="319.0" layoutX="4.0" layoutY="-69.0"
-                                                   pickOnBounds="true">
+                                        <ImageView fitHeight="67.0" fitWidth="319.0" layoutX="4.0" layoutY="-69.0" pickOnBounds="true">
                                             <image>
-                                                <Image url="file:images/status_panel.png"/>
+                                                <Image url="file:images/status_panel.png" />
                                             </image>
                                         </ImageView>
-                                        <Label fx:id="selectedDeckName" alignment="CENTER" contentDisplay="CENTER"
-                                               layoutX="4.0" layoutY="-68.0" prefHeight="70.0" prefWidth="319.0"
-                                               textAlignment="CENTER" textFill="WHITE">
+                                        <Label fx:id="selectedDeckName" alignment="CENTER" contentDisplay="CENTER" layoutX="4.0" layoutY="-68.0" prefHeight="70.0" prefWidth="319.0" textAlignment="CENTER" textFill="WHITE">
                                             <font>
-                                                <Font name="Sitka Text" size="32.0"/>
+                                                <Font name="Sitka Text" size="32.0" />
                                             </font>
                                         </Label>
                                     </children>
                                 </Pane>
-                                <ImageView fx:id="createButton" fitHeight="150.0" fitWidth="200.0" layoutX="242.0"
-                                           layoutY="16.0" onMouseEntered="#setCreateButtonOnMouseOver"
-                                           onMouseExited="#setCreateButtonOnMouseExited"
-                                           onMousePressed="#setCreateButtonOnMousePressed"
-                                           onMouseReleased="#setCreateButtonOnMouseReleased" pickOnBounds="true"
-                                           preserveRatio="true">
+                                <ImageView fx:id="createButton" fitHeight="150.0" fitWidth="200.0" layoutX="242.0" layoutY="16.0" onMouseEntered="#setCreateButtonOnMouseOver" onMouseExited="#setCreateButtonOnMouseExited" onMousePressed="#setCreateButtonOnMousePressed" onMouseReleased="#setCreateButtonOnMouseReleased" pickOnBounds="true" preserveRatio="true">
                                     <image>
-                                        <Image url="file:images/create_button.png"/>
+                                        <Image url="file:images/create_button.png" />
                                     </image>
                                 </ImageView>
-                                <ImageView fx:id="importButton" fitHeight="150.0" fitWidth="200.0" layoutX="52.0"
-                                           layoutY="16.0" onMouseEntered="#setImportButtonOnMouseOver"
-                                           onMouseExited="#setImportButtonOnMouseExited"
-                                           onMousePressed="#setImportButtonOnMousePressed"
-                                           onMouseReleased="#setImportButtonOnMouseReleased" pickOnBounds="true"
-                                           preserveRatio="true">
+                                <ImageView fx:id="importButton" fitHeight="150.0" fitWidth="200.0" layoutX="52.0" layoutY="16.0" onMouseEntered="#setImportButtonOnMouseOver" onMouseExited="#setImportButtonOnMouseExited" onMousePressed="#setImportButtonOnMousePressed" onMouseReleased="#setImportButtonOnMouseReleased" pickOnBounds="true" preserveRatio="true">
                                     <image>
-                                        <Image url="file:images/import_button.png"/>
+                                        <Image url="file:images/import_button.png" />
                                     </image>
                                 </ImageView>
                             </children>
@@ -204,105 +142,70 @@
                             <children>
                                 <Pane layoutX="882.0" layoutY="162.0" prefHeight="494.0" prefWidth="327.0">
                                     <children>
-                                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#797e83" height="494.0"
-                                                   stroke="#17f1f5" strokeType="INSIDE" strokeWidth="3.0"
-                                                   width="327.0"/>
-                                        <ImageView fitHeight="487.0" fitWidth="320.0" layoutX="4.0" layoutY="3.0"
-                                                   pickOnBounds="true">
+                                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#797e83" height="494.0" stroke="#17f1f5" strokeType="INSIDE" strokeWidth="3.0" width="327.0" />
+                                        <ImageView fitHeight="487.0" fitWidth="320.0" layoutX="4.0" layoutY="3.0" pickOnBounds="true">
                                             <image>
-                                                <Image url="file:images/gradient-bg.png"/>
+                                                <Image url="file:images/gradient-bg.png" />
                                             </image>
                                         </ImageView>
-                                        <ImageView fx:id="cardActionButton" fitHeight="69.0" fitWidth="209.0"
-                                                   layoutX="59.0" layoutY="409.0"
-                                                   onMouseEntered="#setCardActionButtonOnMouseMoved"
-                                                   onMouseExited="#setCardActionButtonOnMouseExited"
-                                                   onMousePressed="#setCardActionButtonOnMousePressed"
-                                                   onMouseReleased="#setCardActionButtonOnMouseReleased"
-                                                   pickOnBounds="true">
+                                        <ImageView fx:id="cardActionButton" fitHeight="69.0" fitWidth="209.0" layoutX="59.0" layoutY="409.0" onMouseEntered="#setCardActionButtonOnMouseMoved" onMouseExited="#setCardActionButtonOnMouseExited" onMousePressed="#setCardActionButtonOnMousePressed" onMouseReleased="#setCardActionButtonOnMouseReleased" pickOnBounds="true">
                                             <image>
-                                                <Image url="file:images/unhover_button.png"/>
+                                                <Image url="file:images/unhover_button.png" />
                                             </image>
                                         </ImageView>
-                                        <ImageView fx:id="selectedCardImageInEditDeckTab" fitHeight="413.0"
-                                                   fitWidth="302.0" layoutX="13.0" layoutY="10.0" pickOnBounds="true">
+                                        <ImageView fx:id="selectedCardImageInEditDeckTab" fitHeight="413.0" fitWidth="302.0" layoutX="13.0" layoutY="10.0" pickOnBounds="true">
                                             <image>
-                                                <Image url="file:images/card_glow_line.png"/>
+                                                <Image url="file:images/card_glow_line.png" />
                                             </image>
                                         </ImageView>
                                     </children>
                                 </Pane>
-                                <JFXTabPane fx:id="editDeckTabPane" layoutX="38.0" layoutY="62.0" prefHeight="663.0"
-                                            prefWidth="790.0" stylesheets="../CSS/Screens.css">
+                                <JFXTabPane fx:id="editDeckTabPane" layoutX="38.0" layoutY="62.0" prefHeight="663.0" prefWidth="790.0" stylesheets="../CSS/Screens.css">
                                     <Tab fx:id="userCollectionTab">
-                                        <ScrollPane fitToHeight="true" hbarPolicy="NEVER" layoutY="66.0"
-                                                    prefHeight="655.0" prefWidth="790.0"
-                                                    style="-fx-background-color: #797E83; -fx-stroke-width: 5;">
+                                        <ScrollPane fitToHeight="true" hbarPolicy="NEVER" layoutY="66.0" prefHeight="655.0" prefWidth="790.0" style="-fx-background-color: #797E83; -fx-stroke-width: 5;">
                                             <content>
-                                                <FlowPane fx:id="userCollectionFlowPane" prefHeight="638.0"
-                                                          prefWidth="780.0" style="-fx-background-color: #797E83;">
+                                                <FlowPane fx:id="userCollectionFlowPane" prefHeight="638.0" prefWidth="780.0" style="-fx-background-color: #797E83;">
                                                 </FlowPane>
                                             </content>
                                         </ScrollPane>
                                     </Tab>
                                     <Tab fx:id="deckCollectionTab">
-                                        <ScrollPane fitToHeight="true" hbarPolicy="NEVER" layoutY="66.0"
-                                                    prefHeight="655.0" prefWidth="790.0"
-                                                    style="-fx-background-color: #797E83; -fx-stroke-width: 5;">
+                                        <ScrollPane fitToHeight="true" hbarPolicy="NEVER" layoutY="66.0" prefHeight="655.0" prefWidth="790.0" style="-fx-background-color: #797E83; -fx-stroke-width: 5;">
                                             <content>
-                                                <FlowPane fx:id="deckCollectionFlowPane" prefHeight="638.0"
-                                                          prefWidth="780.0" style="-fx-background-color: #797E83;">
+                                                <FlowPane fx:id="deckCollectionFlowPane" prefHeight="638.0" prefWidth="780.0" style="-fx-background-color: #797E83;">
                                                 </FlowPane>
                                             </content>
                                         </ScrollPane>
                                     </Tab>
                                 </JFXTabPane>
-                                <JFXTextField fx:id="deckRenameField" alignment="CENTER" focusColor="#67f0f5"
-                                              labelFloat="true" layoutX="882.0" layoutY="102.0" prefHeight="38.0"
-                                              prefWidth="184.0" promptText="Change Deck Name"
-                                              style="-fx-text-fill: #ffffff; -fx-prompt-text-fill: #ffffff;"
-                                              unFocusColor="WHITE">
+                                <JFXTextField fx:id="deckRenameField" alignment="CENTER" focusColor="#67f0f5" labelFloat="true" layoutX="882.0" layoutY="102.0" prefHeight="38.0" prefWidth="184.0" promptText="Change Deck Name" style="-fx-text-fill: #ffffff; -fx-prompt-text-fill: #ffffff;" unFocusColor="WHITE">
                                     <font>
-                                        <Font name="Droid Serif" size="15.0"/>
+                                        <Font name="Droid Serif" size="15.0" />
                                     </font>
                                 </JFXTextField>
-                                <JFXToggleButton fx:id="setMainDeckButton" contentDisplay="RIGHT" graphicTextGap="10.0"
-                                                 layoutX="870.0" layoutY="656.0" prefHeight="64.0" prefWidth="355.0"
-                                                 text="Set This Deck As Main Deck" textFill="WHITE"
-                                                 toggleColor="#00ffe5">
+                                <JFXToggleButton fx:id="setMainDeckButton" contentDisplay="RIGHT" graphicTextGap="10.0" layoutX="870.0" layoutY="656.0" prefHeight="64.0" prefWidth="355.0" text="Set This Deck As Main Deck" textFill="WHITE" toggleColor="#00ffe5">
                                     <font>
-                                        <Font name="Droid Serif" size="20.0"/>
+                                        <Font name="Droid Serif" size="20.0" />
                                     </font>
                                 </JFXToggleButton>
-                                <ImageView fitHeight="84.0" fitWidth="298.0" layoutX="900.0" layoutY="1.0"
-                                           pickOnBounds="true">
+                                <ImageView fitHeight="84.0" fitWidth="298.0" layoutX="900.0" layoutY="1.0" pickOnBounds="true">
                                     <image>
-                                        <Image url="file:images/gauntlet_control_bar_bg.png"/>
+                                        <Image url="file:images/gauntlet_control_bar_bg.png" />
                                     </image>
                                 </ImageView>
-                                <Label fx:id="selectedDeckNameInEditTab" alignment="CENTER" contentDisplay="CENTER"
-                                       layoutX="933.0" layoutY="20.0" prefHeight="47.0" prefWidth="233.0"
-                                       textAlignment="CENTER" textFill="WHITE">
+                                <Label fx:id="selectedDeckNameInEditTab" alignment="CENTER" contentDisplay="CENTER" layoutX="933.0" layoutY="20.0" prefHeight="47.0" prefWidth="233.0" textAlignment="CENTER" textFill="WHITE">
                                     <font>
-                                        <Font name="Yu Gothic UI Semibold" size="32.0"/>
+                                        <Font name="Yu Gothic UI Semibold" size="32.0" />
                                     </font>
                                 </Label>
-                                <ImageView fx:id="deckRenameButton" fitHeight="42.0" fitWidth="133.0" layoutX="1076.0"
-                                           layoutY="101.0" onMouseEntered="#setRenameDeckButtonOnMouseOver"
-                                           onMouseExited="#setRenameDeckButtonOnMouseExited"
-                                           onMousePressed="#setRenameDeckButtonOnMousePressed"
-                                           onMouseReleased="#setRenameDeckButtonOnMouseOver" pickOnBounds="true">
+                                <ImageView fx:id="deckRenameButton" fitHeight="42.0" fitWidth="133.0" layoutX="1076.0" layoutY="101.0" onMouseEntered="#setRenameDeckButtonOnMouseOver" onMouseExited="#setRenameDeckButtonOnMouseExited" onMousePressed="#setRenameDeckButtonOnMousePressed" onMouseReleased="#setRenameDeckButtonOnMouseOver" pickOnBounds="true">
                                     <image>
-                                        <Image url="file:images/change_button.png"/>
+                                        <Image url="file:images/change_button.png" />
                                     </image>
                                 </ImageView>
-                                <JFXTextField fx:id="editDeckSearchField" alignment="CENTER" focusColor="#67f0f5"
-                                              labelFloat="true" layoutX="553.0" layoutY="40.0" prefHeight="36.0"
-                                              prefWidth="244.0" promptText="Search"
-                                              style="-fx-text-fill: #ffffff; -fx-prompt-text-fill: #ffffff;"
-                                              unFocusColor="WHITE">
+                                <JFXTextField fx:id="editDeckSearchField" alignment="CENTER" focusColor="#67f0f5" labelFloat="true" layoutX="553.0" layoutY="40.0" prefHeight="36.0" prefWidth="244.0" promptText="Search" style="-fx-text-fill: #ffffff; -fx-prompt-text-fill: #ffffff;" unFocusColor="WHITE">
                                     <font>
-                                        <Font name="Droid Serif" size="15.0"/>
+                                        <Font name="Droid Serif" size="15.0" />
                                     </font>
                                 </JFXTextField>
                             </children>
@@ -311,8 +214,8 @@
                 </Tab>
                 <Tab fx:id="customCardTab">
                     <content>
-                        <AnchorPane prefHeight="523.0" prefWidth="903.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" >
-                            <children>
+                        <!--<AnchorPane fx:id="AL" prefHeight="523.0" prefWidth="903.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">-->
+                            <!--<children>-->
                                 <StackPane layoutX="25.0" layoutY="20.0" prefHeight="481.0" prefWidth="851.0">
                                     <children>
                                         <ImageView fx:id="backgroundImage" fitHeight="481.0" fitWidth="854.0" pickOnBounds="true">
@@ -320,27 +223,27 @@
                                                 <Image url="file:images/codex/generic_background@2x.jpg" />
                                             </image>
                                         </ImageView>
-                                        <ImageView fx:id="createCardButton" fitHeight="150.0" fitWidth="200.0" onMouseClicked="#createCard" pickOnBounds="true" preserveRatio="true" StackPane.alignment="BOTTOM_LEFT">
+                                        <ImageView fx:id="createCardButton" fitHeight="227.0" fitWidth="77.0" onMouseClicked="#createCard" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER_LEFT">
                                             <image>
                                                 <Image url="file:images/create_card_button.png" />
                                             </image>
                                         </ImageView>
-                                        <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="464.0" prefWidth="443.0" StackPane.alignment="CENTER_RIGHT">
+                                        <GridPane alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="464.0" prefWidth="443.0" StackPane.alignment="CENTER">
                                             <columnConstraints>
-                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="239.0" minWidth="10.0" prefWidth="205.0" />
-                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="238.0" minWidth="10.0" prefWidth="238.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="239.0" minWidth="10.0" prefWidth="163.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="281.0" minWidth="10.0" prefWidth="280.0" />
                                             </columnConstraints>
                                             <rowConstraints>
+                                                <RowConstraints maxHeight="36.0" minHeight="10.0" prefHeight="25.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="44.0" minHeight="10.0" prefHeight="44.0" vgrow="SOMETIMES" />
                                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="64.0" minHeight="10.0" prefHeight="19.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="65.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="70.0" minHeight="10.0" prefHeight="27.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="62.0" minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="68.0" minHeight="10.0" prefHeight="22.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="120.0" minHeight="10.0" prefHeight="93.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="113.0" minHeight="10.0" prefHeight="57.0" vgrow="SOMETIMES" />
                                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                             </rowConstraints>
@@ -383,7 +286,7 @@
                                                         <Font name="System Bold" size="16.0" />
                                                     </font>
                                                 </JFXTextField>
-                                                <JFXTextField alignment="CENTER" text="SPECIAL POWER ACTIVATION" GridPane.rowIndex="9">
+                                                <JFXTextField alignment="CENTER" prefHeight="45.0" prefWidth="205.0" text="SPECIAL POWER ACTIVATION" GridPane.rowIndex="9">
                                                     <font>
                                                         <Font name="System Bold" size="14.0" />
                                                     </font></JFXTextField>
@@ -458,17 +361,42 @@
                                                 </Pane>
                                                 <JFXTextArea fx:id="specialPowerCooldown" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="10" />
                                                 <JFXTextArea fx:id="rangeText" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                                    <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="9">
+                                       <children>
+                                          <Pane prefHeight="200.0" prefWidth="200.0">
+                                             <children>
+                                                <JFXRadioButton fx:id="ON_ATTACK" layoutX="-11.0" layoutY="11.0" mnemonicParsing="false" text="ON_ATTACK" />
+                                                <JFXRadioButton fx:id="ON_DEATH" layoutX="76.0" layoutY="11.0" mnemonicParsing="false" text="ON_DEATH" />
+                                                <JFXRadioButton fx:id="ON_DEFEND" layoutX="166.0" layoutY="11.0" mnemonicParsing="false" text="ON_DEFEND" />
+                                                <JFXRadioButton fx:id="ON_SPAWN" layoutX="-11.0" layoutY="42.0" mnemonicParsing="false" text="ON_SPAWN" />
+                                                <JFXRadioButton fx:id="COMBO" layoutX="76.0" layoutY="42.0" mnemonicParsing="false" text="COMBO" />
+                                                <JFXRadioButton fx:id="PASSIVE" layoutX="166.0" layoutY="42.0" mnemonicParsing="false" text="PASSIVE" />
+                                             </children>
+                                          </Pane>
+                                       </children>
+                                    </Pane>
+                                    <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="8">
+                                       <children>
+                                          <JFXRadioButton fx:id="HOLY_BUFF" layoutY="14.0" mnemonicParsing="false" text="HOLY" />
+                                           <JFXRadioButton fx:id="STUN_BUFF" layoutX="97.0" layoutY="14.0" mnemonicParsing="false" text="STUN" />
+                                           <JFXRadioButton fx:id="POWER_BUFF_ATTACK" layoutX="184.0" layoutY="14.0" mnemonicParsing="false" text="ATTACK POWER" />
+                                           <JFXRadioButton fx:id="POWER_BUFF_HEALTH" layoutY="39.0" mnemonicParsing="false" text="HEALTH POWER" />
+                                           <JFXRadioButton fx:id="WEAKNESS_BUFF_ATTACK" layoutX="97.0" layoutY="39.0" mnemonicParsing="false" text="ATTACK WEAK" />
+                                           <JFXRadioButton fx:id="WEAKNESS_BUFF_HEALTH" layoutX="184.0" layoutY="39.0" mnemonicParsing="false" text="HEALTH WEAK" />
+                                           <JFXRadioButton fx:id="POISON_BUFF" layoutY="64.0" mnemonicParsing="false" text="POISEN" />
+                                           <JFXRadioButton fx:id="DISARM_BUFF" layoutX="97.0" layoutY="64.0" mnemonicParsing="false" text="DISARM" />
+                                       </children></Pane>
                                             </children>
                                         </GridPane>
                                     </children>
                                 </StackPane>
-                            </children>
-                        </AnchorPane>
+                            <!--</children>-->
+                        <!--</AnchorPane>-->
                     </content>
                 </Tab>
             </tabs>
             <opaqueInsets>
-                <Insets/>
+                <Insets />
             </opaqueInsets>
         </JFXTabPane>
     </children>

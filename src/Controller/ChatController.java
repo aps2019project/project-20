@@ -28,40 +28,25 @@ public class ChatController implements ScreenManager, Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        inputArea.addEventHandler(KeyEvent.KEY_PRESSED,onKeyEvent);
         Client.setChatController(this);
-    }
-
-    public AnchorPane getView() {
-        if (anchorPane == null)
-            this.createView();
-        return anchorPane;
     }
 
     private EventHandler<KeyEvent> onKeyEvent = new EventHandler<KeyEvent>() {
         @Override
         public void handle(KeyEvent event) {
             if (event.getCode() == KeyCode.ENTER) {
-
                 String message = inputArea.getText() + "\n";
-
-                Client.getWriter().println("Chat; " + CurrentAccount.getCurrentAccount().getName() + " : " + message);
-
+                Client.getWriter().println("Chat;" + CurrentAccount.getCurrentAccount().getName() + " : " + message);
+                inputArea.clear();
+                event.consume();
             }
-            inputArea.clear();
-            event.consume();
         }
 
     };
 
     public void appendTextToConversation(String message) {
         conversationText.getChildren().add(new TextArea(message));
-    }
-
-    private void createView() {
-
-        anchorPane.getChildren().add(conversationText);
-        inputArea.addEventHandler(KeyEvent.KEY_PRESSED, onKeyEvent);
-        anchorPane.getChildren().add(inputArea);
     }
 
 

@@ -17,16 +17,16 @@
                 <Image url="file:images/button_back_corner.png" />
             </image>
         </ImageView>
-        <Label accessibleRole="PARENT" alignment="CENTER" graphicTextGap="3.0" layoutX="840.0" layoutY="34.0" prefHeight="119.0" prefWidth="366.0" text="CHAT ROOM" textAlignment="CENTER" textFill="WHITE">
-            <font>
-                <Font name="Javanese Text" size="43.0" />
-            </font>
-        </Label>
         <ImageView fitHeight="124.0" fitWidth="468.0" layoutX="789.0" layoutY="32.0" pickOnBounds="true">
             <image>
                 <Image url="file:images/gauntlet_control_bar_bg.png" />
             </image>
         </ImageView>
+        <Label accessibleRole="PARENT" alignment="CENTER" graphicTextGap="3.0" layoutX="840.0" layoutY="34.0" prefHeight="119.0" prefWidth="366.0" text="CHAT ROOM" textAlignment="CENTER" textFill="WHITE">
+            <font>
+                <Font name="Javanese Text" size="43.0" />
+            </font>
+        </Label>
         <TextArea fx:id="inputArea" layoutX="355.0" layoutY="873.0" prefHeight="93.0" prefWidth="1305.0" />
       <VBox fx:id="conversationText" layoutX="352.0" layoutY="244.0" prefHeight="607.0" prefWidth="1305.0" />
     </children>

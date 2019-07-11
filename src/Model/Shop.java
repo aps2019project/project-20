@@ -1,6 +1,7 @@
 package Model;
 
 import Exceptions.*;
+import com.gilecode.yagson.YaGson;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -18,6 +19,23 @@ public class Shop {
             e.printStackTrace();
         }
     }
+    synchronized public void saveToDataBase() throws IOException {
+        FileWriter fileWriter = new FileWriter(new File("Data/ShopData.json"));
+        fileWriter.write(new YaGson().toJson(this,Shop.class));
+        fileWriter.flush();
+        fileWriter.close();
+    }
+
+    public void addNewAssetToShop(AssetContainer assetContainer) {
+        for (int i = 0; i < this.getAssetContainers().size(); i++) {
+            if(this.getAssetContainers().get(i).getAsset().getName().equals(assetContainer.getAsset().getName())){
+                this.getAssetContainers().get(i).setQuantity(this.getAssetContainers().get(i).getQuantity()+1);
+                return;
+            }
+        }
+        this.getAssetContainers().add(assetContainer);
+    }
+
 
     public static void createDefaultShop() throws IOException {
         ArrayList<Asset> assets = new ArrayList<>();

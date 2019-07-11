@@ -4,6 +4,8 @@ import com.teamdev.jxcapture.*;
 
 import java.awt.*;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class ScreenRecordController extends Thread {
     //todo for end of game
@@ -13,7 +15,7 @@ public class ScreenRecordController extends Thread {
 
 
     public ScreenRecordController(String dateOfBattle) {
-        this.path = "Data/"+ dateOfBattle+".wmv";
+        this.path = "recordedVideos/"+ dateOfBattle+".wmv";
     }
 
     @Override
@@ -36,6 +38,21 @@ public class ScreenRecordController extends Thread {
             }
         }
         videoCapture.stop();
+    }
+
+    public void stopRecording(){
+        synchronized (this.getFinish()) {
+            this.getFinish().notify();
+        }
+    }
+
+    public void deleteMove(){
+        try {
+            new File(Paths.get("file:"+this.path).toUri()).delete();
+        }catch (Exception e){
+            System.out.println("no");
+            e.printStackTrace();
+        }
     }
 
     public Object getFinish() {

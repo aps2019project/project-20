@@ -107,7 +107,7 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
     }
 
     public void setLeaderBoardButtonReleased() throws IOException {
-        //todo chatRoom
+       loadPageOnStackPane(anchorPane,"../View/FXML/Chat.fxml","rtl");
     }
 
     public void setLeaderBoardButtonPressed() {
