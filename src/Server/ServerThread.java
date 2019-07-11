@@ -203,11 +203,16 @@ public class ServerThread extends Thread {
     private void handleEndTurn(String data) throws IOException {
         int playerIndex = Integer.valueOf(data.split(";")[1]);
         Account account = battle.getPlayers()[playerIndex];
-        battle.endTurn(account);
-        sendInstructionToRequester("endTurn;");
-        String updateBattle = new YaGson().toJson(battle, Battle.class);
-        synchronized (client.getOutputStream()) {
-            connectedThread.sendMessageToClient("opponentAction;endTurn;" + updateBattle);
+        try {
+            battle.endTurn(account);
+        } catch (Exception e) {
+            sendMessageToClient("error;" + e.getMessage());
+        } finally {
+            sendInstructionToRequester("endTurn;");
+            String updateBattle = new YaGson().toJson(battle, Battle.class);
+            synchronized (client.getOutputStream()) {
+                connectedThread.sendMessageToClient("opponentAction;endTurn;" + updateBattle);
+            }
         }
     }
 
@@ -217,11 +222,16 @@ public class ServerThread extends Thread {
         Warrior attackedWarrior = new YaGson().fromJson(data.split(";")[3], Warrior.class);
         int i = Integer.valueOf(data.split(";")[4]);
         int j = Integer.valueOf(data.split(";")[5]);
-        battle.attack(player, (Warrior) attacker, attackedWarrior);
-        sendInstructionToRequester("attack;");
-        String updatedBattle = new YaGson().toJson(battle, Battle.class);
-        synchronized (connectedThread.getClient().getOutputStream()) {
-            connectedThread.sendMessageToClient("opponentAction;attack;" + data.split(";")[3] + ";" + i + ";" + j + ";" + updatedBattle);
+        try {
+            battle.attack(player, (Warrior) attacker, attackedWarrior);
+        } catch (Exception e) {
+            sendMessageToClient("error;" + e.getMessage());
+        } finally {
+            sendInstructionToRequester("attack;");
+            String updatedBattle = new YaGson().toJson(battle, Battle.class);
+            synchronized (connectedThread.getClient().getOutputStream()) {
+                connectedThread.sendMessageToClient("opponentAction;attack;" + data.split(";")[3] + ";" + i + ";" + j + ";" + updatedBattle);
+            }
         }
     }
 
@@ -230,11 +240,16 @@ public class ServerThread extends Thread {
         Card warrior = new YaGson().fromJson(data.split(";")[2], Card.class);
         int x = Integer.valueOf(data.split(";")[3]);
         int y = Integer.valueOf(data.split(";")[4]);
-        battle.cardMoveTo(player, (Warrior) warrior, x, y);
-        sendInstructionToRequester("cardMoveTo;");
-        String updatedBattle = new YaGson().toJson(battle, Battle.class);
-        synchronized (connectedThread.getClient().getOutputStream()) {
-            connectedThread.sendMessageToClient("opponentAction;cardMoveTo;" + (y - 1) + ";" + (x - 1) + ";" + updatedBattle);
+        try {
+            battle.cardMoveTo(player, (Warrior) warrior, x, y);
+        } catch (Exception e) {
+            sendMessageToClient("error;" + e.getMessage());
+        } finally {
+            sendInstructionToRequester("cardMoveTo;");
+            String updatedBattle = new YaGson().toJson(battle, Battle.class);
+            synchronized (connectedThread.getClient().getOutputStream()) {
+                connectedThread.sendMessageToClient("opponentAction;cardMoveTo;" + (y - 1) + ";" + (x - 1) + ";" + updatedBattle);
+            }
         }
     }
 
@@ -243,19 +258,29 @@ public class ServerThread extends Thread {
         Card card = new YaGson().fromJson(data.split(";")[2], Card.class);
         int x = Integer.valueOf(data.split(";")[3]);
         int y = Integer.valueOf(data.split(";")[4]);
-        battle.insertCard(player, card.getName(), x, y);
-        sendInstructionToRequester("insertCard;");
-        String updatedBattle = new YaGson().toJson(battle, Battle.class);
-        synchronized (connectedThread.getClient().getOutputStream()) {
-            connectedThread.sendMessageToClient("opponentAction;insertCard;" + (y - 1) + ";" + (x - 1) + ";" + data.split(";")[2] + ";" + updatedBattle);
+        try {
+            battle.insertCard(player, card.getName(), x, y);
+        } catch (Exception e) {
+            sendMessageToClient("error" + e.getMessage());
+        } finally {
+            sendInstructionToRequester("insertCard;");
+            String updatedBattle = new YaGson().toJson(battle, Battle.class);
+            synchronized (connectedThread.getClient().getOutputStream()) {
+                connectedThread.sendMessageToClient("opponentAction;insertCard;" + (y - 1) + ";" + (x - 1) + ";" + data.split(";")[2] + ";" + updatedBattle);
+            }
         }
     }
 
     private void handleUseItem(String data) throws IOException {
         Account player = new YaGson().fromJson(data.split(";")[1], Account.class);
         Item item = new YaGson().fromJson(data.split(";")[2], Item.class);
-        battle.useItem(player, null, null, item);
-        sendInstructionToRequester("useItem;");
+        try {
+            battle.useItem(player, null, null, item);
+        } catch (Exception e) {
+            sendMessageToClient("error" + e.getMessage());
+        } finally {
+            sendInstructionToRequester("useItem;");
+        }
     }
 
     private void handleApplyHeroSpecialPower(String data) throws IOException {
@@ -263,23 +288,33 @@ public class ServerThread extends Thread {
         Asset targetAsset = new YaGson().fromJson(data.split(";")[2], Asset.class);
         int x = Integer.valueOf(data.split(";")[3]);
         int y = Integer.valueOf(data.split(";")[4]);
-        battle.applyHeroSpecialPower(player, targetAsset, x, y);
-        sendInstructionToRequester("applyHeroSpecialPower;");
-        String updatedBattle = new YaGson().toJson(battle, Battle.class);
-        synchronized (connectedThread.getClient().getOutputStream()) {
-            connectedThread.sendMessageToClient("opponentAction;applyHeroSpecialPower;" + updatedBattle);
+        try {
+            battle.applyHeroSpecialPower(player, targetAsset, x, y);
+        } catch (Exception e) {
+            sendMessageToClient("error" + e.getMessage());
+        } finally {
+            sendInstructionToRequester("applyHeroSpecialPower;");
+            String updatedBattle = new YaGson().toJson(battle, Battle.class);
+            synchronized (connectedThread.getClient().getOutputStream()) {
+                connectedThread.sendMessageToClient("opponentAction;applyHeroSpecialPower;" + updatedBattle);
+            }
         }
     }
 
     private void handleSelectCard(String data) throws IOException {
         Account player = new YaGson().fromJson(data.split(";")[1], Account.class);
         int cardID = Integer.valueOf(data.split(";")[2]);
-        battle.selectWarrior(player, cardID);
-        sendInstructionToRequester("selectCard;");
-        int selectorPlayerIndex = battle.getPlayerIndex(player);
-        String updatedBattle = new YaGson().toJson(battle, Battle.class);
-        synchronized (connectedThread.getClient().getOutputStream()) {
-            connectedThread.sendMessageToClient("opponentAction;selectCard;" + battle.getPlayersSelectedCard()[selectorPlayerIndex].getYInGround() + ";" + battle.getPlayersSelectedCard()[selectorPlayerIndex].getXInGround() + ";" + updatedBattle);
+        try {
+            battle.selectWarrior(player, cardID);
+        } catch (Exception e) {
+            sendMessageToClient("error" + e.getMessage());
+        } finally {
+            sendInstructionToRequester("selectCard;");
+            int selectorPlayerIndex = battle.getPlayerIndex(player);
+            String updatedBattle = new YaGson().toJson(battle, Battle.class);
+            synchronized (connectedThread.getClient().getOutputStream()) {
+                connectedThread.sendMessageToClient("opponentAction;selectCard;" + battle.getPlayersSelectedCard()[selectorPlayerIndex].getYInGround() + ";" + battle.getPlayersSelectedCard()[selectorPlayerIndex].getXInGround() + ";" + updatedBattle);
+            }
         }
     }
 

@@ -163,7 +163,7 @@ public abstract class Battle {
         int pathLength = Math.abs(x - playersSelectedCard[playerIndex].getXInGround())
                 + Math.abs(y - playersSelectedCard[playerIndex].getYInGround());
         if (playersSelectedCard[playerIndex] instanceof Warrior && ((Warrior) playersSelectedCard[playerIndex]).isMovedThisTurn())
-            throw new WarriorSecondMoveInTurnException();
+            throw new WarriorSecondMoveInTurnException("You can't move this unit twice.");
         if (pathLength > 2)
             throw new InvalidTargetException("Invalid target");
         else if (pathLength == 2) {
@@ -178,7 +178,7 @@ public abstract class Battle {
         else if (battleGround.getGround().get(y).get(x) instanceof Item)
             collectItem((Item) battleGround.getGround().get(y).get(x), warrior, playersDeck[playerIndex], y, x);
         else if (battleGround.getGround().get(y).get(x) instanceof Card)
-            throw new ThisCellFilledException();
+            throw new ThisCellFilledException("Target cell is filled.");
         battleGround.getGround().get(playersSelectedCard[playerIndex].getYInGround()).set(playersSelectedCard[playerIndex].getXInGround(), null);
         playersSelectedCard[playerIndex].setXInGround(x);
         playersSelectedCard[playerIndex].setYInGround(y);
@@ -324,7 +324,7 @@ public abstract class Battle {
         if (playerHero.getSpecialPowerCountdown() > 0)
             throw new InvalidCooldown("Cooldown of your special power hasn't reached.");
         if (playersMana[playerIndex] < playerHero.getMP())
-            throw new InsufficientManaException();
+            throw new InsufficientManaException("You don't have enough mana.");
 
         switch (playerHero.getID()) {
             case 2000:
@@ -389,7 +389,7 @@ public abstract class Battle {
                 try {
                     bufferClass.getMethod(attacker.getAction(), methodArgs).invoke(buffer, getOpponent(attacker.getOwner()), attacker, battleGround);
                 } catch (Exception e) {
-                    throw new NoAvailableBufferForCardException();
+                    e.printStackTrace();
                 }
                 break;
             case ON_ATTACK:
@@ -397,7 +397,7 @@ public abstract class Battle {
                 try {
                     bufferClass.getMethod(attacker.getAction(), methodArgs).invoke(buffer, attacker, opponentWarrior);
                 } catch (Exception e) {
-                    throw new NoAvailableBufferForCardException();
+                    e.printStackTrace();
                 }
         }
     }
@@ -419,7 +419,7 @@ public abstract class Battle {
         y--;
         int playerIndex = getPlayerIndex(player);
         if (!isThereAnyAdjacentOwnWarrior(player, x, y, battleGround))
-            throw new InvalidInsertInBattleGroundException("Invalid target");
+            throw new InvalidInsertInBattleGroundException("Invalid target to insert card");
         for (int i = 0; i < NUMBER_OF_CARDS_IN_HAND; i++) {
             Card card = playersHand[playerIndex][i];
             if (card != null && card.getName().equals(cardName)) {
@@ -435,7 +435,7 @@ public abstract class Battle {
                     }
                     else {
                         if (battleGround.getGround().get(y).get(x) != null)
-                            throw new ThisCellFilledException();
+                            throw new ThisCellFilledException("Target cell is filled.");
                         battleGround.getGround().get(y).set(x, card);
                         card.setXInGround(x);
                         card.setYInGround(y);
@@ -453,7 +453,7 @@ public abstract class Battle {
                     return;
                 }
                 else
-                    throw new InsufficientManaException();
+                    throw new InsufficientManaException("You don't have enough mana.");
             }
         }
         throw new AssetNotFoundException("Invalid card name");
@@ -518,7 +518,6 @@ public abstract class Battle {
     }
 
     public void applyAndHandleManaBuffers(Account opponent) {
-//        for (int opponentIndex = 0; opponentIndex <= 1; opponentIndex++) {
         int opponentIndex = getPlayerIndex(opponent);
         Iterator<BufferOfSpells> iterator = playersManaBuffEffected[opponentIndex].iterator();
         while (iterator.hasNext()) {
@@ -537,7 +536,6 @@ public abstract class Battle {
                 }
             }
         }
-//        }
     }
 
     public void applyEffectedBuffersOfWarriors(Account opponent) {
@@ -641,7 +639,7 @@ public abstract class Battle {
         try {
             bufferClass.getMethod(playerSelectedSpell.getAction(), methodArgs).invoke(buffer, player, enemy, battleGround, x, y);
         } catch (Exception e) {
-            throw new NoAvailableBufferForCardException();
+            e.printStackTrace();
         }
     }
 
@@ -904,7 +902,7 @@ public abstract class Battle {
         for (Item item : playersDeck[playerIndex].getItems())
             if (collectibleItemID == item.getID())
                 return item;
-        throw new AssetNotFoundException();
+        throw new AssetNotFoundException("Asset not found.");
     }
 
     public Card searchCardWithInGameCardID(ArrayList<Asset> cards, String cardId) {

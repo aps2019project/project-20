@@ -176,6 +176,9 @@ public class ClientListener extends Thread implements ScreenManager, DialogThrow
                     if (serverMessage.matches("opponentAction;.+")) {
                         handleOpponentAction(serverMessage);
                     }
+                    if (serverMessage.matches("error;.+")) {
+                        showProperError(serverMessage);
+                    }
 
                     if (serverMessage.matches("Chat;.+")) {
                         if (Client.getChatController() != null) {
@@ -200,6 +203,10 @@ public class ClientListener extends Thread implements ScreenManager, DialogThrow
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    private void showProperError(String serverMessage) {
+        Client.getBattleGroundController().handleError(serverMessage.split(";")[1]);
     }
 
     public boolean isBattleCommand(String serverMessage) {

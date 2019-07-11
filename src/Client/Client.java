@@ -20,7 +20,7 @@ import java.net.Socket;
 public class Client extends Application implements ScreenManager {
     private static StackPane stackPane = new StackPane();
     private final static int SERVER_PORT = 9000;
-    private final static String PROXY = "localhost";
+    private final static String PROXY = "169.254.33.37";
     private static Socket client;
     private static BufferedReader reader;
     private static PrintWriter writer;

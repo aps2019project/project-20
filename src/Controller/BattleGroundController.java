@@ -9,6 +9,7 @@ import Presenter.*;
 import com.gilecode.yagson.YaGson;
 import com.jfoenix.controls.JFXProgressBar;
 import com.jfoenix.controls.JFXTextArea;
+import com.sun.xml.internal.ws.server.ServerRtException;
 import javafx.animation.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -260,7 +261,7 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
                         int j;
                         Asset asset;
                         if (!isHeroSelected()) {
-                            handleError(new NoAvailableBufferForCardException("No selected hero detected."));
+                            handleError("No selected hero detected.");
                             return;
                         }
                         if (IDsOfSpecialPowersNeedingCell.contains(battle.getPlayersDeck()[clientIndex].getHero().getID())) {
@@ -315,7 +316,7 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
                                 }
                             });
                         } catch (InvalidTargetException | NoAvailableBufferForCardException e) {
-                            handleError(e);
+                            handleError(getErrorMessage(e));
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -632,7 +633,7 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
             setSelectedCardCoordinates(battle.getPlayersHand()[clientIndex][playerSelectedCardCoordinates[1] - 1], i, j);
             updateGroundCells();
         } catch (AssetNotFoundException | InvalidInsertInBattleGroundException | ThisCellFilledException | InsufficientManaException e) {
-            handleError(e);
+            handleError(getErrorMessage(e));
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -720,7 +721,7 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
             updateFlagLabels();
 //                updateGroundCells();
         } catch (InvalidTargetException | ThisCellFilledException | WarriorSecondMoveInTurnException e) {
-            handleError(e);
+            handleError(getErrorMessage(e));
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -867,7 +868,7 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
             showAttackAnimation(attackedWarrior, i, j, true);
             updateGroundCells();
         } catch (AssetNotFoundException | InvalidAttackException e) {
-            handleError(e);
+            handleError(getErrorMessage(e));
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -1013,7 +1014,7 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
         opponentSelectedCardCoordinates[1] = j;
     }
 
-    private void handleError (RuntimeException e){
+    public void handleError (String message){
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -1021,7 +1022,7 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
                 errorBar.setFitHeight(100);
                 errorBar.setFitWidth(300);
                 errorMessage.setVisible(true);
-                errorMessage.setText(getErrorMessage(e));
+                errorMessage.setText(message);
                 try {
                     Thread.sleep(4000);
                 } catch (InterruptedException e1) {
@@ -1033,6 +1034,10 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
             }
         }).start();
     }
+
+//    public void handleError(String errorMessage) {
+//
+//    }
 
     private String getErrorMessage(RuntimeException e) {
         if (e.getMessage() != null)
