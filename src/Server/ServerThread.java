@@ -1,19 +1,21 @@
 package Server;
 
 import Client.Client;
+import Client.Client;
 import Controller.ScreenRecordController;
 import Exceptions.*;
 import Model.*;
 import com.gilecode.yagson.YaGson;
 import com.google.gson.reflect.TypeToken;
+import com.jniwrapper.Int;
+import com.jniwrapper.Str;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.Collection;
-import java.util.Scanner;
 
 import static Model.Shop.shop;
 
@@ -52,7 +54,6 @@ public class ServerThread extends Thread {
                     String data = clientScanner.nextLine();
                     System.out.println(data);
                     String command = data.split("\\s")[0];
-                    //Add Listeners
                     if ("logIn".equals(command)) {
                         login(data);
                         continue;
@@ -105,7 +106,18 @@ public class ServerThread extends Thread {
                         sendBattleAcceptMessage(data);
                         continue;
                     }
-
+                    if ("auctionBuildRequest".equals(command)) {
+                        buildAuction(data);
+                        continue;
+                    }
+                    if ("auctionPriceRequest".equals(command)) {
+                        registerAuctionPrice(data);
+                        continue;
+                    }
+                    if ("getAuctionCollection".equals(command)) {
+                        sendAuctionCollection();
+                        continue;
+                    }
                     //Battle Listeners
                     if (data.matches("applyHeroSpecialPower;.+"))
                         handleApplyHeroSpecialPower(data);
@@ -223,11 +235,59 @@ public class ServerThread extends Thread {
         return firstAgainstSecond;
     }
 
+    synchronized private void sendAuctionCollection() throws IOException {
+        sendMessageToClient("auctionCollection " + new YaGson().toJson(shop.getAuctionElements(), new TypeToken<Collection<AuctionElement>>() {}.getType()));
+    }
+
+    synchronized private void registerAuctionPrice(String data) throws IOException {
+        AuctionElement newAuctionElement = new YaGson().fromJson(data.substring(20), AuctionElement.class);
+        AuctionElement oldAuctionElement = newAuctionElement.findInCollection(shop.getAuctionElements());
+        oldAuctionElement.setCustomer(newAuctionElement.getCustomer());
+        oldAuctionElement.setRecommendedPrice(newAuctionElement.getRecommendedPrice());
+        autoUpdateAuctionViewForAllClients();
+    }
+
+    synchronized private void buildAuction(String data) throws IOException {
+        AuctionElement auctionElement = new YaGson().fromJson(data.substring(20), AuctionElement.class);
+        try {
+            auctionElement.findInCollection(shop.getAuctionElements());
+        }catch (AuctionElementNotFoundException e) {
+            shop.getAuctionElements().add(0, auctionElement);
+            new Timer().schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    try {
+                        Account[] accounts = null;
+                        try {
+                          accounts =  auctionElement.auctionResult();
+                        } catch (AuctionNotSuccessfulException e) {
+                            sendMessageToClient("AuctionNotSuccess");
+                            shop.getAuctionElements().remove(auctionElement);
+                            autoUpdateAuctionViewForAllClients();
+                            return;
+                        }
+                        sendMessageToClient("auctionSold " + new YaGson().toJson(accounts[0], Account.class));
+                        ServerThread customerThread = ServerThread.searchServerThreadInServer(auctionElement.getCustomer().getName());
+                        synchronized (customerThread.getOutputStream()) {
+                            customerThread.sendMessageToClient("auctionWin " + new YaGson().toJson(accounts[1], Account.class));
+                        }
+                        shop.getAuctionElements().remove(auctionElement);
+                        autoUpdateAuctionViewForAllClients();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }, AuctionElement.getDefaultTimeWaiting());
+            autoUpdateAuctionViewForAllClients();
+            return;
+        }
+        sendMessageToClient("AuctionBuild Error");
+    }
+
     private void sendInstructionToRequester(String action) throws IOException {
         String updatedBattle = new YaGson().toJson(battle, Battle.class);
         sendMessageToClient(action + updatedBattle);
     }
-
 
     synchronized private void sendBattleRequestMessage(String data) throws IOException {
         ServerThread destination = ServerThread.searchServerThreadInServer(data.substring(12));
@@ -275,10 +335,12 @@ public class ServerThread extends Thread {
             }
         }
         if (!isUpdate) {
-            sendMessageToClient("onlinePlayersTable " + new YaGson().toJson(playerViewers, new TypeToken<Collection<PlayerViewer>>(){}.getType()));
+            sendMessageToClient("onlinePlayersTable " + new YaGson().toJson(playerViewers, new TypeToken<Collection<PlayerViewer>>() {
+            }.getType()));
             pageType = CurrentPageType.ONLINE_PLAYERS_BOARD;
         } else {
-            sendMessageToClient("updateOnlinePlayersTable " + new YaGson().toJson(playerViewers, new TypeToken<Collection<PlayerViewer>>(){}.getType()));
+            sendMessageToClient("updateOnlinePlayersTable " + new YaGson().toJson(playerViewers, new TypeToken<Collection<PlayerViewer>>() {
+            }.getType()));
         }
     }
 
@@ -322,9 +384,9 @@ public class ServerThread extends Thread {
             sendMessageToClient("updateShopCollection " + new YaGson().toJson(shop.getAssetContainers(), new TypeToken<Collection<AssetContainer>>() {
             }.getType()));
         } else {
-            sendMessageToClient("shopCollection " + new YaGson().toJson(shop.getAssetContainers(), new TypeToken<Collection<AssetContainer>>() {
-            }.getType()));
+            sendMessageToClient("shopCollection " + new YaGson().toJson(shop.getAssetContainers(), new TypeToken<Collection<AssetContainer>>() {}.getType()));
             pageType = CurrentPageType.SHOP_COLLECTION_BOARD;
+            sendAuctionCollection();
         }
     }
 
@@ -349,16 +411,22 @@ public class ServerThread extends Thread {
     private void login(String data) throws IOException {
         String[] args = data.split("\\s");
         try {
+            searchServerThreadInServer(args[1]);
+        }catch (ServerThreadNotFoundException e) {
+        try {
             currentAccount = Account.login(args[1], args[2]);
-        } catch (UserNotFoundException e) {
+        } catch (UserNotFoundException e1) {
             disconnectServerWithMessage("loginError userNotFound");
             return;
-        } catch (WrongPasswordException e) {
+        } catch (WrongPasswordException e1) {
             disconnectServerWithMessage("loginError wrongPassword");
             return;
         }
         sendMessageToClient("loginSuccess " + new YaGson().toJson(currentAccount, Account.class));
         autoUpdateOnlinePlayersTableForAllClients();
+            return;
+        }
+        disconnectServerWithMessage("loginError repeatedLogin");
     }
 
     synchronized private void createAccount(String data) throws IOException {
@@ -379,6 +447,16 @@ public class ServerThread extends Thread {
             for (int i = 0; i < Server.getThreads().size(); i++) {
                 if (!Server.getThreads().get(i).getCurrentAccount().getName().equals(currentAccount.getName()) && Server.getThreads().get(i).getPageType() == CurrentPageType.SHOP_COLLECTION_BOARD) {
                     Server.getThreads().get(i).sendShopCollection(true);
+                }
+            }
+        }
+    }
+
+    private void autoUpdateAuctionViewForAllClients() throws IOException {
+        synchronized (Server.getThreads()) {
+            for (int i = 0; i < Server.getThreads().size(); i++) {
+                if (Server.getThreads().get(i).getPageType() == CurrentPageType.SHOP_COLLECTION_BOARD) {
+                    Server.getThreads().get(i).sendAuctionCollection();
                 }
             }
         }
@@ -419,7 +497,7 @@ public class ServerThread extends Thread {
     public static ServerThread searchServerThreadInServer(String accountName) {
         synchronized (Server.getThreads()) {
             for (int i = 0; i < Server.getThreads().size(); i++) {
-                if (Server.getThreads().get(i).getCurrentAccount().getName().equals(accountName)) {
+                if (Server.getThreads().get(i).getCurrentAccount()!=null && Server.getThreads().get(i).getCurrentAccount().getName().equals(accountName)) {
                     return Server.getThreads().get(i);
                 }
             }

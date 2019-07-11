@@ -1,22 +1,15 @@
 package Model;
 
-import Datas.AssetDatas;
-import Exceptions.AssetNotFoundException;
-import Exceptions.InsufficientMoneyInBuyFromShopException;
-import Exceptions.MaximumNumberOfItemsInBuyException;
-import Exceptions.NotEnoughQuantityException;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.google.gson.stream.JsonWriter;
+import Exceptions.*;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Collection;
 
 public class Shop {
     private final static int MAX_NUMBER_OF_ITEMS_IN_COLLECTION = 3;
     private ArrayList<AssetContainer> assetContainers = new ArrayList<>();
     public static Shop shop = new Shop();
+    private ArrayList<AuctionElement> auctionElements = new ArrayList<>();
 
     private Shop() {
         try {
@@ -91,5 +84,11 @@ public class Shop {
         throw new AssetNotFoundException() ;
     }
 
+    public ArrayList<AuctionElement> getAuctionElements() {
+        return auctionElements;
+    }
 
+    public void setAuctionElements(ArrayList<AuctionElement> auctionElements) {
+        this.auctionElements = auctionElements;
+    }
 }

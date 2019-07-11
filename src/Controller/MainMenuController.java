@@ -107,7 +107,7 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
     }
 
     public void setLeaderBoardButtonReleased() throws IOException {
-        loadPageOnStackPane(anchorPane, "../View/FXML/LeaderBoard.fxml", "rtl");
+        //todo chatRoom
     }
 
     public void setLeaderBoardButtonPressed() {
@@ -117,7 +117,7 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
 
     public void setLeaderBoardMouseOver() {
         leaderBoard.setImage(new Image("file:images/hover_leaderboard_button.png"));
-        description.setText("\n  You Can See Your Ranking");
+        description.setText("\n     Chat With Your Friends");
         SoundDatas.playSFX(SoundDatas.BUTTON_MOUSEOVER);
     }
 
@@ -148,6 +148,7 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        description.setText("\n                Welcome");
         ImageView main = new ImageView(new Image("file:images/ranked_chevron_empty.png"));
         ImageView myProfile = new ImageView(new Image("file:images/profile.png"));
         ImageView logout = new ImageView(new Image("file:images/logoff.png"));
@@ -180,12 +181,20 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
 
         myProfile.setOnMouseEntered(event -> {
             myProfile.setImage(new Image("file:images/hover_profile_button.png"));
-            description.setText("\n         Edit Your Profile");
+            description.setText("\n  You Can See Your Ranking");
             SoundDatas.playSFX(SoundDatas.BUTTON_MOUSEOVER);
         });
         myProfile.setOnMouseExited(event -> {
             myProfile.setImage(new Image("file:images/profile.png"));
             description.setText("\n                Welcome");
+        });
+        myProfile.setOnMousePressed(event -> {
+            SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
+            try {
+                loadPageOnStackPane(anchorPane, "../View/FXML/LeaderBoard.fxml", "rtl");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         });
         logout.setOnMouseEntered(event -> {
             logout.setImage(new Image("file:images/hover_logoff_button.png"));
