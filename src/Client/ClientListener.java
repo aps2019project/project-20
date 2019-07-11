@@ -32,7 +32,6 @@ public class ClientListener extends Thread implements ScreenManager, DialogThrow
                 if (clientScanner.hasNextLine()) {
                     String serverMessage = clientScanner.nextLine();
                     System.out.println(serverMessage);
-
                     //Add Listeners
                     if (serverMessage.matches("forceDisconnection")) {
                         showOneButtonCloseConnectionErrorDialog();
@@ -49,6 +48,11 @@ public class ClientListener extends Thread implements ScreenManager, DialogThrow
                     }
                     if (serverMessage.matches("loginError wrongPassword")) {
                         showOneButtonErrorDialogInThread("Login Error", "Password Is Not Correct!!!");
+                        Client.closeConnection();
+                        return;
+                    }
+                    if (serverMessage.matches("loginError repeatedLogin")) {
+                        showOneButtonErrorDialogInThread("Login Error", "You Have Already SignedIn Before!!!");
                         Client.closeConnection();
                         return;
                     }
@@ -79,24 +83,46 @@ public class ClientListener extends Thread implements ScreenManager, DialogThrow
                         }
                     }
                     if (serverMessage.matches("updateShopCollection .+")) {
-                        Platform.runLater(() -> Client.getClientShopController().updateShopCollection(new YaGson().fromJson(serverMessage.substring(21), new TypeToken<Collection<AssetContainer>>() {
-                        }.getType())));
+                        Platform.runLater(() -> Client.getClientShopController().updateShopCollection(new YaGson().fromJson(serverMessage.substring(21), new TypeToken<Collection<AssetContainer>>() {}.getType())));
+                    }
+                    if (serverMessage.matches("auctionCollection .+")){
+                        Platform.runLater(() -> Client.getClientShopController().updateAuctionView(new YaGson().fromJson(serverMessage.substring(18),new TypeToken<Collection<AuctionElement>>(){}.getType())));
+                    }
+                    if (serverMessage.matches("AuctionBuild Error")){
+                       showOneButtonErrorDialogInThread("Auction Build Error","You Cannot Hold Auction For One Type Of Asset Twice!!!");
+                    }
+                    if (serverMessage.matches("AuctionNotSuccess")){
+                        showOneButtonInformationDialogInThread("Auction Result","No One Bought Your Asset",false);
+                    }
+                    if (serverMessage.matches("auctionSold .+")){
+                        showOneButtonInformationDialogInThread("Auction Result","Your Asset Sold Successfully.",false);
+                        Platform.runLater(() -> {
+                            Client.getClientShopController().updateAuctionBuyOrSell(new YaGson().fromJson(serverMessage.substring(12), Account.class));
+                        });
+                    }
+                    if (serverMessage.matches("auctionWin .+")){
+                        showOneButtonInformationDialogInThread("Auction Result","Your Won Asset Successfully.",false);
+                        Platform.runLater(() -> {
+                            Client.getClientShopController().updateAuctionBuyOrSell(new YaGson().fromJson(serverMessage.substring(11), Account.class));
+                        });
                     }
                     if (serverMessage.matches("buySuccess .+")) {
                         Platform.runLater(() -> {
                             String[] args = serverMessage.substring(11).split(" \\|\\| ");
-                            Client.getClientShopController().update(new YaGson().fromJson(args[0], Account.class), new YaGson().fromJson(args[1], new TypeToken<Collection<AssetContainer>>() {
+                            Client.getClientShopController().updateShopCollectionAndAccountCollection(new YaGson().fromJson(args[0], Account.class), new YaGson().fromJson(args[1], new TypeToken<Collection<AssetContainer>>() {
                             }.getType()));
                         });
                     }
+
                     if (serverMessage.matches("sellSuccess .+")) {
                         Platform.runLater(() -> {
                             String[] args = serverMessage.substring(12).split(" \\|\\| ");
-                            Client.getClientShopController().update(new YaGson().fromJson(args[0], Account.class), new YaGson().fromJson(args[1], new TypeToken<Collection<AssetContainer>>() {
+                            Client.getClientShopController().updateShopCollectionAndAccountCollection(new YaGson().fromJson(args[0], Account.class), new YaGson().fromJson(args[1], new TypeToken<Collection<AssetContainer>>() {
                             }.getType()));
                             Client.getClientShopController().setRightPanelToDefault();
                         });
                     }
+
                     if (serverMessage.matches("buyError InsufficientMoney")) {
                         showOneButtonErrorDialogInThread("Buy Error", "You Haven't Enough Budget To Buy!!!");
                     }
@@ -122,7 +148,7 @@ public class ClientListener extends Thread implements ScreenManager, DialogThrow
                         showBattleInvitation(serverMessage.substring(11));
                     }
                     if (serverMessage.matches("requestDeclined")) {
-                        showOneButtonInformationDialogInThread("Answer","Your Request Was Rejected",true);
+                        showOneButtonInformationDialogInThread("Answer", "Your Request Was Rejected", true);
                         synchronized (Client.getrLock()) {
                             Client.getrLock().notify();
                         }
@@ -149,6 +175,14 @@ public class ClientListener extends Thread implements ScreenManager, DialogThrow
                     }
                     if (serverMessage.matches("opponentAction;.+")) {
                         handleOpponentAction(serverMessage);
+                    }
+
+                    if (serverMessage.matches("Chat;.+")) {
+                        if (Client.getChatController() != null) {
+                            Platform.runLater(() -> {
+                                Client.getChatController().appendTextToConversation(serverMessage.substring(5));
+                            });
+                        }
                     }
                 }
             }
@@ -257,7 +291,7 @@ public class ClientListener extends Thread implements ScreenManager, DialogThrow
             Text header = new Text("Battle Invitation");
             header.setStyle("-fx-text-fill: #ff0000;  -fx-font-family: 'Microsoft Tai Le'; -fx-font-weight:bold ;");
             dialogLayout.setHeading(header);
-            Text footer = new Text(inviterName+" Invites To The Battle.");
+            Text footer = new Text(inviterName + " Invites To The Battle.");
             footer.setStyle("-fx-text-fill: #000000;  -fx-font-family: 'Microsoft Tai Le'; -fx-font-weight:bold ;");
             dialogLayout.setBody(footer);
             dialogLayout.setStyle("-fx-background-color: #acf5ff; -fx-text-fill: #ffffff");

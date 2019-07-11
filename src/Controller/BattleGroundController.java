@@ -96,10 +96,10 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
     public JFXTextArea endGameBanner;
     public ImageView enterGraveYardButton;
     public ImageView cheatButton;
-    public ProgressBar progressbar;
+    public static ProgressBar progressbar;
     private HashMap<Warrior, Label> hpBars = new HashMap<>();
     private HashMap<Warrior, Label> apBars = new HashMap<>();
-//    public Button friendButton;
+    //    public Button friendButton;
     public AnchorPane battleGroundAnchorPane;
     private ImageView[][] groundImageViews;
     private ArrayList<ImageView>[][] cellEffectImageViews = new ArrayList[BattleGround.getRows()][BattleGround.getColumns()];
@@ -124,7 +124,8 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
     private boolean isCursorChanged = false;
     private int[] cellCoordinatesForSpecialPower = new int[]{-1, -1};
 
-    public BattleGroundController(){}
+    public BattleGroundController() {
+    }
 
     public BattleGroundController(Battle battle) {
         this.battle = battle;
@@ -132,7 +133,7 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
         clientIndex = 0;
     }
 
-    public ProgressBar getProgressbar() {
+    public static ProgressBar getProgressbar() {
         return progressbar;
     }
 
@@ -169,12 +170,12 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
 
         cheatButton.setOnMouseClicked(event -> cheatMode());
 
-//        TimeLine t0 = new TimeLine(progressbar);
+        TimeLine t0 = new TimeLine(progressbar);
 //        TimeLine t1 = new TimeLine(progressbar);
 //
-//        t0.start();
-//        battle.endTurn(battle.getPlayers()[clientIndex]);
-//
+        t0.start();
+        battle.endTurn(battle.getPlayers()[clientIndex]);
+
 //        t1.start();
 //        battle.endTurn(battle.getPlayers()[1]);
     }
@@ -220,7 +221,7 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
         } catch (IOException e) {
             e.printStackTrace();
         }
-        for (Asset asset: allAssets) {
+        for (Asset asset : allAssets) {
             if (asset.getID() >= 2010 && asset.getID() < 3000)
                 IDsOfSpecialPowersNeedingCell.add(asset.getID());
         }
@@ -256,8 +257,7 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
                                 j = cellCoordinatesForSpecialPower[1];
                                 asset = battle.getBattleGround().getGround().get(i).get(j);
                             }
-                        }
-                        else {
+                        } else {
                             i = -1;
                             j = -1;
                             asset = null;
@@ -269,8 +269,7 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
                                     Client.getrLock().wait();
                                 }
                                 battle = new YaGson().fromJson(Client.getMessageListener().getDataFromServer(), Battle.class);
-                            }
-                            else
+                            } else
                                 battle.applyHeroSpecialPower(battle.getPlayers()[clientIndex], asset, j, i);
                             Platform.runLater(new Runnable() {
                                 @Override
@@ -301,6 +300,7 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
                             e.printStackTrace();
                         }
                     }
+
                     private boolean isHeroSelected() {
                         return battle.getPlayersDeck()[clientIndex].getHero().getHP() > 0 && playerSelectedCardCoordinates[0] == battle.getPlayersDeck()[clientIndex].getHero().getYInGround() && playerSelectedCardCoordinates[1] == battle.getPlayersDeck()[clientIndex].getHero().getXInGround();
                     }
@@ -388,25 +388,22 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
         }
     }
 
-    private void setSelectedCardFromHandEvent (ImageView handAndNextCardImageView,int i){
-        handAndNextCardImageView.setOnDragDetected(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                if (clientIndex != battle.getTurn() % 2)
-                    return;
-                if (playerSelectedCardCoordinates[0] == -1) //Card is already in hand.
-                    handAndNextCardPanes[playerSelectedCardCoordinates[1]].getChildren().remove(selectedCardBackground);
-                else if (playerSelectedCardCoordinates[0] > -1)
-                    groundPanes[playerSelectedCardCoordinates[0]][playerSelectedCardCoordinates[1]].getChildren().remove(selectedCardBackground);
-                playerSelectedCardCoordinates[0] = -1;
-                playerSelectedCardCoordinates[1] = i;
-                handAndNextCardPanes[i].getChildren().add(selectedCardBackground);
-                Dragboard db = handAndNextCardImageView.startDragAndDrop(TransferMode.ANY);
-                ClipboardContent content = new ClipboardContent();
-                content.putString(dragAndDropKey);
-                db.setContent(content);
-                event.consume();
-            }
+    private void setSelectedCardFromHandEvent(ImageView handAndNextCardImageView, int i) {
+        handAndNextCardImageView.setOnDragDetected(event -> {
+            if (clientIndex != battle.getTurn() % 2)
+                return;
+            if (playerSelectedCardCoordinates[0] == -1) //Card is already in hand.
+                handAndNextCardPanes[playerSelectedCardCoordinates[1]].getChildren().remove(selectedCardBackground);
+            else if (playerSelectedCardCoordinates[0] > -1)
+                groundPanes[playerSelectedCardCoordinates[0]][playerSelectedCardCoordinates[1]].getChildren().remove(selectedCardBackground);
+            playerSelectedCardCoordinates[0] = -1;
+            playerSelectedCardCoordinates[1] = i;
+            handAndNextCardPanes[i].getChildren().add(selectedCardBackground);
+            Dragboard db = handAndNextCardImageView.startDragAndDrop(TransferMode.ANY);
+            ClipboardContent content = new ClipboardContent();
+            content.putString(dragAndDropKey);
+            db.setContent(content);
+            event.consume();
         });
         handAndNextCardImageView.setOnDragDone(new EventHandler<DragEvent>() {
             @Override
@@ -425,7 +422,7 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
         handAndNextCardGrid.add(handAndNextCardPanes[0], 0, 0);
     }
 
-    private void initializeGround () {
+    private void initializeGround() {
         graveYardPane.setVisible(false);
         groundPanes = new Pane[BattleGround.getRows()][BattleGround.getColumns()];
         groundImageViews = new ImageView[BattleGround.getRows()][BattleGround.getColumns()];
@@ -459,7 +456,7 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
         }
     }
 
-    private void setCollectedItemEvent (int index){
+    private void setCollectedItemEvent(int index) {
         ImageView imageView = collectedItemsImageViews[index];
         if (imageView.getImage() != null) {
             imageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -510,7 +507,7 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
         }
     }
 
-    private void setGroundCellEvent (ImageView imageView, Asset asset,int i, int j){
+    private void setGroundCellEvent(ImageView imageView, Asset asset, int i, int j) {
         imageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -597,8 +594,7 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
                     Client.getrLock().wait();
                 }
                 battle = new YaGson().fromJson(Client.getMessageListener().getDataFromServer(), Battle.class);
-            }
-            else
+            } else
                 battle.insertCard(battle.getPlayers()[clientIndex], battle.getPlayersHand()[clientIndex][playerSelectedCardCoordinates[1] - 1].getName(), j + 1, i + 1);
             showInsertAnimation(i, j, handCard, true);
             setSelectedCardCoordinates(battle.getPlayersHand()[clientIndex][playerSelectedCardCoordinates[1] - 1], i, j);
@@ -610,7 +606,7 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
         }
     }
 
-    public void showInsertAnimation (int i, int j, Card handCard, boolean isOwn){
+    public void showInsertAnimation(int i, int j, Card handCard, boolean isOwn) {
         groundImageViews[i][j].setOpacity(1);
         if (isOwn) {
             handAndNextCardImageViews[playerSelectedCardCoordinates[1]].setImage(null);
@@ -629,18 +625,13 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
                         e.printStackTrace();
                     }
                     groundImageViews[i][j].setImage(new Image(freeCellImageAddress));
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            makeCellEffects();
-                        }
-                    });
+                    Platform.runLater(() -> makeCellEffects());
                 }
             }).start();
         }
     }
 
-    private void makeCellEffects () {
+    private void makeCellEffects() {
         for (int i = 0; i < BattleGround.getRows(); i++) {
             for (int j = 0; j < BattleGround.getColumns(); j++) {
                 for (CellEffect cellEffect : battle.getBattleGround().getEffectsPosition().get(i).get(j)) {
@@ -655,7 +646,7 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
         }
     }
 
-    private void setInsertionRequirements(int i, int j, Warrior warrior, boolean isOwn){
+    private void setInsertionRequirements(int i, int j, Warrior warrior, boolean isOwn) {
         groundImageViews[i][j].setImage(new Image(warrior.getBreathingImageAddress()));
         if (isOwn)
             groundPanes[i][j].getChildren().add(selectedCardBackground);
@@ -666,7 +657,7 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
         groundPanes[i][j].getChildren().add(apBars.get(warrior));
     }
 
-    private void setSelectedCardCoordinates (Card card,int i, int j){
+    private void setSelectedCardCoordinates(Card card, int i, int j) {
         if (card instanceof Warrior) {
             playerSelectedCardCoordinates[0] = i;
             playerSelectedCardCoordinates[1] = j;
@@ -676,7 +667,7 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
         playerSelectedCardCoordinates[1] = -2;
     }
 
-    private void moveCard (int i, int j) {
+    private void moveCard(int i, int j) {
         try {
             Asset targetCell = battle.getBattleGround().getGround().get(i).get(j); // Because map will be changed after the next line execution.
             if (BattleGroundController.this instanceof ClientBattleGroundController) {
@@ -685,8 +676,7 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
                     Client.getrLock().wait();
                 }
                 battle = new YaGson().fromJson(Client.getMessageListener().getDataFromServer(), Battle.class);
-            }
-            else
+            } else
                 battle.cardMoveTo(battle.getPlayers()[clientIndex], (Warrior) battle.getPlayersSelectedCard()[clientIndex], j + 1, i + 1);
             showMove(i, j, true);
             if (targetCell instanceof Item)
@@ -700,7 +690,7 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
         }
     }
 
-    private void addItemToInventory (Item collected){
+    private void addItemToInventory(Item collected) {
         collectedItemsImageViews[itemsCursor].setImage(new Image(collected.getActionbarImageAddress()));
         setCollectedItemEvent(itemsCursor);
         itemsCursor++;
@@ -821,7 +811,7 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
 //        translateTransition.play();
     }
 
-    private void attack (Warrior attackedWarrior, int i, int j) {
+    private void attack(Warrior attackedWarrior, int i, int j) {
         try {
             if (BattleGroundController.this instanceof ClientBattleGroundController) {
                 Client.getWriter().println("attack;" + new YaGson().toJson(battle.getPlayers()[clientIndex], Account.class) + ";" + new YaGson().toJson(battle.getPlayersSelectedCard()[0], Card.class) + ";" + new YaGson().toJson(attackedWarrior, Warrior.class) + ";" + i + ";" + j);
@@ -829,8 +819,7 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
                     Client.getrLock().wait();
                 }
                 battle = new YaGson().fromJson(Client.getMessageListener().getDataFromServer(), Battle.class);
-            }
-            else
+            } else
                 battle.attack(battle.getPlayers()[clientIndex], (Warrior) battle.getPlayersSelectedCard()[clientIndex], attackedWarrior);
             showAttackAnimation(attackedWarrior, i, j, true);
             updateGroundCells();
@@ -841,7 +830,7 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
         }
     }
 
-    public void showAttackAnimation (Warrior attackedWarrior,int i, int j, boolean isOwn) {
+    public void showAttackAnimation(Warrior attackedWarrior, int i, int j, boolean isOwn) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -864,7 +853,7 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
         }).start();
     }
 
-    private void setEndTurnEvent () {
+    private void setEndTurnEvent() {
         endTurn.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -945,7 +934,7 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
             manaGemImageViews[i].setImage(new Image("file:images/icon_mana_inactive.png"));
     }
 
-    private void updateHandImages () {
+    private void updateHandImages() {
         for (int i = 0; i <= Battle.NUMBER_OF_CARDS_IN_HAND; i++) {
             Card card;
             if (i == 0)
@@ -1011,7 +1000,7 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
         }).start();
     }
 
-    private String getErrorMessage (RuntimeException e){
+    private String getErrorMessage(RuntimeException e) {
         if (e.getMessage() != null)
             return e.getMessage();
         else if (e instanceof AssetNotFoundException)
@@ -1030,33 +1019,15 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
     }
 
     private void setEnterGraveYardEvent() {
-        enterGraveYardButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                enterGraveYardButton.setImage(new Image("file:images/button_graveYard_hover.png"));
-            }
-        });
-        enterGraveYardButton.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                enterGraveYardButton.setImage(new Image("file:images/button_graveYard.png"));
-            }
-        });
-        enterGraveYardButton.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                enterGraveYardButton.setImage(new Image("file:images/button_graveYard_pressed.png"));
-            }
-        });
-        enterGraveYardButton.setOnMouseReleased(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                enterGraveYardButton.setImage(new Image("file:images/button_graveYard_hover.png"));
-                initializeDeadCardsImages(0);
-                initializeDeadCardsImages(1);
-                battleGroundAnchorPane.setVisible(false);
-                graveYardPane.setVisible(true);
-            }
+        enterGraveYardButton.setOnMouseEntered(event -> enterGraveYardButton.setImage(new Image("file:images/button_graveYard_hover.png")));
+        enterGraveYardButton.setOnMouseExited(event -> enterGraveYardButton.setImage(new Image("file:images/button_graveYard.png")));
+        enterGraveYardButton.setOnMousePressed(event -> enterGraveYardButton.setImage(new Image("file:images/button_graveYard_pressed.png")));
+        enterGraveYardButton.setOnMouseReleased(event -> {
+            enterGraveYardButton.setImage(new Image("file:images/button_graveYard_hover.png"));
+            initializeDeadCardsImages(0);
+            initializeDeadCardsImages(1);
+            battleGroundAnchorPane.setVisible(false);
+            graveYardPane.setVisible(true);
         });
     }
 
@@ -1086,31 +1057,13 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
     }
 
     private void setExitGraveYardButtonEvent() {
-        exitGraveYardButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                exitGraveYardButton.setImage(new Image("file:images/exit_button_hover.png"));
-            }
-        });
-        exitGraveYardButton.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                exitGraveYardButton.setImage(new Image("file:images/exit_button.png"));
-            }
-        });
-        exitGraveYardButton.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                exitGraveYardButton.setImage(new Image("file:images/exit_button_pressed.png"));
-            }
-        });
-        exitGraveYardButton.setOnMouseReleased(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                exitGraveYardButton.setImage(new Image("file:images/exit_button_hover.png"));
-                graveYardPane.setVisible(false);
-                battleGroundAnchorPane.setVisible(true);
-            }
+        exitGraveYardButton.setOnMouseEntered(event -> exitGraveYardButton.setImage(new Image("file:images/exit_button_hover.png")));
+        exitGraveYardButton.setOnMouseExited(event -> exitGraveYardButton.setImage(new Image("file:images/exit_button.png")));
+        exitGraveYardButton.setOnMousePressed(event -> exitGraveYardButton.setImage(new Image("file:images/exit_button_pressed.png")));
+        exitGraveYardButton.setOnMouseReleased(event -> {
+            exitGraveYardButton.setImage(new Image("file:images/exit_button_hover.png"));
+            graveYardPane.setVisible(false);
+            battleGroundAnchorPane.setVisible(true);
         });
     }
 
@@ -1132,7 +1085,8 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
     }
 
     @FXML
-    private void cheatMode () {new EventHandler<KeyEvent>() {
+    private void cheatMode() {
+        new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
                 if (clientIndex != battle.getTurn() % 2)
@@ -1188,26 +1142,26 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
         };
     }
 
-    public void setMenuButtonReleased () {
+    public void setMenuButtonReleased() {
         pauseMenu.setVisible(true);
         FadeTransition fadeTransition = nodeFadeAnimation(pauseMenu, 300, 0, 1);
         fadeTransition.play();
         setMenuButtonMouseOver();
     }
 
-    public void setMenuButtonPressed () {
+    public void setMenuButtonPressed() {
         menuButton.setImage(new Image("file:images/menu_button_pressed.png"));
     }
 
-    public void setMenuButtonMouseOver () {
+    public void setMenuButtonMouseOver() {
         menuButton.setImage(new Image("file:images/menu_button_onmouseover.png"));
     }
 
-    public void setMenuButtonMouseExited () {
+    public void setMenuButtonMouseExited() {
         menuButton.setImage(new Image("file:images/menu_button.png"));
     }
 
-    public void setSaveButtonReleased () {
+    public void setSaveButtonReleased() {
         SavedBattle newSave = new SavedBattle(battle);
         CurrentAccount.getCurrentAccount().getSavedBattles().add(0, newSave);
         newSave.saveBattleInToFile(CurrentAccount.getCurrentAccount().getName(), "Data/AccountsData.json");
@@ -1215,19 +1169,19 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
         setSaveButtonMouseOver();
     }
 
-    public void setSaveButtonPressed () {
+    public void setSaveButtonPressed() {
         saveButton.setImage(new Image("file:images/save_button_pressed.png"));
     }
 
-    public void setSaveButtonMouseOver () {
+    public void setSaveButtonMouseOver() {
         saveButton.setImage(new Image("file:images/save_button_hover.png"));
     }
 
-    public void setSaveButtonMouseExited () {
+    public void setSaveButtonMouseExited() {
         saveButton.setImage(new Image("file:images/save_button.png"));
     }
 
-    public void setExitButtonReleased () {
+    public void setExitButtonReleased() {
         confirmationDialog("Exit Confirmation", "Are You Sure To Exit From Battle ?").setOnAction(event -> {
             try {
                 loadPageOnStackPane(battleGroundAnchorPane, "../View/FXML/MainMenu.fxml", "rtl");
@@ -1238,38 +1192,38 @@ public class BattleGroundController implements Initializable, ScreenManager , Di
         setExitButtonMouseOver();
     }
 
-    public void setExitButtonPressed () {
+    public void setExitButtonPressed() {
         exitButton.setImage(new Image("file:images/exit_button_pressed.png"));
     }
 
-    public void setExitButtonMouseOver () {
+    public void setExitButtonMouseOver() {
         exitButton.setImage(new Image("file:images/exit_button_hover.png"));
     }
 
-    public void setExitButtonMouseExited () {
+    public void setExitButtonMouseExited() {
         exitButton.setImage(new Image("file:images/exit_button.png"));
     }
 
-    public void setPauseMenuCloseButtonReleased () {
+    public void setPauseMenuCloseButtonReleased() {
         FadeTransition fadeTransition = nodeFadeAnimation(pauseMenu, 300, 1, 0);
         fadeTransition.setOnFinished((event) -> pauseMenu.setVisible(false));
         fadeTransition.play();
         setPauseMenuCloseButtonMouseOver();
     }
 
-    public void setPauseMenuCloseButtonPressed () {
+    public void setPauseMenuCloseButtonPressed() {
         pauseMenuCloseButton.setImage(new Image("file:images/button_close_pressed.png"));
     }
 
-    public void setPauseMenuCloseButtonMouseOver () {
+    public void setPauseMenuCloseButtonMouseOver() {
         pauseMenuCloseButton.setImage(new Image("file:images/button_close_hover.png"));
     }
 
-    public void setPauseMenuCloseButtonMouseExited () {
+    public void setPauseMenuCloseButtonMouseExited() {
         pauseMenuCloseButton.setImage(new Image("file:images/button_close.png"));
     }
 
-    public void initializeMenuButtonEvents () {
+    public void initializeMenuButtonEvents() {
         menuButton.setOnMouseReleased(event -> setMenuButtonReleased());
         menuButton.setOnMousePressed(event -> setMenuButtonPressed());
         menuButton.setOnMouseEntered(event -> setMenuButtonMouseOver());

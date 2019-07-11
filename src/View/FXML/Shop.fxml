@@ -13,10 +13,11 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="anchorPane" layoutX="0" prefHeight="1091.0" prefWidth="1858.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ShopController">
+<AnchorPane fx:id="anchorPane" layoutX="0" prefHeight="1091.0" prefWidth="1858.0" stylesheets="@../CSS/Button.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ShopController">
     <children>
         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#8b8d8f" height="956.0" layoutX="162.0" layoutY="94.0" opacity="0.69" stroke="BLACK" strokeType="INSIDE" style="-fx-stroke-width: 3;" width="1634.0" AnchorPane.bottomAnchor="41.0" AnchorPane.leftAnchor="162.0" AnchorPane.rightAnchor="62.0" AnchorPane.topAnchor="94.0" />
         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#797e83" height="791.0" layoutX="324.0" layoutY="209.0" stroke="#17f1f5" strokeType="INSIDE" strokeWidth="3.0" width="804.0" />
@@ -116,6 +117,25 @@
                                         <Font name="Droid Serif" size="15.0" />
                                     </font>
                                 </JFXTextField>
+                        <ImageView fx:id="saleButton" fitHeight="68.0" fitWidth="162.0" layoutX="19.0" layoutY="-2.0" onMouseEntered="#setSaleButtonOnMouseMoved" onMouseExited="#setSaleButtonOnMouseExited" onMousePressed="#setSaleButtonOnMousePressed" onMouseReleased="#setSaleButtonOnMouseReleased" pickOnBounds="true">
+                           <image>
+                              <Image url="file:images/button_sale_unavilable.png" />
+                           </image></ImageView>
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
+                <Tab fx:id="auctionTab">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="710.0" prefWidth="1307.0">
+                            <children>
+                                <ScrollPane fx:id="auctionScrollPane" fitToHeight="true" hbarPolicy="NEVER" layoutY="14.0" prefHeight="713.0" prefWidth="790.0" style="-fx-background-color: #797E83; -fx-stroke-width: 5;">
+                                    <content>
+                                        <VBox fx:id="auctionVBox" prefHeight="708.0" prefWidth="780.0" style="-fx-background-color: #797E83;">
+                                 <children>
+                                 </children></VBox>
+                                    </content>
+                                </ScrollPane>
                             </children>
                         </AnchorPane>
                     </content>

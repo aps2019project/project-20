@@ -1,6 +1,5 @@
 package Controller;
 
-import Chat.Chat;
 import Datas.SoundDatas;
 import Exceptions.InvalidSelectMainDeckException;
 import Model.Account;
@@ -26,7 +25,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class MainMenuController implements Initializable, ScreenManager, ImageComparable, AccountManageable,DialogThrowable {
+public class MainMenuController implements Initializable, ScreenManager, ImageComparable, AccountManageable, DialogThrowable {
     public ImageView battle;
     public ImageView collection;
     public ImageView shop;
@@ -37,14 +36,14 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
     public ImageView chatButton;
 
     public void setBattleButtonReleased() throws IOException {
-        if (getCurrentAccount().getMainDeck()==null){
-            showOneButtonErrorDialog("Starting Battle Error","There Is No Main Deck!!!");
+        if (getCurrentAccount().getMainDeck() == null) {
+            showOneButtonErrorDialog("Starting Battle Error", "There Is No Main Deck!!!");
             return;
-        }else{
+        } else {
             try {
                 isValidDeck(getCurrentAccount().getMainDeck());
-            }catch (InvalidSelectMainDeckException e){
-                showOneButtonErrorDialog("Starting Battle Error","Your Selected Main Deck Is Not Valid!!!");
+            } catch (InvalidSelectMainDeckException e) {
+                showOneButtonErrorDialog("Starting Battle Error", "Your Selected Main Deck Is Not Valid!!!");
                 return;
             }
         }
@@ -108,7 +107,7 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
     }
 
     public void setLeaderBoardButtonReleased() throws IOException {
-        loadPageOnStackPane(anchorPane, "../View/FXML/LeaderBoard.fxml", "rtl");
+        //todo chatRoom
     }
 
     public void setLeaderBoardButtonPressed() {
@@ -118,7 +117,7 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
 
     public void setLeaderBoardMouseOver() {
         leaderBoard.setImage(new Image("file:images/hover_leaderboard_button.png"));
-        description.setText("\n  You Can See Your Ranking");
+        description.setText("\n     Chat With Your Friends");
         SoundDatas.playSFX(SoundDatas.BUTTON_MOUSEOVER);
     }
 
@@ -149,6 +148,7 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        description.setText("\n                Welcome");
         ImageView main = new ImageView(new Image("file:images/ranked_chevron_empty.png"));
         ImageView myProfile = new ImageView(new Image("file:images/profile.png"));
         ImageView logout = new ImageView(new Image("file:images/logoff.png"));
@@ -181,12 +181,20 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
 
         myProfile.setOnMouseEntered(event -> {
             myProfile.setImage(new Image("file:images/hover_profile_button.png"));
-            description.setText("\n         Edit Your Profile");
+            description.setText("\n  You Can See Your Ranking");
             SoundDatas.playSFX(SoundDatas.BUTTON_MOUSEOVER);
         });
         myProfile.setOnMouseExited(event -> {
             myProfile.setImage(new Image("file:images/profile.png"));
             description.setText("\n                Welcome");
+        });
+        myProfile.setOnMousePressed(event -> {
+            SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
+            try {
+                loadPageOnStackPane(anchorPane, "../View/FXML/LeaderBoard.fxml", "rtl");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         });
         logout.setOnMouseEntered(event -> {
             logout.setImage(new Image("file:images/hover_logoff_button.png"));
@@ -198,7 +206,7 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
             description.setText("\n                Welcome");
         });
         logout.setOnMousePressed(event -> {
-            showTwoButtonMainMenuExitDialog(anchorPane.getScene(),"../View/FXML/FirstPage.fxml");
+            showTwoButtonMainMenuExitDialog(anchorPane.getScene(), "../View/FXML/FirstPage.fxml");
             SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
         });
         save.setOnMouseEntered(event -> {
@@ -212,7 +220,7 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
         });
         save.setOnMousePressed(event -> {
             SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
-            Client.getWriter().println("save "+new YaGson().toJson(getCurrentAccount(), Account.class));
+            Client.getWriter().println("save " + new YaGson().toJson(getCurrentAccount(), Account.class));
         });
         exit.setOnMouseEntered(event -> {
             exit.setImage(new Image("file:images/hover_exit_button.png"));
@@ -224,7 +232,7 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
             description.setText("\n                Welcome");
         });
         exit.setOnMousePressed(event -> {
-            showTwoButtonMainMenuExitDialog(anchorPane.getScene(),"");
+            showTwoButtonMainMenuExitDialog(anchorPane.getScene(), "");
             SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
         });
         main.setOnMouseEntered(event -> {
@@ -248,15 +256,17 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
         });
 
 
-
-
-
         chatButton.setOnMouseClicked(event -> {
-                    Chat chat = new Chat();
-                    chat.start(new Stage());
+            try {
+
+                loadPageOnStackPane(anchorPane, "../View/FXML/Chat.fxml", "rtl");
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         });
 
-                anchorPane.getChildren().add(nodesList);
+        anchorPane.getChildren().add(nodesList);
 
     }
 
@@ -278,14 +288,15 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
             if (nextPageAddress.equals("")) {
                 Client.getWriter().println(("logOut"));
                 System.exit(0);
-            } else{
+            } else {
                 try {
                     Client.getWriter().println(("logOut"));
                     loadPageInNewStage(prevScene, nextPageAddress, false);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            }});
+            }
+        });
         JFXButton noButton = new JFXButton("NO");
         noButton.setButtonType(JFXButton.ButtonType.RAISED);
         noButton.setStyle("-fx-background-color: #ff0000; -fx-text-fill: #ffffff; -fx-font-family: 'Microsoft Tai Le'; -fx-font-weight:bold;");

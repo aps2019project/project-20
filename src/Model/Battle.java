@@ -1,5 +1,6 @@
 package Model;
 
+import Controller.BattleGroundController;
 import Datas.AssetDatas;
 import Exceptions.*;
 
@@ -488,6 +489,13 @@ public abstract class Battle {
         resetIsAttackedThisTurn();
         resetIsMovedThisTurn(player);
         setPlayersManaByDefault();
+
+
+        TimeLine t0 = new TimeLine(BattleGroundController.getProgressbar());
+        t0 . start();
+
+
+
         return endGameStatus;
     }
 
