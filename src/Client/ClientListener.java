@@ -122,7 +122,7 @@ public class ClientListener extends Thread implements ScreenManager, DialogThrow
                         showBattleInvitation(serverMessage.substring(11));
                     }
                     if (serverMessage.matches("requestDeclined")) {
-                        showOneButtonInformationDialogInThread("Answer","Your Request Was Rejected",true);
+                        showOneButtonInformationDialogInThread("Answer", "Your Request Was Rejected", true);
                         synchronized (Client.getrLock()) {
                             Client.getrLock().notify();
                         }
@@ -147,6 +147,14 @@ public class ClientListener extends Thread implements ScreenManager, DialogThrow
                     }
                     if (serverMessage.matches("opponentAction;.+")) {
                         handleOpponentAction(serverMessage);
+                    }
+
+                    if (serverMessage.matches("Chat;.+")) {
+                        if (Client.getChatController() != null) {
+                            Platform.runLater(() -> {
+                                Client.getChatController().appendTextToConversation(serverMessage.substring(5));
+                            });
+                        }
                     }
                 }
             }
@@ -199,7 +207,7 @@ public class ClientListener extends Thread implements ScreenManager, DialogThrow
             Text header = new Text("Battle Invitation");
             header.setStyle("-fx-text-fill: #ff0000;  -fx-font-family: 'Microsoft Tai Le'; -fx-font-weight:bold ;");
             dialogLayout.setHeading(header);
-            Text footer = new Text(inviterName+" Invites To The Battle.");
+            Text footer = new Text(inviterName + " Invites To The Battle.");
             footer.setStyle("-fx-text-fill: #000000;  -fx-font-family: 'Microsoft Tai Le'; -fx-font-weight:bold ;");
             dialogLayout.setBody(footer);
             dialogLayout.setStyle("-fx-background-color: #acf5ff; -fx-text-fill: #ffffff");

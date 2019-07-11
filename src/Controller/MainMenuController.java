@@ -1,6 +1,5 @@
 package Controller;
 
-import Chat.Chat;
 import Datas.SoundDatas;
 import Exceptions.InvalidSelectMainDeckException;
 import Model.Account;
@@ -26,7 +25,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class MainMenuController implements Initializable, ScreenManager, ImageComparable, AccountManageable,DialogThrowable {
+public class MainMenuController implements Initializable, ScreenManager, ImageComparable, AccountManageable, DialogThrowable {
     public ImageView battle;
     public ImageView collection;
     public ImageView shop;
@@ -37,14 +36,14 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
     public ImageView chatButton;
 
     public void setBattleButtonReleased() throws IOException {
-        if (getCurrentAccount().getMainDeck()==null){
-            showOneButtonErrorDialog("Starting Battle Error","There Is No Main Deck!!!");
+        if (getCurrentAccount().getMainDeck() == null) {
+            showOneButtonErrorDialog("Starting Battle Error", "There Is No Main Deck!!!");
             return;
-        }else{
+        } else {
             try {
                 isValidDeck(getCurrentAccount().getMainDeck());
-            }catch (InvalidSelectMainDeckException e){
-                showOneButtonErrorDialog("Starting Battle Error","Your Selected Main Deck Is Not Valid!!!");
+            } catch (InvalidSelectMainDeckException e) {
+                showOneButtonErrorDialog("Starting Battle Error", "Your Selected Main Deck Is Not Valid!!!");
                 return;
             }
         }
@@ -198,7 +197,7 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
             description.setText("\n                Welcome");
         });
         logout.setOnMousePressed(event -> {
-            showTwoButtonMainMenuExitDialog(anchorPane.getScene(),"../View/FXML/FirstPage.fxml");
+            showTwoButtonMainMenuExitDialog(anchorPane.getScene(), "../View/FXML/FirstPage.fxml");
             SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
         });
         save.setOnMouseEntered(event -> {
@@ -212,7 +211,7 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
         });
         save.setOnMousePressed(event -> {
             SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
-            Client.getWriter().println("save "+new YaGson().toJson(getCurrentAccount(), Account.class));
+            Client.getWriter().println("save " + new YaGson().toJson(getCurrentAccount(), Account.class));
         });
         exit.setOnMouseEntered(event -> {
             exit.setImage(new Image("file:images/hover_exit_button.png"));
@@ -224,7 +223,7 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
             description.setText("\n                Welcome");
         });
         exit.setOnMousePressed(event -> {
-            showTwoButtonMainMenuExitDialog(anchorPane.getScene(),"");
+            showTwoButtonMainMenuExitDialog(anchorPane.getScene(), "");
             SoundDatas.playSFX(SoundDatas.BUTTON_PRESS);
         });
         main.setOnMouseEntered(event -> {
@@ -248,15 +247,17 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
         });
 
 
-
-
-
         chatButton.setOnMouseClicked(event -> {
-                    Chat chat = new Chat();
-                    chat.start(new Stage());
+            try {
+
+                loadPageOnStackPane(anchorPane, "../View/FXML/Chat.fxml", "rtl");
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         });
 
-                anchorPane.getChildren().add(nodesList);
+        anchorPane.getChildren().add(nodesList);
 
     }
 
@@ -278,14 +279,15 @@ public class MainMenuController implements Initializable, ScreenManager, ImageCo
             if (nextPageAddress.equals("")) {
                 Client.getWriter().println(("logOut"));
                 System.exit(0);
-            } else{
+            } else {
                 try {
                     Client.getWriter().println(("logOut"));
                     loadPageInNewStage(prevScene, nextPageAddress, false);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            }});
+            }
+        });
         JFXButton noButton = new JFXButton("NO");
         noButton.setButtonType(JFXButton.ButtonType.RAISED);
         noButton.setStyle("-fx-background-color: #ff0000; -fx-text-fill: #ffffff; -fx-font-family: 'Microsoft Tai Le'; -fx-font-weight:bold;");

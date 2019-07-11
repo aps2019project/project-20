@@ -21,7 +21,7 @@ public class ServerThread extends Thread {
     private boolean kill;
 
     private enum CurrentPageType {
-        LEADER_BOARD, ONLINE_PLAYERS_BOARD, SHOP_COLLECTION_BOARD, NONE
+        LEADER_BOARD, ONLINE_PLAYERS_BOARD, SHOP_COLLECTION_BOARD, CHAT , NONE
     }
 
     private CurrentPageType pageType;
@@ -119,6 +119,9 @@ public class ServerThread extends Thread {
                         handleAttack(data);
                     if (data.matches("endGame;.+"))
                         handleEndGame(data);
+                    if (data.matches("Chat;.+")){
+                        handleChat(data);
+                    }
                 }
             }
         } catch (IOException e) {
@@ -126,6 +129,18 @@ public class ServerThread extends Thread {
         }
     }
 
+    private  void handleChat(String data) throws IOException {
+
+        for (ServerThread thread : Server.getThreads()) {
+            synchronized (thread){
+                thread.sendMessageToClient(data);
+
+            }
+        }
+
+
+
+    }
     private void handleEndGame(String data) throws IOException {
         Account firstAccount = new YaGson().fromJson(data.split(";")[2], Account.class);
         Account secondAccount = new YaGson().fromJson(data.split(";")[3], Account.class);
